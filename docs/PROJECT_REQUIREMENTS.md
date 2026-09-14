@@ -1,7 +1,7 @@
 # Project Management POC — Authoritative Requirements
 
 **Document status:** Approved baseline for implementation  
-**Repository:** `anonapps/project-management-poc`  
+**Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
 
