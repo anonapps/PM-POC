@@ -1,5 +1,7 @@
 import type { Project, Stream, Task } from "./entities";
 import { ACTIVE_DELETION_STATE } from "./types";
+import type { ProjectState } from "../application/state";
+import { EMPTY_IDENTIFIER_SEQUENCES } from "./identifiers";
 
 export const projectFixture = (overrides: Partial<Project> = {}): Project => ({
   id: "project-1",
@@ -34,4 +36,9 @@ export const taskFixture = (overrides: Partial<Task> = {}): Task => ({
   progress: 0,
   deletion: ACTIVE_DELETION_STATE,
   ...overrides,
+});
+
+export const makeProjectState = (overrides: Partial<ProjectState> = {}): ProjectState => ({
+  project: projectFixture(), streams: [], tasks: [], milestones: [], people: [], risks: [], decisions: [],
+  relationships: [], dependencies: [], identifierSequences: { ...EMPTY_IDENTIFIER_SEQUENCES }, ...overrides,
 });
