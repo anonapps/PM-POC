@@ -1,0 +1,10 @@
+import { describe, expect, it } from "vitest";
+import { makeProjectState, streamFixture } from "../../domain/test-fixtures";
+import { buildTubeMap, isoWeek, mondayOf } from "./model";
+const milestone = (id: string, date: string, streamIds: string[] = ["stream-1"]) => ({ id, projectId: "project-1", humanId: `MILESTONE-00${id}` as const, name: `Gate ${id}`, plannedDate: date, status: "Planned" as const, ownerId: null, scope: { kind: "streams" as const, streamIds }, relatedTaskIds: [], deletion: { isDeleted: false } });
+describe("Tube Map model", () => {
+  it("calculates Monday and twelve deterministic week labels", () => { expect(mondayOf("2026-09-17")).toBe("2026-09-14"); expect(isoWeek("2026-09-14")).toBe(38); const model = buildTubeMap(makeProjectState(), "2026-09-17"); expect(model.weeks).toHaveLength(12); expect(model.weeks[0].label).toBe("W38"); expect(model).toEqual(buildTubeMap(makeProjectState(), "2026-09-17")); });
+  it("positions boundaries and exact dates proportionally", () => { const state = makeProjectState({ streams: [streamFixture()], milestones: [milestone("1", "2026-09-13"), milestone("2", "2026-09-14"), milestone("3", "2026-12-08")] }); const model = buildTubeMap(state, "2026-09-14"); expect(model.stations.map((station) => station.boundary)).toEqual(["before", "inside", "after"]); expect(model.stations[1].x).toBe(0); });
+  it("uses multiple labelled lines and one crossing station", () => { const state = makeProjectState({ streams: [streamFixture(), streamFixture({ id: "stream-2", humanId: "STREAM-002", name: "Change" })], milestones: [milestone("1", "2026-10-01", ["stream-1", "stream-2"])] }); const model = buildTubeMap(state); expect(model.streams).toHaveLength(2); expect(model.stations[0].lanes).toEqual([0, 1]); });
+  it("excludes deleted entities and exposes an empty state model", () => { const state = makeProjectState({ streams: [streamFixture({ deletion: { isDeleted: true } })], milestones: [{ ...milestone("1", "2026-10-01"), deletion: { isDeleted: true } }] }); expect(buildTubeMap(state)).toMatchObject({ streams: [], stations: [] }); });
+});
