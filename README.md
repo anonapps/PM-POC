@@ -1,37 +1,9 @@
 # Project Management POC
 
-A local-first project management proof of concept built with TypeScript, React, Next.js, and Tailwind CSS. The product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md).
+Local-first, offline project-management proof of concept.
 
-## Prerequisites
+The authoritative product specification is `docs/PROJECT_REQUIREMENTS.md`. Architecture and staged implementation guidance live under `docs/`.
 
-- Node.js 20.9 or newer
-- npm 10 or newer
+Development is performed directly on the single `main` branch. The application uses a layered architecture: domain, application, persistence/platform adapters, and presentation.
 
-## Local development
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in Chrome Desktop.
-
-## Validation
-
-```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
-```
-
-## Source layout
-
-- `src/app` — Next.js entry points and global presentation styles.
-- `src/features` — feature-oriented React UI.
-- `src/application` — framework-independent use cases and state orchestration.
-- `src/domain` — framework- and platform-independent business rules.
-- `src/persistence` — project-file codecs and adapters.
-- `src/shared` — small cross-cutting constants and utilities.
-
-The `.pmp` project file will be the sole source of truth for project data. Persistence will remain behind the Project File Service abstraction; Block 0 does not implement project or persistence functionality.
+Current implementation baseline includes the domain model, application command/state/history architecture, and PMP v1 in-memory project container codec. Later blocks add Project File Service, launcher/runtime, UI modules, persistence lifecycle, security hardening, accessibility, and final QA.
