@@ -15,13 +15,7 @@ Before making any architectural, functional, data-model, persistence, or UX chan
 
 ## Architecture Principles
 
-Keep the core domain model independent from:
-
-- React
-- Next.js
-- browser APIs
-- filesystem implementation details
-- future desktop-shell technology
+Keep the core domain model independent from React, Next.js, browser APIs, filesystem implementation details, and future desktop-shell technology.
 
 Use explicit abstractions where defined by the requirements, particularly the Project File Service.
 
@@ -29,24 +23,19 @@ The `.pmp` file is the authoritative and self-contained project data format.
 
 ## Development Approach
 
-Implement the application incrementally in logical blocks.
-
-For each block:
-
-1. Inspect the existing implementation first.
-2. Implement only the intended scope.
-3. Run relevant tests, linting, type checking, and validation.
-4. Fix regressions introduced by the change.
-5. Keep documentation aligned with significant architectural decisions.
-6. Commit completed and validated work to GitHub.
+Implement the application incrementally in logical blocks. Inspect first, implement only intended scope, validate, fix regressions, keep documentation aligned, and commit completed work.
 
 Do not attempt to build the entire application in a single Codex task.
 
 ## Supporting Documentation
 
-Also consult when available:
+Also consult `docs/ARCHITECTURE.md` and `docs/IMPLEMENTATION_PLAN.md`. If supporting documentation conflicts with `docs/PROJECT_REQUIREMENTS.md`, the project requirements take precedence.
 
-- `docs/ARCHITECTURE.md`
-- `docs/IMPLEMENTATION_PLAN.md`
+## Branch Policy
 
-If supporting documentation conflicts with `docs/PROJECT_REQUIREMENTS.md`, the project requirements take precedence.
+- `main` is the only development and publication branch for this POC.
+- Do not create, switch to, publish, or require feature, work, recovery, or PR branches.
+- Commit completed and validated blocks directly to `main`.
+- Never force-push or rewrite published `main` history.
+- Before changing files, verify the task is based on current `origin/main`; after publication verify local/remote HEAD alignment when the execution environment supports GitHub authentication.
+- If the execution environment supplies a temporary checkout branch, treat it only as an execution detail: do not publish it and do not make it part of the repository workflow.
