@@ -2,7 +2,8 @@ import type { Dependency, EntityKind, EntityReference, GenericRelationship } fro
 import type { ProjectState } from "./state";
 
 function activeIds(state: ProjectState): Set<string> {
-  return new Set([state.project.id, ...state.streams, ...state.tasks, ...state.milestones, ...state.people, ...state.risks, ...state.decisions].filter((e) => !("deletion" in e) || !e.deletion.isDeleted).map((e) => e.id));
+  const entities = [...state.streams, ...state.tasks, ...state.milestones, ...state.people, ...state.risks, ...state.decisions];
+  return new Set([state.project.id, ...entities.filter((entity) => !entity.deletion.isDeleted).map((entity) => entity.id)]);
 }
 
 export const selectActiveStreams = (s: ProjectState) => s.streams.filter((e) => !e.deletion.isDeleted);
