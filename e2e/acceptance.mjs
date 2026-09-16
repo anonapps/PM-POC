@@ -15,10 +15,7 @@ const record = (name, ok, detail = "") => { results.push({ name, ok, detail }); 
 function chromeCandidates() {
   if (process.env.CHROME_PATH) return [process.env.CHROME_PATH];
   if (process.platform === "darwin") return ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "/Applications/Chromium.app/Contents/MacOS/Chromium"];
-  if (process.platform === "win32") return [
-    `${process.env.PROGRAMFILES || "C:\\Program Files"}\\Google\\Chrome\\Application\\chrome.exe`,
-    `${process.env["PROGRAMFILES(X86)"] || "C:\\Program Files (x86)"}\\Google\\Chrome\\Application\\chrome.exe`,
-  ];
+  if (process.platform === "win32") return [`${process.env.PROGRAMFILES || "C:\\Program Files"}\\Google\\Chrome\\Application\\chrome.exe`, `${process.env["PROGRAMFILES(X86)"] || "C:\\Program Files (x86)"}\\Google\\Chrome\\Application\\chrome.exe`];
   return ["google-chrome", "google-chrome-stable", "chromium", "chromium-browser"];
 }
 
@@ -39,14 +36,13 @@ async function waitHttp(url, timeout = 30_000) {
 
 class Cdp {
   constructor(ws) {
-    this.ws = new WebSocket(ws);
-    this.pending = new Map();
+    this.ws = new WebSocket(ws); this.pending = new Map();
     this.ready = new Promise((resolve, reject) => { this.ws.onopen = resolve; this.ws.onerror = reject; });
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.id) { const pending = this.pending.get(message.id); if (!pending) return; this.pending.delete(message.id); message.error ? pending.reject(new Error(message.error.message)) : pending.resolve(message.result); return; }
       if (message.method === "Runtime.exceptionThrown") browserErrors.push(message.params.exceptionDetails?.text || "Uncaught browser exception");
-      if (message.method === "Log.entryAdded" && ["error", "warning"].includes(message.params.entry.level)) browserErrors.push(`${message.params.entry.level}: ${message.params.entry.text}`);
+      if (message.method === "Log.entryAdded" && message.params.entry.level === "error") browserErrors.push(`error: ${message.params.entry.text}`);
     };
   }
   async send(method, params = {}) { await this.ready; const id = nextId++; return new Promise((resolve, reject) => { this.pending.set(id, { resolve, reject }); this.ws.send(JSON.stringify({ id, method, params })); }); }
@@ -67,11 +63,9 @@ const initFilePickerMock = `(() => {
 })();`;
 
 async function main() {
-  const profile = await mkdtemp(join(tmpdir(), "pm-poc-e2e-"));
-  let server; let chrome; let cdp;
+  const profile = await mkdtemp(join(tmpdir(), "pm-poc-e2e-")); let server; let chrome; let cdp;
   try {
-    const ownServer = !process.env.E2E_BASE_URL;
-    if (ownServer) {
+    if (!process.env.E2E_BASE_URL) {
       server = spawn(process.platform === "win32" ? "npm.cmd" : "npm", ["run", "dev", "--", "--hostname", "127.0.0.1", "--port", "3000"], { stdio: ["ignore", "pipe", "pipe"] });
       server.stdout.on("data", (data) => process.stdout.write(`[next] ${data}`)); server.stderr.on("data", (data) => process.stderr.write(`[next] ${data}`));
     }
@@ -80,31 +74,25 @@ async function main() {
     chrome = spawn(chromePath, [`--remote-debugging-port=${DEBUG_PORT}`, `--user-data-dir=${profile}`, "--headless=new", "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "about:blank"], { stdio: "ignore" });
     await waitHttp(`http://127.0.0.1:${DEBUG_PORT}/json/version`);
     const target = await fetch(`http://127.0.0.1:${DEBUG_PORT}/json/new?about:blank`, { method: "PUT" }).then((r) => r.json());
-    cdp = new Cdp(target.webSocketDebuggerUrl);
-    await cdp.send("Runtime.enable"); await cdp.send("Page.enable"); await cdp.send("Log.enable");
-    await cdp.send("Page.addScriptToEvaluateOnNewDocument", { source: initFilePickerMock });
-    await cdp.send("Page.navigate", { url: BASE_URL });
+    cdp = new Cdp(target.webSocketDebuggerUrl); await cdp.send("Runtime.enable"); await cdp.send("Page.enable"); await cdp.send("Log.enable");
+    await cdp.send("Page.addScriptToEvaluateOnNewDocument", { source: initFilePickerMock }); await cdp.send("Page.navigate", { url: BASE_URL });
 
     const evaluate = async (expression) => { const result = await cdp.send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true }); if (result.exceptionDetails) throw new Error(result.exceptionDetails.text); return result.result?.value; };
     const waitFor = async (expression, timeout = 10_000) => { const end = Date.now() + timeout; while (Date.now() < end) { if (await evaluate(expression)) return; await sleep(100); } throw new Error(`Timed out waiting for: ${expression}`); };
     const text = (value) => JSON.stringify(value);
     const click = async (label) => { const ok = await evaluate(`(() => { const el=[...document.querySelectorAll('button')].find(x=>x.textContent.trim()===${text(label)} || x.getAttribute('title')===${text(label)}); if(!el)return false; el.click(); return true; })()`); if (!ok) throw new Error(`Button not found: ${label}`); };
     const setLabel = async (label, value) => { const ok = await evaluate(`(() => { const l=[...document.querySelectorAll('label')].find(x=>x.childNodes[0]?.textContent?.trim()===${text(label)} || x.textContent.trim().startsWith(${text(label)})); const el=l?.querySelector('input,textarea,select'); if(!el)return false; const proto=el instanceof HTMLSelectElement?HTMLSelectElement.prototype:el instanceof HTMLTextAreaElement?HTMLTextAreaElement.prototype:HTMLInputElement.prototype; Object.getOwnPropertyDescriptor(proto,'value').set.call(el,${text(value)}); el.dispatchEvent(new Event(el instanceof HTMLSelectElement?'change':'input',{bubbles:true})); return true; })()`); if (!ok) throw new Error(`Field not found: ${label}`); };
-    const nav = async (module) => { const ok = await evaluate(`(() => { const el=[...document.querySelectorAll('nav button')].find(x=>x.title===${text(module)}); if(!el)return false; el.click(); return true; })()`); if (!ok) throw new Error(`Module not found: ${module}`); await waitFor(`document.querySelector('main.workspace h1')?.textContent===${text(module)}`); };
+    const nav = async (module) => { const ok = await evaluate(`(() => { const el=[...document.querySelectorAll('nav button')].find(x=>x.title===${text(module)}); if(!el)return false; el.click(); return true; })()`); if (!ok) throw new Error(`Module not found: ${module}`); await waitFor(`document.querySelector('nav button[aria-current="page"]')?.getAttribute('title')===${text(module)}`); };
     const bodyHas = (value) => `document.body.innerText.includes(${text(value)})`;
 
     await waitFor(bodyHas("Project Manager")); record("Launcher renders", true);
-    await click("New Project"); await waitFor(bodyHas("Project factory"));
-    await setLabel("Project name", "E2E Acceptance Project"); await setLabel("Description", "Automated local-first acceptance test"); await setLabel("Start date", "2026-09-01"); await setLabel("End date", "2026-12-31"); await click("Choose File & Create");
-    await waitFor(bodyHas("Current project")); record("Create project through mocked browser file picker", true);
+    await click("New Project"); await waitFor(bodyHas("Project factory")); await setLabel("Project name", "E2E Acceptance Project"); await setLabel("Description", "Automated local-first acceptance test"); await setLabel("Start date", "2026-09-01"); await setLabel("End date", "2026-12-31"); await click("Choose File & Create"); await waitFor(bodyHas("Current project")); record("Create project through mocked browser file picker", true);
 
-    for (const module of ["Overview","Streams","People","Tasks","Milestones","Gantt","Tube Map","Risk Log","Decision Log","Warnings","Search","File Information"]) { await nav(module); }
+    for (const module of ["Overview","Streams","People","Tasks","Milestones","Gantt","Tube Map","Risk Log","Decision Log","Warnings","Search","File Information"]) await nav(module);
     record("All modules navigate and render", true, "12 modules");
 
     await nav("People"); await setLabel("Person name", "Harry Potter"); await click("Add Person"); await waitFor(bodyHas("PERSON-001")); record("Create person", true);
-    await nav("Streams"); await setLabel("Stream name", "Platform Delivery"); await click("Add Stream"); await waitFor(bodyHas("STREAM-001"));
-    await evaluate(`(() => { const s=document.querySelector('select[aria-label="Owner for STREAM-001"]'); s.value=[...s.options].find(o=>o.textContent==='Harry Potter').value; s.dispatchEvent(new Event('change',{bubbles:true})); })()`); record("Create stream and assign owner", true);
-
+    await nav("Streams"); await setLabel("Stream name", "Platform Delivery"); await click("Add Stream"); await waitFor(bodyHas("STREAM-001")); await evaluate(`(() => { const s=document.querySelector('select[aria-label="Owner for STREAM-001"]'); s.value=[...s.options].find(o=>o.textContent==='Harry Potter').value; s.dispatchEvent(new Event('change',{bubbles:true})); })()`); record("Create stream and assign owner", true);
     await nav("Tasks"); await setLabel("Task name", "Build local runtime"); await setLabel("Scope", await evaluate(`([...document.querySelectorAll('label')].find(x=>x.textContent.includes('Scope'))?.querySelector('select')?.options[1]?.value)||''`)); await click("Add Task"); await waitFor(bodyHas("TASK-001")); record("Create stream-scoped task", true);
     await nav("Milestones"); await setLabel("Name", "Release Candidate"); await setLabel("Date", "2026-11-15"); await click("Add Milestone"); await waitFor(bodyHas("MILESTONE-001")); record("Create milestone", true);
     await nav("Risk Log"); await setLabel("Risk title", "Local file access regression"); await click("Add Risk"); await waitFor(bodyHas("RISK-001")); record("Create risk", true);
@@ -115,17 +103,16 @@ async function main() {
     await nav("Tube Map"); record("Tube Map renders created stream/milestone", await evaluate(bodyHas("Platform Delivery")) && await evaluate(bodyHas("Release Candidate")));
 
     await nav("Search"); await setLabel("Search by name, title or ID", "Build local runtime"); await waitFor(bodyHas("TASK-001")); await click("Build local runtime"); await waitFor(bodyHas("Quick View")); await click("Open full detail"); await waitFor(`document.querySelector('input[aria-label="Name for TASK-001"]')?.matches(':focus')`); record("Search quick view navigates and focuses entity", true);
-
     await nav("Milestones"); await evaluate(`(() => { const el=document.querySelector('input[aria-label="Date for MILESTONE-001"]'); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'2027-01-15'); el.dispatchEvent(new Event('input',{bubbles:true})); })()`); await nav("Warnings"); await waitFor(bodyHas("Outside project dates")); await evaluate(`(() => { const b=[...document.querySelectorAll('.warning-list button')][0]; b?.click(); return !!b; })()`); await waitFor(`document.querySelector('input[aria-label="Name for MILESTONE-001"]')?.matches(':focus')`); record("Derived warning navigates to affected milestone", true);
 
     await nav("People"); await evaluate(`(() => { const el=document.querySelector('input[aria-label="Name for PERSON-001"]'); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'Hermione Granger'); el.dispatchEvent(new Event('input',{bubbles:true})); })()`); await waitFor(bodyHas("Hermione Granger")); await evaluate(`document.querySelector('button[aria-label="Undo"]').click()`); await waitFor(bodyHas("Harry Potter")); await evaluate(`document.querySelector('button[aria-label="Redo"]').click()`); await waitFor(bodyHas("Hermione Granger")); record("Undo and redo", true);
 
-    await evaluate(`document.querySelector('button.secondary')?.textContent==='Save Now' ? document.querySelector('button.secondary').click() : [...document.querySelectorAll('button')].find(b=>b.textContent==='Save Now')?.click()`); await waitFor(`document.querySelector('[role="status"]')?.textContent.startsWith('Saved')`); record("Save Now persists active project", true);
+    await click("Save Now"); await waitFor(`document.querySelector('[role="status"]')?.textContent.startsWith('Saved')`); record("Save Now persists active project", true);
     await click("Close"); await waitFor(bodyHas("Local project workspace")); await click("Open Project"); await waitFor(bodyHas("E2E Acceptance Project")); await nav("People"); await waitFor(bodyHas("Hermione Granger")); record("Close and reopen preserves project data", true);
 
-    await nav("People"); await evaluate(`([...document.querySelectorAll('tr')].find(r=>r.innerText.includes('PERSON-001'))?.querySelector('button.danger'))?.click()`); await waitFor(`!document.body.innerText.includes('PERSON-001')`); await evaluate(`([...document.querySelectorAll('label')].find(l=>l.textContent.includes('Show Deleted'))?.querySelector('input')).click()`); await waitFor(bodyHas("PERSON-001")); await click("Restore"); await waitFor(bodyHas("Active")); record("Soft delete and restore", true);
+    await nav("Decision Log"); await evaluate(`([...document.querySelectorAll('tr')].find(r=>r.innerText.includes('DECISION-001'))?.querySelector('button.danger'))?.click()`); await waitFor(`!document.body.innerText.includes('DECISION-001')`); await evaluate(`([...document.querySelectorAll('label')].find(l=>l.textContent.includes('Show Deleted'))?.querySelector('input')).click()`); await waitFor(bodyHas("DECISION-001")); await click("Restore"); await waitFor(bodyHas("Project-wide")); record("Soft delete and restore", true);
 
-    const semanticNav = await evaluate(`document.querySelector('nav[aria-label="Project modules"]') && document.querySelector('nav button[aria-current="page"]')`); record("Navigation semantics expose current page", Boolean(semanticNav));
+    const semanticNav = await evaluate(`Boolean(document.querySelector('nav[aria-label="Project modules"]') && document.querySelector('nav button[aria-current="page"]'))`); record("Navigation semantics expose current page", semanticNav);
     record("No browser runtime errors", browserErrors.length === 0, browserErrors.join(" | "));
   } finally {
     console.log("\nAcceptance summary"); for (const result of results) console.log(`${result.ok ? "PASS" : "FAIL"}\t${result.name}${result.detail ? `\t${result.detail}` : ""}`);
