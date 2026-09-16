@@ -17,4 +17,5 @@ export interface ProjectFileService {
   saveAs(state: ProjectState, suggestedName: string, options: SaveOptions): Promise<FileServiceResult<LoadedProject>>;
   reload(handle: ProjectFileHandle): Promise<FileServiceResult<LoadedProject>>;
   inspect(handle: ProjectFileHandle): Promise<FileServiceResult<FileInformation>>;
+  acceptExternalModification(handle: ProjectFileHandle): Promise<FileServiceResult<FileInformation>>;
 }
