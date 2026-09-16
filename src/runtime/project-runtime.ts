@@ -1,34 +1,17 @@
-import { createProjectStore, type ProjectStore } from "../application";
-import type { ProjectFileService, LoadedProject, ProjectFileHandle } from "../persistence/project-file-service";
+import { createProjectStore,type ProjectStore,type ProjectState } from "../application";import type{FileServiceResult,LoadedProject,ProjectFileHandle,ProjectFileService,SaveResult}from"../persistence/project-file-service";
+export type RuntimeScreen="launcher"|"create"|"workspace";export type RuntimeSaveStatus="saved"|"dirty"|"saving"|"save-failed"|"file-lost"|"externally-modified";
+export interface ActiveProject{readonly store:ProjectStore;readonly handle:ProjectFileHandle;readonly loaded:LoadedProject}export interface RuntimeSnapshot{readonly screen:RuntimeScreen;readonly active?:ActiveProject;readonly message?:string;readonly saveStatus?:RuntimeSaveStatus;readonly lastSavedAt?:string;readonly failedSaveCount?:number;readonly pendingSwitch?:boolean}
+export class ProjectRuntime{private snapshot:RuntimeSnapshot={screen:"launcher"};private listeners=new Set<()=>void>();constructor(private readonly files:ProjectFileService){}getSnapshot=()=>this.snapshot;subscribe=(listener:()=>void)=>{this.listeners.add(listener);return()=>this.listeners.delete(listener)};beginNewProject(){this.set({screen:"create"})}cancelNewProject(){this.set({screen:"launcher"})}
+async openProject(force=false){if(this.snapshot.active?.store.isDirty()&&!force){const saved=await this.saveNow();if(!saved.ok){this.set({...this.snapshot,pendingSwitch:true});return saved;}}const result=await this.files.open();if(!result.ok){if(result.error.code!=="CANCELLED")this.set({...this.snapshot,message:result.error.message});return result}if(this.snapshot.active?.handle.id===result.value.handle.id){this.set({...this.snapshot,pendingSwitch:false,message:undefined});return result;}this.activate(result.value);return result}
+activate(loaded:LoadedProject){const store=createProjectStore(loaded.state,{createId:()=>crypto.randomUUID(),now:()=>new Date().toISOString()});store.subscribe(()=>{if(store.isDirty()&&this.snapshot.saveStatus==="saved")this.set({...this.snapshot,saveStatus:"dirty"})});this.set({screen:"workspace",active:{store,handle:loaded.handle,loaded},saveStatus:"saved",lastSavedAt:loaded.lastSavedAt,failedSaveCount:0})}
+cancelProjectSwitch(){this.set({...this.snapshot,pendingSwitch:false})}
+async continueProjectSwitch(){this.set({...this.snapshot,pendingSwitch:false});return this.openProject(true)}
+async createProject(state:ProjectState,suggestedName:string){const result=await this.files.create(state,suggestedName,{runtimeVersion:"0.1.0"});if(result.ok)this.activate(result.value);return result}
+async saveNow():Promise<FileServiceResult<SaveResult>>{const active=this.snapshot.active;if(!active)return{ok:false,error:{code:"READ_FAILED",message:"No project is open."}};if(!active.store.isDirty())return{ok:true,value:{handle:active.handle,savedAt:this.snapshot.lastSavedAt??active.loaded.lastSavedAt,bytesWritten:0}};this.set({...this.snapshot,saveStatus:"saving"});const result=await this.files.save(active.handle,active.store.getState(),this.options(active));if(result.ok){active.store.acknowledgeSave();this.set({...this.snapshot,saveStatus:"saved",lastSavedAt:result.value.savedAt,failedSaveCount:0,message:undefined})}else{const status=result.error.code==="EXTERNALLY_MODIFIED"?"externally-modified":result.error.code==="READ_FAILED"||result.error.code==="PERMISSION_DENIED"?"file-lost":"save-failed";this.set({...this.snapshot,saveStatus:status,failedSaveCount:(this.snapshot.failedSaveCount??0)+1,message:result.error.message})}return result}
+async saveAs(){const active=this.snapshot.active;if(!active)return;const result=await this.files.saveAs(active.store.getState(),`${active.store.getState().project.name}.pmp`,this.options(active));if(result.ok){active.store.acknowledgeSave();this.set({screen:"workspace",active:{...active,handle:result.value.handle,loaded:result.value},saveStatus:"saved",lastSavedAt:result.value.lastSavedAt,failedSaveCount:0})}return result}
+async reload(){const active=this.snapshot.active;if(!active)return;const result=await this.files.reload(active.handle);if(result.ok)this.activate(result.value);else this.set({...this.snapshot,message:result.error.message});return result}
+async keepCurrent(){const active=this.snapshot.active;if(!active)return;const result=await this.files.acceptExternalModification(active.handle);if(result.ok)this.set({...this.snapshot,saveStatus:"dirty",message:undefined});return result}
+async closeProject(force=false){const active=this.snapshot.active;if(active?.store.isDirty()&&!force){const result=await this.saveNow();if(!result.ok)return false}this.set({screen:"launcher"});return true}
+get fileService(){return this.files}private options(active:ActiveProject){return{runtimeVersion:"0.1.0",createdAt:active.loaded.createdAt,configuration:active.loaded.configuration}}private set(snapshot:RuntimeSnapshot){this.snapshot=snapshot;this.listeners.forEach(listener=>listener())}}
 
-export type RuntimeScreen = "launcher" | "create" | "workspace";
-export interface ActiveProject { readonly store: ProjectStore; readonly handle: ProjectFileHandle; readonly loaded: LoadedProject }
-export interface RuntimeSnapshot { readonly screen: RuntimeScreen; readonly active?: ActiveProject; readonly message?: string }
-
-export class ProjectRuntime {
-  private snapshot: RuntimeSnapshot = { screen: "launcher" };
-  private listeners = new Set<() => void>();
-  constructor(private readonly files: ProjectFileService) {}
-  getSnapshot = () => this.snapshot;
-  subscribe = (listener: () => void) => { this.listeners.add(listener); return () => this.listeners.delete(listener); };
-  beginNewProject() { this.set({ screen: "create" }); }
-  cancelNewProject() { this.set({ screen: "launcher" }); }
-  async openProject() {
-    const result = await this.files.open();
-    if (!result.ok) {
-      if (result.error.code !== "CANCELLED") this.set({ screen: "launcher", message: result.error.message });
-      return result;
-    }
-    if (this.snapshot.active?.handle.id === result.value.handle.id) return result;
-    this.activate(result.value);
-    return result;
-  }
-  activate(loaded: LoadedProject) {
-    const store = createProjectStore(loaded.state, { createId: () => crypto.randomUUID(), now: () => new Date().toISOString() });
-    this.set({ screen: "workspace", active: { store, handle: loaded.handle, loaded } });
-  }
-  async createProject(state: import("../application").ProjectState, suggestedName: string) { const result = await this.files.create(state, suggestedName, { runtimeVersion: "0.1.0" }); if (result.ok) this.activate(result.value); return result; }
-  closeProject() { this.set({ screen: "launcher" }); }
-  get fileService() { return this.files; }
-  private set(snapshot: RuntimeSnapshot) { this.snapshot = snapshot; this.listeners.forEach((listener) => listener()); }
-}
+export function startAutosave(save:()=>void,setIntervalFn:(callback:()=>void,ms:number)=>ReturnType<typeof setInterval>=setInterval,clearIntervalFn:(id:ReturnType<typeof setInterval>)=>void=clearInterval){const id=setIntervalFn(save,60_000);return()=>clearIntervalFn(id)}
