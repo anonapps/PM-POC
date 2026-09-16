@@ -1,4 +1,6 @@
 import { hydrateProjectState, type ProjectState } from "../../application/state";
+import { wouldCreateDependencyCycle } from "../../domain";
+import { validatePersistedState } from "./structural-validation";
 import { CURRENT_PMP_FORMAT_VERSION, CURRENT_PROJECT_SCHEMA_VERSION, DEFAULT_PROJECT_CONFIGURATION, PMP_FORMAT_IDENTIFIER, type CompatibilityInspection, type LogicalPmpContainer, type PmpError, type PmpManifest, type PmpProjectConfiguration, type PmpResult, type ValidatedProjectContainer } from "./types";
 
 const obj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === "object" && !Array.isArray(v);
@@ -35,7 +37,23 @@ function validateState(v: unknown): PmpResult<ProjectState> {
     return undefined;
   };
   const bad = walk(v); if (bad) return err("SCHEMA_VALIDATION_FAILURE", `Prohibited persistence field: ${bad}.`, bad);
-  try { return { ok: true, value: hydrateProjectState(v as unknown as Parameters<typeof hydrateProjectState>[0]) }; } catch { return err("SCHEMA_VALIDATION_FAILURE", "Project state could not be hydrated."); }
+  try {
+    if (arrays.some((key) => (v[key] as unknown[]).length > 100_000)) return err("SCHEMA_VALIDATION_FAILURE", "Project collections exceed the safety limit.");
+    const sequenceKeys = ["stream", "task", "milestone", "person", "risk", "decision"]; const rawSequences = v.identifierSequences; if (!obj(rawSequences) || Object.keys(rawSequences).sort().join() !== [...sequenceKeys].sort().join() || sequenceKeys.some((key) => !Number.isSafeInteger(rawSequences[key]) || (rawSequences[key] as number) < 0)) return err("SCHEMA_VALIDATION_FAILURE", "Identifier sequences are invalid.");
+    const state = hydrateProjectState(v as unknown as Parameters<typeof hydrateProjectState>[0]);
+    const structuralError = validatePersistedState(state); if (structuralError) return err("SCHEMA_VALIDATION_FAILURE", structuralError);
+    const entities = [...state.streams, ...state.tasks, ...state.milestones, ...state.people, ...state.risks, ...state.decisions];
+    const ids = [state.project.id, ...entities.map((entity) => entity.id)];
+    if (ids.some((id) => typeof id !== "string" || id.length === 0 || id.length > 200) || new Set(ids).size !== ids.length) return err("SCHEMA_VALIDATION_FAILURE", "Entity IDs must be non-empty, bounded and unique.");
+    if (entities.some((entity) => typeof entity.humanId !== "string" || !/^(STREAM|TASK|MILESTONE|PERSON|RISK|DECISION)-[0-9]{3,}$/.test(entity.humanId)) || new Set(entities.map((entity) => entity.humanId)).size !== entities.length) return err("SCHEMA_VALIDATION_FAILURE", "Human-readable IDs are invalid or duplicated.");
+    if (entities.some((entity) => entity.projectId !== state.project.id)) return err("SCHEMA_VALIDATION_FAILURE", "Entity project membership is invalid.");
+    const localDate = (date: unknown) => { if (date === undefined) return true; if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return false; const [year, month, day] = date.split("-").map(Number), parsed = new Date(Date.UTC(year, month - 1, day)); return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day; };
+    if (!localDate(state.project.startDate) || !localDate(state.project.endDate) || state.tasks.some((item) => !localDate(item.startDate) || !localDate(item.endDate) || !localDate(item.actualCompletionDate)) || state.streams.some((item) => !localDate(item.startDate) || !localDate(item.endDate)) || state.milestones.some((item) => !localDate(item.plannedDate) || !localDate(item.actualCompletionDate)) || state.decisions.some((item) => !localDate(item.decisionDate))) return err("SCHEMA_VALIDATION_FAILURE", "Project contains an invalid calendar date.");
+    const endpointExists = (kind: "task" | "milestone", id: string) => (kind === "task" ? state.tasks : state.milestones).some((item) => item.id === id);
+    if (state.dependencies.some((dependency) => dependency.projectId !== state.project.id || !endpointExists(dependency.predecessor.kind, dependency.predecessor.id) || !endpointExists(dependency.successor.kind, dependency.successor.id))) return err("SCHEMA_VALIDATION_FAILURE", "Dependency references an invalid entity.");
+    if (state.dependencies.some((dependency, index) => wouldCreateDependencyCycle(state.dependencies.slice(0, index), dependency))) return err("SCHEMA_VALIDATION_FAILURE", "Dependencies contain a cycle.");
+    return { ok: true, value: state };
+  } catch { return err("SCHEMA_VALIDATION_FAILURE", "Project state could not be hydrated."); }
 }
 
 export function validateProjectContainer(container: LogicalPmpContainer): PmpResult<ValidatedProjectContainer> {
