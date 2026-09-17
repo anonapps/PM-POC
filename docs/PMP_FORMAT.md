@@ -14,7 +14,7 @@ No runtime files, filesystem paths, session history, file handles, undo/redo his
 
 ## Manifest
 
-The manifest identifies `PM-POC/PMP`, format version `1`, project schema version `1`, project ID, created/save timestamps, runtime compatibility metadata, and the fixed project/config entry names.
+The manifest identifies `PM-POC/PMP`, format version `1`, project schema version `2`, project ID, created/save timestamps, runtime compatibility metadata, and the fixed project/config entry names.
 
 ## Canonical serialization
 
@@ -26,9 +26,7 @@ Treat every PMP file as untrusted. The codec applies archive/entry size limits, 
 
 ## Compatibility and migration
 
-Format and schema versions are explicit. Current v1 opens directly. Newer versions are rejected with a structured incompatibility result. Older schemas require an explicit registered migration path. Migration is never silent and the future Project File Service must write migrated data to a new `.pmp`, leaving the original untouched.
-
-The initial migration registry is intentionally empty because no historical project schema exists yet.
+Format and schema versions are explicit. Current schema 2 opens directly. Schema 1 is automatically normalised in memory on open; legacy Due remains historical metadata rather than becoming a scheduling date. Newer versions are rejected with a structured incompatibility result. Saving an opened schema-1 project writes schema 2 through the normal save lifecycle.
 
 ## Boundary
 

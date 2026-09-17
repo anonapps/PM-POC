@@ -1,7 +1,6 @@
 import {
   calculateParentProgress,
   deriveParentCompletion,
-  deriveParentTaskDates,
   issueHumanId,
   type Decision,
   type EntityKind,
@@ -60,7 +59,12 @@ function lifecycleCommand(type: string, kind: Exclude<EntityKind, "project">, id
       }
       if (kind === "task") {
         const entities = update(state.tasks);
-        return entities ? recalculate({ ...state, tasks: entities }) : state;
+        if (!entities) return state;
+        const source = state.tasks.find((task) => task.id === id);
+        const tasks = deleted ? entities.map((task) => task.parentTaskId === id && !task.deletion.isDeleted
+          ? { ...task, parentTaskId: source?.parentTaskId }
+          : task) : entities;
+        return recalculate({ ...state, tasks });
       }
       if (kind === "milestone") {
         const entities = update(state.milestones);
@@ -187,9 +191,8 @@ export function recalculate(state: ProjectState): ProjectState {
       const children = tasks.filter((child) => child.parentTaskId === task.id && !child.deletion.isDeleted);
       if (!children.length) return task;
       const progress = calculateParentProgress(children) ?? task.progress;
-      const dates = deriveParentTaskDates(children);
       const completion = deriveParentCompletion(children);
-      return { ...task, progress, ...dates, ...completion } as Task;
+      return { ...task, progress, ...completion } as Task;
     });
   return { ...state, tasks };
 }

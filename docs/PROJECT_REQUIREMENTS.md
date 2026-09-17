@@ -1907,3 +1907,25 @@ If a future user instruction explicitly changes a requirement:
 4. preserve version/history through Git commits.
 
 Do not infer that an implementation shortcut permanently changes the product requirement.
+
+---
+
+## POC v1.1 implemented specification (supersedes conflicting v1.0 text)
+
+POC v1.1 uses project schema version 2 and application compatibility version 1.1.0. Schema-1 files open through an automatic, in-memory normalisation: missing task dates become null, legacy Due is retained as non-scheduling historical data, a legacy task predecessor becomes a Finish-to-Start relationship, and implicit milestone scope becomes explicit Project-wide scope. Saving emits schema 2; the original file is not separately rewritten during open.
+
+Tasks have independently managed optional Start Date and End Date. Both dates are required for scheduling; one missing date is valid and Unscheduled. End Date before Start Date is rejected, while a same-day task is valid. Parent progress/completion remains derived from immediate children, but dates are never derived. Deleting a parent promotes active children to its parent (or the top level); restoring does not re-parent them.
+
+Tasks support any number of unique Finish-to-Start predecessor relationships using stable IDs. Active parent and leaf tasks are eligible. Self-references, missing/deleted new references, and direct or indirect cycles are prevented. Dependencies never schedule tasks automatically. Historical references to soft-deleted tasks remain until restored or explicitly removed.
+
+Milestones have either explicit Project-wide scope or one or more stable Stream IDs. The choices are mutually exclusive. Deleted Stream references are preserved historically, hidden from active selection, and restored automatically when the Stream is restored. Editing scope requires a valid non-empty active selection.
+
+Warnings are derived, never acknowledged or persisted, and cover child schedules outside a fully scheduled parent, Finish-to-Start timing violations, deleted predecessor references, deleted milestone-scope Streams, and active Tasks belonging to deleted Streams. Same-day handover is valid. Corrective relationship removal requires confirmation and is a normal dirty, persisted command.
+
+Navigation order is Overview, Search, Streams, People, Tasks, Milestones, Gantt, Tube Map, Risk Log, Decision Log, Warnings, and File Information. The full sidebar can be hidden for the current session and restores on reload. Its Warnings label omits a zero count.
+
+Gantt has exactly twelve columns: calendar days for Week, Monday-Sunday weeks for Month, and Monday-based fourteen-day periods for Quarter. Its default window has two periods before the current period and nine after it. Only fully scheduled tasks have bars or connectors; actual dates are positioned proportionally. It includes an always-visible Project-wide row and one occurrence of a multi-stream milestone in every applicable active Stream.
+
+Tube Map is a twelve-week Monday-based roadmap with an always-visible Project-wide row, ordered active Stream rows, neutral Stream lines, and purple milestone diamonds at actual-date positions. Multi-stream visual occurrences remain one logical milestone and connections remain entity-level. Outside-window indicators are informational.
+
+Risk Log opens at Level All. Level filters the table (including deleted risks when requested), while the 3x3 matrix always represents all active risks. The always-visible Add Risk control follows the matrix.

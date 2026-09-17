@@ -2,9 +2,9 @@ import type { ProjectState } from "../../application/state";
 
 export const PMP_FORMAT_IDENTIFIER = "PM-POC/PMP" as const;
 export const CURRENT_PMP_FORMAT_VERSION = 1 as const;
-export const CURRENT_PROJECT_SCHEMA_VERSION = 1 as const;
+export const CURRENT_PROJECT_SCHEMA_VERSION = 2 as const;
 export const SUPPORTED_PMP_FORMAT_VERSIONS = [1] as const;
-export const SUPPORTED_PROJECT_SCHEMA_VERSIONS = [1] as const;
+export const SUPPORTED_PROJECT_SCHEMA_VERSIONS = [1, 2] as const;
 export const PMP_ENTRY_NAMES = ["manifest.json", "project.json", "config.json"] as const;
 
 export interface PmpManifest {
