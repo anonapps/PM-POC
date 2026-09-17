@@ -3,7 +3,7 @@ const day = 86_400_000;
 const parse = (date: string) => new Date(`${date}T00:00:00Z`);
 const iso = (date: Date) => date.toISOString().slice(0, 10);
 export function mondayOf(date: string) { const value = parse(date); const weekday = value.getUTCDay() || 7; value.setUTCDate(value.getUTCDate() - weekday + 1); return iso(value); }
-export function isoWeek(date: string) { const value = parse(date); value.setUTCDate(value.getUTCDate() + 4 - (value.getUTCDay() || 7)); return Math.ceil((((value.getTime() - Date.UTC(value.getUTCFullYear(), 0, 1)) / day) + 1) / 7); }
+export function isoWeek(date: string) { const value = parse(date); value.setUTCDate(value.getUTCDate() + 4 - (value.getUTCDay() || 7)); const yearStart = new Date(Date.UTC(value.getUTCFullYear(), 0, 1)); return Math.ceil((((value.getTime() - yearStart.getTime()) / day) + 1) / 7); }
 export interface TubeStream { id: string; label: string; lane: number; top: number; height: number }
 export interface TubeStation { id: string; entityId: string; label: string; date: string; x: number; lane: number; y: number; level: number; boundary: "before" | "inside" | "after" }
 export interface TubeConnection { from: string; to: string; fromX: number; fromY: number; toX: number; toY: number }
