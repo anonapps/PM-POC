@@ -1912,7 +1912,7 @@ Do not infer that an implementation shortcut permanently changes the product req
 
 ## POC v1.1 implemented specification (supersedes conflicting v1.0 text)
 
-POC v1.1 uses project schema version 2 and application compatibility version 1.1.0. Schema-1 files open through an automatic, in-memory normalisation: missing task dates become null, legacy Due is retained as End Date, a legacy task predecessor becomes a Finish-to-Start relationship, and implicit milestone scope becomes explicit Project-wide scope. Saving emits schema 2; the original file is not separately rewritten during open.
+POC v1.1 uses project schema version 2 and application compatibility version 1.1.0. Schema-1 files open through an automatic, in-memory normalisation: missing task dates become null, legacy Due is retained as non-scheduling historical data, a legacy task predecessor becomes a Finish-to-Start relationship, and implicit milestone scope becomes explicit Project-wide scope. Saving emits schema 2; the original file is not separately rewritten during open.
 
 Tasks have independently managed optional Start Date and End Date. Both dates are required for scheduling; one missing date is valid and Unscheduled. End Date before Start Date is rejected, while a same-day task is valid. Parent progress/completion remains derived from immediate children, but dates are never derived. Deleting a parent promotes active children to its parent (or the top level); restoring does not re-parent them.
 

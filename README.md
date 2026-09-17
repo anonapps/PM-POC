@@ -31,7 +31,7 @@ npm audit
 npm run test:e2e
 ```
 
-The completed Blocks 0–20 baseline has been validated with 21 Vitest files / 93 tests, zero lint warnings, successful TypeScript and production builds, zero audit vulnerabilities, and the Chrome E2E acceptance flow. See [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for coverage and the remaining native file-picker boundary checks.
+The completed Blocks 0–20 baseline has been validated with 22 Vitest files / 102 tests, zero lint warnings, successful TypeScript and production builds, zero audit vulnerabilities, and the Chrome E2E acceptance flow. See [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for coverage and the remaining native file-picker boundary checks.
 
 ## Source layout
 

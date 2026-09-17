@@ -30,7 +30,7 @@ describe("schema 1 to 2 migration", () => {
     const result = migrateProject(legacy, 1);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.tasks[0]).toMatchObject({ startDate: null, endDate: "2026-10-01" });
+    expect(result.value.tasks[0]).toMatchObject({ startDate: null, endDate: null, legacyDueDate: "2026-10-01" });
     expect(result.value.milestones[0].scope).toEqual({ kind: "project" });
     expect(result.value.dependencies[0]).toMatchObject({ predecessor: { id: "task-1" }, successor: { id: "old-task" } });
   });

@@ -108,13 +108,10 @@ export function duplicate(kind: DuplicableKind, id: string): ProjectCommand {
           actualCompletionDate: undefined,
           ownerId: ownerIfActive(source.ownerId),
           milestoneId: source.milestoneId && active.has(source.milestoneId) ? source.milestoneId : undefined,
-          parentTaskId: undefined,
+          parentTaskId: source.parentTaskId && active.has(source.parentTaskId) ? source.parentTaskId : undefined,
           deletion: { isDeleted: false },
         };
-        const copiedDependencies = state.dependencies
-          .filter((dependency) => dependency.successor.kind === "task" && dependency.successor.id === source.id && dependency.predecessor.id !== copy.id && active.has(dependency.predecessor.id))
-          .map((dependency) => ({ ...dependency, id: context.createId(), successor: { kind: "task" as const, id: copy.id } }));
-        return recalculate({ ...state, tasks: [...state.tasks, copy], dependencies: [...state.dependencies, ...copiedDependencies], identifierSequences: issued.sequences });
+        return recalculate({ ...state, tasks: [...state.tasks, copy], identifierSequences: issued.sequences });
       }
 
       if (kind === "milestone") {

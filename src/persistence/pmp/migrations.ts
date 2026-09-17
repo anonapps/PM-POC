@@ -12,7 +12,7 @@ migrations.set(1, (input) => {
     const legacy = typeof task.dependencyTaskId === "string" ? task.dependencyTaskId : undefined;
     if (legacy) dependencies.push({ id: `migrated-${task.id}-${legacy}`, projectId: project.id, predecessor: { kind: "task", id: legacy }, successor: { kind: "task", id: task.id }, type: "Finish-to-Start" });
     const rest = { ...task }; const legacyDue = rest.dueDate; delete rest.dependencyTaskId; delete rest.dueDate;
-    return { ...rest, startDate: task.startDate ?? null, endDate: task.endDate ?? legacyDue ?? null };
+    return { ...rest, startDate: task.startDate ?? null, endDate: task.endDate ?? null, legacyDueDate: task.legacyDueDate ?? legacyDue };
   });
   state.milestones = (state.milestones as Record<string, unknown>[]).map((milestone) => ({ ...milestone, scope: milestone.scope ?? { kind: "project" } }));
   state.dependencies = dependencies;

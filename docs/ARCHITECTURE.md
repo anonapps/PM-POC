@@ -398,7 +398,7 @@ When making an implementation decision:
 
 ## POC v1.1 architecture
 
-Schema 2 is the canonical write format. The PMP codec recognises schema 1 and runs the pure `migrations.ts` normaliser before structural validation and hydration. This keeps compatibility logic at the persistence boundary and avoids parallel domain schemas.
+Schema 2 is the canonical write format. The PMP codec recognises schema 1 and runs the pure `migrations.ts` normaliser before structural validation and hydration. This keeps compatibility logic at the persistence boundary and avoids parallel domain schemas. Legacy Due values are preserved in `legacyDueDate` solely for lossless history and never populate Start or End scheduling fields.
 
 Task schedule values are nullable independent fields. Dependency graph integrity remains centralised in domain relationship validation and canonical `ProjectState.dependencies`; task controls, warning derivation, and Gantt all consume that same collection. Parent recalculation derives progress and completion only.
 

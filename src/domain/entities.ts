@@ -45,6 +45,8 @@ export interface Task extends EntityIdentity, SoftDeletable {
   readonly status: LifecycleStatus;
   readonly startDate?: LocalDate | null;
   readonly endDate?: LocalDate | null;
+  /** Preserved v1.0 Due value; not a v1.1 scheduling date. */
+  readonly legacyDueDate?: LocalDate;
   readonly ownerId: OwnerId;
   readonly priority?: Priority;
   readonly progress: number;
