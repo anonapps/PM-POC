@@ -395,3 +395,15 @@ When making an implementation decision:
 3. Prefer the simplest implementation satisfying both.
 4. Record material architectural decisions in documentation.
 5. Ask for user clarification only when a material product/architecture ambiguity remains.
+
+## POC v1.1 architecture
+
+Schema 2 is the canonical write format. The PMP codec recognises schema 1 and runs the pure `migrations.ts` normaliser before structural validation and hydration. This keeps compatibility logic at the persistence boundary and avoids parallel domain schemas.
+
+Task schedule values are nullable independent fields. Dependency graph integrity remains centralised in domain relationship validation and canonical `ProjectState.dependencies`; task controls, warning derivation, and Gantt all consume that same collection. Parent recalculation derives progress and completion only.
+
+Milestone scope is a discriminated union (`project` or `streams` with stable IDs). Soft deletion never rewrites dependency or scope relationships. The warning selector derives current inconsistencies and corrective actions dispatch ordinary project commands, so dirty state, undo/redo, autosave, and counts stay coherent.
+
+Gantt and Tube Map models are pure projections of canonical state. Their timeline models calculate fixed twelve-column windows and proportional date positions. Repeated milestone marks carry the same entity ID and are not cloned state. Stream array order is the visual order.
+
+Sidebar visibility belongs to the application shell and is intentionally session-only React state. Hidden mode removes the navigation column entirely and exposes a fixed restore control; no persistence adapter or project configuration is involved.

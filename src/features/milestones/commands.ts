@@ -17,6 +17,7 @@ export function validateMilestone(state: ProjectState, draft: MilestoneDraft): r
   if (!draft.name.trim()) errors.push("Milestone name is required.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.plannedDate)) errors.push("Milestone date is required.");
   if (draft.ownerId && !state.people.some((person) => person.id === draft.ownerId && !person.deletion.isDeleted)) errors.push("Owner must be active.");
+  if (draft.scope.kind === "streams" && draft.scope.streamIds.length === 0) errors.push("Select at least one active Stream or Project-wide.");
   if (draft.scope.kind === "streams" && draft.scope.streamIds.some((id) => !state.streams.some((stream) => stream.id === id && !stream.deletion.isDeleted))) errors.push("Related streams must be active.");
   if (draft.relatedTaskIds.some((id) => !state.tasks.some((task) => task.id === id && !task.deletion.isDeleted))) errors.push("Related tasks must be active.");
   return errors;
@@ -36,7 +37,9 @@ export function editMilestone(id: string, patch: Partial<MilestoneDraft>): Proje
     const current = state.milestones.find((milestone) => milestone.id === id);
     if (!current) return state;
     const draft = { ...current, ...patch };
-    if (validateMilestone(state, draft).length) return state;
+    const errors = validateMilestone(state, draft);
+    // Historical deleted scope references do not block unrelated edits.
+    if (errors.length && (patch.scope !== undefined || errors.some((error) => !error.includes("streams must be active")))) return state;
     const actualCompletionDate = patch.status ? (patch.status === "Complete" ? context.now().slice(0, 10) : undefined) : current.actualCompletionDate;
     return { ...state, milestones: state.milestones.map((milestone) => milestone.id === id ? { ...milestone, ...patch, name: draft.name.trim(), actualCompletionDate } : milestone) };
   } };

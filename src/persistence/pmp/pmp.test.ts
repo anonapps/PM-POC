@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { makeProjectState } from "../../domain/test-fixtures";
+import { makeProjectState, taskFixture } from "../../domain/test-fixtures";
 import { canonicalJson } from "./canonical";
 import { deserializeProject, serializeProject } from "./codec";
+import { migrateProject } from "./migrations";
 import { inspectProjectCompatibility } from "./validation";
 import { CURRENT_PMP_FORMAT_VERSION, CURRENT_PROJECT_SCHEMA_VERSION, PMP_FORMAT_IDENTIFIER } from "./types";
 
@@ -19,3 +20,18 @@ describe("PMP v1", () => {
 describe("adversarial project validation",()=>{it("rejects malformed UTF-8 and non-ZIP data",()=>{expect(deserializeProject(Uint8Array.from([0x50,0x4d,0xff])).ok).toBe(false)});it("rejects invalid and duplicate human-readable IDs before serialization",()=>{const state=makeProjectState({streams:[{id:"s1",projectId:"project-1",humanId:"STREAM-X",name:"unsafe",ownerId:null,status:"Not Started",deletion:{isDeleted:false}}]});expect(serializeProject(state,meta).ok).toBe(false)});it("rejects invalid dependency references",()=>{const state=makeProjectState({dependencies:[{id:"d1",projectId:"project-1",type:"Finish-to-Start",predecessor:{kind:"task",id:"missing"},successor:{kind:"milestone",id:"missing"}}]});expect(serializeProject(state,meta).ok).toBe(false)})});
 
 describe("hardened PMP boundaries",()=>{const encode=(state=makeProjectState())=>{const result=serializeProject(state,meta);expect(result.ok).toBe(true);return result.ok?result.value:new Uint8Array()};it("rejects an archive entry renamed to a traversal path",()=>{const bytes=encode().slice();const original=new TextEncoder().encode("manifest.json"),unsafe=new TextEncoder().encode("../nifest.json");const at=bytes.findIndex((_,i)=>original.every((b,j)=>bytes[i+j]===b));bytes.set(unsafe,at);expect(deserializeProject(bytes).ok).toBe(false)});it("rejects an unexpected equal-length archive entry",()=>{const bytes=encode().slice(),original=new TextEncoder().encode("project.json"),unsafe=new TextEncoder().encode("project.exe");const at=bytes.findIndex((_,i)=>original.every((b,j)=>bytes[i+j]===b));bytes.set(unsafe,at);expect(deserializeProject(bytes).ok).toBe(false)});it("rejects impossible calendar dates",()=>expect(serializeProject(makeProjectState({project:{...makeProjectState().project,startDate:"2026-02-30"}}),meta).ok).toBe(false));it("rejects corrupt identifier sequences",()=>{expect(serializeProject(makeProjectState({identifierSequences:{stream:-1,task:0,milestone:0,person:0,risk:0,decision:0}}),meta).ok).toBe(false)});it("rejects cyclic dependencies",()=>{const task=(id:string,humanId:`TASK-${string}`)=>({id,projectId:"project-1",humanId,name:id,scope:{kind:"project" as const},status:"Not Started" as const,ownerId:null,progress:0,deletion:{isDeleted:false}});const state=makeProjectState({tasks:[task("a","TASK-001"),task("b","TASK-002")],identifierSequences:{stream:0,task:2,milestone:0,person:0,risk:0,decision:0},dependencies:[{id:"d1",projectId:"project-1",type:"Finish-to-Start",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"}},{id:"d2",projectId:"project-1",type:"Finish-to-Start",predecessor:{kind:"task",id:"b"},successor:{kind:"task",id:"a"}}]});expect(serializeProject(state,meta).ok).toBe(false)});it("rejects oversized container input without processing it",()=>expect(deserializeProject(new Uint8Array(32*1024*1024+1)).ok).toBe(false))});
+
+describe("schema 1 to 2 migration", () => {
+  it("normalises dates, legacy dependency and milestone scope without data loss", () => {
+    const legacy = makeProjectState({
+      tasks: [{ ...taskFixture({ id: "old-task" }), dependencyTaskId: "task-1", dueDate: "2026-10-01", startDate: undefined, endDate: undefined } as never],
+      milestones: [{ id: "m-old", projectId: "project-1", humanId: "MILESTONE-001", name: "Legacy", plannedDate: "2026-10-01", status: "Planned", ownerId: null, relatedTaskIds: [], deletion: { isDeleted: false } } as never],
+    });
+    const result = migrateProject(legacy, 1);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.tasks[0]).toMatchObject({ startDate: null, endDate: "2026-10-01" });
+    expect(result.value.milestones[0].scope).toEqual({ kind: "project" });
+    expect(result.value.dependencies[0]).toMatchObject({ predecessor: { id: "task-1" }, successor: { id: "old-task" } });
+  });
+});

@@ -3,7 +3,7 @@ import type { ProjectState } from "../../application";
 const object=(value:unknown):value is Record<string,unknown>=>value!==null&&typeof value==="object"&&!Array.isArray(value);
 const text=(value:unknown,required=false):value is string=>typeof value==="string"&&value.length<=100_000&&(!required||value.trim().length>0);
 const id=(value:unknown):value is string=>text(value,true)&&value.length<=200;
-const date=(value:unknown,optional=true)=>{if(value===undefined)return optional;if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const [year,month,day]=value.split("-").map(Number),parsed=new Date(Date.UTC(year,month-1,day));return parsed.getUTCFullYear()===year&&parsed.getUTCMonth()===month-1&&parsed.getUTCDate()===day;};
+const date=(value:unknown,optional=true)=>{if(value===undefined||value===null)return optional;if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const [year,month,day]=value.split("-").map(Number),parsed=new Date(Date.UTC(year,month-1,day));return parsed.getUTCFullYear()===year&&parsed.getUTCMonth()===month-1&&parsed.getUTCDate()===day;};
 const deletion=(value:unknown)=>object(value)&&typeof value.isDeleted==="boolean"&&(!value.isDeleted||typeof value.deletedAt==="string")&&Object.keys(value).every(key=>["isDeleted","deletedAt"].includes(key));
 const identity=(value:unknown,prefix:string,projectId:string)=>object(value)&&id(value.id)&&value.projectId===projectId&&typeof value.humanId==="string"&&new RegExp(`^${prefix}-[0-9]{3,}$`).test(value.humanId)&&deletion(value.deletion);
 const ids=(value:unknown)=>Array.isArray(value)&&value.every(id);

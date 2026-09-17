@@ -1,7 +1,6 @@
 import {
   calculateParentProgress,
   deriveParentCompletion,
-  deriveParentTaskDates,
   issueHumanId,
   type Decision,
   type EntityKind,
@@ -60,7 +59,12 @@ function lifecycleCommand(type: string, kind: Exclude<EntityKind, "project">, id
       }
       if (kind === "task") {
         const entities = update(state.tasks);
-        return entities ? recalculate({ ...state, tasks: entities }) : state;
+        if (!entities) return state;
+        const source = state.tasks.find((task) => task.id === id);
+        const tasks = deleted ? entities.map((task) => task.parentTaskId === id && !task.deletion.isDeleted
+          ? { ...task, parentTaskId: source?.parentTaskId }
+          : task) : entities;
+        return recalculate({ ...state, tasks });
       }
       if (kind === "milestone") {
         const entities = update(state.milestones);
@@ -104,10 +108,13 @@ export function duplicate(kind: DuplicableKind, id: string): ProjectCommand {
           actualCompletionDate: undefined,
           ownerId: ownerIfActive(source.ownerId),
           milestoneId: source.milestoneId && active.has(source.milestoneId) ? source.milestoneId : undefined,
-          parentTaskId: source.parentTaskId && active.has(source.parentTaskId) ? source.parentTaskId : undefined,
+          parentTaskId: undefined,
           deletion: { isDeleted: false },
         };
-        return recalculate({ ...state, tasks: [...state.tasks, copy], identifierSequences: issued.sequences });
+        const copiedDependencies = state.dependencies
+          .filter((dependency) => dependency.successor.kind === "task" && dependency.successor.id === source.id && dependency.predecessor.id !== copy.id && active.has(dependency.predecessor.id))
+          .map((dependency) => ({ ...dependency, id: context.createId(), successor: { kind: "task" as const, id: copy.id } }));
+        return recalculate({ ...state, tasks: [...state.tasks, copy], dependencies: [...state.dependencies, ...copiedDependencies], identifierSequences: issued.sequences });
       }
 
       if (kind === "milestone") {
@@ -187,9 +194,8 @@ export function recalculate(state: ProjectState): ProjectState {
       const children = tasks.filter((child) => child.parentTaskId === task.id && !child.deletion.isDeleted);
       if (!children.length) return task;
       const progress = calculateParentProgress(children) ?? task.progress;
-      const dates = deriveParentTaskDates(children);
       const completion = deriveParentCompletion(children);
-      return { ...task, progress, ...dates, ...completion } as Task;
+      return { ...task, progress, ...completion } as Task;
     });
   return { ...state, tasks };
 }

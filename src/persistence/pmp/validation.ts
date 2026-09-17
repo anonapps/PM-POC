@@ -1,6 +1,7 @@
 import { hydrateProjectState, type ProjectState } from "../../application/state";
 import { wouldCreateDependencyCycle } from "../../domain";
 import { validatePersistedState } from "./structural-validation";
+import { migrateProject } from "./migrations";
 import { CURRENT_PMP_FORMAT_VERSION, CURRENT_PROJECT_SCHEMA_VERSION, DEFAULT_PROJECT_CONFIGURATION, PMP_FORMAT_IDENTIFIER, type CompatibilityInspection, type LogicalPmpContainer, type PmpError, type PmpManifest, type PmpProjectConfiguration, type PmpResult, type ValidatedProjectContainer } from "./types";
 
 const obj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === "object" && !Array.isArray(v);
@@ -47,7 +48,7 @@ function validateState(v: unknown): PmpResult<ProjectState> {
     if (ids.some((id) => typeof id !== "string" || id.length === 0 || id.length > 200) || new Set(ids).size !== ids.length) return err("SCHEMA_VALIDATION_FAILURE", "Entity IDs must be non-empty, bounded and unique.");
     if (entities.some((entity) => typeof entity.humanId !== "string" || !/^(STREAM|TASK|MILESTONE|PERSON|RISK|DECISION)-[0-9]{3,}$/.test(entity.humanId)) || new Set(entities.map((entity) => entity.humanId)).size !== entities.length) return err("SCHEMA_VALIDATION_FAILURE", "Human-readable IDs are invalid or duplicated.");
     if (entities.some((entity) => entity.projectId !== state.project.id)) return err("SCHEMA_VALIDATION_FAILURE", "Entity project membership is invalid.");
-    const localDate = (date: unknown) => { if (date === undefined) return true; if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return false; const [year, month, day] = date.split("-").map(Number), parsed = new Date(Date.UTC(year, month - 1, day)); return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day; };
+    const localDate = (date: unknown) => { if (date === undefined || date === null) return true; if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return false; const [year, month, day] = date.split("-").map(Number), parsed = new Date(Date.UTC(year, month - 1, day)); return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day; };
     if (!localDate(state.project.startDate) || !localDate(state.project.endDate) || state.tasks.some((item) => !localDate(item.startDate) || !localDate(item.endDate) || !localDate(item.actualCompletionDate)) || state.streams.some((item) => !localDate(item.startDate) || !localDate(item.endDate)) || state.milestones.some((item) => !localDate(item.plannedDate) || !localDate(item.actualCompletionDate)) || state.decisions.some((item) => !localDate(item.decisionDate))) return err("SCHEMA_VALIDATION_FAILURE", "Project contains an invalid calendar date.");
     const endpointExists = (kind: "task" | "milestone", id: string) => (kind === "task" ? state.tasks : state.milestones).some((item) => item.id === id);
     if (state.dependencies.some((dependency) => dependency.projectId !== state.project.id || !endpointExists(dependency.predecessor.kind, dependency.predecessor.id) || !endpointExists(dependency.successor.kind, dependency.successor.id))) return err("SCHEMA_VALIDATION_FAILURE", "Dependency references an invalid entity.");
@@ -61,8 +62,9 @@ export function validateProjectContainer(container: LogicalPmpContainer): PmpRes
   const compatibility = inspectProjectCompatibility(manifest.value);
   if (compatibility.format === "UNSUPPORTED_NEWER" || compatibility.schema === "UNSUPPORTED_NEWER") return err("UNSUPPORTED_NEWER_VERSION", "Project requires a newer runtime.");
   if (compatibility.format === "UNSUPPORTED_OLDER") return err("UNSUPPORTED_OLDER_VERSION", "PMP format is older than supported.");
-  if (compatibility.requiresMigration) return err("UNSUPPORTED_OLDER_VERSION", "Project schema requires migration.");
-  const project = validateState(container.project); if (!project.ok) return project;
+  let rawProject = container.project;
+  if (compatibility.requiresMigration) { const migrated = migrateProject(container.project as ProjectState, manifest.value.schemaVersion); if (!migrated.ok) return migrated; rawProject = migrated.value; }
+  const project = validateState(rawProject); if (!project.ok) return project;
   if (project.value.project.id !== manifest.value.projectId) return err("PROJECT_ID_MISMATCH", "Manifest project ID does not match project payload.", "projectId");
   const configuration = validateConfiguration(container.configuration); if (!configuration.ok) return configuration;
   return { ok: true, value: { manifest: manifest.value, projectState: project.value, configuration: configuration.value } };
