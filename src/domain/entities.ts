@@ -33,8 +33,8 @@ export interface Stream extends EntityIdentity, SoftDeletable {
   readonly description?: string;
   readonly ownerId: OwnerId;
   readonly status: LifecycleStatus;
-  readonly startDate?: LocalDate;
-  readonly endDate?: LocalDate;
+  readonly startDate?: LocalDate | null;
+  readonly endDate?: LocalDate | null;
   readonly priority?: Priority;
 }
 
@@ -43,8 +43,10 @@ export interface Task extends EntityIdentity, SoftDeletable {
   readonly description?: string;
   readonly scope: TaskScope;
   readonly status: LifecycleStatus;
-  readonly startDate?: LocalDate;
-  readonly endDate?: LocalDate;
+  readonly startDate?: LocalDate | null;
+  readonly endDate?: LocalDate | null;
+  /** Preserved v1.0 Due value; not a v1.1 scheduling date. */
+  readonly legacyDueDate?: LocalDate;
   readonly ownerId: OwnerId;
   readonly priority?: Priority;
   readonly progress: number;

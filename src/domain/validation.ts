@@ -108,11 +108,11 @@ export function validateTaskHierarchy(
   }];
 }
 
-function invalidRange(start?: LocalDate, end?: LocalDate): boolean {
+function invalidRange(start?: LocalDate | null, end?: LocalDate | null): boolean {
   return Boolean(start && end && start > end);
 }
 
-function outsideRange(date?: LocalDate, start?: LocalDate, end?: LocalDate): boolean {
+function outsideRange(date?: LocalDate | null, start?: LocalDate | null, end?: LocalDate | null): boolean {
   return Boolean(date && ((start && date < start) || (end && date > end)));
 }
 

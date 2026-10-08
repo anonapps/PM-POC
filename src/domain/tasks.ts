@@ -32,23 +32,14 @@ function averageProgress(tasks: readonly Task[]): number | null {
   return Math.round(tasks.reduce((total, task) => total + task.progress, 0) / tasks.length);
 }
 
-export interface DerivedTaskDates {
-  readonly startDate?: LocalDate;
-  readonly endDate?: LocalDate;
-}
-
-export function deriveParentTaskDates(children: readonly Task[]): DerivedTaskDates {
+/** Legacy helper retained for API compatibility; v1.1 never applies it automatically. */
+export function deriveParentTaskDates(children: readonly Task[]) {
   const active = activeTasks(children);
-  const starts = active.flatMap((child) => (child.startDate ? [child.startDate] : []));
-  const ends = active.flatMap((child) => (child.endDate ? [child.endDate] : []));
-  return {
-    startDate: starts.length > 0 ? starts.reduce(earlierDate) : undefined,
-    endDate: ends.length > 0 ? ends.reduce(laterDate) : undefined,
-  };
+  const starts = active.flatMap((child) => child.startDate ? [child.startDate] : []);
+  const ends = active.flatMap((child) => child.endDate ? [child.endDate] : []);
+  return { startDate: starts.length ? starts.reduce((a,b)=>a<b?a:b) : undefined, endDate: ends.length ? ends.reduce(laterDate) : undefined };
 }
 
-const earlierDate = (left: LocalDate, right: LocalDate) =>
-  left < right ? left : right;
 const laterDate = (left: LocalDate, right: LocalDate) =>
   left > right ? left : right;
 

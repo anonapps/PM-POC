@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Decision, Milestone, Person, Risk, Task } from "../domain";
-import { projectFixture, streamFixture, taskFixture } from "../domain/test-fixtures";
+import { makeProjectState, projectFixture, streamFixture, taskFixture } from "../domain/test-fixtures";
 import { duplicate } from "./commands";
 import { createProjectStore } from "./store";
 
@@ -71,3 +71,5 @@ describe("duplicate", () => {
     expect(store.getState().milestones[1]?.actualCompletionDate).toBeUndefined();
   });
 });
+
+describe("v1.1 task duplication corrections",()=>{it("keeps an active parent but leaves the duplicate dependency-free",()=>{const parent=taskFixture({id:"parent"}),source=taskFixture({id:"child",humanId:"TASK-002",parentTaskId:"parent"}),predecessor=taskFixture({id:"before",humanId:"TASK-003"});const store=createProjectStore(makeProjectState({tasks:[parent,source,predecessor],identifierSequences:{stream:0,task:3,milestone:0,person:0,risk:0,decision:0},dependencies:[{id:"d",projectId:"project-1",predecessor:{kind:"task",id:"before"},successor:{kind:"task",id:"child"},type:"Finish-to-Start"}]}),context);store.execute(duplicate("task","child"));expect(store.getState().tasks.at(-1)?.parentTaskId).toBe("parent");expect(store.getState().dependencies).toHaveLength(1)})});

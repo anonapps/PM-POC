@@ -1,34 +1,12 @@
-import { getTaskHierarchyDepth, type Milestone, type Stream, type Task } from "../../domain";
-import { selectActiveDependencies, type ProjectState } from "../../application";
-
-export type GanttRow =
-  | { kind: "stream"; id: string; label: string; start?: string; end?: string; progress: number | null; depth: 0 }
-  | { kind: "task"; id: string; label: string; start?: string; end?: string; progress: number; depth: number; scope: "stream" | "project" }
-  | { kind: "milestone"; id: string; label: string; start: string; end: string; progress: number; depth: 0 };
-export interface GanttModel { start: string; end: string; rows: readonly GanttRow[]; dependencies: readonly { from: string; to: string; type: string }[] }
-
-const day = 86_400_000;
-const time = (date: string) => Date.parse(`${date}T00:00:00Z`);
-export function positionForDate(date: string, start: string, end: string) { const span = Math.max(day, time(end) - time(start)); return Math.max(0, Math.min(100, ((time(date) - time(start)) / span) * 100)); }
-export function barPosition(start: string | undefined, end: string | undefined, rangeStart: string, rangeEnd: string) { if (!start && !end) return null; const left = positionForDate(start ?? end!, rangeStart, rangeEnd); const right = positionForDate(end ?? start!, rangeStart, rangeEnd); return { left, width: Math.max(0.75, right - left) }; }
-
-function taskRows(tasks: readonly Task[], scope: "project" | "stream", streamId?: string): GanttRow[] {
-  const included = tasks.filter((task) => !task.deletion.isDeleted && (scope === "project" ? task.scope.kind === "project" : task.scope.kind === "stream" && task.scope.streamId === streamId));
-  const children = new Map<string | undefined, Task[]>();
-  for (const task of included) children.set(task.parentTaskId, [...(children.get(task.parentTaskId) ?? []), task]);
-  const visit = (parent: string | undefined): GanttRow[] => (children.get(parent) ?? []).flatMap((task) => [{ kind: "task" as const, id: task.id, label: task.name, start: task.startDate, end: task.endDate, progress: task.progress, depth: Math.min(4, getTaskHierarchyDepth(task.id, tasks) ?? 1), scope }, ...visit(task.id)]);
-  return visit(undefined);
-}
-export function buildGanttModel(state: ProjectState): GanttModel {
-  const streams = state.streams.filter((stream) => !stream.deletion.isDeleted);
-  const milestones = state.milestones.filter((milestone) => !milestone.deletion.isDeleted);
-  const dated = [state.project.startDate, state.project.endDate, ...streams.flatMap((stream: Stream) => [stream.startDate, stream.endDate]), ...state.tasks.filter((task) => !task.deletion.isDeleted).flatMap((task: Task) => [task.startDate, task.endDate]), ...milestones.map((milestone: Milestone) => milestone.plannedDate)].filter((date): date is string => Boolean(date)).sort();
-  const start = dated[0] ?? state.project.startDate;
-  const end = dated.at(-1) ?? state.project.startDate;
-  const rows: GanttRow[] = [...taskRows(state.tasks, "project")];
-  for (const stream of streams) rows.push({ kind: "stream", id: stream.id, label: stream.name, start: stream.startDate, end: stream.endDate, progress: null, depth: 0 }, ...taskRows(state.tasks, "stream", stream.id));
-  rows.push(...milestones.map((milestone) => ({ kind: "milestone" as const, id: milestone.id, label: milestone.name, start: milestone.plannedDate, end: milestone.plannedDate, progress: milestone.status === "Complete" ? 100 : 0, depth: 0 as const })));
-  const ids = new Set(rows.map((row) => row.id));
-  const dependencies = selectActiveDependencies(state).filter((dependency) => ids.has(dependency.predecessor.id) && ids.has(dependency.successor.id)).map((dependency) => ({ from: dependency.predecessor.id, to: dependency.successor.id, type: dependency.type }));
-  return { start, end, rows, dependencies };
-}
+import { getTaskHierarchyDepth,type Task } from "../../domain";import type{ProjectState}from"../../application";
+export type GanttZoom="Week"|"Month"|"Quarter"; export interface TimelineColumn{start:string;end:string;label:string;weekend:boolean}
+export type GanttRow={kind:"section"|"task"|"milestone";id:string;label:string;start?:string|null;end?:string|null;progress:number;depth:number};
+export interface GanttModel{start:string;end:string;columns:readonly TimelineColumn[];rows:readonly GanttRow[];dependencies:readonly{from:string;to:string}[]}
+const DAY=86400000,parse=(s:string)=>Date.parse(s+"T00:00:00Z"),iso=(n:number)=>new Date(n).toISOString().slice(0,10),monday=(s:string)=>{const d=new Date(parse(s)),w=d.getUTCDay()||7;return iso(d.setUTCDate(d.getUTCDate()-w+1))};
+const month=(date:string)=>new Intl.DateTimeFormat("en-GB",{month:"long",timeZone:"UTC"}).format(new Date(parse(date)));
+const rangeLabel=(a:string,b:string)=>{const ad=new Date(parse(a)),bd=new Date(parse(b));return ad.getUTCFullYear()!==bd.getUTCFullYear()?`${ad.getUTCDate()} ${month(a)} ${ad.getUTCFullYear()}–${bd.getUTCDate()} ${month(b)} ${bd.getUTCFullYear()}`:month(a)===month(b)?`${ad.getUTCDate()}–${bd.getUTCDate()} ${month(a)}`:`${ad.getUTCDate()} ${month(a)}–${bd.getUTCDate()} ${month(b)}`};
+export function timelineColumns(zoom:GanttZoom,today:string,offset=0):TimelineColumn[]{const width=zoom==="Week"?1:zoom==="Month"?7:14;const base=zoom==="Week"?today:monday(today);const start=parse(base)+(offset-2)*width*DAY;return Array.from({length:12},(_,i)=>{const a=iso(start+i*width*DAY),b=iso(start+(i+1)*width*DAY-DAY);return{start:a,end:b,label:zoom==="Week"?`${new Date(parse(a)).getUTCDate()}/${month(a)}`:rangeLabel(a,b),weekend:zoom==="Week"&&[0,6].includes(new Date(parse(a)).getUTCDay())}})}
+export function positionForDate(date:string,start:string,end:string){return((parse(date)-parse(start))/(parse(end)-parse(start)+DAY))*100}
+export function barPosition(start:string|null|undefined,end:string|null|undefined,rangeStart:string,rangeEnd:string){if(!start||!end)return null;const left=Math.max(0,positionForDate(start,rangeStart,rangeEnd)),right=Math.min(100,positionForDate(iso(parse(end)+DAY),rangeStart,rangeEnd));if(right<=0||left>=100)return{left:0,width:0,outside:true};return{left,width:Math.max(.75,right-left),outside:false}}
+function tasksFor(tasks:readonly Task[],streamId:string|undefined){const list=tasks.filter(t=>!t.deletion.isDeleted&&(streamId?t.scope.kind==="stream"&&t.scope.streamId===streamId:t.scope.kind==="project"));return list.map(t=>({kind:"task"as const,id:t.id,label:t.name,start:t.startDate,end:t.endDate,progress:t.progress,depth:getTaskHierarchyDepth(t.id,tasks)??1}))}
+export function buildGanttModel(state:ProjectState,zoom:GanttZoom="Week",today=new Date().toISOString().slice(0,10),offset=0):GanttModel{const columns=timelineColumns(zoom,today,offset),streams=state.streams.filter(s=>!s.deletion.isDeleted),milestones=state.milestones.filter(m=>!m.deletion.isDeleted),rows:GanttRow[]=[{kind:"section",id:"project",label:"Project-wide",progress:0,depth:0},...tasksFor(state.tasks,undefined),...milestones.filter(m=>m.scope.kind==="project").map(m=>({kind:"milestone"as const,id:`${m.id}:project`,label:m.name,start:m.plannedDate,end:m.plannedDate,progress:0,depth:0}))];for(const stream of streams)rows.push({kind:"section",id:stream.id,label:stream.name,progress:0,depth:0},...tasksFor(state.tasks,stream.id),...milestones.filter(m=>m.scope.kind==="streams"&&m.scope.streamIds.includes(stream.id)).map(m=>({kind:"milestone"as const,id:`${m.id}:${stream.id}`,label:m.name,start:m.plannedDate,end:m.plannedDate,progress:0,depth:0})));const visibleTasks=new Set(rows.filter(r=>r.kind==="task").map(r=>r.id));const dependencies=state.dependencies.filter(d=>d.type==="Finish-to-Start"&&d.predecessor.kind==="task"&&d.successor.kind==="task"&&visibleTasks.has(d.predecessor.id)&&visibleTasks.has(d.successor.id)&&state.tasks.find(t=>t.id===d.predecessor.id)?.startDate&&state.tasks.find(t=>t.id===d.predecessor.id)?.endDate&&state.tasks.find(t=>t.id===d.successor.id)?.startDate&&state.tasks.find(t=>t.id===d.successor.id)?.endDate).map(d=>({from:d.predecessor.id,to:d.successor.id}));return{start:columns[0].start,end:columns[11].end,columns,rows,dependencies}}
