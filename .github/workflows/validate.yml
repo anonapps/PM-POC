@@ -1,0 +1,40 @@
+name: PM-POC validation
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: validation-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Full audit (informational until upstream dev-tool fixes)
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+      - name: End-to-end acceptance
+        run: |
+          CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
+          test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run test:e2e
