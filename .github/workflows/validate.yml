@@ -29,7 +29,8 @@ jobs:
       - name: Full audit (informational until upstream dev-tool fixes)
         run: npm audit --audit-level=moderate
         continue-on-error: true
-      - name: Install Chromium
-        run: sudo apt-get update && sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
       - name: End-to-end acceptance
-        run: CHROME_PATH=$(command -v chromium || command -v chromium-browser) npm run test:e2e
+        run: |
+          CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
+          test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run test:e2e
