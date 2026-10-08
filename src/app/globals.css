@@ -54,3 +54,31 @@ table input:not([type=checkbox]),table select,.inline-form input,.inline-form se
 .tube-map{min-width:980px;padding-top:48px}.tube-axis{position:sticky;z-index:5;left:0;right:auto;top:0;width:100%;grid-template-columns:160px repeat(12,1fr);background:white}.tube-axis b{position:sticky;left:0;background:#eef2f6;padding:.6rem}.tube-line{height:76px;grid-template-columns:160px 1fr;border-bottom:1px solid #e5e7eb}.tube-line strong{position:sticky;left:0;z-index:3;background:white}.tube-line div{height:2px;border-radius:0;background:#334155;background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(8.333% - 1px),#e5e7eb calc(8.333% - 1px),#e5e7eb 8.333%)}.tube-station{max-width:160px;white-space:normal;text-align:center}.tube-station i{width:16px;height:16px;border:0;border-radius:1px;background:#7c3aed;transform:rotate(45deg)}.tube-station small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.tube-map footer{position:sticky;left:12px}
 .gantt-connectors{position:absolute;left:32%;top:42px;width:68%;height:calc(100% - 84px);z-index:2;pointer-events:none;overflow:visible}.gantt-connectors>path{fill:none;stroke:#334155;stroke-width:.35;vector-effect:non-scaling-stroke}.gantt-connectors marker path{fill:#334155}.gantt-bar i{display:block;height:100%;background:#173f72}.gantt-bar.milestone i{display:none}
 .tube-body{position:relative;margin-left:160px}.tube-line{position:absolute;left:-160px;right:0;width:calc(100% + 160px)}.tube-connections{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.tube-connections path{fill:none;stroke:#64748b;stroke-width:1.5;vector-effect:non-scaling-stroke}.tube-body .tube-station{left:var(--station-x)}
+
+/* v1.2: shared compact controls, persistent section tools and responsive planning */
+.panel>.title-row { position:sticky; top:0; z-index:8; background:#f4f6f8; padding:.55rem 0; align-items:center; flex-wrap:wrap; }
+.panel>.title-row h1 { margin-bottom:0; }
+.panel>.title-row .actions { margin-top:0; align-items:center; flex-wrap:wrap; }
+.panel>.title-row label { display:inline-flex; align-items:center; gap:.35rem; }
+.panel>.title-row select { max-width:100%; min-width:90px; }
+table td { vertical-align:middle; border-bottom:1px solid #e2e7ed; }
+table td:last-child { display:table-cell; white-space:nowrap; }
+table td:last-child button { margin:.12rem; }
+.multi-select[open] { z-index:9; }
+.multi-select[open] > label { position:relative; z-index:10; }
+.multi-select summary { border:1px solid #8293a8; cursor:pointer; }
+.gantt { grid-template-columns:clamp(175px,23%,275px) minmax(680px,1fr); }
+.gantt-row>div { min-height:36px; padding:.3rem .5rem; }
+.gantt-row>div:first-child { min-width:0; overflow:hidden; }
+.gantt-row strong { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.gantt-row small { margin:.1rem 0 0 0; font-size:.69rem; }
+.gantt-bar { top:8px; height:18px; }
+.gantt-bar.milestone { top:10px; }
+.gantt-columns span { color:#2459a9; font-weight:700; white-space:nowrap; font-size:.68rem; }
+.gantt-connectors { left:clamp(175px,23%,275px); width:calc(100% - clamp(175px,23%,275px)); }
+.today-line { left:clamp(175px,23%,275px); }
+.risk-matrix { max-width:880px; width:100%; }
+.risk-matrix button { min-width:0; padding:clamp(.25rem,1vw,.65rem); }
+.risk-matrix button span { white-space:nowrap; font-size:clamp(.46rem,.85vw,.75rem); }
+.inline-form { flex-wrap:wrap; }
+@media(max-width:750px){.risk-matrix{gap:.2rem}.risk-matrix button{padding:.2rem}.risk-matrix button span{font-size:.44rem;letter-spacing:-.025em}}
