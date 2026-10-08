@@ -37,5 +37,7 @@ jobs:
           git add package.json package-lock.json
           if ! git diff --cached --quiet; then
             git commit -m "fix(deps): patch v1.1 production and tooling vulnerabilities"
+            git fetch origin maintenance/v1.1-security-stability
+            git rebase origin/maintenance/v1.1-security-stability
             git push origin HEAD:maintenance/v1.1-security-stability
           fi
