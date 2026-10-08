@@ -82,3 +82,10 @@ table td:last-child button { margin:.12rem; }
 .risk-matrix button span { white-space:nowrap; font-size:clamp(.46rem,.85vw,.75rem); }
 .inline-form { flex-wrap:wrap; }
 @media(max-width:750px){.risk-matrix{gap:.2rem}.risk-matrix button{padding:.2rem}.risk-matrix button span{font-size:.44rem;letter-spacing:-.025em}}
+
+.risk-actions-editor { background:#f8fafc; padding:.75rem; border:1px solid #dce2e9; border-radius:6px; }
+.risk-actions-editor h3 { margin:.25rem 0 .75rem; font-size:.95rem; }
+.risk-action-row { display:flex; align-items:center; gap:.6rem; margin:.5rem 0; }
+.risk-action-row span { min-width:5rem; }
+.risk-action-row input { flex:1; min-width:0; }
+.risk-actions-editor .inline-form { margin:.75rem 0 0; }
