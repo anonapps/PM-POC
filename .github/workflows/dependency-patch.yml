@@ -1,0 +1,41 @@
+name: One-time v1.1 dependency patch
+on:
+  push:
+    branches: ['maintenance/v1.1-security-stability']
+    paths: ['.github/workflows/dependency-patch.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.repository == 'anonapps/PM-POC' && github.ref == 'refs/heads/maintenance/v1.1-security-stability'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Apply compatible framework security updates
+        run: |
+          npm install --save-exact next@16.3.8
+          npm install --save-dev --save-exact eslint-config-next@16.3.8
+          npm update sharp source-map-js brace-expansion
+      - name: Review updated dependency graph
+        run: |
+          npm ls next eslint-config-next sharp source-map-js brace-expansion || true
+          npm audit --omit=dev --audit-level=moderate
+      - name: Commit dependency changes to maintenance branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "fix(deps): patch v1.1 production and tooling vulnerabilities"
+            git push origin HEAD:maintenance/v1.1-security-stability
+          fi
