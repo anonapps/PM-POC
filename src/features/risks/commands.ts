@@ -9,3 +9,16 @@ export function addRiskAction(riskId: string, description: string, dueDate?: str
 export function editRiskAction(riskId: string, actionId: string, patch: Partial<Omit<RiskAction, "id">>): ProjectCommand { return { type: "edit-risk-action", apply(state) { if (patch.description !== undefined && !patch.description.trim()) return state; return { ...state, risks: state.risks.map((risk) => risk.id === riskId ? { ...risk, actions: risk.actions.map((action) => action.id === actionId ? { ...action, ...patch, description: patch.description?.trim() ?? action.description } : action) } : risk) }; } }; }
 export const isRiskActionOverdue = (action: RiskAction, today: string) => action.status === "Open" && Boolean(action.dueDate && action.dueDate < today);
 export const selectOpenRisks = (state: ProjectState) => state.risks.filter((risk) => !risk.deletion.isDeleted && risk.status !== "Closed");
+
+export function deleteRiskAction(riskId: string, actionId: string): ProjectCommand {
+  return { type: "delete-risk-action", apply(state) {
+    return { ...state, risks: state.risks.map(risk => risk.id === riskId
+      ? { ...risk, actions: risk.actions.filter(action => action.id !== actionId) } : risk) };
+  } };
+}
+export function restoreRiskAction(riskId: string, action: RiskAction, index: number): ProjectCommand {
+  return { type: "restore-risk-action", apply(state) {
+    return { ...state, risks: state.risks.map(risk => risk.id === riskId && !risk.actions.some(a => a.id === action.id)
+      ? { ...risk, actions: [...risk.actions.slice(0,index), action, ...risk.actions.slice(index)] } : risk) };
+  } };
+}
