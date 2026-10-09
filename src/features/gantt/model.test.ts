@@ -13,3 +13,5 @@ describe("v1.2 Gantt milestone warning lookup",()=>{
   expect(milestoneDependencyIssues(state,row!.id.split(":")[0])).toEqual([expect.stringContaining("Scheduling conflict")]);
  });
 });
+
+describe("v1.2 Gantt year boundaries",()=>{it("shows both years when a week crosses New Year",()=>{const columns=timelineColumns("Month","2026-12-31");const boundary=columns.find(c=>c.start==="2026-12-28");expect(boundary?.label).toBe("28 Dec – 3 Jan 2026–2027");});it("keeps same-year weekly labels compact",()=>{const columns=timelineColumns("Month","2026-09-17");expect(columns.find(c=>c.start==="2026-09-14")?.label).toBe("14–20 Sep");});});
