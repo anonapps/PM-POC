@@ -10,7 +10,7 @@ export function milestoneDependencyIssues(state: ProjectState, milestoneId: stri
       : state.milestones.find(item => item.id === dependency.predecessor.id);
     if (!predecessor || predecessor.deletion.isDeleted) return ["Dependency references a deleted item"];
     const date = "plannedDate" in predecessor ? predecessor.plannedDate : predecessor.endDate;
-    const label = "humanId" in predecessor ? predecessor.humanId : predecessor.id;
+    const label = predecessor.humanId;
     const issues: string[] = [];
     if (!date) issues.push(`Dependency not scheduled: ${label}`);
     else if (milestone.plannedDate && milestone.plannedDate < date) issues.push(`Scheduling conflict: ${label} finishes ${date}`);
