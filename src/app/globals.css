@@ -89,3 +89,12 @@ table td:last-child button { margin:.12rem; }
 .risk-action-row span { min-width:5rem; }
 .risk-action-row input { flex:1; min-width:0; }
 .risk-actions-editor .inline-form { margin:.75rem 0 0; }
+
+/* v1.2 accessibility and validation feedback */
+.field-warning { display:block; color:#8a5600; font-size:.75rem; line-height:1.4; margin-top:.2rem; }
+:where(button,input,select,textarea,summary,a):focus-visible { outline:2px solid #1b65c9; outline-offset:2px; }
+.gantt-warning { position:relative; font-size:.7rem; color:#855100; }
+.gantt-warning summary { cursor:pointer; white-space:nowrap; }
+.gantt-warning[open] ul { position:absolute; z-index:15; width:min(320px,65vw); background:white; border:1px solid #b8c5d3; border-radius:5px; padding:.6rem .6rem .6rem 1.5rem; box-shadow:0 4px 12px #0002; white-space:normal; }
+.decision-context-editor { display:flex; flex-direction:column; align-items:flex-start; gap:.4rem; padding:.7rem; background:#f7f9fc; }
+.decision-context-editor label { display:flex; align-items:center; gap:.4rem; }
