@@ -168,3 +168,15 @@ table td:last-child button { margin:.12rem; }
 .manual-progress-control input[type="number"]{box-sizing:border-box;width:94px;min-width:94px;padding:9px 12px;background:#fff;border:2px solid #94a3b8;border-radius:7px;color:#111827;font:inherit;appearance:auto;}
 .manual-progress-control input[type="number"]:hover{border-color:#2563eb;}
 .manual-progress-control input[type="number"]:focus-visible{outline:3px solid #93c5fd;outline-offset:2px;border-color:#1d4ed8;}
+
+/* Overview timeline: aligned, consistently sized columns with quiet row separators. */
+.overview-timeline-range{margin:10px 0 16px;color:#475569;font-size:0.95rem;}
+.overview-timeline-table-wrap{width:100%;overflow-x:auto;}
+.overview-timeline-table{width:100%;border-collapse:collapse;table-layout:auto;font-size:0.95rem;}
+.overview-timeline-table th,.overview-timeline-table td{padding:11px 14px;text-align:left;vertical-align:middle;border-bottom:1px solid #e2e8f0;white-space:nowrap;}
+.overview-timeline-table thead th{background:#f1f5f9;color:#475569;font-weight:600;}
+.overview-timeline-table tbody th{font-weight:600;color:#17243b;}
+.overview-timeline-table tbody td{font-variant-numeric:tabular-nums;color:#334155;}
+.overview-timeline-table tbody tr:last-child th,.overview-timeline-table tbody tr:last-child td{border-bottom:0;}
+.overview-timeline-table th:last-child,.overview-timeline-table td:last-child{text-align:right;}
+.overview-timeline-footer{margin-top:14px;font-size:0.9rem;}
