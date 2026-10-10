@@ -114,3 +114,8 @@ table td:last-child button { margin:.12rem; }
 .milestone-name-cell>small:first-child{position:absolute;bottom:calc(100% + 4px);left:0;margin:0;font-size:.67rem;line-height:1.1;white-space:nowrap;}
 .milestone-name-cell>input{display:block;width:100%;min-width:0;}
 .milestone-name-cell>.field-warning{position:absolute;top:calc(100% + 2px);left:0;z-index:1;background:white;}
+
+.tube-navigation{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.65rem .8rem;border-top:1px solid #dce2e9;background:#fff;}
+.tube-navigation button{font-size:.78rem;padding:.4rem .6rem;white-space:nowrap;}
+.tube-navigation button:disabled{opacity:.45;cursor:default;}
+.tube-navigation span{font-size:.78rem;color:#526174;white-space:nowrap;}
