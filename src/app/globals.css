@@ -119,3 +119,11 @@ table td:last-child button { margin:.12rem; }
 .tube-navigation button{font-size:.78rem;padding:.4rem .6rem;white-space:nowrap;}
 .tube-navigation button:disabled{opacity:.45;cursor:default;}
 .tube-navigation span{font-size:.78rem;color:#526174;white-space:nowrap;}
+
+/* Timeline headers must stay visible while their own scrollable timeline is browsed.
+   Both axes scroll in the same container so position:sticky has a real vertical scrollport. */
+.gantt-panel .gantt{max-height:75vh;overflow:auto;align-content:start;}
+.gantt-panel .gantt>.gantt-head{position:sticky;top:0;z-index:8;}
+.gantt-panel .gantt>.gantt-head:first-child{z-index:9;}
+.tube-map{max-height:75vh;overflow:auto;padding-top:0;}
+.tube-map>.tube-axis{position:sticky;top:0;z-index:9;}
