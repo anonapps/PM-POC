@@ -137,3 +137,11 @@ table td:last-child button { margin:.12rem; }
 .panel>table{border-collapse:separate;border-spacing:0;}
 .panel>table thead th{position:sticky;top:88px;z-index:12;background:#edf1f5;box-shadow:0 1px 0 #d5dde6;}
 @media(max-width:850px){.panel>.title-row{min-height:112px;}.panel>table thead th{top:112px;}}
+
+/* Existing-record selectors: overlay their choices instead of stretching table rows. */
+.panel table .multi-select{position:relative;min-width:0;}
+.panel table .multi-select>summary{cursor:pointer;background:#fff;}
+.panel table .multi-select[open]{z-index:30;}
+.panel table .multi-select-options{position:absolute;left:0;top:calc(100% + 4px);width:max(100%,280px);max-width:min(380px,85vw);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #b7c1ce;border-radius:6px;padding:.4rem;box-shadow:0 8px 22px #1720332b;z-index:40;}
+.panel table .multi-select-options label{display:flex;align-items:center;gap:.5rem;white-space:normal;padding:.4rem .25rem;font-size:.78rem;cursor:pointer;}
+.panel table .multi-select-options input[type="checkbox"],.panel table .multi-select-options input[type="radio"]{width:16px;height:16px;flex:0 0 16px;margin:0;}
