@@ -98,3 +98,13 @@ table td:last-child button { margin:.12rem; }
 .gantt-warning[open] ul { position:absolute; z-index:15; width:min(320px,65vw); background:white; border:1px solid #b8c5d3; border-radius:5px; padding:.6rem .6rem .6rem 1.5rem; box-shadow:0 4px 12px #0002; white-space:normal; }
 .decision-context-editor { display:flex; flex-direction:column; align-items:flex-start; gap:.4rem; padding:.7rem; background:#f7f9fc; }
 .decision-context-editor label { display:flex; align-items:center; gap:.4rem; }
+
+/* Creation-time dependency selector: keep long predecessor lists out of the inline form flow. */
+.inline-form .draft-dependency-select{position:relative;min-width:210px;max-width:min(340px,100%);align-self:end;font-size:.8rem;}
+.inline-form .draft-dependency-select>summary{list-style:none;cursor:pointer;border:1px solid #b7c1ce;background:#fff;border-radius:5px;padding:.65rem .8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inline-form .draft-dependency-select>summary::-webkit-details-marker{display:none;}
+.inline-form .draft-dependency-select>summary:after{content:" ▾";float:right;}
+.inline-form .draft-dependency-select[open]>summary:after{content:" ▴";}
+.inline-form .draft-dependency-select>fieldset{position:absolute;z-index:12;top:calc(100% + 4px);left:0;width:max(100%,280px);max-width:min(360px,85vw);max-height:260px;overflow-y:auto;margin:0;padding:.65rem;background:#fff;border:1px solid #b7c1ce;border-radius:6px;box-shadow:0 8px 20px #17203325;}
+.inline-form .draft-dependency-select fieldset label{display:flex;align-items:center;gap:.5rem;padding:.35rem .2rem;font-size:.8rem;font-weight:500;white-space:normal;cursor:pointer;}
+.inline-form .draft-dependency-select fieldset input[type="checkbox"]{width:16px;height:16px;flex:0 0 16px;margin:0;}
