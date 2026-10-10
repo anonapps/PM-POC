@@ -35,3 +35,27 @@ describe("schema 1 to 2 migration", () => {
     expect(result.value.dependencies[0]).toMatchObject({ predecessor: { id: "task-1" }, successor: { id: "old-task" } });
   });
 });
+
+describe("v1.2 legacy project compatibility",()=>{
+ it("opens a pre-v1.2 project without a Getting Started completion flag",()=>{
+ const legacy=makeProjectState();
+ const encoded=serializeProject(legacy,meta);
+ expect(encoded.ok).toBe(true);
+ if(!encoded.ok)return;
+ const reopened=deserializeProject(encoded.value);
+ expect(reopened.ok).toBe(true);
+ if(!reopened.ok)return;
+ expect(reopened.value.projectState.project.metadata.gettingStartedCompleted).toBeUndefined();
+ expect(reopened.value.projectState.project.id).toBe(legacy.project.id);
+ });
+ it("preserves the Getting Started completion flag across .pmp save and reopen",()=>{
+ const base=makeProjectState();
+ const state=makeProjectState({project:{...base.project,metadata:{...base.project.metadata,gettingStartedCompleted:true}}});
+ const encoded=serializeProject(state,meta);
+ expect(encoded.ok).toBe(true);
+ if(!encoded.ok)return;
+ const reopened=deserializeProject(encoded.value);
+ expect(reopened.ok).toBe(true);
+ if(reopened.ok)expect(reopened.value.projectState.project.metadata.gettingStartedCompleted).toBe(true);
+ });
+});

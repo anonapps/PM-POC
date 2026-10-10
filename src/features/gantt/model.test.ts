@@ -3,3 +3,15 @@ describe("Gantt v1.1 model",()=>{it("always includes Project-wide and exactly tw
 
 import { ganttConnectorPaths } from "./gantt";
 describe("Gantt connector projection",()=>{it("creates a visible arrow path for each scheduled dependency",()=>{const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({id:"a",startDate:"2026-09-14",endDate:"2026-09-16"}),taskFixture({id:"b",humanId:"TASK-002",startDate:"2026-09-17",endDate:"2026-09-18"})],dependencies:[{id:"d",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"},type:"Finish-to-Start"}]});expect(ganttConnectorPaths(buildGanttModel(state,"Month","2026-09-17"))).toHaveLength(1)})});
+
+import { milestoneDependencyIssues } from "../milestones/dependencies";
+describe("v1.2 Gantt milestone warning lookup",()=>{
+ it("resolves composite Gantt row IDs to the underlying Milestone",()=>{
+  const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({id:"t",endDate:"2026-10-20",startDate:"2026-10-19"})],milestones:[{id:"m",projectId:"project-1",humanId:"MILESTONE-001",name:"Gate",plannedDate:"2026-10-15",status:"Planned",ownerId:null,scope:{kind:"streams",streamIds:["stream-1"]},relatedTaskIds:[],deletion:{isDeleted:false}}],dependencies:[{id:"d",projectId:"project-1",predecessor:{kind:"task",id:"t"},successor:{kind:"milestone",id:"m"},type:"Finish-to-Start"}]});
+  const row=buildGanttModel(state,"Month","2026-10-15").rows.find(r=>r.kind==="milestone");
+  expect(row?.id).toBe("m:stream-1");
+  expect(milestoneDependencyIssues(state,row!.id.split(":")[0])).toEqual([expect.stringContaining("Scheduling conflict")]);
+ });
+});
+
+describe("v1.2 Gantt year boundaries",()=>{it("shows both years when a week crosses New Year",()=>{const columns=timelineColumns("Month","2026-12-31");const boundary=columns.find(c=>c.start==="2026-12-28");expect(boundary?.label).toBe("28 Dec – 3 Jan 2026–2027");});it("keeps same-year weekly labels compact",()=>{const columns=timelineColumns("Month","2026-09-17");expect(columns.find(c=>c.start==="2026-09-14")?.label).toBe("14–20 Sep");});});
