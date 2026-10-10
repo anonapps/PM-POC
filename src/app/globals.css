@@ -129,3 +129,11 @@ table td:last-child button { margin:.12rem; }
 .tube-map>.tube-axis{position:sticky;top:0;z-index:9;}
 
 .tube-map{min-height:0;}
+
+/* Keep section actions and table column names visible as one opaque sticky header.
+   Cover the workspace's top padding so scrolled rows cannot peek above the toolbar. */
+.panel>.title-row{min-height:88px;z-index:20;isolation:isolate;}
+.panel>.title-row::before{content:"";position:absolute;left:-1.5rem;right:-1.5rem;top:-1.5rem;height:1.5rem;background:#f4f6f8;pointer-events:none;}
+.panel>table{border-collapse:separate;border-spacing:0;}
+.panel>table thead th{position:sticky;top:88px;z-index:12;background:#edf1f5;box-shadow:0 1px 0 #d5dde6;}
+@media(max-width:850px){.panel>.title-row{min-height:112px;}.panel>table thead th{top:112px;}}
