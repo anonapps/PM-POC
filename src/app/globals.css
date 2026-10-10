@@ -127,3 +127,5 @@ table td:last-child button { margin:.12rem; }
 .gantt-panel .gantt>.gantt-head:first-child{z-index:9;}
 .tube-map{max-height:75vh;overflow:auto;padding-top:0;}
 .tube-map>.tube-axis{position:sticky;top:0;z-index:9;}
+
+.tube-map{min-height:0;}
