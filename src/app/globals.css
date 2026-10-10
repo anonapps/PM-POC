@@ -151,3 +151,7 @@ table td:last-child button { margin:.12rem; }
 .workspace .panel>.title-row{position:sticky;top:0;z-index:25;background:#f4f6f8;isolation:isolate;}
 .workspace .panel>.title-row::before{content:"";position:absolute;left:-2rem;right:-2rem;top:-4rem;height:4rem;background:#f4f6f8;pointer-events:none;z-index:-1;}
 .workspace .panel>table thead th{z-index:15;}
+
+.sort-heading{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;color:inherit!important;font:inherit!important;font-weight:inherit!important;text-align:left;cursor:pointer;white-space:nowrap;}
+.sort-heading:hover{text-decoration:underline;}
+.sort-heading:focus-visible{outline:2px solid #2563eb;outline-offset:4px;}
