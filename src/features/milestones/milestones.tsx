@@ -18,7 +18,7 @@ export function MilestonesModule({store,targetId}:{store:ProjectStore;targetId?:
   const [editWarning,setEditWarning]=useState<Record<string,boolean>>({});
   const [originalNames,setOriginalNames]=useState<Record<string,string>>({});
   const selectorsRef=useRef<HTMLTableElement>(null);
-  useEffect(()=>{const close=(event:PointerEvent)=>{const table=selectorsRef.current;if(table&&!(event.target as Element).closest("details.multi-select"))table.querySelectorAll("details.multi-select[open]").forEach(item=>item.removeAttribute("open"));};document.addEventListener("pointerdown",close);return()=>document.removeEventListener("pointerdown",close);},[]);
+  useEffect(()=>{const close=(event:PointerEvent)=>{const table=selectorsRef.current;if(!table)return;const selected=(event.target as Element).closest("details.multi-select");table.querySelectorAll("details.multi-select[open]").forEach(item=>{if(item!==selected)item.removeAttribute("open")});};document.addEventListener("pointerdown",close);return()=>document.removeEventListener("pointerdown",close);},[]);
   const state = store.getState();
   const streams = state.streams.filter((item) => !item.deletion.isDeleted);
   const milestones = state.milestones.filter((item) => showDeleted || item.id === targetId || !item.deletion.isDeleted);
