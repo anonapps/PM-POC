@@ -162,3 +162,9 @@ table td:last-child button { margin:.12rem; }
 .decision-context-notes{display:flex;flex-direction:column;gap:8px;margin-top:20px;font-weight:600;}
 .decision-context-notes textarea{width:100%;min-height:100px;resize:vertical;field-sizing:content;font-weight:400;}
 @media(max-width:800px){.decision-context-columns{grid-template-columns:1fr;gap:20px;}}
+
+.manual-progress-label{display:flex;align-items:center;flex-wrap:wrap;gap:12px;}
+.manual-progress-control{display:inline-flex;align-items:center;gap:8px;}
+.manual-progress-control input[type="number"]{box-sizing:border-box;width:94px;min-width:94px;padding:9px 12px;background:#fff;border:2px solid #94a3b8;border-radius:7px;color:#111827;font:inherit;appearance:auto;}
+.manual-progress-control input[type="number"]:hover{border-color:#2563eb;}
+.manual-progress-control input[type="number"]:focus-visible{outline:3px solid #93c5fd;outline-offset:2px;border-color:#1d4ed8;}
