@@ -52,3 +52,7 @@ Validation of this sync: 27 files / 140 tests, TypeScript, ESLint, production bu
 ## Sidebar rail refinement
 
 The sidebar now collapses to a 64px rail containing each module’s first letter. A small unfilled chevron points left to collapse and right to expand, with accessible labels and expanded state. The rail remains in the layout grid, preventing overlap with the current project header. Narrow viewports initially use the compact rail; users can expand it. Regression checks cover rail geometry, letters, navigation and expansion at desktop and mobile widths.
+
+## Live selection lists
+
+Streams, People, Tasks, Milestones, Risks and Decisions subscribe directly to the current project store. Selection options refresh on committed changes, including creation, renaming, deletion, restoration and undo/redo, without relying on a shell rerender. Browser regression creates a fresh stream, then verifies it is offered by milestone scope and task stream selectors after navigation.

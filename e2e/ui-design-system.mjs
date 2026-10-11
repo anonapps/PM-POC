@@ -35,6 +35,18 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     const screenshot = await cdp.send('Page.captureScreenshot', { format: 'png' });
     await writeFile(process.env.UI_SCREENSHOT_PATH, Buffer.from(screenshot.data, 'base64'));
   }
+  await nav('Streams');
+  await click('Add Stream');
+  await evaluate(`(()=>{const input=document.getElementById('new-stream-name');const set=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;set.call(input,'Fresh selection stream');input.dispatchEvent(new Event('input',{bubbles:true}))})()`);
+  await evaluate(`document.querySelector('form[data-create-draft]').requestSubmit()`);
+  await waitFor(`!document.querySelector('form[data-create-draft]')`);
+  await nav('Milestones');
+  record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
+  await nav('Tasks');
+  await click('Add Task');
+  record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
+  await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
+  await nav('Overview');
   await click('Edit Project');
   await waitFor(`Boolean(document.querySelector('[role="dialog"]'))`);
   await evaluate(`document.querySelector('[role="dialog"]').focus()`);

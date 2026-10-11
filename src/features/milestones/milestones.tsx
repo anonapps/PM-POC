@@ -1,4 +1,5 @@
 "use client";
+import { useProjectState } from "../shell/use-project-state";
 import { useEffect, useRef, useState } from "react";
 import type { ProjectStore } from "../../application";
 import { duplicate, restore, softDelete } from "../../application";
@@ -22,7 +23,7 @@ export function MilestonesModule({store,targetId}:{store:ProjectStore;targetId?:
   const [originalNames,setOriginalNames]=useState<Record<string,string>>({});
   const selectorsRef=useRef<HTMLTableElement>(null);
   useEffect(()=>{const close=(event:PointerEvent)=>{const table=selectorsRef.current;if(!table)return;const selected=(event.target as Element).closest("details.multi-select");table.querySelectorAll("details.multi-select[open]").forEach(item=>{if(item!==selected)item.removeAttribute("open")});};document.addEventListener("pointerdown",close);return()=>document.removeEventListener("pointerdown",close);},[]);
-  const state = store.getState();
+  const state = useProjectState(store);
   const streams = state.streams.filter((item) => !item.deletion.isDeleted);
   const milestones = state.milestones.filter((item) => showDeleted || item.id === targetId || !item.deletion.isDeleted);
   const sortedMilestones=[...milestones].sort((a,b)=>{if(!sort)return 0;const value=(m:typeof a)=>sort.key==="id"?m.humanId:sort.key==="name"?m.name:sort.key==="date"?m.plannedDate:sort.key==="status"?m.status:state.people.find(p=>p.id===m.ownerId)?.name??"Unassigned";return String(value(a)).localeCompare(String(value(b)),undefined,{numeric:true,sensitivity:"base"})*(sort.direction==="asc"?1:-1)});
