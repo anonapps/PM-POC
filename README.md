@@ -54,3 +54,7 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## POC status
 
 Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
+
+## v1.3.0 — UI design system
+
+Version 1.3.0 on the isolated `experiment/design-system-polish` branch introduces shared visual tokens, content-sized shell layout and measured sticky toolbar offsets. See [UI_DESIGN_SYSTEM.md](docs/UI_DESIGN_SYSTEM.md) for the scoped changes and browser validation. This branch is a user-approved exception to the normal main-only workflow.

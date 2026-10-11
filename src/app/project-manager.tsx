@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import packageInfo from "../../package.json";
+import { APP_VERSION } from "@/shared/app-info";
 import { BrowserProjectFileService } from "@/persistence/project-file-service/browser";
 import { createBrowserFileAccess } from "@/runtime/browser-access";
 import { ProjectRuntime, startAutosave } from "@/runtime/project-runtime";
@@ -17,7 +17,6 @@ import { DecisionLog } from "@/features/decisions/decisions";
 import { WarningsPanel } from "@/features/warnings/warnings-panel";
 import { SearchPanel } from "@/features/search/search-panel";
 
-const APP_VERSION = packageInfo.version;
 const runtime = new ProjectRuntime(new BrowserProjectFileService(createBrowserFileAccess()));
 export function ProjectManager() {
   const state = useSyncExternalStore(runtime.subscribe, runtime.getSnapshot, runtime.getSnapshot);
