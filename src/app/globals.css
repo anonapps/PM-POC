@@ -209,3 +209,31 @@ table td:last-child button { margin:.12rem; }
 .gantt-panel .gantt-time-heading .gantt-years span{min-width:0;text-align:center;font-size:.72rem;font-weight:700;padding:.35rem .2rem;border-left:1px solid #bdcbdc;}
 .gantt-panel .gantt-time-heading .gantt-dates span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:.65rem .2rem;}
 .gantt-panel .gantt>.gantt-item-heading{display:flex;align-items:center;}
+
+/* Branch-only HeroUI experiment. Keep planning coordinates and sticky offsets intact. */
+.heroui-experiment { --experiment-surface:#f4f6f8; }
+.heroui-experiment .app-shell { grid-template-columns:232px minmax(0,1fr); }
+.heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:1fr; }
+.heroui-experiment .app-shell aside { background:#111c30; padding:20px 12px; border-right:1px solid #25334a; }
+.heroui-experiment .brand { color:#f8fafc; letter-spacing:.08em; font-size:11px; padding:10px 8px; }
+.heroui-experiment .experiment-label { margin:0 8px 20px; font-size:11px; color:#93a9c9; }
+.heroui-experiment aside nav { gap:5px; }
+.heroui-experiment aside nav .hero-nav { justify-content:flex-start; min-width:0; height:40px; padding:0 12px; color:#cbd5e1; border-radius:10px; font-size:13px; }
+.heroui-experiment aside nav .hero-nav:hover { background:#23324b; }
+.heroui-experiment aside nav .hero-nav[aria-current="page"] { background:#2563eb; color:white; box-shadow:0 4px 12px #02061730; }
+.heroui-experiment aside nav .hero-nav[aria-current="page"] span { color:white; }
+.heroui-experiment .app-main>header { box-shadow:0 2px 12px #0f172a05; }
+.heroui-experiment .header-actions button { border-radius:10px; font-size:12px; min-width:0; height:34px; }
+.heroui-experiment .header-actions .search { min-width:120px; gap:16px; }
+.heroui-experiment .app-main>header strong { display:block; max-width:32vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.heroui-experiment .card,.heroui-experiment .kpis button { border-radius:16px; border-color:#e0e6ee; box-shadow:0 3px 14px #0f172a05; }
+.heroui-experiment .kpis button { padding:20px; }
+.heroui-experiment .kpis strong { color:#1d4ed8; }
+.heroui-experiment .card h2 { color:#17243a; font-weight:700; }
+.heroui-experiment .dialog-backdrop>section { border-radius:18px; box-shadow:0 24px 80px #02061740; }
+.heroui-experiment .empty { border-radius:16px; }
+.heroui-experiment .panel>table { border:1px solid #e0e6ee; border-radius:12px; background:white; }
+.heroui-experiment .panel>table tbody tr:hover { background:#f8faff; }
+@media(max-width:1100px) { .heroui-experiment .header-actions { gap:4px; flex-wrap:wrap; justify-content:flex-end; } .heroui-experiment .header-actions button { padding:5px 8px; } }
+@media(max-width:850px) { .heroui-experiment .app-shell { grid-template-columns:64px minmax(0,1fr); } .heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:1fr; } .heroui-experiment .experiment-label { display:none; } .heroui-experiment aside nav .hero-nav { font-size:0; padding:0 8px; } }
+.heroui-experiment aside .collapse { color:#cbd5e1; background:#23324b; height:32px; min-width:0; justify-content:flex-start; padding:0 12px; border-radius:8px; }

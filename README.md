@@ -54,3 +54,7 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## POC status
 
 Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
+
+## HeroUI experiment
+
+A branch-only UI comparison is available on `experiment/heroui-ui`. See [experiment scope and local instructions](docs/HEROUI_EXPERIMENT.md). Production/main remain the baseline.

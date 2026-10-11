@@ -545,3 +545,7 @@ When implementation reveals a requirement that is technically impossible or mate
 - Preserved the original smoke command and local/offline application architecture.
 
 The initial validation passed 27 test files / 139 tests plus TypeScript, lint, build and both GitHub browser jobs. See [AUTOMATED_REGRESSION.md](AUTOMATED_REGRESSION.md) for current commands, scope and limitations.
+
+## HeroUI experiment — initial comparison pass
+
+Branch `experiment/heroui-ui` is explicitly approved for a presentation-only comparison: shared shell Buttons and Chips, theme/provider, and visual refinements. Validate against the existing regression suite before publishing the branch. Wider form/table conversion and promotion to main require subsequent review. See [HEROUI_EXPERIMENT.md](HEROUI_EXPERIMENT.md).

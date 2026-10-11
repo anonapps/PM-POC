@@ -15,6 +15,8 @@
     "test:lifecycle": "node e2e/run-regression.mjs --full"
   },
   "dependencies": {
+    "@heroui/react": "2.7.11",
+    "framer-motion": "11.18.2",
     "next": "16.3.8",
     "react": "19.3.0",
     "react-dom": "19.3.0"
