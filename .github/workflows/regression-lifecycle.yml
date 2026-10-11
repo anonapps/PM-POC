@@ -1,5 +1,11 @@
 name: PM-POC full lifecycle regression
 on:
+  push:
+    branches: [main]
+    paths:
+      - "e2e/**"
+      - "src/testing/**"
+      - ".github/workflows/regression-lifecycle.yml"
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch:

@@ -4,6 +4,7 @@ import { serializeProject, deserializeProject } from '../persistence/pmp/codec';
 import { createProjectStore } from '../application/store';
 import { duplicate, softDelete, restore } from '../application/commands';
 import { editRisk, isRiskActionOverdue } from '../features/risks/commands';
+import { editTask } from '../features/tasks/commands';
 import { editDecision } from '../features/decisions/commands';
 import { searchProject } from '../features/search/search';
 import { buildGanttModel } from '../features/gantt/model';
@@ -77,6 +78,36 @@ describe('180-record regression', () => {
       expect(store.undo()).toBe(true); expect(store.isDirty()).toBe(true);
     });
   }
+  for (const progress of [0, 25, 50, 75, 100]) {
+    it(`propagates ${progress}% through four hierarchy levels at volume`, () => {
+      const store = createProjectStore(regressionFixture(), { createId: () => 'unused', now: () => meta.createdAt });
+      store.execute(editTask('task-4', { progress, status: progress === 100 ? 'Completed' : 'In Progress' }));
+      expect(store.getState().tasks.slice(0, 4).map(t => t.progress)).toEqual([progress, progress, progress, progress]);
+      roundTrip(store.getState());
+    });
+  }
+  for (const [kind, collection] of [['stream','streams'],['person','people']] as const) {
+    it(`${kind}: delete and undo restore relationships atomically at volume`, () => {
+      const store = createProjectStore(regressionFixture(), { createId: () => 'unused', now: () => meta.createdAt });
+      const before = store.getState();
+      store.execute(softDelete(kind, `${kind}-2`));
+      expect(store.getState()[collection][1].deletion.isDeleted).toBe(true);
+      roundTrip(store.getState());
+      expect(store.undo()).toBe(true);
+      expect(store.getState()).toEqual(before);
+      expect(store.redo()).toBe(true);
+      expect(store.execute(restore(kind, `${kind}-2`))).toBe(true);
+      roundTrip(store.getState());
+    });
+  }
+  it('removes original task dependencies on deletion and restores them on undo', () => {
+    const store = createProjectStore(regressionFixture(), { createId: () => 'unused', now: () => meta.createdAt });
+    const before = store.getState();
+    store.execute(softDelete('task', 'task-9'));
+    expect(store.getState().dependencies.some(d => d.predecessor.id === 'task-9' || d.successor.id === 'task-9')).toBe(false);
+    roundTrip(store.getState());
+    store.undo(); expect(store.getState()).toEqual(before);
+  });
   it('edits risk ratings and decision relationships without losing other records', () => {
     const store = createProjectStore(regressionFixture(), { createId: () => 'unused', now: () => meta.createdAt });
     expect(store.execute(editRisk('risk-2', { probability: 'High', impact: 'High', ownerId: 'person-30' }))).toBe(true);
