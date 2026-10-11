@@ -180,3 +180,13 @@ table td:last-child button { margin:.12rem; }
 .overview-timeline-table tbody tr:last-child th,.overview-timeline-table tbody tr:last-child td{border-bottom:0;}
 .overview-timeline-table th:last-child,.overview-timeline-table td:last-child{text-align:right;}
 .overview-timeline-footer{margin-top:14px;font-size:0.9rem;}
+
+/* v1.2 acceptance: creation selectors must overlay sticky table headers. */
+.workspace .panel>.inline-form{position:relative;z-index:18;overflow:visible;}
+.workspace .panel>.inline-form .draft-dependency-select[open]{z-index:19;}
+.workspace .panel>.inline-form .draft-dependency-select>fieldset{z-index:20;}
+/* Tube Map: keep the week axis in normal flow so sticky positioning survives scrolling;
+   keep navigation below the full-height stream canvas rather than over the last row. */
+.workspace .tube-map>.tube-axis{position:sticky;top:0;left:auto;right:auto;z-index:20;box-sizing:border-box;height:42px;min-height:42px;width:100%;background:#fff;}
+.workspace .tube-map>.tube-body{position:relative;z-index:1;}
+.workspace .tube-map>footer.tube-navigation{position:relative;left:auto;right:auto;top:auto;bottom:auto;z-index:1;box-sizing:border-box;width:100%;margin-top:0;}
