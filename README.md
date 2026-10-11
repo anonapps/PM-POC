@@ -2,6 +2,16 @@
 
 A local-first Project Management POC v1.3.1 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
+## 30-second product demo
+
+See PM-POC in action before running it locally: create a project, organise two streams and five tasks, add people, milestones and risks, then explore the Gantt and Tube Map.
+
+[![PM-POC demo — project Gantt view](docs/media/pm-poc-demo-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)
+
+**[Watch or download the 30-second demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)** · 1080p MP4 · recorded on v1.3.0 · accelerated real interactions, captions and original instrumental audio.
+
+The recording uses fictional data in a separate local project. Ownership is demonstrated for streams and milestones. The current v1.3.1 release includes HeroUI styling, a compact sidebar and live selection-list updates introduced after this recording.
+
 ## Prerequisites
 
 - Node.js 20.9 or newer for the app; Node.js 22 or newer for the browser test harness
