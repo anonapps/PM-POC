@@ -15,3 +15,27 @@ describe("persistence lifecycle",()=>{it("preserves dirty state and history afte
 describe("autosave scheduling",()=>{it("uses the exact sixty-second interval",async()=>{const {startAutosave}=await import("./project-runtime");let delay=0;let calls=0;let cleared=false;const stop=startAutosave(()=>calls++,((callback:()=>void,ms:number)=>{delay=ms;callback();return 9}) as never,(()=>{cleared=true}) as never);expect(delay).toBe(60_000);expect(calls).toBe(1);stop();expect(cleared).toBe(true)})});
 
 describe("project switching",()=>{it("requires an explicit decision after a dirty-project save failure",async()=>{const loaded={handle:{id:"file-1",name:"x.pmp"},state:(await import("../domain/test-fixtures")).makeProjectState(),configuration:DEFAULT_PROJECT_CONFIGURATION,createdAt:"2026-01-01T00:00:00Z",lastSavedAt:"2026-01-01T00:00:00Z"};let opened=0;const service:ProjectFileService={...files(async()=>{opened++;return{ok:true,value:loaded}}),save:async()=>({ok:false,error:{code:"WRITE_FAILED",message:"failed"}})};const runtime=new ProjectRuntime(service);runtime.activate(loaded);runtime.getSnapshot().active!.store.execute({type:"change",apply:s=>({...s,project:{...s.project,progress:55}})});await runtime.openProject();expect(runtime.getSnapshot().pendingSwitch).toBe(true);expect(opened).toBe(0);runtime.cancelProjectSwitch();expect(runtime.getSnapshot().pendingSwitch).toBe(false);await runtime.continueProjectSwitch();expect(opened).toBe(1)})});
+
+it("writes the current application version while retaining the project's compatibility floor", async () => {
+  const { APP_VERSION } = await import("../shared/app-info");
+  const { makeProjectState } = await import("../domain/test-fixtures");
+  const state = makeProjectState();
+  const loaded = { handle: { id: "version-test", name: "version.pmp" }, state, configuration: DEFAULT_PROJECT_CONFIGURATION, createdAt: "2026-10-11T00:00:00Z", lastSavedAt: "2026-10-11T00:00:00Z" };
+  const observed: import("../persistence/project-file-service").SaveOptions[] = [];
+  const service: ProjectFileService = {
+    ...files(async () => ({ ok: true, value: loaded })),
+    create: async (_state, _name, options) => { observed.push(options); return { ok: true, value: loaded }; },
+    save: async (_handle, _state, options) => { observed.push(options); return { ok: true, value: { handle: loaded.handle, savedAt: loaded.lastSavedAt, bytesWritten: 1 } }; },
+    saveAs: async (_state, _name, options) => { observed.push(options); return { ok: true, value: loaded }; },
+  };
+  const runtime = new ProjectRuntime(service);
+  await runtime.createProject(state, "version.pmp");
+  runtime.getSnapshot().active!.store.execute({ type: "progress", apply: current => ({ ...current, project: { ...current.project, progress: 45 } }) });
+  await runtime.saveNow();
+  await runtime.saveAs();
+  expect(observed).toHaveLength(3);
+  for (const options of observed) {
+    expect(options.runtimeVersion).toBe(APP_VERSION);
+    expect(options.minimumRuntimeVersion).toBe(state.project.metadata.minimumAppVersion);
+  }
+});
