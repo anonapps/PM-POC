@@ -1,6 +1,6 @@
 # Project Management POC
 
-A local-first Project Management POC v1.3.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first Project Management POC v1.3.1 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
 ## 30-second product demo
 
@@ -8,9 +8,9 @@ See PM-POC in action before running it locally: create a project, organise two s
 
 [![PM-POC demo — project Gantt view](docs/media/pm-poc-demo-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)
 
-**[Watch or download the 30-second demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)** · 1080p MP4 · v1.3.0 · accelerated real interactions, captions and original instrumental audio.
+**[Watch or download the 30-second demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)** · 1080p MP4 · recorded on v1.3.0 · accelerated real interactions, captions and original instrumental audio.
 
-The recording uses fictional data in a separate local project. Ownership is demonstrated for streams and milestones.
+The recording uses fictional data in a separate local project. Ownership is demonstrated for streams and milestones. The current v1.3.1 release includes HeroUI styling, a compact sidebar and live selection-list updates introduced after this recording.
 
 ## Prerequisites
 
@@ -64,6 +64,10 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## POC status
 
 Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
+
+## v1.3.1 — HeroUI release
+
+The tested HeroUI presentation is now the main baseline: dark navigation, a compact letter rail with left/right chevrons, improved controls and live entity selection lists. It uses HeroUI 2.8.10 and Tailwind 4.3.3, bundled locally. Run `git switch main`, `git pull --ff-only origin main`, `npm ci` and `npm run dev` to update your local runtime. No hosted service is required.
 
 ## v1.3.0 — UI design system
 

@@ -39,3 +39,7 @@ Also consult `docs/ARCHITECTURE.md` and `docs/IMPLEMENTATION_PLAN.md`. If suppor
 - Never force-push or rewrite published `main` history.
 - Before changing files, verify the task is based on current `origin/main`; after publication verify local/remote HEAD alignment when the execution environment supports GitHub authentication.
 - If the execution environment supplies a temporary checkout branch, treat it only as an execution detail: do not publish it and do not make it part of the repository workflow.
+
+## HeroUI promotion (11 October 2026)
+
+The user authorised promoting the HeroUI UI and its fixes to `main` as v1.3.1. The experiment is now part of the released baseline; further development follows the main branch policy above.

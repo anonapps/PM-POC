@@ -545,3 +545,11 @@ When implementation reveals a requirement that is technically impossible or mate
 - Preserved the original smoke command and local/offline application architecture.
 
 The initial validation passed 27 test files / 139 tests plus TypeScript, lint, build and both GitHub browser jobs. See [AUTOMATED_REGRESSION.md](AUTOMATED_REGRESSION.md) for current commands, scope and limitations.
+
+## HeroUI experiment — initial comparison pass
+
+Branch `experiment/heroui-ui` is explicitly approved for a presentation-only comparison: shared shell Buttons and Chips, theme/provider, and visual refinements. Validate against the existing regression suite before publishing the branch. Wider form/table conversion and promotion to main require subsequent review. See [HEROUI_EXPERIMENT.md](HEROUI_EXPERIMENT.md).
+
+## Completed v1.3.1 promotion
+
+The user approved HeroUI promotion after testing the compact sidebar rail and live Stream selections. The release includes direct entity-store subscriptions, chevron collapse/expand controls, package-derived v1.3.1 metadata and the HeroUI v2 / Tailwind 4 toolchain. The production audit remains blocking and reports zero vulnerabilities. No hosted runtime or project persistence change is introduced.

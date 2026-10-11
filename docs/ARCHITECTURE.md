@@ -409,3 +409,11 @@ Milestone scope is a discriminated union (`project` or `streams` with stable IDs
 Gantt and Tube Map models are pure projections of canonical state. Their timeline models calculate fixed twelve-column windows and proportional date positions. Repeated milestone marks carry the same entity ID and are not cloned state. Stream array order is the visual order.
 
 Sidebar visibility belongs to the application shell and is intentionally session-only React state. Hidden mode removes the navigation column entirely and exposes a fixed restore control; no persistence adapter or project configuration is involved.
+
+## HeroUI experiment presentation boundary
+
+The approved `experiment/heroui-ui` branch adds bundled HeroUI v2 controls and a client provider only at the presentation boundary. Core domain, application commands, file service and `.pmp` schema remain unchanged. See [HEROUI_EXPERIMENT.md](HEROUI_EXPERIMENT.md).
+
+## v1.3.1 presentation baseline
+
+HeroUI v2 Button/Chip controls and provider are part of the main presentation layer. Tailwind 4 runs through @tailwindcss/postcss and loads the existing theme configuration explicitly. Entity modules read project state through useSyncExternalStore so selection lists update directly on committed changes. The compact sidebar retains its own grid column; it never overlays the project header. Domain, file-service and persistence boundaries are unchanged.
