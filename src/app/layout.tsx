@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import "./design-system.css";
+import "./heroui-experiment.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {

@@ -42,3 +42,9 @@ The explicit user request supersedes the main-only branch policy for this experi
 - Production build passed.
 - Extended Chromium acceptance passed, including 180-record module counts, save/reopen, Undo/Redo, dialog and selector interactions, Tube Map sticky weeks, and Gantt year geometry.
 - Native OS file-picker consent remains a manual check; the browser suite uses its existing isolated file adapter.
+
+## Sync with v1.3.0 main
+
+Merged the v1.3.0 baseline while retaining HeroUI Button/Chip components and the root provider. Shared design tokens load before branch-specific HeroUI styles, now isolated in `src/app/heroui-experiment.css`. Measured toolbar offsets, dialog keyboard fixes, explicit action cells, sidebar-toggle visibility and package-derived version metadata are retained. Project schema and local file workflows remain unchanged.
+
+Validation of this sync: 27 files / 140 tests, TypeScript, ESLint, production build and full Chromium lifecycle passed. All 60 records per module survived reopen; measured sticky geometry passed at 1440, 1080, 768 and 375px, and sidebar visibility and dialog keyboard checks passed with no browser runtime errors. Desktop Overview was visually reviewed. The documented seven audit advisories remain unchanged.
