@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "node e2e/acceptance.mjs"
+    "test:e2e": "node e2e/acceptance.mjs",
+    "test:regression": "node e2e/run-regression.mjs",
+    "test:lifecycle": "node e2e/run-regression.mjs --full"
   },
   "dependencies": {
     "next": "16.3.8",

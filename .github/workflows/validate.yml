@@ -37,4 +37,4 @@ jobs:
         run: |
           CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
-          CHROME_PATH="$CHROME_PATH" npm run test:e2e
+          CHROME_PATH="$CHROME_PATH" npm run test:regression
