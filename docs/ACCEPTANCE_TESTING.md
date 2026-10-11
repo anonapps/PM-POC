@@ -24,6 +24,8 @@ The suite verifies:
 - stream-scoped Task creation;
 - Milestone, Risk and Decision creation;
 - Overview, Gantt and Tube Map reflection of created data;
+- Gantt year-band geometry and alignment after paging forward;
+- Tube Map 12-week label completeness, Monday-date axis, scroll retention and pagination;
 - Search -> Quick View -> owning-module navigation and entity focus;
 - derived Project Warning creation and contextual navigation;
 - Undo and Redo;
@@ -32,6 +34,8 @@ The suite verifies:
 - soft deletion and restoration;
 - semantic project navigation / `aria-current`;
 - uncaught browser/runtime error collection.
+
+The visual regression assertions use DOM geometry and content rather than screenshots, so they catch missing labels and grid misalignment without introducing snapshot dependencies. They are lightweight smoke checks, not a full cross-browser or multi-viewport visual comparison.
 
 The test data is intentionally deterministic and disposable. The test browser uses a temporary profile and an in-memory `.pmp` handle; it does not write a project file to the user's filesystem.
 
