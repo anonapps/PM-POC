@@ -190,3 +190,10 @@ table td:last-child button { margin:.12rem; }
 .workspace .tube-map>.tube-axis{position:sticky;top:0;left:auto;right:auto;z-index:20;box-sizing:border-box;height:42px;min-height:42px;width:100%;background:#fff;}
 .workspace .tube-map>.tube-body{position:relative;z-index:1;}
 .workspace .tube-map>footer.tube-navigation{position:relative;left:auto;right:auto;top:auto;bottom:auto;z-index:1;box-sizing:border-box;width:100%;margin-top:0;}
+
+/* Tube Map regression: the workspace is the vertical scroll container.
+   Nested overflow:auto trapped the sticky axis inside the Tube Map and caused
+   the week labels to disappear when the workspace itself was scrolled. */
+.workspace .tube-map{overflow:visible;max-height:none;min-height:0;padding-top:0;}
+.workspace .tube-map>.tube-axis{position:sticky;top:88px;z-index:22;}
+@media(max-width:850px){.workspace .tube-map>.tube-axis{top:112px;}}
