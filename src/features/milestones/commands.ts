@@ -1,4 +1,4 @@
-import { issueHumanId, type Milestone, type MilestoneScope, type MilestoneStatus } from "../../domain";
+import { issueHumanId, type DependencyEndpoint, type Milestone, type MilestoneScope, type MilestoneStatus } from "../../domain";
 import type { ProjectCommand, ProjectState } from "../../application";
 
 export interface MilestoneDraft {
@@ -10,6 +10,7 @@ export interface MilestoneDraft {
   priority?: Milestone["priority"];
   scope: MilestoneScope;
   relatedTaskIds: readonly string[];
+  predecessors?: readonly DependencyEndpoint[];
 }
 
 export function validateMilestone(state: ProjectState, draft: MilestoneDraft, historicalStreamIds: readonly string[] = []): readonly string[] {
@@ -20,6 +21,8 @@ export function validateMilestone(state: ProjectState, draft: MilestoneDraft, hi
   if (draft.scope.kind === "streams" && draft.scope.streamIds.length === 0) errors.push("Select at least one active Stream or Project-wide.");
   if (draft.scope.kind === "streams" && draft.scope.streamIds.some((id) => !historicalStreamIds.includes(id) && !state.streams.some((stream) => stream.id === id && !stream.deletion.isDeleted))) errors.push("Related streams must be active.");
   if (draft.relatedTaskIds.some((id) => !state.tasks.some((task) => task.id === id && !task.deletion.isDeleted))) errors.push("Related tasks must be active.");
+  if(draft.predecessors?.some(p=>!(p.kind==="task"?state.tasks:state.milestones).some(item=>item.id===p.id&&!item.deletion.isDeleted))) errors.push("Predecessors must be active.");
+  if(new Set(draft.predecessors?.map(p=>`${p.kind}:${p.id}`)).size!==(draft.predecessors?.length??0)) errors.push("Duplicate predecessors.");
   return errors;
 }
 
@@ -27,8 +30,9 @@ export function createMilestone(draft: MilestoneDraft): ProjectCommand {
   return { type: "create-milestone", apply(state, context) {
     if (validateMilestone(state, draft).length) return state;
     const issued = issueHumanId(state.identifierSequences, "milestone");
-    const milestone: Milestone = { ...draft, name: draft.name.trim(), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
-    return { ...state, milestones: [...state.milestones, milestone], identifierSequences: issued.sequences };
+    const { predecessors = [], ...milestoneDraft } = draft;
+    const milestone: Milestone = { ...milestoneDraft, name: draft.name.trim(), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
+    return { ...state, milestones: [...state.milestones, milestone], dependencies: [...state.dependencies,...predecessors.map(predecessor=>({id:context.createId(),projectId:state.project.id,predecessor,successor:{kind:"milestone" as const,id:milestone.id},type:"Finish-to-Start" as const}))], identifierSequences: issued.sequences };
   } };
 }
 

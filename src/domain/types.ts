@@ -78,4 +78,5 @@ export type MilestoneScope =
 export interface ProjectDomainMetadata {
   readonly schemaVersion: number;
   readonly minimumAppVersion: string;
+  readonly gettingStartedCompleted?: boolean;
 }

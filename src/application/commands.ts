@@ -55,7 +55,7 @@ function lifecycleCommand(type: string, kind: Exclude<EntityKind, "project">, id
 
       if (kind === "stream") {
         const entities = update(state.streams);
-        return entities ? recalculate({ ...state, streams: entities }) : state;
+        return entities ? recalculate({ ...state, streams: entities, ...(deleted ? { decisions: state.decisions.map(decision => ({ ...decision, relatedStreamIds: decision.relatedStreamIds.filter(streamId => streamId !== id) })) } : {}) }) : state;
       }
       if (kind === "task") {
         const entities = update(state.tasks);
@@ -64,15 +64,15 @@ function lifecycleCommand(type: string, kind: Exclude<EntityKind, "project">, id
         const tasks = deleted ? entities.map((task) => task.parentTaskId === id && !task.deletion.isDeleted
           ? { ...task, parentTaskId: source?.parentTaskId }
           : task) : entities;
-        return recalculate({ ...state, tasks });
+        return recalculate({ ...state, tasks, ...(deleted ? { dependencies: state.dependencies.filter(dependency => !(dependency.predecessor.kind === "task" && dependency.predecessor.id === id) && !(dependency.successor.kind === "task" && dependency.successor.id === id)) } : {}) });
       }
       if (kind === "milestone") {
         const entities = update(state.milestones);
-        return entities ? recalculate({ ...state, milestones: entities }) : state;
+        return entities ? recalculate({ ...state, milestones: entities, ...(deleted ? { dependencies: state.dependencies.filter(dependency => !(dependency.predecessor.kind === "milestone" && dependency.predecessor.id === id) && !(dependency.successor.kind === "milestone" && dependency.successor.id === id)), decisions: state.decisions.map(decision => ({ ...decision, relatedMilestoneIds: decision.relatedMilestoneIds.filter(milestoneId => milestoneId !== id) })) } : {}) }) : state;
       }
       if (kind === "person") {
         const entities = update(state.people);
-        return entities ? recalculate({ ...state, people: entities }) : state;
+        return entities ? recalculate({ ...state, people: entities, ...(deleted ? { milestones: state.milestones.map(milestone => milestone.ownerId === id ? { ...milestone, ownerId: null } : milestone) } : {}) }) : state;
       }
       if (kind === "risk") {
         const entities = update(state.risks);
