@@ -48,3 +48,7 @@ The explicit user request supersedes the main-only branch policy for this experi
 Merged the v1.3.0 baseline while retaining HeroUI Button/Chip components and the root provider. Shared design tokens load before branch-specific HeroUI styles, now isolated in `src/app/heroui-experiment.css`. Measured toolbar offsets, dialog keyboard fixes, explicit action cells, sidebar-toggle visibility and package-derived version metadata are retained. Project schema and local file workflows remain unchanged.
 
 Validation of this sync: 27 files / 140 tests, TypeScript, ESLint, production build and full Chromium lifecycle passed. All 60 records per module survived reopen; measured sticky geometry passed at 1440, 1080, 768 and 375px, and sidebar visibility and dialog keyboard checks passed with no browser runtime errors. Desktop Overview was visually reviewed. The documented seven audit advisories remain unchanged.
+
+## Sidebar rail refinement
+
+The sidebar now collapses to a 64px rail containing each module’s first letter. A small unfilled chevron points left to collapse and right to expand, with accessible labels and expanded state. The rail remains in the layout grid, preventing overlap with the current project header. Narrow viewports initially use the compact rail; users can expand it. Regression checks cover rail geometry, letters, navigation and expansion at desktop and mobile widths.

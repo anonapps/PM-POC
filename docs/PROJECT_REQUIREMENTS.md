@@ -1922,7 +1922,7 @@ Milestones have either explicit Project-wide scope or one or more stable Stream 
 
 Warnings are derived, never acknowledged or persisted, and cover child schedules outside a fully scheduled parent, Finish-to-Start timing violations, deleted predecessor references, deleted milestone-scope Streams, and active Tasks belonging to deleted Streams. Same-day handover is valid. Corrective relationship removal requires confirmation and is a normal dirty, persisted command.
 
-Navigation order is Overview, Search, Streams, People, Tasks, Milestones, Gantt, Tube Map, Risk Log, Decision Log, Warnings, and File Information. The full sidebar can be hidden for the current session and restores on reload. Its Warnings label omits a zero count.
+Navigation order is Overview, Search, Streams, People, Tasks, Milestones, Gantt, Tube Map, Risk Log, Decision Log, Warnings, and File Information. On the HeroUI experiment, the sidebar collapses to a rail showing only each section’s first letter. A small left arrow collapses it and a right arrow expands it; the control stays inside the sidebar without overlapping the project header. The state is session-only and restores on reload. Outside this experiment, the full sidebar can be hidden for the current session and restores on reload. Its Warnings label omits a zero count.
 
 Gantt has exactly twelve columns: calendar days for Week, Monday-Sunday weeks for Month, and Monday-based fourteen-day periods for Quarter. Its default window has two periods before the current period and nine after it. Only fully scheduled tasks have bars or connectors; actual dates are positioned proportionally. It includes an always-visible Project-wide row and one occurrence of a multi-stream milestone in every applicable active Stream.
 

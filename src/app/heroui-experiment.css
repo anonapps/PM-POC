@@ -1,7 +1,7 @@
 /* Branch-only HeroUI experiment. Keep planning coordinates and sticky offsets intact. */
 .heroui-experiment { --experiment-surface:#f4f6f8; }
 .heroui-experiment .app-shell { grid-template-columns:232px minmax(0,1fr); }
-.heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:1fr; }
+.heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:64px minmax(0,1fr); }
 .heroui-experiment .app-shell aside { background:#111c30; padding:20px 12px; border-right:1px solid #25334a; }
 .heroui-experiment .brand { color:#f8fafc; letter-spacing:.08em; font-size:11px; padding:10px 8px; }
 .heroui-experiment .experiment-label { margin:0 8px 20px; font-size:11px; color:#93a9c9; }
@@ -23,5 +23,19 @@
 .heroui-experiment .panel>table { border:1px solid #e0e6ee; border-radius:12px; background:white; }
 .heroui-experiment .panel>table tbody tr:hover { background:#f8faff; }
 @media(max-width:1100px) { .heroui-experiment .header-actions { gap:4px; flex-wrap:wrap; justify-content:flex-end; } .heroui-experiment .header-actions button { padding:5px 8px; } }
-@media(max-width:850px) { .heroui-experiment .app-shell { grid-template-columns:64px minmax(0,1fr); } .heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:1fr; } .heroui-experiment .experiment-label { display:none; } .heroui-experiment aside nav .hero-nav { font-size:0; padding:0 8px; } }
-.heroui-experiment aside .sidebar-toggle { color:#cbd5e1; background:#23324b; height:32px; min-width:0; justify-content:flex-start; padding:0 12px; border-radius:8px; }
+/* Keep the compact rail in the grid, clear of the project header. */
+.heroui-experiment .sidebar-heading { min-height:64px; }
+.heroui-experiment aside .sidebar-toggle { display:flex; align-items:center; justify-content:center; width:32px; height:32px; min-width:32px; padding:0; margin-left:auto; color:#cbd5e1; background:transparent; border:0; border-radius:4px; box-shadow:none; }
+.heroui-experiment aside .sidebar-toggle:hover { background:#23324b; }
+.heroui-experiment aside nav .module-letter { flex:none; width:22px; font-size:13px; }
+.heroui-experiment aside nav .module-label { display:inline; flex:0 1 auto; width:auto; color:inherit; }
+.heroui-experiment .sidebar-hidden aside { padding:20px 8px; }
+.heroui-experiment .sidebar-hidden .sidebar-heading { display:none; }
+.heroui-experiment .sidebar-hidden aside .sidebar-toggle { margin:0 auto; }
+.heroui-experiment .sidebar-hidden aside nav .hero-nav { justify-content:center; padding:0; gap:0; }
+.heroui-experiment .sidebar-hidden .module-label { display:none; }
+.heroui-experiment .sidebar-hidden .app-main>header { padding-left:var(--space-4); }
+@media(max-width:850px) {
+  .heroui-experiment .app-shell { grid-template-columns:200px minmax(0,1fr); }
+  .heroui-experiment .app-shell.sidebar-hidden { grid-template-columns:64px minmax(0,1fr); }
+}
