@@ -345,6 +345,8 @@ Use a layered test strategy:
 
 Security tests must include malformed containers, traversal attempts, invalid schemas and unsupported versions.
 
+The implemented regression layers are described in [AUTOMATED_REGRESSION.md](AUTOMATED_REGRESSION.md). `src/testing/regression-fixture.ts` builds deterministic canonical project state with 180 records; `regression.test.ts` checks scenario pairs, domain commands, projections and complete `.pmp` round trips. `e2e/run-regression.mjs` asks Vitest to serialize a disposable fixture, then runs the existing Chrome acceptance harness with extended checks from `e2e/regression.mjs`. Full mode additionally exercises creation forms. These are development tools, not app runtime dependencies or user project data. Browser persistence crosses the real codec and application file service using an isolated in-memory file adapter; native OS picker consent remains manual.
+
 ## 21. Accessibility and UX Engineering
 
 Use semantic HTML and keyboard-operable controls. Modals/panels require sensible focus management and Escape behaviour. Interactive Gantt/Tube Map operations should provide accessible alternatives where practical.

@@ -33,7 +33,7 @@ jobs:
       - name: Full audit (informational until upstream dev-tool fixes)
         run: npm audit --audit-level=moderate
         continue-on-error: true
-      - name: End-to-end acceptance
+      - name: Extended browser regression
         run: |
           CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }

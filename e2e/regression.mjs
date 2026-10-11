@@ -16,7 +16,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
     record(`${module}: 30 records render`, await evaluate(`new Set([...document.querySelectorAll('tbody tr')].flatMap(row=>row.innerText.match(/${prefix}-\\d{3}/g)||[])).size===30`), `${Date.now()-start} ms (diagnostic)`);
   }
   await nav('Tube Map');
-  record('Large Tube Map retains 12 week labels and 31 lanes', await evaluate(`document.querySelectorAll('.tube-axis span').length===12 && document.body.innerText.includes('Regression stream 30')`));
+  record('Large Tube Map retains 12 week labels and 31 lanes', await evaluate(`document.querySelectorAll('.tube-axis span').length===12 && document.querySelectorAll('.tube-line').length===31 && document.body.innerText.includes('Regression stream 30')`));
   await nav('Gantt');
   record('Large Gantt renders final task', await evaluate(`document.body.innerText.includes('Regression task 30')`));
   await nav('Search');
@@ -45,5 +45,10 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   await waitFor(`document.body.innerText.includes('Regression 180 records')`);
   await nav('Decision Log');
   await waitFor(`document.body.innerText.includes('DECISION-${process.env.E2E_FULL_LIFECYCLE === '1' ? '060' : '030'}')`);
+  const expected = process.env.E2E_FULL_LIFECYCLE === '1' ? 60 : 30;
+  for (const [module, prefix] of [['People','PERSON'],['Streams','STREAM'],['Tasks','TASK'],['Milestones','MILESTONE'],['Risk Log','RISK'],['Decision Log','DECISION']]) {
+    await nav(module);
+    record(`${module}: all ${expected} records survive reopen`, await evaluate(`new Set([...document.querySelectorAll('tbody tr')].flatMap(row=>row.innerText.match(/${prefix}-\\d{3}/g)||[])).size===${expected}`));
+  }
   record('Large project save/close/reopen', true);
 }

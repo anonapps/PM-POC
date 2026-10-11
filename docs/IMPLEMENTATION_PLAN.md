@@ -534,3 +534,14 @@ Every block must preserve these rules:
 ## Change Control
 
 When implementation reveals a requirement that is technically impossible or materially unsafe in the selected POC environment, Codex must not silently reinterpret it. Document the constraint, identify the smallest viable alternatives, and request a product decision before changing the authoritative requirement.
+
+
+## Completed follow-up — Automated Regression Suite v2 (11 October 2026)
+
+- Added a deterministic 180-record fixture: 30 each of Streams, People, Tasks, Milestones, Risks and Decisions.
+- Added asserted status/owner and dependency/status pairs, all risk rating cells, four-level hierarchy/progress checks, domain lifecycle operations and complete `.pmp` equality on reopen.
+- Extended Chrome acceptance with crowded module counts, Gantt/Tube Map, search and save/reopen checks.
+- Added full form creation of 30 additional records per module; runs nightly, manually and when suite/package files change.
+- Preserved the original smoke command and local/offline application architecture.
+
+The initial validation passed 27 test files / 139 tests plus TypeScript, lint, build and both GitHub browser jobs. See [AUTOMATED_REGRESSION.md](AUTOMATED_REGRESSION.md) for current commands, scope and limitations.

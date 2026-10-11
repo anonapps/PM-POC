@@ -5,6 +5,8 @@ on:
     paths:
       - "e2e/**"
       - "src/testing/**"
+      - "package.json"
+      - "package-lock.json"
       - ".github/workflows/regression-lifecycle.yml"
   schedule:
     - cron: '0 3 * * *'

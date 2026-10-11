@@ -8,10 +8,12 @@ Run:
 
 ```bash
 npm ci
-npm run test:e2e
+npm run test:regression
 ```
 
 The harness starts the Next.js development server unless `E2E_BASE_URL` is supplied, launches an isolated headless Chrome profile, and exits non-zero on the first failed acceptance assertion. Set `CHROME_PATH` if Chrome is installed in a non-standard location. `E2E_DEBUG_PORT` can override the default DevTools port 9222.
+
+`npm run test:e2e` retains the original smoke flow. `npm run test:lifecycle` adds 180 form-created records to the 180-record fixture. See [Automated regression suite v2](AUTOMATED_REGRESSION.md) for the coverage matrix and CI schedule. Browser commands require Node.js 22 or newer because the harness uses the built-in WebSocket client.
 
 ## Automated coverage
 
@@ -33,11 +35,16 @@ The suite verifies:
 - Close -> Open Project persistence round trip;
 - soft deletion and restoration;
 - semantic project navigation / `aria-current`;
-- uncaught browser/runtime error collection.
+- uncaught browser/runtime error collection;
+- loading a real codec-generated 180-record `.pmp` fixture;
+- 30 records in each operational table, 31 Tube Map lanes and 12 week labels;
+- large-project Gantt rendering and decision search;
+- record counts in all six modules after save/close/reopen;
+- in full mode, 30 additional form creations per module (360 records total).
 
 The visual regression assertions use DOM geometry and content rather than screenshots, so they catch missing labels and grid misalignment without introducing snapshot dependencies. They are lightweight smoke checks, not a full cross-browser or multi-viewport visual comparison.
 
-The test data is intentionally deterministic and disposable. The test browser uses a temporary profile and an in-memory `.pmp` handle; it does not write a project file to the user's filesystem.
+The test data is deterministic and disposable. The regression runner writes codec-generated fixture bytes to an OS temporary directory and removes it after the run. Browser persistence uses an in-memory `.pmp` handle and an isolated temporary profile. User project files are never accessed.
 
 ## Why the file picker is mocked
 
@@ -63,12 +70,12 @@ npm test
 npm run typecheck
 npm run lint
 npm run build
-npm audit
-npm run test:e2e
+npm audit --omit=dev --audit-level=moderate
+npm run test:regression
 ```
 
-The established Blocks 0–20 baseline before introducing this harness was 21 test files / 91 tests, zero lint warnings, successful production build, zero audit vulnerabilities, clean `git diff --check`, and no prohibited local-storage/cloud/runtime-network patterns.
+GitHub normal validation runs extended regression on pushes and pull requests to `main`, and on manual dispatch. Full lifecycle runs nightly at 03:00 UTC, on manual dispatch and when the regression harness, fixture, package manifests or lifecycle workflow change. The full development-dependency audit remains informational in normal validation.
 
 ## Environment limitations
 
-A runtime without Chrome/Chromium cannot execute `npm run test:e2e`. This is an environment limitation, not an application failure. The regular Vitest/typecheck/lint/build/audit gates remain executable in such environments.
+A runtime without Chrome/Chromium cannot execute any of the three browser commands. This is an environment limitation, not an application failure. The regular Vitest/typecheck/lint/build/audit gates remain executable in such environments.

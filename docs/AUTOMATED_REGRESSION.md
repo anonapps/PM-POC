@@ -1,13 +1,68 @@
 # Automated regression suite v2
 
-`npm test` runs the existing tests plus the deterministic regression tests.
-`npm run test:regression` generates a temporary .pmp fixture, runs existing browser acceptance, then opens and exercises the large fixture.
-`npm run test:lifecycle` additionally creates 30 records per module through the actual creation forms (180 additional records). The nightly/manual GitHub workflow runs this mode; normal validation runs extended regression.
+## Commands and execution
 
-The fixture contains 30 streams, people, tasks, milestones, risks and decisions (180 records). It uses fixed dates, stable IDs and supported domain values. Risk probability/impact covers all nine matrix cells. Explicit coverage assertions cover lifecycle status/assigned owner, milestone status/owner and risk status/owner. Other targeted scenarios include optional dates, out-of-range dates, project/multiple stream scope, four-level task nesting, progress boundaries, dependency chains, cross-stream dependencies, empty/multiple risk actions, overdue/open versus completed actions, optional decision rationale and decision-to-risk links. Decisions have no status in the current product model.
+Run commands from the repository root after `npm ci`. The app supports Node.js 20.9+; browser tests require Node.js 22+ and a locally installed Chrome/Chromium executable. The harness uses Node's built-in WebSocket client and Chrome DevTools Protocol without adding a browser automation dependency to the app.
 
-Domain regression verifies complete .pmp equality after reopen, deterministic serialization, search for every ID, Gantt/Tube Map projections, duplication, deletion/restoration, undo/redo, dirty baselines, risk rating edits and decision relationships. Browser regression verifies all six crowded tables, Gantt, Tube Map, search and save/close/reopen. Existing acceptance retains the layout, validation, keyboard, dependency and file lifecycle checks.
+| Command | Scope | Automatic execution |
+| --- | --- | --- |
+| `npm test` | All Vitest domain, application, persistence and regression tests | Normal validation |
+| `npm run test:e2e` | Original browser acceptance/smoke flow | Included by both larger browser suites |
+| `npm run test:regression` | Fixture validation, smoke flow, 180-record browser regression | Push/PR to `main`; manual normal validation |
+| `npm run test:lifecycle` | Extended regression plus 180 additional form-created records | Nightly at 03:00 UTC; manual dispatch; pushes to `main` changing `e2e/**`, `src/testing/**`, package manifests or the lifecycle workflow |
 
-Performance timings for opening and module navigation are diagnostic only; they are not hardware-dependent pass/fail thresholds. This is targeted scenario coverage, not an exhaustive pairwise covering array across every field. The full form loop verifies creation volume; varied combinations are supplied by the validated fixture.
+Normal validation also checks TypeScript, lint, production build and production dependency audit. The full dependency audit is informational. The lifecycle workflow has a 30-minute timeout; normal validation has a 20-minute timeout.
 
-Every browser run uses its own disposable profile and in-memory picker adapter. Fixture bytes are produced by the real .pmp codec in an OS temporary directory and removed by the runner. No user project files are accessed. Chrome must be installed; set CHROME_PATH when it is not on PATH. E2E_BASE_URL explicitly opts into using an existing local test server.
+To run full lifecycle manually on GitHub, open **Actions → PM-POC full lifecycle regression → Run workflow**, select `main` and run. The schedule is fixed to UTC (05:00 Madrid summer time / 04:00 winter time), and scheduled runs use the default branch.
+
+## Dataset
+
+The fixture has exactly 180 active entity records: 30 Streams, 30 People, 30 Tasks, 30 Milestones, 30 Risks and 30 Decisions. Risk actions and dependency edges are additional supporting records. Gantt renders Tasks and Milestones; it is not a separate entity collection. Full mode creates 30 more of each entity through the actual forms, reaching 360 entity records before save/reopen.
+
+Dates are anchored to `2026-10-11` in domain regression. Browser views retain their normal current-date behaviour, so browser checks avoid depending on historical fixture milestones remaining in the current 12-week window. IDs, names and dates are deterministic. The fixture uses supported product enums; Decisions have no status field.
+
+| Dimension | Covered scenarios | Verification |
+| --- | --- | --- |
+| Status and owner | All five Task/Stream statuses × assigned/unassigned; four Milestone statuses × owner; four Risk statuses × owner | Explicit pair-count assertions |
+| Dependencies and status | Every Task/Milestone status with/without incoming dependency | Explicit pair-count assertions |
+| Dependency structure | None, chains, multiple predecessors, cross-stream task edges, task-to-milestone edge | Real container validation, model projection and deletion cleanup |
+| Risk ratings | All nine probability × impact cells; Low/Medium/High derived levels | Matrix pair assertion, codec validation and rating edit |
+| Risk actions | No actions or multiple actions; overdue Open and Complete actions | Overdue count, field persistence and duplication lifecycle |
+| Decision context | Project-wide or linked scope, optional rationale, assigned/unassigned owner, dates, multiple risk links | Complete field round trip and relationship edit |
+| Task hierarchy/progress | Flat Tasks and four levels; 0/25/50/75/100% propagation | Targeted hierarchy tests at each progress value |
+| Dates and scope | Missing dates, before/inside/after project/window, shared dates, project-wide and multiple-stream Milestones | Codec equality, Gantt/Tube Map scope counts and boundary assertions |
+| Names and identity | Long names, repeated names, Unicode and `<>&`; stable IDs and next sequence | Unique ID assertion, per-record ID search and duplication ID 031 |
+| Lifecycle | Duplicate Tasks/Milestones/Risks/Decisions; delete/restore all six kinds; Undo/Redo; saved/dirty baseline | Store-level assertions and full field round trips |
+| Crowded browser views | 30 rows per module, 31 Tube Map lanes, 12 labels, last Gantt Task, decision search | DOM/content checks |
+| Form creation | 30 additional entities per module | Actual form submission and next human ID; full mode only |
+| Persistence | Real `.pmp` encode/decode; save/close/reopen in browser | Whole-state equality in Vitest; counts in all six browser modules after reopening |
+
+These assertions cover selected pairs and risky scenarios. They are not an exhaustive pairwise covering array across every field. Varied scenarios come from the validated fixture; the full form loop checks creation volume using required fields and defaults. Existing unit and smoke tests supply further validation, keyboard, draft, layout and file-lifecycle coverage.
+
+## Implementation and isolation
+
+- `src/testing/regression-fixture.ts` builds canonical project state and recalculates parent values.
+- `src/testing/regression.test.ts` validates coverage and exercises commands, search, models and the real `.pmp` codec.
+- `e2e/run-regression.mjs` creates an OS temporary directory, runs fixture tests to serialize a `.pmp`, runs browser acceptance and removes the fixture directory in `finally`.
+- `e2e/acceptance.mjs` owns the local server/browser lifecycle, isolated temporary Chrome profile and in-memory File System Access API adapter.
+- `e2e/regression.mjs` opens generated bytes through the app, verifies large views, optionally creates additional records and saves/reopens.
+
+No user project files are accessed. No fixture or automation is imported into the app's runtime. Browser save/reopen uses the real application persistence path with the in-memory adapter; native file-picker consent and physical OS file access remain [manual boundary checks](ACCEPTANCE_TESTING.md#manual-native-boundary-checks).
+
+## Configuration and failure diagnosis
+
+| Variable | Purpose |
+| --- | --- |
+| `CHROME_PATH` | Absolute path to a Chrome/Chromium executable when automatic discovery is insufficient |
+| `E2E_DEBUG_PORT` | DevTools port; default 9222 |
+| `E2E_BASE_URL` | Explicitly opt into reusing a local test server instead of starting an owned server |
+| `REGRESSION_PMP_PATH` | Internal runner variable specifying the temporary codec output; normally do not set manually |
+| `E2E_FULL_LIFECYCLE` | Internal runner flag selected by `--full`; use `npm run test:lifecycle` |
+
+The harness refuses to reuse an existing server on its default URL unless `E2E_BASE_URL` is explicitly supplied. Run browser suites sequentially on one machine, or allocate separate server URLs and DevTools ports. Console output lists PASS/FAIL assertions; the first failure exits non-zero. Inspect the failed GitHub step and rerun its command locally with the same commit.
+
+Opening and module-navigation timings are diagnostic only, not hardware-dependent pass/fail thresholds. Geometry/content checks are not screenshot comparisons or comprehensive desktop viewport testing. The extended browser suite verifies rendering/search/persistence; the larger domain suite verifies mutation semantics. Native permissions, physical file writes and Windows/macOS launcher checks are separate boundaries.
+
+## Recorded verification
+
+On 11 October 2026, commit `14eb167` passed 27 Vitest files / 139 tests, TypeScript, lint, production build and dependency checks. GitHub [normal validation](https://github.com/anonapps/PM-POC/actions/runs/38133053042) and [full lifecycle](https://github.com/anonapps/PM-POC/actions/runs/38133053022) both passed. Full lifecycle created all 180 additional entities and saved/reopened the large project without browser runtime errors. This is a dated result; the current Actions run is the authority for later commits.

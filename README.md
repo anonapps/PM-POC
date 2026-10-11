@@ -1,10 +1,10 @@
 # Project Management POC
 
-A local-first Project Management POC v1.1 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first Project Management POC v1.2 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
 ## Prerequisites
 
-- Node.js 20.9 or newer
+- Node.js 20.9 or newer for the app; Node.js 22 or newer for the browser test harness
 - npm 10 or newer
 - Chrome Desktop for the supported browser runtime and E2E acceptance suite
 
@@ -27,11 +27,13 @@ npm test
 npm run typecheck
 npm run lint
 npm run build
-npm audit
-npm run test:e2e
+npm audit --omit=dev --audit-level=moderate
+npm run test:regression
 ```
 
-The completed Blocks 0–20 baseline has been validated with 22 Vitest files / 102 tests, zero lint warnings, successful TypeScript and production builds, zero audit vulnerabilities, and the Chrome E2E acceptance flow. See [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for coverage and the remaining native file-picker boundary checks.
+The regression suite includes 30 streams, people, tasks, milestones, risks and decisions (180 varied records). `npm run test:e2e` runs the original smoke flow; `npm run test:regression` adds the large dataset; `npm run test:lifecycle` also creates 30 additional records per module through the UI. See [`docs/AUTOMATED_REGRESSION.md`](docs/AUTOMATED_REGRESSION.md) for scenarios, CI triggers and commands, and [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for native file-picker checks.
+
+The 11 October 2026 regression baseline passed 27 Vitest files / 139 tests, TypeScript, lint, production build, dependency checks and both Chrome browser suites. Test counts are a dated validation result, not a fixed coverage target. The production audit is blocking; the full development audit is informational in CI.
 
 ## Source layout
 
@@ -42,7 +44,8 @@ The completed Blocks 0–20 baseline has been validated with 22 Vitest files / 1
 - `src/persistence` — `.pmp` codec, validation and Project File Service adapters.
 - `src/runtime` — local project runtime/session coordination.
 - `src/shared` — small cross-cutting constants and utilities.
-- `e2e` — dependency-free Chrome DevTools Protocol acceptance harness.
+- `src/testing` — deterministic regression fixture and coverage/lifecycle assertions.
+- `e2e` — Chrome DevTools Protocol smoke, extended and full creation harnesses.
 
 ## Persistence model
 
