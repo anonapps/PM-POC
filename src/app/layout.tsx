@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import "./design-system.css";
+import "./heroui-experiment.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Project Management POC",
@@ -15,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="heroui-experiment"><Providers>{children}</Providers></body>
     </html>
   );
 }

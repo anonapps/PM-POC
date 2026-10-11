@@ -1,6 +1,6 @@
 # Project Management POC
 
-A local-first Project Management POC v1.3.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first Project Management POC v1.3.1 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
 ## Prerequisites
 
@@ -54,6 +54,10 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## POC status
 
 Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
+
+## v1.3.1 — HeroUI release
+
+The tested HeroUI presentation is now the main baseline: dark navigation, a compact letter rail with left/right chevrons, improved controls and live entity selection lists. It uses HeroUI 2.8.10 and Tailwind 4.3.3, bundled locally. Run `git switch main`, `git pull --ff-only origin main`, `npm ci` and `npm run dev` to update your local runtime. No hosted service is required.
 
 ## v1.3.0 — UI design system
 

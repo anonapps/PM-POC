@@ -1,5 +1,14 @@
 # Release notes
 
+## v1.3.1 — 11 October 2026
+
+- Promote the user-tested HeroUI presentation to the main release.
+- Collapse sidebar to a 64px letter rail with small left/right chevrons; keep the project header clear.
+- Refresh entity lists and selection options directly from the project store, including newly created Streams in milestone scope and task selectors.
+- Remove the experiment preview label.
+- Update HeroUI v2 and migrate the styling toolchain to Tailwind 4 to remove the production audit advisories; production audit remains blocking.
+- Preserve schema 2, existing compatibility floors, offline operation and `.pmp` file workflows.
+
 ## v1.3.0 — 11 October 2026
 
 - Shared design tokens for colours, typography, spacing, radii and shadows.
