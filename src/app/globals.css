@@ -197,3 +197,7 @@ table td:last-child button { margin:.12rem; }
 .workspace .tube-map{overflow:visible;max-height:none;min-height:0;padding-top:0;}
 .workspace .tube-map>.tube-axis{position:sticky;top:88px;z-index:22;}
 @media(max-width:850px){.workspace .tube-map>.tube-axis{top:112px;}}
+
+/* Dialogs must always sit above sticky module headers and table overlays. */
+.dialog-backdrop{z-index:1000;isolation:isolate;}
+.dialog-backdrop>section{position:relative;z-index:1;}
