@@ -201,3 +201,11 @@ table td:last-child button { margin:.12rem; }
 /* Dialogs must always sit above sticky module headers and table overlays. */
 .dialog-backdrop{z-index:1000;isolation:isolate;}
 .dialog-backdrop>section{position:relative;z-index:1;}
+
+/* Gantt year bands and week labels share the exact same twelve-column grid. */
+.gantt-panel .gantt>.gantt-time-heading{display:flex;flex-direction:column;padding:0;min-width:0;}
+.gantt-panel .gantt-time-heading .gantt-years,.gantt-panel .gantt-time-heading .gantt-dates{display:grid;width:100%;min-width:0;}
+.gantt-panel .gantt-time-heading .gantt-years{background:#dce6f2;border-bottom:1px solid #bdcbdc;}
+.gantt-panel .gantt-time-heading .gantt-years span{min-width:0;text-align:center;font-size:.72rem;font-weight:700;padding:.35rem .2rem;border-left:1px solid #bdcbdc;}
+.gantt-panel .gantt-time-heading .gantt-dates span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:.65rem .2rem;}
+.gantt-panel .gantt>.gantt-item-heading{display:flex;align-items:center;}
