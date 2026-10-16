@@ -37,6 +37,23 @@ describe("project audit history", () => {
     const result = recordAuditChange(before, after, "edit-project", "2026-10-16T10:01:00Z");
     expect(String(result.auditHistory?.events[0]?.after).length).toBeLessThan(2100);
   });
+  it("records the correct singular entity name for milestones", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const milestone = { id: "m1", humanId: "MILESTONE-001", name: "Gate" };
+    const after = { ...before, milestones: [milestone] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "create-milestone", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "milestone", action: "created", entityId: "m1" });
+  });
+  it("does not record a configuration toggle as a project event", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, project: { ...before.project, name: "After" } };
+    expect(recordAuditChange(before, after, "set-audit-enabled", "2026-10-16T10:01:00Z")).toBe(after);
+  });
+  it("does not create events for unchanged state", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const result = recordAuditChange(before, before, "edit-project", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(0);
+  });
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
