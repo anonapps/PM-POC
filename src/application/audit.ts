@@ -2,13 +2,19 @@ import type { ProjectState, AuditEvent } from "./state";
 
 const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions"] as const;
 export const MAX_AUDIT_EVENTS = 5000;
+const MAX_SNAPSHOT_CHARS = 2000;
+function compact(value: unknown): unknown {
+  if (value === undefined) return undefined;
+  const text = JSON.stringify(value);
+  return text && text.length > MAX_SNAPSHOT_CHARS ? text.slice(0, MAX_SNAPSHOT_CHARS) + " [truncated]" : value;
+}
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
   if (after.auditHistory?.enabled !== true || command === "set-audit-enabled") return after;
   const events: AuditEvent[] = [];
   const append = (entityType: string, entityId: string, action: AuditEvent["action"], field?: string, oldValue?: unknown, newValue?: unknown) => {
-    events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: oldValue } : {}), ...(newValue !== undefined ? { after: newValue } : {}) });
+    events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: compact(oldValue) } : {}), ...(newValue !== undefined ? { after: compact(newValue) } : {}) });
   };
   const inspect = (entityType: string, oldEntity: Record<string, unknown> | undefined, newEntity: Record<string, unknown> | undefined, id: string) => {
     if (!oldEntity && newEntity) { append(entityType, id, "created", undefined, undefined, newEntity.humanId ?? newEntity.name); return; }
