@@ -5,7 +5,7 @@ export function auditEventsToCsv(events: readonly AuditEvent[]): string {
   const quote = (value: unknown): string => {
     const text = value === undefined ? "" : typeof value === "string" ? value : JSON.stringify(value);
     // Quoting does not stop spreadsheet programs from interpreting formula-like cells.
-    const safe = /^[\\t\\r\\n ]*[=+@-]/.test(text) ? "\'" + text : text;
+    const safe = /^[\t\r\n ]*[=+@-]/.test(text) ? "\'" + text : text;
     return '"' + safe.replace(/"/g, '""') + '"';
   };
   return [fields.join(","), ...events.map(event => fields.map(field => quote(event[field])).join(","))].join("\r\n");
