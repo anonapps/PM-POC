@@ -11,7 +11,7 @@ function compact(value: unknown): unknown {
 }
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 const DERIVED_FIELDS = new Set(["riskLevel", "actualCompletionDate"]);
-const TRACKED_FIELDS = new Set(["name", "title", "description", "startDate", "endDate", "plannedDate", "dueDate", "status", "probability", "impact", "scope", "ownerId", "role", "notes", "priority", "progress", "parentTaskId", "milestoneId", "relatedStreamIds", "relatedTaskIds", "relatedMilestoneIds", "relatedRiskIds", "actions", "metadata", "decisionDate"]);
+const TRACKED_FIELDS = new Set(["name", "title", "description", "startDate", "endDate", "plannedDate", "dueDate", "status", "probability", "impact", "scope", "ownerId", "role", "notes", "priority", "progress", "parentTaskId", "milestoneId", "relatedStreamIds", "relatedTaskIds", "relatedMilestoneIds", "relatedRiskIds", "actions", "metadata", "decisionDate", "type", "source", "target", "predecessor", "successor"]);
 
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
