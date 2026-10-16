@@ -11,7 +11,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: oldValue } : {}), ...(newValue !== undefined ? { after: newValue } : {}) });
   };
   const inspect = (entityType: string, oldEntity: Record<string, unknown> | undefined, newEntity: Record<string, unknown> | undefined, id: string) => {
-    if (!oldEntity && newEntity) { append(entityType, id, "created"); return; }
+    if (!oldEntity && newEntity) { append(entityType, id, "created", undefined, undefined, newEntity.humanId ?? newEntity.name); return; }
     if (oldEntity && !newEntity) { append(entityType, id, "deleted"); return; }
     if (!oldEntity || !newEntity) return;
     const oldDeleted = (oldEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted;
