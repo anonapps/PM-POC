@@ -245,3 +245,9 @@ table td.table-actions button { margin:.12rem; }
 .gantt-row.section .gantt-open-stream { display:inline-flex; align-items:center; justify-content:center; margin-left:.35rem; padding:.1rem .3rem; border:0; border-radius:3px; background:transparent; color:#2459a9; cursor:pointer; font-weight:700; }
 .gantt-row.section .gantt-open-stream:hover { background:#dce6f2; }
 .gantt-row.section .gantt-open-stream:focus-visible { outline:2px solid #2459a9; outline-offset:1px; }
+
+/* Tube Map compact milestone editor; keep the roadmap visible behind it. */
+.tube-quick-edit { position:sticky;left:12px;bottom:12px;z-index:25;width:min(360px,calc(100% - 24px));margin:12px;padding:12px;display:grid;gap:8px;background:white;border:1px solid #b8c5d3;border-radius:8px;box-shadow:0 6px 22px #0002; }
+.tube-quick-edit label { display:grid;gap:4px;font-size:.8rem; }
+.tube-quick-edit input { width:100%;min-width:0; }
+.tube-quick-edit .actions { display:flex;flex-wrap:wrap;gap:6px; }
