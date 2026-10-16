@@ -5,7 +5,7 @@ export const MAX_AUDIT_EVENTS = 5000;
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
-  if (after.auditHistory?.enabled !== true) return after;
+  if (after.auditHistory?.enabled !== true || command === "set-audit-enabled") return after;
   const events: AuditEvent[] = [];
   const append = (entityType: string, entityId: string, action: AuditEvent["action"], field?: string, oldValue?: unknown, newValue?: unknown) => {
     events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: oldValue } : {}), ...(newValue !== undefined ? { after: newValue } : {}) });
