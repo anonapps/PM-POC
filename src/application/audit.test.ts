@@ -61,6 +61,11 @@ describe("project audit history", () => {
     const after = { ...before, project: { ...before.project, name: "After" } };
     expect(recordAuditChange(before, after, "set-audit-enabled", "2026-10-16T10:01:00Z")).toBe(after);
   });
+  it("does not treat project replacement as an editable change", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, project: { ...before.project, name: "Imported project" } };
+    expect(recordAuditChange(before, after, "replace-state", "2026-10-16T10:01:00Z")).toBe(after);
+  });
   it("does not create events for unchanged state", () => {
     const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = recordAuditChange(before, before, "edit-project", "2026-10-16T10:01:00Z");
