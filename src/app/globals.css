@@ -251,3 +251,8 @@ table td.table-actions button { margin:.12rem; }
 .tube-quick-edit label { display:grid;gap:4px;font-size:.8rem; }
 .tube-quick-edit input { width:100%;min-width:0; }
 .tube-quick-edit .actions { display:flex;flex-wrap:wrap;gap:6px; }
+
+.gantt-quick-edit { position:sticky; left:12px; bottom:12px; z-index:25; width:min(370px,calc(100% - 24px)); margin:12px; padding:12px; display:grid; gap:8px; background:white; border:1px solid #b8c5d3; border-radius:8px; box-shadow:0 6px 22px #0002; }
+.gantt-quick-edit label { display:grid; gap:4px; font-size:.8rem; }
+.gantt-quick-edit input { width:100%; min-width:0; }
+.gantt-quick-edit .actions { display:flex; flex-wrap:wrap; gap:6px; }
