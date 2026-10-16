@@ -77,6 +77,8 @@ export interface Milestone extends EntityIdentity, SoftDeletable {
 
 export interface Person extends EntityIdentity, SoftDeletable {
   readonly name: string;
+  readonly role?: string;
+  readonly notes?: string;
 }
 
 export const RISK_STATUSES = ["Open", "Mitigated", "Closed", "Accepted"] as const;
