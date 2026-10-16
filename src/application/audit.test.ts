@@ -54,6 +54,22 @@ describe("project audit history", () => {
     const result = recordAuditChange(before, before, "edit-project", "2026-10-16T10:01:00Z");
     expect(result.auditHistory?.events).toHaveLength(0);
   });
+  it("records dependency creation and removal", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const dependency = { id: "dep-1", projectId: "p1", type: "finish-to-start", predecessor: { kind: "task", id: "t1" }, successor: { kind: "task", id: "t2" } };
+    const added = { ...before, dependencies: [dependency] } as unknown as ProjectState;
+    const created = recordAuditChange(before, added, "add-dependency", "2026-10-16T10:01:00Z");
+    expect(created.auditHistory?.events.at(-1)).toMatchObject({ entityType: "dependency", entityId: "dep-1", action: "created" });
+    const removed = recordAuditChange(created, { ...created, dependencies: [] }, "remove-dependency", "2026-10-16T10:02:00Z");
+    expect(removed.auditHistory?.events.at(-1)).toMatchObject({ entityType: "dependency", entityId: "dep-1", action: "deleted" });
+  });
+  it("records relationship creation", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const relationship = { id: "rel-1", projectId: "p1", type: "relates", source: { kind: "task", id: "t1" }, target: { kind: "risk", id: "r1" } };
+    const after = { ...before, relationships: [relationship] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "add-relationship", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events.at(-1)).toMatchObject({ entityType: "relationship", entityId: "rel-1", action: "created" });
+  });
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
