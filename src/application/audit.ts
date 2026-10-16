@@ -1,7 +1,7 @@
 import type { ProjectState, AuditEvent } from "./state";
 
 const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions"] as const;
-const MAX_EVENTS = 5000;
+export const MAX_AUDIT_EVENTS = 5000;
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
@@ -29,5 +29,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     for (const id of new Set([...previous.keys(), ...current.keys()])) inspect(collection === "people" ? "person" : collection.slice(0, -1), previous.get(id), current.get(id), id);
   }
   if (!events.length) return after;
-  return { ...after, auditHistory: { enabled: true, events: [...(after.auditHistory?.events ?? []), ...events].slice(-MAX_EVENTS) } };
+  return { ...after, auditHistory: { enabled: true, events: [...(after.auditHistory?.events ?? []), ...events].slice(-MAX_AUDIT_EVENTS) } };
 }
+
+export function setAuditEnabled(enabled: boolean) { return { type: "set-audit-enabled", apply(state: ProjectState): ProjectState { return { ...state, auditHistory: { enabled, events: state.auditHistory?.events ?? [] } }; } }; }
