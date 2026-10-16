@@ -70,6 +70,14 @@ describe("project audit history", () => {
     const result = recordAuditChange(before, after, "add-relationship", "2026-10-16T10:01:00Z");
     expect(result.auditHistory?.events.at(-1)).toMatchObject({ entityType: "relationship", entityId: "rel-1", action: "created" });
   });
+  it("records changed dependency endpoints without emitting unchanged fields", () => {
+    const dependency = { id: "dep-1", projectId: "p1", type: "finish-to-start", predecessor: "t1", successor: "t2" };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, dependencies: [dependency] } as unknown as ProjectState;
+    const after = { ...before, dependencies: [{ ...dependency, predecessor: "t3" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "edit-dependency", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "dependency", field: "predecessor", before: "t1", after: "t3" });
+  });
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
