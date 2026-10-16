@@ -10,6 +10,9 @@ function compact(value: unknown): unknown {
   return text && text.length > MAX_SNAPSHOT_CHARS ? text.slice(0, MAX_SNAPSHOT_CHARS) + " [truncated]" : value;
 }
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+const DERIVED_FIELDS = new Set(["riskLevel", "actualCompletionDate"]);
+const TRACKED_FIELDS = new Set(["name", "title", "description", "startDate", "endDate", "plannedDate", "dueDate", "status", "probability", "impact", "scope", "ownerId", "role", "notes", "priority", "progress", "parentTaskId", "milestoneId", "relatedStreamIds", "relatedTaskIds", "relatedMilestoneIds", "relatedRiskIds", "actions", "metadata", "decisionDate"]);
+
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
   if (after.auditHistory?.enabled !== true || command === "set-audit-enabled") return after;
@@ -25,7 +28,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     const newDeleted = (newEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted;
     if (oldDeleted !== newDeleted) append(entityType, id, newDeleted ? "deleted" : "restored");
     for (const field of Object.keys(newEntity)) {
-      if (field === "deletion" || field === "projectId" || field === "id" || field === "humanId") continue;
+      if (!TRACKED_FIELDS.has(field) || DERIVED_FIELDS.has(field)) continue;
       if (!same(oldEntity[field], newEntity[field])) append(entityType, id, "updated", field, oldEntity[field], newEntity[field]);
     }
   };
