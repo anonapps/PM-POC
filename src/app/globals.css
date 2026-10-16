@@ -256,3 +256,13 @@ table td.table-actions button { margin:.12rem; }
 .gantt-quick-edit label { display:grid; gap:4px; font-size:.8rem; }
 .gantt-quick-edit input { width:100%; min-width:0; }
 .gantt-quick-edit .actions { display:flex; flex-wrap:wrap; gap:6px; }
+
+/* v1.4 compact navigation rail: retain the 64px column and prevent header overlap. */
+.app-shell.sidebar-hidden { grid-template-columns:64px minmax(0,1fr); }
+.app-shell.sidebar-hidden aside { width:64px; padding-inline:6px; }
+.app-shell.sidebar-hidden .sidebar-heading { display:none; }
+.app-shell.sidebar-hidden .sidebar-toggle { display:grid; place-items:center; width:100%; min-height:36px; }
+.app-shell.sidebar-hidden .hero-nav { justify-content:center; padding-inline:0; gap:0; }
+.app-shell.sidebar-hidden .hero-nav .module-label { display:none; }
+.app-shell.sidebar-hidden .hero-nav .module-letter { display:inline-flex; align-items:center; justify-content:center; width:100%; font-size:1rem; }
+.app-shell.sidebar-hidden .workspace { padding-left:1.5rem; }
