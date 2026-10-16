@@ -240,3 +240,8 @@ table td.table-actions button { margin:.12rem; }
 .gantt-row .sort-heading:hover { text-decoration:underline; }
 .tube-line .tube-stream-link:focus-visible,.tube-station .tube-station-link:focus-visible,
 .gantt-row .sort-heading:focus-visible { outline:2px solid #2459a9;outline-offset:-2px; }
+
+/* Gantt stream open action, independent of collapse. */
+.gantt-row.section .gantt-open-stream { display:inline-flex; align-items:center; justify-content:center; margin-left:.35rem; padding:.1rem .3rem; border:0; border-radius:3px; background:transparent; color:#2459a9; cursor:pointer; font-weight:700; }
+.gantt-row.section .gantt-open-stream:hover { background:#dce6f2; }
+.gantt-row.section .gantt-open-stream:focus-visible { outline:2px solid #2459a9; outline-offset:1px; }
