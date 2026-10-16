@@ -1,6 +1,7 @@
 import type { ProjectState, AuditEvent } from "./state";
 
 const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions"] as const;
+const ENTITY_TYPES = { streams: "stream", tasks: "task", milestones: "milestone", people: "person", risks: "risk", decisions: "decision" } as const;
 export const MAX_AUDIT_EVENTS = 5000;
 const MAX_SNAPSHOT_CHARS = 2000;
 function compact(value: unknown): unknown {
@@ -32,7 +33,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
   for (const collection of COLLECTIONS) {
     const previous = new Map(before[collection].map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
     const current = new Map(after[collection].map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
-    for (const id of new Set([...previous.keys(), ...current.keys()])) inspect(collection === "people" ? "person" : collection.slice(0, -1), previous.get(id), current.get(id), id);
+    for (const id of new Set([...previous.keys(), ...current.keys()])) inspect(ENTITY_TYPES[collection], previous.get(id), current.get(id), id);
   }
   if (!events.length) return after;
   return { ...after, auditHistory: { enabled: true, events: [...(after.auditHistory?.events ?? []), ...events].slice(-MAX_AUDIT_EVENTS) } };
