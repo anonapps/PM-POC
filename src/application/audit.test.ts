@@ -31,6 +31,18 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events[0]).toBe(old[1]);
     expect(result.auditHistory?.events.at(-1)?.after).toBe("After");
   });
+  it("retains the newest 5000 events when one command changes many fields", () => {
+    const old = Array.from({ length: 4999 }, (_, index) => ({
+      timestamp: "2026-10-16T10:00:00Z", command: "edit-project", entityType: "project",
+      entityId: "p1", action: "updated" as const, field: "name", after: String(index),
+    }));
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: old } };
+    const after = { ...before, project: { ...before.project, name: "After", description: "New description", status: "planned" } } as ProjectState;
+    const result = recordAuditChange(before, after, "edit-project", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(5000);
+    expect(result.auditHistory?.events[0]).toBe(old[2]);
+    expect(result.auditHistory?.events.slice(-3).map(event => event.field)).toEqual(["name", "description", "status"]);
+  });
   it("truncates large snapshots", () => {
     const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const after = { ...before, project: { ...before.project, name: "x".repeat(10000) } };
