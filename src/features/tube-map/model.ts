@@ -20,13 +20,14 @@ function levelsFor(stations: readonly { x: number; label: string }[]) {
   });
 }
 
-export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10)): TubeMapModel {
+export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original"): TubeMapModel {
   const start = mondayOf(startDate);
   const startTime = parse(start).getTime();
   const endTime = startTime + 84 * day;
   const end = iso(new Date(endTime));
   const weeks = Array.from({ length: 12 }, (_, index) => { const date = iso(new Date(startTime + index * 7 * day)); return { date, label: `W${String(isoWeek(date)).padStart(2, "0")}` }; });
-  const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...state.streams.filter((stream) => !stream.deletion.isDeleted).map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
+  const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
+  const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...orderedStreams.map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
   const candidates = state.milestones.filter((milestone) => !milestone.deletion.isDeleted).flatMap((milestone) => {
     const stamp = parse(milestone.plannedDate).getTime();
     const boundary = stamp < startTime ? "before" as const : stamp >= endTime ? "after" as const : "inside" as const;
