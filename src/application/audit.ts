@@ -15,7 +15,7 @@ const TRACKED_FIELDS = new Set(["name", "title", "description", "startDate", "en
 
 
 export function recordAuditChange(before: ProjectState, after: ProjectState, command: string, timestamp: string): ProjectState {
-  if (after.auditHistory?.enabled !== true || command === "set-audit-enabled") return after;
+  if (after.auditHistory?.enabled !== true || command === "set-audit-enabled" || command === "replace-state") return after;
   const events: AuditEvent[] = [];
   const append = (entityType: string, entityId: string, action: AuditEvent["action"], field?: string, oldValue?: unknown, newValue?: unknown) => {
     events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: compact(oldValue) } : {}), ...(newValue !== undefined ? { after: compact(newValue) } : {}) });
