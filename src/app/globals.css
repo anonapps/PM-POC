@@ -208,3 +208,16 @@ table td.table-actions button { margin:.12rem; }
 
 /* v1.4: severity badges share the risk matrix colour tokens. */
 .risk-level-chip { display:inline-flex; align-items:center; justify-content:center; min-width:4.5rem; padding:.2rem .65rem; border-radius:999px; font-size:.75rem; font-weight:700; color:var(--sidebar); white-space:nowrap; }
+
+/* v1.4 Tube Map sortable stream heading follows the sticky first column. */
+.tube-axis > button.sort-heading {
+  position:sticky;left:0;z-index:2;min-width:0;text-align:left;
+  background:#eef2f6;padding:.6rem;border:0;border-radius:0;
+  color:inherit;font:inherit;font-weight:700;cursor:pointer;
+}
+.tube-axis > button.sort-heading:focus-visible { outline:2px solid #2459a9;outline-offset:-2px; }
+/* Keep toolbar controls usable at narrower desktop widths. */
+.workspace .panel > .title-row { min-width:0;gap:.75rem; }
+.workspace .panel > .title-row .actions,
+.workspace .panel > .title-row .header-actions { flex-wrap:wrap;justify-content:flex-end;min-width:0; }
+.workspace .panel > .title-row button { white-space:nowrap; }
