@@ -34,6 +34,15 @@ describe("store audit history", () => {
     expect(store.getState().auditHistory?.events[0].after).toBe("First");
   });
 
+  it("avoids requesting audit timestamps when disabled", () => {
+    let clockCalls = 0;
+    const store = createProjectStore(initial, { ...context, now: () => { clockCalls += 1; return "2026-10-16T10:00:00Z"; } });
+    expect(store.execute(rename("After"))).toBe(true);
+    expect(store.undo()).toBe(true);
+    expect(store.redo()).toBe(true);
+    expect(clockCalls).toBe(0);
+  });
+
   it("does not add events for no-op commands", () => {
     const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
     expect(store.execute(rename("Before"))).toBe(false);
