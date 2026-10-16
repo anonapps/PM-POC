@@ -93,6 +93,14 @@ describe("project audit history", () => {
     const result = recordAuditChange(before, after, "recalculate", "2026-10-16T10:01:00Z");
     expect(result.auditHistory?.events).toHaveLength(0);
   });
+  it("records soft deletion as a single lifecycle event", () => {
+    const person = { id: "person-1", name: "Alex", deletion: { isDeleted: false } };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, people: [person] } as unknown as ProjectState;
+    const after = { ...before, people: [{ ...person, name: "Alex (deleted)", deletion: { isDeleted: true } }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "delete-person", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "person", entityId: "person-1", action: "deleted" });
+  });
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
