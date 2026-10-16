@@ -20,7 +20,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
     await evaluate(`document.querySelector('[aria-label="Collapse sidebar"]')?.click()`);
     await waitFor(`Boolean(document.querySelector('[aria-label="Expand sidebar"]'))`);
-    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>b.innerText.trim()===b.getAttribute('aria-label').slice(0,1))})()`));
+    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(b.getAttribute('aria-label')==='Overview'||b.getAttribute('aria-label')==='Search'?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
     await nav('People');
     record(`Collapsed navigation works at ${width}px`, await evaluate(`document.querySelector('nav [aria-current="page"]').getAttribute('aria-label')==='People'`));
     await evaluate(`document.querySelector('[aria-label="Expand sidebar"]').click()`);
