@@ -25,8 +25,9 @@ export function createProjectStore(input: HydratableProjectState, context: Comma
   return {
     getState: () => current,
     execute(command) {
-      const next = recordAuditChange(current, recalculate(command.apply(current, context)), command.type, context.now());
-      if (projectStateEquals(next, current)) return false;
+      const applied = recalculate(command.apply(current, context));
+      if (projectStateEquals(applied, current)) return false;
+      const next = recordAuditChange(current, applied, command.type, context.now());
       undoStack = [...undoStack, current]; current = next; redoStack = []; notify(); return true;
     },
     undo() {
