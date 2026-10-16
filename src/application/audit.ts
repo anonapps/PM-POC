@@ -1,7 +1,7 @@
 import type { ProjectState, AuditEvent } from "./state";
 
-const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions"] as const;
-const ENTITY_TYPES = { streams: "stream", tasks: "task", milestones: "milestone", people: "person", risks: "risk", decisions: "decision" } as const;
+const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions", "relationships", "dependencies"] as const;
+const ENTITY_TYPES = { streams: "stream", tasks: "task", milestones: "milestone", people: "person", risks: "risk", decisions: "decision", relationships: "relationship", dependencies: "dependency" } as const;
 export const MAX_AUDIT_EVENTS = 5000;
 const MAX_SNAPSHOT_CHARS = 2000;
 function compact(value: unknown): unknown {
