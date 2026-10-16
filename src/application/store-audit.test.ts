@@ -8,7 +8,7 @@ const initial = {
   streams: [], tasks: [], milestones: [], people: [], risks: [], decisions: [], relationships: [], dependencies: [], identifierSequences: {},
 } as unknown as ProjectState;
 
-const context = { now: () => "2026-10-16T10:00:00Z" };
+const context = { createId: () => "test-id", now: () => "2026-10-16T10:00:00Z" };
 const rename = (name: string) => ({
   type: "edit-project",
   apply: (state: ProjectState): ProjectState => ({ ...state, project: { ...state.project, name } }),
