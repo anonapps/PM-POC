@@ -78,6 +78,21 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events).toHaveLength(1);
     expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "dependency", field: "predecessor", before: "t1", after: "t3" });
   });
+  it("reports recalculated risk level when probability changes", () => {
+    const risk = { id: "risk-1", probability: 1, impact: 3, riskLevel: "low" };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, risks: [risk] } as unknown as ProjectState;
+    const after = { ...before, risks: [{ ...risk, probability: 3, riskLevel: "high" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "edit-risk", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events.map(event => event.field)).toContain("probability");
+    expect(result.auditHistory?.events).toContainEqual(expect.objectContaining({ field: "riskLevel", before: "low", after: "high" }));
+  });
+  it("does not log risk-level recalculation without a probability or impact edit", () => {
+    const risk = { id: "risk-1", probability: 1, impact: 3, riskLevel: "low" };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, risks: [risk] } as unknown as ProjectState;
+    const after = { ...before, risks: [{ ...risk, riskLevel: "medium" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "recalculate", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(0);
+  });
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
