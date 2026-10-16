@@ -37,7 +37,7 @@ describe("project audit history", () => {
       entityId: "p1", action: "updated" as const, field: "name", after: String(index),
     }));
     const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: old } };
-    const after = { ...before, project: { ...before.project, name: "After", description: "New description", status: "planned" } } as ProjectState;
+    const after = { ...before, project: { ...before.project, name: "After", description: "New description", status: "planned" } } as unknown as ProjectState;
     const result = recordAuditChange(before, after, "edit-project", "2026-10-16T10:01:00Z");
     expect(result.auditHistory?.events).toHaveLength(5000);
     expect(result.auditHistory?.events[0]).toBe(old[2]);
