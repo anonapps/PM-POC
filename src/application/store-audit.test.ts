@@ -43,6 +43,30 @@ describe("store audit history", () => {
     expect(clockCalls).toBe(0);
   });
 
+  it("keeps the audit toggle disabled through undo and redo", () => {
+    const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
+    store.execute(rename("First"));
+    store.execute(setAuditEnabled(false));
+    store.execute(rename("Second"));
+    expect(store.undo()).toBe(true);
+    expect(store.getState().auditHistory?.enabled).toBe(false);
+    expect(store.getState().project.name).toBe("First");
+    expect(store.redo()).toBe(true);
+    expect(store.getState().auditHistory?.enabled).toBe(false);
+    expect(store.getState().project.name).toBe("Second");
+    expect(store.getState().auditHistory?.events).toHaveLength(1);
+  });
+
+  it("starts recording again after audit history is re-enabled", () => {
+    const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
+    store.execute(rename("First"));
+    store.execute(setAuditEnabled(false));
+    store.execute(rename("Second"));
+    store.execute(setAuditEnabled(true));
+    store.execute(rename("Third"));
+    expect(store.getState().auditHistory?.events.map(event => event.after)).toEqual(["First", "Third"]);
+  });
+
   it("does not add events for no-op commands", () => {
     const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
     expect(store.execute(rename("Before"))).toBe(false);
