@@ -42,6 +42,13 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   await waitFor(`!document.querySelector('form[data-create-draft]')`);
   await nav('Milestones');
   record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
+  await nav('Tube Map');
+  const diamondExists = await evaluate(`Boolean(document.querySelector('.tube-station-diamond'))`);
+  if (diamondExists) {
+    await evaluate(`document.querySelector('.tube-station-diamond').click()`);
+    record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
+    await evaluate(`document.querySelector('.tube-quick-edit button.secondary:last-child')?.click()`);
+  }
   await nav('Tasks');
   await click('Add Task');
   record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
