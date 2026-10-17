@@ -59,3 +59,32 @@ describe("v1.2 legacy project compatibility",()=>{
  if(reopened.ok)expect(reopened.value.projectState.project.metadata.gettingStartedCompleted).toBe(true);
  });
 });
+
+describe("v1.4 audit history persistence", () => {
+  const event = { timestamp: "2026-10-17T12:00:00Z", command: "edit-project", entityType: "project", entityId: "project-1", action: "updated" as const, field: "name", before: "Old", after: "New" };
+
+  it("preserves enabled audit history and events across .pmp save and reopen", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [event] } });
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toEqual(state.auditHistory);
+  });
+
+  it("preserves disabled audit history without discarding past events", () => {
+    const state = makeProjectState({ auditHistory: { enabled: false, events: [event] } });
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toEqual(state.auditHistory);
+  });
+
+  it("rejects null audit history rather than treating it as disabled", () => {
+    const state = makeProjectState({ auditHistory: null } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+});
