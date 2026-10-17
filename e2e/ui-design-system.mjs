@@ -47,7 +47,8 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   if (diamondExists) {
     await evaluate(`document.querySelector('.tube-station-diamond').click()`);
     record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
-    await evaluate(`document.querySelector('.tube-quick-edit button.secondary:last-child')?.click()`);
+    await evaluate(`document.querySelector('.tube-quick-edit button[type="submit"]')?.click()`);
+    record('Unchanged milestone save closes quick edit', await evaluate(`!document.querySelector('.tube-quick-edit')`));
   }
   await nav('Gantt');
   const streamChevron = await evaluate(`Boolean(document.querySelector('.gantt-row.section button[aria-expanded]'))`);
