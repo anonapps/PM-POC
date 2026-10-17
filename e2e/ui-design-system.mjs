@@ -55,6 +55,13 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   if (streamChevron) {
     record('Gantt stream name opens Streams and chevron remains separate', await evaluate(`(()=>{const row=[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'));return !!row&&!!row.querySelector('button[aria-expanded]')&&!!row.querySelector('button.sort-heading[title^="Open "]')})()`));
   }
+  const ganttTaskButton = await evaluate(`Boolean(document.querySelector('.gantt-row.task button.sort-heading'))`);
+  if (ganttTaskButton) {
+    await evaluate(`document.querySelector('.gantt-row.task button.sort-heading').click()`);
+    record('Gantt task name opens quick edit', await evaluate(`Boolean(document.querySelector('.gantt-quick-edit input[type="date"]'))`));
+    await evaluate(`document.querySelector('.gantt-quick-edit button[type="submit"]')?.click()`);
+    record('Unchanged Gantt task save closes quick edit', await evaluate(`!document.querySelector('.gantt-quick-edit')`));
+  }
   await nav('Tasks');
   await click('Add Task');
   record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
