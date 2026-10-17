@@ -33,6 +33,14 @@ describe("project audit history", () => {
     expect(recordAuditChange(before, after, "edit-project", "2026-10-16T10:00:00Z")).toBe(after);
   });
 
+  it("records a project name edit without recording simultaneous metadata changes", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, project: { ...before.project, name: "Renamed", metadata: { ...before.project.metadata, gettingStartedCompleted: true } } };
+    const result = recordAuditChange(before, after, "edit-project", "2026-10-16T10:00:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "project", field: "name", after: "Renamed" });
+  });
+
   it("limits history to the most recent 5000 events", () => {
     const old = Array.from({ length: 5000 }, (_, index) => ({
       timestamp: "2026-10-16T10:00:00Z", command: "edit-project", entityType: "project",
