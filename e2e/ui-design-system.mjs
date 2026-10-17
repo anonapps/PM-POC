@@ -70,9 +70,9 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.click()`);
   }
   await evaluate(`[...document.querySelectorAll('.gantt-panel .title-row button')].find(b=>b.textContent.trim()==='Collapse All')?.click()`);
-  record('Gantt Collapse All collapses every stream', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading')).every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='false')`));
+  record('Gantt Collapse All collapses every stream', await evaluate(`(()=>{const rows=[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading'));return rows.length>0&&rows.every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='false')})()`));
   await evaluate(`[...document.querySelectorAll('.gantt-panel .title-row button')].find(b=>b.textContent.trim()==='Expand All')?.click()`);
-  record('Gantt Expand All expands every stream', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading')).every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='true')`));
+  record('Gantt Expand All expands every stream', await evaluate(`(()=>{const rows=[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading'));return rows.length>0&&rows.every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='true')})()`));
   const ganttTaskButton = await evaluate(`Boolean(document.querySelector('.gantt-row.task button.sort-heading'))`);
   if (ganttTaskButton) {
     await evaluate(`document.querySelector('.gantt-row.task button.sort-heading').click()`);
