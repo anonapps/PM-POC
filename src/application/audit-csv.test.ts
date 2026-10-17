@@ -37,6 +37,11 @@ describe("auditEventsToCsv", () => {
     expect(csv).toContain('"\'\u00a0=1+1"');
     expect(csv).toContain('"\'\ufeff@SUM(A1)"');
   });
+  it("exports structured before and after values as JSON strings", () => {
+    const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-risk", entityType: "risk", entityId: "1", action: "updated", field: "actions", before: ["Review"], after: ["Review", "Mitigate"] }]);
+    expect(csv).toContain('"[""Review""]"');
+    expect(csv).toContain('"[""Review"",""Mitigate""]"');
+  });
   it("escapes commas, quotes and newlines", () => {
     const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated", field: "name", after: 'Hello, "world"\nAgain' }]);
     expect(csv).toContain('"Hello, ""world""\nAgain"');
