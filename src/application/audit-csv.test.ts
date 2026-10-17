@@ -32,6 +32,11 @@ describe("auditEventsToCsv", () => {
     expect(csv).toContain('"\'\\n+1+2"'.replace("\\n", "\n"));
     expect(csv).toContain('"\'-2+3"');
   });
+  it("neutralises formula prefixes after Unicode whitespace", () => {
+    const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated", field: "name", before: "\u00a0=1+1", after: "\ufeff@SUM(A1)" }]);
+    expect(csv).toContain('"\'\u00a0=1+1"');
+    expect(csv).toContain('"\'\ufeff@SUM(A1)"');
+  });
   it("escapes commas, quotes and newlines", () => {
     const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated", field: "name", after: 'Hello, "world"\nAgain' }]);
     expect(csv).toContain('"Hello, ""world""\nAgain"');
