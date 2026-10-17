@@ -15,7 +15,7 @@ export function TubeMapView({ store, navigate }: { store: ProjectStore; navigate
   const [draftDate, setDraftDate] = useState("");
   const state = useProjectState(store);
   const openEdit = (id: string) => { const milestone = state.milestones.find(item=>item.id===id); if(!milestone)return;setEditingId(id);setDraftName(milestone.name);setDraftDate(milestone.plannedDate); };
-  const saveEdit = () => { if(!editingId || !draftName.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(draftDate))return;const changed=store.execute(editMilestone(editingId,{name:draftName,plannedDate:draftDate}));if(changed)setEditingId(null); };
+  const saveEdit = () => { if(!editingId || !draftName.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(draftDate))return;store.execute(editMilestone(editingId,{name:draftName,plannedDate:draftDate}));setEditingId(null); };
   const anchor = new Date();
   anchor.setUTCDate(anchor.getUTCDate() + windowOffset * 84);
   const model = buildTubeMap(state, anchor.toISOString().slice(0, 10), streamSort);
