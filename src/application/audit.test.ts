@@ -19,6 +19,14 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events).toHaveLength(1);
     expect(result.auditHistory?.events[0]).toMatchObject({ field: "name", before: "Before", after: "After" });
   });
+  it("records when an optional field is cleared", () => {
+    const before = { ...initial, project: { ...initial.project, description: "Previous description" }, auditHistory: { enabled: true, events: [] } } as unknown as ProjectState;
+    const after = { ...before, project: { ...initial.project } };
+    const result = recordAuditChange(before, after, "edit-project", "2026-10-16T10:00:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({ field: "description", before: "Previous description", action: "updated" });
+    expect(result.auditHistory?.events[0]).not.toHaveProperty("after");
+  });
   it("limits history to the most recent 5000 events", () => {
     const old = Array.from({ length: 5000 }, (_, index) => ({
       timestamp: "2026-10-16T10:00:00Z", command: "edit-project", entityType: "project",
