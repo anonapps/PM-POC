@@ -21,6 +21,17 @@ describe("auditEventsToCsv", () => {
     const csv = auditEventsToCsv([{ ...base, command: "first" }, { ...base, command: "second" }]);
     expect(csv.indexOf('"first"')).toBeLessThan(csv.indexOf('"second"'));
   });
+  it("neutralises formula prefixes with tabs, newlines, at signs and minus signs", () => {
+    const base = { timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated" as const, field: "name" };
+    const csv = auditEventsToCsv([
+      { ...base, before: "\t=HYPERLINK(A1)", after: "@SUM(A1)" },
+      { ...base, before: "\n+1+2", after: "-2+3" },
+    ]);
+    expect(csv).toContain('"\'\\t=HYPERLINK(A1)"'.replace("\\t", "\t"));
+    expect(csv).toContain('"\'@SUM(A1)"');
+    expect(csv).toContain('"\'\\n+1+2"'.replace("\\n", "\n"));
+    expect(csv).toContain('"\'-2+3"');
+  });
   it("escapes commas, quotes and newlines", () => {
     const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated", field: "name", after: 'Hello, "world"\nAgain' }]);
     expect(csv).toContain('"Hello, ""world""\nAgain"');
