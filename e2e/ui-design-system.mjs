@@ -20,7 +20,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
     await evaluate(`document.querySelector('[aria-label="Collapse sidebar"]')?.click()`);
     await waitFor(`Boolean(document.querySelector('[aria-label="Expand sidebar"]'))`);
-    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>b.innerText.trim()===b.getAttribute('aria-label').slice(0,1))})()`));
+    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(b.getAttribute('aria-label')==='Overview'||b.getAttribute('aria-label')==='Search'?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
     await nav('People');
     record(`Collapsed navigation works at ${width}px`, await evaluate(`document.querySelector('nav [aria-current="page"]').getAttribute('aria-label')==='People'`));
     await evaluate(`document.querySelector('[aria-label="Expand sidebar"]').click()`);
@@ -42,6 +42,44 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   await waitFor(`!document.querySelector('form[data-create-draft]')`);
   await nav('Milestones');
   record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
+  await nav('Tube Map');
+  const diamondExists = await evaluate(`Boolean(document.querySelector('.tube-station-diamond'))`);
+  if (diamondExists) {
+    await evaluate(`document.querySelector('.tube-station-diamond').click()`);
+    record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
+    await evaluate(`document.querySelector('.tube-quick-edit button[type="submit"]')?.click()`);
+    record('Unchanged milestone save closes quick edit', await evaluate(`!document.querySelector('.tube-quick-edit')`));
+  }
+  await nav('Tube Map');
+  record('Tube Map sort announces ascending direction', await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.getAttribute('aria-label')?.includes('ascending')===true`));
+  await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.click()`);
+  record('Tube Map sort announces descending direction', await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.getAttribute('aria-label')?.includes('descending')===true`));
+  await nav('Gantt');
+  record('Gantt sort announces ascending direction', await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.getAttribute('aria-label')?.includes('ascending')===true`));
+  await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.click()`);
+  record('Gantt sort announces descending direction', await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.getAttribute('aria-label')?.includes('descending')===true`));
+  const streamChevron = await evaluate(`Boolean(document.querySelector('.gantt-row.section button[aria-expanded]'))`);
+  if (streamChevron) {
+    record('Gantt stream name opens Streams and chevron remains separate', await evaluate(`(()=>{const row=[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'));return !!row&&!!row.querySelector('button[aria-expanded]')&&!!row.querySelector('button.sort-heading[title^="Open "]')})()`));
+  }
+  const expandableGanttStream = await evaluate(`Boolean([...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading')&&r.querySelector('button[aria-expanded]')))`);
+  if (expandableGanttStream) {
+    record('Gantt stream chevron starts expanded', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='true'`));
+    await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.click()`);
+    record('Gantt stream chevron collapses section', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='false'`));
+    await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.click()`);
+  }
+  await evaluate(`[...document.querySelectorAll('.gantt-panel .title-row button')].find(b=>b.textContent.trim()==='Collapse All')?.click()`);
+  record('Gantt Collapse All collapses every stream', await evaluate(`(()=>{const rows=[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading'));return rows.length>0&&rows.every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='false')})()`));
+  await evaluate(`[...document.querySelectorAll('.gantt-panel .title-row button')].find(b=>b.textContent.trim()==='Expand All')?.click()`);
+  record('Gantt Expand All expands every stream', await evaluate(`(()=>{const rows=[...document.querySelectorAll('.gantt-row.section')].filter(r=>r.querySelector('button.sort-heading'));return rows.length>0&&rows.every(r=>r.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='true')})()`));
+  const ganttTaskButton = await evaluate(`Boolean(document.querySelector('.gantt-row.task button.sort-heading'))`);
+  if (ganttTaskButton) {
+    await evaluate(`document.querySelector('.gantt-row.task button.sort-heading').click()`);
+    record('Gantt task name opens quick edit', await evaluate(`Boolean(document.querySelector('.gantt-quick-edit input[type="date"]'))`));
+    await evaluate(`document.querySelector('.gantt-quick-edit button[type="submit"]')?.click()`);
+    record('Unchanged Gantt task save closes quick edit', await evaluate(`!document.querySelector('.gantt-quick-edit')`));
+  }
   await nav('Tasks');
   await click('Add Task');
   record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));

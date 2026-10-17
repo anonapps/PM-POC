@@ -59,3 +59,79 @@ describe("v1.2 legacy project compatibility",()=>{
  if(reopened.ok)expect(reopened.value.projectState.project.metadata.gettingStartedCompleted).toBe(true);
  });
 });
+
+describe("v1.4 audit history persistence", () => {
+  const event = { timestamp: "2026-10-17T12:00:00Z", command: "edit-project", entityType: "project", entityId: "project-1", action: "updated" as const, field: "name", before: "Old", after: "New" };
+
+  it("keeps audit history optional for older projects", () => {
+    const state = makeProjectState();
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toBeUndefined();
+  });
+
+  it("preserves enabled audit history and events across .pmp save and reopen", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [event] } });
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toEqual(state.auditHistory);
+  });
+
+  it("preserves disabled audit history without discarding past events", () => {
+    const state = makeProjectState({ auditHistory: { enabled: false, events: [event] } });
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toEqual(state.auditHistory);
+  });
+
+  it("rejects an invalid audit event action", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, action: "modified" }] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects audit histories exceeding the event retention limit", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: Array.from({ length: 5001 }, () => event) } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects invalid audit event timestamps", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, timestamp: "not-a-date" }] } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects oversized audit snapshots", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, after: "x".repeat(2200) }] } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects audit history with a non-boolean enabled flag", () => {
+    const state = makeProjectState({ auditHistory: { enabled: "yes", events: [event] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects malformed audit events missing required identifiers", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, entityId: null }] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects blank audit command and entity identifiers", () => {
+    for (const field of ["command", "entityType", "entityId"] as const) {
+      const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, [field]: "  " }] } });
+      expect(serializeProject(state, meta).ok).toBe(false);
+    }
+  });
+
+  it("rejects null audit history rather than treating it as disabled", () => {
+    const state = makeProjectState({ auditHistory: null } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+});

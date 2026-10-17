@@ -1,5 +1,6 @@
 import type { CommandContext, ProjectCommand } from "./commands";
 import { recalculate } from "./commands";
+import { recordAuditChange } from "./audit";
 import { hydrateProjectState, projectStateEquals, type HydratableProjectState, type ProjectState } from "./state";
 
 export interface ProjectStore {
@@ -24,17 +25,19 @@ export function createProjectStore(input: HydratableProjectState, context: Comma
   return {
     getState: () => current,
     execute(command) {
-      const next = recalculate(command.apply(current, context));
-      if (projectStateEquals(next, current)) return false;
+      const applied = recalculate(command.apply(current, context));
+      if (projectStateEquals(applied, current)) return false;
+      const next = applied.auditHistory?.enabled === true && command.type !== "set-audit-enabled" && command.type !== "replace-state"
+        ? recordAuditChange(current, applied, command.type, context.now()) : applied;
       undoStack = [...undoStack, current]; current = next; redoStack = []; notify(); return true;
     },
     undo() {
       const previous = undoStack.at(-1); if (!previous) return false;
-      undoStack = undoStack.slice(0, -1); redoStack = [current, ...redoStack]; current = recalculate(previous); notify(); return true;
+      undoStack = undoStack.slice(0, -1); redoStack = [current, ...redoStack]; current = current.auditHistory?.enabled === true ? recordAuditChange(current, { ...recalculate(previous), auditHistory: current.auditHistory }, "undo", context.now()) : { ...recalculate(previous), auditHistory: current.auditHistory }; notify(); return true;
     },
     redo() {
       const next = redoStack[0]; if (!next) return false;
-      redoStack = redoStack.slice(1); undoStack = [...undoStack, current]; current = recalculate(next); notify(); return true;
+      redoStack = redoStack.slice(1); undoStack = [...undoStack, current]; current = current.auditHistory?.enabled === true ? recordAuditChange(current, { ...recalculate(next), auditHistory: current.auditHistory }, "redo", context.now()) : { ...recalculate(next), auditHistory: current.auditHistory }; notify(); return true;
     },
     canUndo: () => undoStack.length > 0,
     canRedo: () => redoStack.length > 0,
