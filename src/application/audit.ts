@@ -11,6 +11,8 @@ function compact(value: unknown): unknown {
 }
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 const DERIVED_FIELDS = new Set(["riskLevel", "actualCompletionDate"]);
+// Only editable project data belongs in the audit trail; runtime and file metadata do not.
+const PROJECT_EXCLUDED_FIELDS = new Set(["metadata"]);
 const TRACKED_FIELDS = new Set(["name", "title", "description", "startDate", "endDate", "plannedDate", "dueDate", "status", "probability", "impact", "scope", "ownerId", "role", "notes", "priority", "progress", "parentTaskId", "milestoneId", "relatedStreamIds", "relatedTaskIds", "relatedMilestoneIds", "relatedRiskIds", "actions", "metadata", "decisionDate", "type", "source", "target", "predecessor", "successor"]);
 
 
@@ -29,7 +31,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     if (oldDeleted !== newDeleted) { append(entityType, id, newDeleted ? "deleted" : "restored"); return; }
     if (entityType === "risk" && (!same(oldEntity.probability, newEntity.probability) || !same(oldEntity.impact, newEntity.impact)) && !same(oldEntity.riskLevel, newEntity.riskLevel)) append(entityType, id, "updated", "riskLevel", oldEntity.riskLevel, newEntity.riskLevel);
     for (const field of new Set([...Object.keys(oldEntity), ...Object.keys(newEntity)])) {
-      if (!TRACKED_FIELDS.has(field) || DERIVED_FIELDS.has(field)) continue;
+      if (!TRACKED_FIELDS.has(field) || DERIVED_FIELDS.has(field) || (entityType === "project" && PROJECT_EXCLUDED_FIELDS.has(field))) continue;
       if (!same(oldEntity[field], newEntity[field])) append(entityType, id, "updated", field, oldEntity[field], newEntity[field]);
     }
   };
