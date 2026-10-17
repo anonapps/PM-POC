@@ -62,6 +62,13 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   if (streamChevron) {
     record('Gantt stream name opens Streams and chevron remains separate', await evaluate(`(()=>{const row=[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'));return !!row&&!!row.querySelector('button[aria-expanded]')&&!!row.querySelector('button.sort-heading[title^="Open "]')})()`));
   }
+  const expandableGanttStream = await evaluate(`Boolean([...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading')&&r.querySelector('button[aria-expanded]')))`);
+  if (expandableGanttStream) {
+    record('Gantt stream chevron starts expanded', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='true'`));
+    await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.click()`);
+    record('Gantt stream chevron collapses section', await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded')==='false'`));
+    await evaluate(`[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'))?.querySelector('button[aria-expanded]')?.click()`);
+  }
   const ganttTaskButton = await evaluate(`Boolean(document.querySelector('.gantt-row.task button.sort-heading'))`);
   if (ganttTaskButton) {
     await evaluate(`document.querySelector('.gantt-row.task button.sort-heading').click()`);
