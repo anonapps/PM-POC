@@ -93,6 +93,16 @@ describe("v1.4 audit history persistence", () => {
     expect(serializeProject(state, meta).ok).toBe(false);
   });
 
+  it("rejects invalid audit event timestamps", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, timestamp: "not-a-date" }] } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects oversized audit snapshots", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, after: "x".repeat(2200) }] } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
   it("rejects null audit history rather than treating it as disabled", () => {
     const state = makeProjectState({ auditHistory: null } as never);
     expect(serializeProject(state, meta).ok).toBe(false);
