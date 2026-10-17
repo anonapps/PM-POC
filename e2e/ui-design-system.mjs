@@ -55,6 +55,9 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.click()`);
   record('Tube Map sort announces descending direction', await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.getAttribute('aria-label')?.includes('descending')===true`));
   await nav('Gantt');
+  record('Gantt sort announces ascending direction', await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.getAttribute('aria-label')?.includes('ascending')===true`));
+  await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.click()`);
+  record('Gantt sort announces descending direction', await evaluate(`document.querySelector('.gantt-item-heading button.sort-heading')?.getAttribute('aria-label')?.includes('descending')===true`));
   const streamChevron = await evaluate(`Boolean(document.querySelector('.gantt-row.section button[aria-expanded]'))`);
   if (streamChevron) {
     record('Gantt stream name opens Streams and chevron remains separate', await evaluate(`(()=>{const row=[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'));return !!row&&!!row.querySelector('button[aria-expanded]')&&!!row.querySelector('button.sort-heading[title^="Open "]')})()`));
