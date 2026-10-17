@@ -83,6 +83,16 @@ describe("v1.4 audit history persistence", () => {
     if (reopened.ok) expect(reopened.value.projectState.auditHistory).toEqual(state.auditHistory);
   });
 
+  it("rejects an invalid audit event action", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, action: "modified" }] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects audit histories exceeding the event retention limit", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: Array.from({ length: 5001 }, () => event) } });
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
   it("rejects null audit history rather than treating it as disabled", () => {
     const state = makeProjectState({ auditHistory: null } as never);
     expect(serializeProject(state, meta).ok).toBe(false);
