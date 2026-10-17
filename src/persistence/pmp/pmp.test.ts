@@ -123,6 +123,13 @@ describe("v1.4 audit history persistence", () => {
     expect(serializeProject(state, meta).ok).toBe(false);
   });
 
+  it("rejects blank audit command and entity identifiers", () => {
+    for (const field of ["command", "entityType", "entityId"] as const) {
+      const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, [field]: "  " }] } });
+      expect(serializeProject(state, meta).ok).toBe(false);
+    }
+  });
+
   it("rejects null audit history rather than treating it as disabled", () => {
     const state = makeProjectState({ auditHistory: null } as never);
     expect(serializeProject(state, meta).ok).toBe(false);
