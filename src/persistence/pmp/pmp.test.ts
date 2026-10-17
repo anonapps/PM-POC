@@ -103,6 +103,16 @@ describe("v1.4 audit history persistence", () => {
     expect(serializeProject(state, meta).ok).toBe(false);
   });
 
+  it("rejects audit history with a non-boolean enabled flag", () => {
+    const state = makeProjectState({ auditHistory: { enabled: "yes", events: [event] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
+  it("rejects malformed audit events missing required identifiers", () => {
+    const state = makeProjectState({ auditHistory: { enabled: true, events: [{ ...event, entityId: null }] } } as never);
+    expect(serializeProject(state, meta).ok).toBe(false);
+  });
+
   it("rejects null audit history rather than treating it as disabled", () => {
     const state = makeProjectState({ auditHistory: null } as never);
     expect(serializeProject(state, meta).ok).toBe(false);
