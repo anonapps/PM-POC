@@ -63,6 +63,16 @@ describe("v1.2 legacy project compatibility",()=>{
 describe("v1.4 audit history persistence", () => {
   const event = { timestamp: "2026-10-17T12:00:00Z", command: "edit-project", entityType: "project", entityId: "project-1", action: "updated" as const, field: "name", before: "Old", after: "New" };
 
+  it("keeps audit history optional for older projects", () => {
+    const state = makeProjectState();
+    const encoded = serializeProject(state, meta);
+    expect(encoded.ok).toBe(true);
+    if (!encoded.ok) return;
+    const reopened = deserializeProject(encoded.value);
+    expect(reopened.ok).toBe(true);
+    if (reopened.ok) expect(reopened.value.projectState.auditHistory).toBeUndefined();
+  });
+
   it("preserves enabled audit history and events across .pmp save and reopen", () => {
     const state = makeProjectState({ auditHistory: { enabled: true, events: [event] } });
     const encoded = serializeProject(state, meta);
