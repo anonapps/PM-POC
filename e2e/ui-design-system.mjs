@@ -50,6 +50,10 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await evaluate(`document.querySelector('.tube-quick-edit button[type="submit"]')?.click()`);
     record('Unchanged milestone save closes quick edit', await evaluate(`!document.querySelector('.tube-quick-edit')`));
   }
+  await nav('Tube Map');
+  record('Tube Map sort announces ascending direction', await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.getAttribute('aria-label')?.includes('ascending')===true`));
+  await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.click()`);
+  record('Tube Map sort announces descending direction', await evaluate(`document.querySelector('.tube-axis button.sort-heading')?.getAttribute('aria-label')?.includes('descending')===true`));
   await nav('Gantt');
   const streamChevron = await evaluate(`Boolean(document.querySelector('.gantt-row.section button[aria-expanded]'))`);
   if (streamChevron) {
