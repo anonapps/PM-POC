@@ -49,6 +49,11 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
     await evaluate(`document.querySelector('.tube-quick-edit button.secondary:last-child')?.click()`);
   }
+  await nav('Gantt');
+  const streamChevron = await evaluate(`Boolean(document.querySelector('.gantt-row.section button[aria-expanded]'))`);
+  if (streamChevron) {
+    record('Gantt stream name opens Streams and chevron remains separate', await evaluate(`(()=>{const row=[...document.querySelectorAll('.gantt-row.section')].find(r=>r.querySelector('button.sort-heading'));return !!row&&!!row.querySelector('button[aria-expanded]')&&!!row.querySelector('button.sort-heading[title^="Open "]')})()`));
+  }
   await nav('Tasks');
   await click('Add Task');
   record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
