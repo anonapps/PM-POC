@@ -13,6 +13,14 @@ describe("auditEventsToCsv", () => {
     expect(csv).toContain('"\'=1+1"');
     expect(csv).toContain('"\' +SUM(A1:A2)"');
   });
+  it("exports no rows when history is empty", () => {
+    expect(auditEventsToCsv([])).toBe("timestamp,command,entityType,entityId,action,field,before,after");
+  });
+  it("preserves the supplied event order", () => {
+    const base = { timestamp: "2026-10-16T10:00:00Z", entityType: "task", entityId: "1", action: "updated" as const };
+    const csv = auditEventsToCsv([{ ...base, command: "first" }, { ...base, command: "second" }]);
+    expect(csv.indexOf('"first"')).toBeLessThan(csv.indexOf('"second"'));
+  });
   it("escapes commas, quotes and newlines", () => {
     const csv = auditEventsToCsv([{ timestamp: "2026-10-16T10:00:00Z", command: "edit-task", entityType: "task", entityId: "1", action: "updated", field: "name", after: 'Hello, "world"\nAgain' }]);
     expect(csv).toContain('"Hello, ""world""\nAgain"');
