@@ -28,7 +28,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     const newDeleted = (newEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted;
     if (oldDeleted !== newDeleted) { append(entityType, id, newDeleted ? "deleted" : "restored"); return; }
     if (entityType === "risk" && (!same(oldEntity.probability, newEntity.probability) || !same(oldEntity.impact, newEntity.impact)) && !same(oldEntity.riskLevel, newEntity.riskLevel)) append(entityType, id, "updated", "riskLevel", oldEntity.riskLevel, newEntity.riskLevel);
-    for (const field of Object.keys(newEntity)) {
+    for (const field of new Set([...Object.keys(oldEntity), ...Object.keys(newEntity)])) {
       if (!TRACKED_FIELDS.has(field) || DERIVED_FIELDS.has(field)) continue;
       if (!same(oldEntity[field], newEntity[field])) append(entityType, id, "updated", field, oldEntity[field], newEntity[field]);
     }
