@@ -156,6 +156,12 @@ describe("project audit history", () => {
     expect(recordAuditChange(before, after, "recalculate", "2026-10-17T10:01:00Z")).toBe(after);
   });
 
+  it("does not record changes to identifier sequences as user edits", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, identifierSequences: { ...before.identifierSequences, task: 100 } } as unknown as ProjectState;
+    expect(recordAuditChange(before, after, "allocate-identifier", "2026-10-17T10:01:00Z")).toBe(after);
+  });
+
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
