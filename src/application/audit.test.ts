@@ -149,6 +149,13 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "person", entityId: "person-1", action: "restored" });
   });
 
+  it("does not log unrelated derived task completion dates", () => {
+    const task = { id: "task-1", name: "Task", actualCompletionDate: undefined };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, tasks: [task] } as unknown as ProjectState;
+    const after = { ...before, tasks: [{ ...task, actualCompletionDate: "2026-10-17" }] } as unknown as ProjectState;
+    expect(recordAuditChange(before, after, "recalculate", "2026-10-17T10:01:00Z")).toBe(after);
+  });
+
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
