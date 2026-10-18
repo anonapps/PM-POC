@@ -7,6 +7,16 @@ const event = (timestamp: string, entityId: string): AuditEvent => ({
 });
 
 describe("audit history chronological sorting", () => {
+  it("keeps equal-timestamp events in their original order", () => {
+    const events = [
+      event("2026-10-18T09:00:00Z", "first"),
+      event("2026-10-18T11:00:00+02:00", "second"),
+      event("2026-10-18T09:00:00.000Z", "third"),
+    ];
+    expect(sortAuditEvents(events, true).map(item => item.entityId)).toEqual(["first", "second", "third"]);
+    expect(sortAuditEvents(events, false).map(item => item.entityId)).toEqual(["first", "second", "third"]);
+  });
+
   it("sorts by actual time even when timezone offsets differ", () => {
     const events = [
       event("2026-10-18T11:00:00+02:00", "later"),
