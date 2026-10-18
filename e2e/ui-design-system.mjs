@@ -44,6 +44,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
   await nav('Tube Map');
   const diamondExists = await evaluate(`Boolean(document.querySelector('.tube-station-diamond'))`);
+  record('Tube Map milestone diamond is present', diamondExists);
   if (diamondExists) {
     await evaluate(`document.querySelector('.tube-station-diamond').click()`);
     record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
