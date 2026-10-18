@@ -1,5 +1,5 @@
-import { sortAuditEvents } from "@/application/audit-sort";
 "use client";
+import { sortAuditEvents } from "@/application/audit-sort";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { APP_VERSION } from "@/shared/app-info";
 import { setAuditEnabled } from "@/application/audit";
