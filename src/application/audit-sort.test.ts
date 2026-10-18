@@ -17,6 +17,15 @@ describe("audit history chronological sorting", () => {
     expect(sortAuditEvents(events, false).map(item => item.entityId)).toEqual(["first", "second", "third"]);
   });
 
+  it("handles daylight-saving offset changes in chronological order", () => {
+    const events = [
+      event("2026-10-25T02:15:00+01:00", "after-fallback"),
+      event("2026-10-25T02:45:00+02:00", "before-fallback"),
+    ];
+    expect(sortAuditEvents(events, false).map(item => item.entityId)).toEqual(["before-fallback", "after-fallback"]);
+    expect(sortAuditEvents(events, true).map(item => item.entityId)).toEqual(["after-fallback", "before-fallback"]);
+  });
+
   it("sorts by actual time even when timezone offsets differ", () => {
     const events = [
       event("2026-10-18T11:00:00+02:00", "later"),
