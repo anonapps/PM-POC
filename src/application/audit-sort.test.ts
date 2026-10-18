@@ -1,0 +1,20 @@
+import { describe, expect, it } from "vitest";
+import type { AuditEvent } from "./state";
+import { sortAuditEvents } from "./audit-sort";
+
+const event = (timestamp: string, entityId: string): AuditEvent => ({
+  timestamp, entityId, entityType: "task", command: "edit-task", action: "updated",
+});
+
+describe("audit history chronological sorting", () => {
+  it("sorts by actual time even when timezone offsets differ", () => {
+    const events = [
+      event("2026-10-18T11:00:00+02:00", "later"),
+      event("2026-10-18T10:30:00+03:00", "earlier"),
+      event("2026-10-18T09:30:00Z", "latest"),
+    ];
+    expect(sortAuditEvents(events, false).map(item => item.entityId)).toEqual(["earlier", "later", "latest"]);
+    expect(sortAuditEvents(events, true).map(item => item.entityId)).toEqual(["latest", "later", "earlier"]);
+    expect(events.map(item => item.entityId)).toEqual(["later", "earlier", "latest"]);
+  });
+});
