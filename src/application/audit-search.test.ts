@@ -35,6 +35,19 @@ describe("audit event search", () => {
     expect(auditEventMatchesSearch(structured, "stream-999")).toBe(false);
   });
 
+  it("matches audit events with missing optional fields and snapshots", () => {
+    const created: AuditEvent = {
+      timestamp: "2026-10-18T11:30:00Z",
+      command: "add-dependency",
+      entityType: "dependency",
+      entityId: "dependency-1",
+      action: "created",
+    };
+    expect(auditEventMatchesSearch(created, "dependency-1")).toBe(true);
+    expect(auditEventMatchesSearch(created, "created")).toBe(true);
+    expect(auditEventMatchesSearch(created, "old title")).toBe(false);
+  });
+
   it("rejects nonmatching text", () => {
     expect(auditEventMatchesSearch(event, "unrelated milestone")).toBe(false);
   });
