@@ -13,6 +13,20 @@ describe("auditEventsToCsv", () => {
     expect(csv).toContain('"\'=1+1"');
     expect(csv).toContain('"\' +SUM(A1:A2)"');
   });
+  it("neutralises formula-like values in entity identifiers and commands", () => {
+    const csv = auditEventsToCsv([{
+      timestamp: "2026-10-16T10:00:00Z",
+      command: "=IMPORTXML(A1)",
+      entityType: "task",
+      entityId: "+SUM(1,2)",
+      action: "created",
+      field: "@HYPERLINK",
+    }]);
+    expect(csv).toContain('"\'=IMPORTXML(A1)"');
+    expect(csv).toContain('"\'+SUM(1,2)"');
+    expect(csv).toContain('"\'@HYPERLINK"');
+  });
+
   it("exports no rows when history is empty", () => {
     expect(auditEventsToCsv([])).toBe("timestamp,command,entityType,entityId,action,field,before,after");
   });
