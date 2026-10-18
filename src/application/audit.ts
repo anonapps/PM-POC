@@ -26,8 +26,8 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
     if (!oldEntity && newEntity) { append(entityType, id, "created", undefined, undefined, newEntity.humanId ?? newEntity.name ?? newEntity.title); return; }
     if (oldEntity && !newEntity) { append(entityType, id, "deleted"); return; }
     if (!oldEntity || !newEntity) return;
-    const oldDeleted = (oldEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted;
-    const newDeleted = (newEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted;
+    const oldDeleted = (oldEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted === true;
+    const newDeleted = (newEntity.deletion as { isDeleted?: boolean } | undefined)?.isDeleted === true;
     if (oldDeleted !== newDeleted) { append(entityType, id, newDeleted ? "deleted" : "restored"); return; }
     if (entityType === "risk" && (!same(oldEntity.probability, newEntity.probability) || !same(oldEntity.impact, newEntity.impact)) && !same(oldEntity.riskLevel, newEntity.riskLevel)) append(entityType, id, "updated", "riskLevel", oldEntity.riskLevel, newEntity.riskLevel);
     for (const field of new Set([...Object.keys(oldEntity), ...Object.keys(newEntity)])) {
