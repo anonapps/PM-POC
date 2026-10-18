@@ -27,6 +27,21 @@ describe("auditEventsToCsv", () => {
     expect(csv).toContain('"\'@HYPERLINK"');
   });
 
+  it("does not alter ordinary negative-looking prose or safe text", () => {
+    const csv = auditEventsToCsv([{
+      timestamp: "2026-10-16T10:00:00Z",
+      command: "edit-task",
+      entityType: "task",
+      entityId: "TASK-001",
+      action: "updated",
+      field: "notes",
+      before: "Risk - medium",
+      after: "Completed",
+    }]);
+    expect(csv).toContain('"Risk - medium","Completed"');
+    expect(csv).toContain('"TASK-001"');
+  });
+
   it("exports no rows when history is empty", () => {
     expect(auditEventsToCsv([])).toBe("timestamp,command,entityType,entityId,action,field,before,after");
   });
