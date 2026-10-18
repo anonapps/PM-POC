@@ -23,6 +23,18 @@ describe("audit event search", () => {
     expect(auditEventMatchesSearch(event, "  TASK-123  ")).toBe(true);
     expect(auditEventMatchesSearch(event, "  ")).toBe(true);
   });
+  it("searches structured before/after values without relying on a display label", () => {
+    const structured: AuditEvent = {
+      ...event,
+      field: "relatedStreamIds",
+      before: ["stream-001"],
+      after: ["stream-002", "stream-003"],
+    };
+    expect(auditEventMatchesSearch(structured, "stream-001")).toBe(true);
+    expect(auditEventMatchesSearch(structured, "stream-003")).toBe(true);
+    expect(auditEventMatchesSearch(structured, "stream-999")).toBe(false);
+  });
+
   it("rejects nonmatching text", () => {
     expect(auditEventMatchesSearch(event, "unrelated milestone")).toBe(false);
   });
