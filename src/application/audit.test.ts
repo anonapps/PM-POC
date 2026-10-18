@@ -162,6 +162,16 @@ describe("project audit history", () => {
     expect(recordAuditChange(before, after, "allocate-identifier", "2026-10-17T10:01:00Z")).toBe(after);
   });
 
+  it("captures a new entity title when no human ID or name is available", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, tasks: [{ id: "task-1", title: "Prepare release" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "add-task", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({
+      entityType: "task", entityId: "task-1", action: "created", after: "Prepare release",
+    });
+  });
+
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
