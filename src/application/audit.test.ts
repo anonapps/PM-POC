@@ -172,6 +172,27 @@ describe("project audit history", () => {
     });
   });
 
+  it("prefers the stable human identifier over a title on creation", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, tasks: [{ id: "task-1", humanId: "TASK-001", title: "Prepare release" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "add-task", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({
+      entityType: "task", entityId: "task-1", action: "created", after: "TASK-001",
+    });
+  });
+
+  it("records a nameless relationship creation without inventing a label", () => {
+    const before: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
+    const after = { ...before, relationships: [{ id: "rel-1", source: "task-1", target: "risk-1" }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "add-relationship", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({
+      entityType: "relationship", entityId: "rel-1", action: "created",
+    });
+    expect(result.auditHistory?.events[0]).not.toHaveProperty("after");
+  });
+
   it("keeps existing history when disabled", () => {
     const state: ProjectState = { ...initial, auditHistory: { enabled: true, events: [] } };
     const result = setAuditEnabled(false).apply(state);
