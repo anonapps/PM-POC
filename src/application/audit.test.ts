@@ -140,6 +140,17 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events).toHaveLength(1);
     expect(result.auditHistory?.events[0]).toMatchObject({ entityType: "person", entityId: "person-1", action: "deleted" });
   });
+  it("does not mistake newly initialised deletion metadata for a restoration", () => {
+    const person = { id: "person-1", name: "Alex" };
+    const before = { ...initial, auditHistory: { enabled: true, events: [] }, people: [person] } as unknown as ProjectState;
+    const after = { ...before, people: [{ ...person, name: "Alex Smith", deletion: { isDeleted: false } }] } as unknown as ProjectState;
+    const result = recordAuditChange(before, after, "edit-person", "2026-10-16T10:01:00Z");
+    expect(result.auditHistory?.events).toHaveLength(1);
+    expect(result.auditHistory?.events[0]).toMatchObject({
+      entityType: "person", action: "updated", field: "name", before: "Alex", after: "Alex Smith",
+    });
+  });
+
   it("records restoring a soft-deleted person as one lifecycle event", () => {
     const person = { id: "person-1", name: "Alex", deletion: { isDeleted: true } };
     const before = { ...initial, auditHistory: { enabled: true, events: [] }, people: [person] } as unknown as ProjectState;
