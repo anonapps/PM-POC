@@ -19,6 +19,25 @@ describe("project audit history", () => {
     expect(result.auditHistory?.events).toHaveLength(1);
     expect(result.auditHistory?.events[0]).toMatchObject({ field: "name", before: "Before", after: "After" });
   });
+  it("records changes between project-wide and scoped risks or decisions", () => {
+    const before = {
+      ...initial,
+      auditHistory: { enabled: true, events: [] },
+      risks: [{ id: "risk-1", title: "Risk", projectWide: false }],
+      decisions: [{ id: "decision-1", title: "Decision", projectWide: true }],
+    } as unknown as ProjectState;
+    const after = {
+      ...before,
+      risks: [{ ...before.risks[0], projectWide: true }],
+      decisions: [{ ...before.decisions[0], projectWide: false }],
+    } as ProjectState;
+    const result = recordAuditChange(before, after, "edit-scope", "2026-10-16T10:00:00Z");
+    expect(result.auditHistory?.events).toEqual([
+      expect.objectContaining({ entityType: "risk", field: "projectWide", before: false, after: true }),
+      expect.objectContaining({ entityType: "decision", field: "projectWide", before: true, after: false }),
+    ]);
+  });
+
   it("records when an optional field is cleared", () => {
     const before = { ...initial, project: { ...initial.project, description: "Previous description" }, auditHistory: { enabled: true, events: [] } } as unknown as ProjectState;
     const after = { ...before, project: { ...initial.project } };
