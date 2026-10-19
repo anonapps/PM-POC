@@ -36,7 +36,8 @@ export function GanttView({ store, navigate }: { store: ProjectStore; navigate: 
   const [draftEnd, setDraftEnd] = useState("");
   const openTaskEditor = (id: string) => { const task = state.tasks.find(item=>item.id===id&&!item.deletion.isDeleted);if(!task)return;setEditingTaskId(id);setDraftName(task.name);setDraftStart(task.startDate??"");setDraftEnd(task.endDate??""); };
   const saveTask = () => { if(!editingTaskId || !draftName.trim() || (draftStart&&draftEnd&&draftEnd<draftStart))return;store.execute(editTask(editingTaskId,{name:draftName,startDate:draftStart||null,endDate:draftEnd||null}));setEditingTaskId(null); };
-  const today = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const state = useProjectState(store);
   const model = buildGanttModel(state, zoom, today, offset);
   const showProgress = state.project.metadata.showProgress !== false;
