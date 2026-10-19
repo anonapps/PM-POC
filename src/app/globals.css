@@ -644,3 +644,18 @@ table td.table-actions button { margin:.12rem; }
   right:12px;
   text-align:right;
 }
+
+/* Keep Tube Map time navigation accessible while scrolling long stream lists.
+   The workspace is the scrolling ancestor, so sticky must not be trapped by a
+   nested scroll container. The footer stays in normal document flow. */
+.workspace .tube-map > footer.tube-navigation {
+  position:sticky;
+  bottom:0;
+  left:auto;
+  right:auto;
+  z-index:24;
+  width:100%;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  box-shadow:0 -3px 10px #17243a12;
+}
