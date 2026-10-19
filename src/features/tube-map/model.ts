@@ -13,9 +13,12 @@ function levelsFor(stations: readonly { x: number; label: string }[]) {
   const occupied: number[] = [];
   return stations.map((station) => {
     const halfWidth = Math.min(12, Math.max(3, station.label.length * 0.35));
+    // Labels near the right edge extend leftwards rather than overflowing the timeline.
+    const left = station.x + halfWidth > 100 ? station.x - halfWidth * 2 : station.x - halfWidth;
+    const right = station.x + halfWidth > 100 ? station.x : station.x + halfWidth;
     let level = 0;
-    while (occupied[level] !== undefined && station.x - halfWidth < occupied[level]) level += 1;
-    occupied[level] = station.x + halfWidth;
+    while (occupied[level] !== undefined && left < occupied[level]) level += 1;
+    occupied[level] = right;
     return level;
   });
 }
