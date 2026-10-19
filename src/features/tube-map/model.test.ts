@@ -43,3 +43,16 @@ describe("Tube Map dependency visibility", () => {
     expect(model.connections).toHaveLength(0);
   });
 });
+
+
+describe("Tube Map multi-stream dependency selection", () => {
+  it("connects the closest pair of milestone occurrences across shared streams", () => {
+    const streams = [streamFixture(), streamFixture({ id: "s2", humanId: "STREAM-002" })];
+    const state = makeProjectState({ streams, milestones: [milestone("1", "2026-09-21", ["stream-1", "s2"]), milestone("2", "2026-10-01", ["stream-1", "s2"])], dependencies: [{ id: "d", projectId: "project-1", predecessor: { kind: "milestone", id: "1" }, successor: { kind: "milestone", id: "2" }, type: "Finish-to-Start" }] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.connections).toHaveLength(1);
+    expect(model.connections[0].fromY).toBe(model.connections[0].toY);
+    expect(model.connections[0].from).toBe("1");
+    expect(model.connections[0].to).toBe("2");
+  });
+});
