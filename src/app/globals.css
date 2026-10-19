@@ -300,3 +300,7 @@ table td.table-actions button { margin:.12rem; }
 .gantt-row.section .gantt-open-stream { flex: 0 0 auto; margin-left: 0; }
 .gantt-row.section .sort-heading { display: inline-block; flex: 0 1 auto; min-width: 0; }
 .gantt-row.section > div:first-child > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Reserve room for the full Zoom select border and native dropdown arrow. */
+.gantt-panel .title-row .gantt-zoom-control { display:inline-flex; align-items:center; gap:.4rem; flex:0 0 auto; margin-right:10px; }
+.gantt-panel .title-row .gantt-zoom-control select { box-sizing:border-box; width:116px; min-width:0; max-width:116px; padding: .35rem 1.4rem .35rem .45rem; border:1px solid #8293a8; border-radius:4px; background-color:#fff; }
