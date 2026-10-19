@@ -51,9 +51,16 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     top += height;
   }
   const visibleMilestoneIds = new Set(state.milestones.filter(milestone => !milestone.deletion.isDeleted).map(milestone => milestone.id));
+  const stationsByMilestone = new Map<string, TubeStation[]>();
+  for (const station of stations) {
+    if (station.boundary !== "inside") continue;
+    const occurrences = stationsByMilestone.get(station.entityId) ?? [];
+    occurrences.push(station);
+    stationsByMilestone.set(station.entityId, occurrences);
+  }
   const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone" && visibleMilestoneIds.has(dependency.predecessor.id) && visibleMilestoneIds.has(dependency.successor.id)).flatMap((dependency) => {
-    const sources = stations.filter((station) => station.entityId === dependency.predecessor.id && station.boundary === "inside");
-    const targets = stations.filter((station) => station.entityId === dependency.successor.id && station.boundary === "inside");
+    const sources = stationsByMilestone.get(dependency.predecessor.id) ?? [];
+    const targets = stationsByMilestone.get(dependency.successor.id) ?? [];
     const pairs = sources.flatMap((source) => targets.map((target) => ({ source, target, score: Math.abs(source.lane - target.lane) * 100 + Math.abs(source.x - target.x) })));
     const selected = pairs.sort((left, right) => left.score - right.score || left.source.id.localeCompare(right.source.id) || left.target.id.localeCompare(right.target.id))[0];
     return selected ? [{ from: selected.source.entityId, to: selected.target.entityId, fromX: selected.source.x, fromY: selected.source.y, toX: selected.target.x, toY: selected.target.y }] : [];
