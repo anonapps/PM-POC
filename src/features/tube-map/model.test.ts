@@ -18,3 +18,16 @@ describe("Tube Map off-window lane sizing", () => {
     expect(model.stations.filter(station => station.boundary === "inside").map(station => station.level)).toEqual([0, 1]);
   });
 });
+
+
+describe("Tube Map twelve-week boundaries", () => {
+  it("includes the first Monday and excludes the Monday after week twelve", () => {
+    const state = makeProjectState({ milestones: [milestone("1", "2026-09-14"), milestone("2", "2026-12-06"), milestone("3", "2026-12-07")] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.start).toBe("2026-09-14");
+    expect(model.end).toBe("2026-12-07");
+    expect(model.stations.map(station => station.boundary)).toEqual(["inside", "inside", "after"]);
+    expect(model.stations[0].x).toBe(0);
+    expect(model.stations[2].x).toBe(100);
+  });
+});
