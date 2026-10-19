@@ -20,7 +20,9 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
   if (after.auditHistory?.enabled !== true || command === "set-audit-enabled" || command === "replace-state") return after;
   const events: AuditEvent[] = [];
   const append = (entityType: string, entityId: string, action: AuditEvent["action"], field?: string, oldValue?: unknown, newValue?: unknown) => {
-    events.push({ timestamp, command, entityType, entityId, action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: compact(oldValue) } : {}), ...(newValue !== undefined ? { after: compact(newValue) } : {}) });
+    const collections = [after.streams, after.tasks, after.milestones, after.people, after.risks, after.decisions, before.streams, before.tasks, before.milestones, before.people, before.risks, before.decisions];
+    const humanId = collections.flatMap(items => items).find(item => item.id === entityId)?.humanId;
+    events.push({ timestamp, command, entityType, entityId, ...(humanId ? { humanId } : {}), action, ...(field ? { field } : {}), ...(oldValue !== undefined ? { before: compact(oldValue) } : {}), ...(newValue !== undefined ? { after: compact(newValue) } : {}) });
   };
   const inspect = (entityType: string, oldEntity: Record<string, unknown> | undefined, newEntity: Record<string, unknown> | undefined, id: string) => {
     if (!oldEntity && newEntity) { append(entityType, id, "created", undefined, undefined, newEntity.humanId ?? newEntity.name ?? newEntity.title); return; }
