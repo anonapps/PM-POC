@@ -101,3 +101,16 @@ describe("Tube Map label collision boundaries", () => {
     expect(model.streams[0].height).toBe(76);
   });
 });
+
+
+describe("Tube Map dense milestone lanes", () => {
+  it("assigns every overlapping visible milestone a distinct level", () => {
+    const milestones = Array.from({ length: 120 }, (_, index) => milestone(String(index + 1), "2026-09-21"));
+    const state = makeProjectState({ milestones });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.stations).toHaveLength(120);
+    expect(new Set(model.stations.map(station => station.level)).size).toBe(120);
+    expect(model.streams[0].height).toBe(76 + 119 * 30);
+    expect(model.height).toBe(model.streams[0].height);
+  });
+});
