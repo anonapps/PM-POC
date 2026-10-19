@@ -67,3 +67,18 @@ describe("Tube Map deleted stream visibility", () => {
     expect(model.stations).toHaveLength(0);
   });
 });
+
+
+describe("Tube Map stream sorting", () => {
+  it("reorders lanes and milestone positions without changing dependency endpoints", () => {
+    const streams = [streamFixture({ name: "Zulu" }), streamFixture({ id: "s2", humanId: "STREAM-002", name: "Alpha" })];
+    const state = makeProjectState({ streams, milestones: [milestone("1", "2026-09-21", ["stream-1"]), milestone("2", "2026-10-01", ["s2"])], dependencies: [{ id: "d", projectId: "project-1", predecessor: { kind: "milestone", id: "1" }, successor: { kind: "milestone", id: "2" }, type: "Finish-to-Start" }] });
+    const ascending = buildTubeMap(state, "2026-09-17", "asc");
+    const descending = buildTubeMap(state, "2026-09-17", "desc");
+    expect(ascending.streams.map(stream => stream.label)).toEqual(["Project-wide", "Alpha", "Zulu"]);
+    expect(descending.streams.map(stream => stream.label)).toEqual(["Project-wide", "Zulu", "Alpha"]);
+    expect(ascending.stations.find(station => station.entityId === "1")?.y).not.toBe(descending.stations.find(station => station.entityId === "1")?.y);
+    expect(ascending.connections.map(connection => [connection.from, connection.to])).toEqual([["1", "2"]]);
+    expect(descending.connections.map(connection => [connection.from, connection.to])).toEqual([["1", "2"]]);
+  });
+});
