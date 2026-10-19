@@ -49,6 +49,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await evaluate(`document.querySelector('.tube-station-diamond').click()`);
     record('Milestone diamond opens quick edit', await evaluate(`Boolean(document.querySelector('.tube-quick-edit input[type="date"]'))`));
     record('Milestone quick edit has accessible form name', await evaluate(`document.querySelector('.tube-quick-edit')?.getAttribute('aria-label')==='Quick edit milestone'`));
+    record('Tube Map quick editor fits desktop viewport', await evaluate(`(()=>{const e=document.querySelector('.tube-quick-edit');if(!e)return false;const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight})()`));
     await evaluate(`document.querySelector('.tube-quick-edit button[type="submit"]')?.click()`);
     record('Unchanged milestone save closes quick edit', await evaluate(`!document.querySelector('.tube-quick-edit')`));
   }
@@ -80,6 +81,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await evaluate(`document.querySelector('.gantt-row.task button.sort-heading').click()`);
     record('Gantt task name opens quick edit', await evaluate(`Boolean(document.querySelector('.gantt-quick-edit input[type="date"]'))`));
     record('Gantt quick edit has accessible form name', await evaluate(`document.querySelector('.gantt-quick-edit')?.getAttribute('aria-label')==='Quick edit task'`));
+    record('Gantt quick editor fits desktop viewport', await evaluate(`(()=>{const e=document.querySelector('.gantt-quick-edit');if(!e)return false;const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight})()`));
     await evaluate(`document.querySelector('.gantt-quick-edit button[type="submit"]')?.click()`);
     record('Unchanged Gantt task save closes quick edit', await evaluate(`!document.querySelector('.gantt-quick-edit')`));
   }
