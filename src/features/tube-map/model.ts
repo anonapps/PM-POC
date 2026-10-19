@@ -50,11 +50,11 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const visibleLevels = levelsFor(visibleCandidates);
     const levelsById = new Map(visibleCandidates.map((station, index) => [station.id, visibleLevels[index]]));
     const maxLevel = visibleLevels.reduce((maximum, level) => Math.max(maximum, level), 0);
-    const height = 76 + maxLevel * 30;
+    const height = 96 + Math.ceil(maxLevel / 2) * 64;
     streams.push({ ...stream, top, height });
     laneCandidates.forEach((station) => {
       const level = levelsById.get(station.id) ?? 0;
-      stations.push({ ...station, lane: stream.lane, level, y: top + 38 + level * 30 });
+      stations.push({ ...station, lane: stream.lane, level, y: top + height / 2 + (level === 0 ? 0 : (level % 2 === 1 ? -1 : 1) * Math.ceil(level / 2) * 30) });
     });
     top += height;
   }
