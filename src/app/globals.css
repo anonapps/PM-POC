@@ -616,3 +616,31 @@ table td.table-actions button { margin:.12rem; }
   stroke-dasharray:4 5;
   stroke-linecap:round;
 }
+
+/* Tube Map stream names behave like links, not filled navigation buttons. */
+.workspace .tube-map .tube-line .tube-stream-link:hover {
+  background:transparent;
+  color:#59687b;
+  text-decoration:underline;
+}
+.workspace .tube-map .tube-line .tube-stream-link:focus-visible {
+  background:transparent;
+  color:#59687b;
+  text-decoration:underline;
+}
+/* Keep station captions compact, and point edge labels into the visible chart. */
+.workspace .tube-map .tube-station .tube-station-link {
+  top:25px;
+  left:12px;
+  max-width:110px;
+  overflow-wrap:anywhere;
+}
+.workspace .tube-map .tube-station.above .tube-station-link {
+  top:auto;
+  bottom:25px;
+}
+.workspace .tube-map .tube-station.label-left .tube-station-link {
+  left:auto;
+  right:12px;
+  text-align:right;
+}
