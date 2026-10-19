@@ -88,3 +88,26 @@ describe("audit retention order", () => {
     expect(events.every(event => event.command === "edit-project")).toBe(true);
   }, 30000);
 });
+
+
+describe("audit retention for a single large command", () => {
+  it("keeps the last five thousand events when one command changes more than five thousand fields", () => {
+    const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
+    const fields = Array.from({ length: 5002 }, (_, index) => ({
+      id: `person-${index}`,
+      projectId: "p1",
+      humanId: `PERSON-${index}`,
+      name: `Person ${index}`,
+      deletion: { isDeleted: false },
+    }));
+    const command = {
+      type: "bulk-create-people",
+      apply: (state: ProjectState): ProjectState => ({ ...state, people: fields as unknown as ProjectState["people"] }),
+    };
+    expect(store.execute(command)).toBe(true);
+    const events = store.getState().auditHistory?.events ?? [];
+    expect(events).toHaveLength(5000);
+    expect(events[0].entityId).toBe("person-2");
+    expect(events.at(-1)?.entityId).toBe("person-5001");
+  }, 30000);
+});
