@@ -35,11 +35,17 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const ids = milestone.scope.kind === "project" ? ["project"] : milestone.scope.streamIds;
     return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, x, streamId, boundary }));
   });
+  const candidatesByStream = new Map<string, typeof candidates>();
+  for (const station of candidates) {
+    const lane = candidatesByStream.get(station.streamId) ?? [];
+    lane.push(station);
+    candidatesByStream.set(station.streamId, lane);
+  }
   let top = 0;
   const streams: TubeStream[] = [];
   const stations: TubeStation[] = [];
   for (const stream of baseStreams) {
-    const laneCandidates = candidates.filter((station) => station.streamId === stream.id).sort((left, right) => left.x - right.x || left.entityId.localeCompare(right.entityId));
+    const laneCandidates = [...(candidatesByStream.get(stream.id) ?? [])].sort((left, right) => left.x - right.x || left.entityId.localeCompare(right.entityId));
     const visibleCandidates = laneCandidates.filter(station => station.boundary === "inside");
     const visibleLevels = levelsFor(visibleCandidates);
     const levelsById = new Map(visibleCandidates.map((station, index) => [station.id, visibleLevels[index]]));
