@@ -445,3 +445,9 @@ table td.table-actions button { margin:.12rem; }
     gap:6px;
   }
 }
+
+/* Tube Map station markers are centred on their lane, with labels clear of the line. */
+.tube-body .tube-station{transform:translate(-50%,-13px);z-index:4;min-width:26px;max-width:160px;}
+.tube-station .tube-station-link{position:absolute;top:29px;left:13px;width:max-content;max-width:140px;text-align:left;white-space:normal;line-height:1.2;background:var(--surface,#fff);padding:1px 3px;}
+.tube-station.above .tube-station-link{top:auto;bottom:29px;left:13px;}
+.tube-today-line{position:absolute;top:0;bottom:0;width:1px;background:#dc2626;z-index:3;pointer-events:none;}
