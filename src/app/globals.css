@@ -384,3 +384,62 @@ table td.table-actions button { margin:.12rem; }
 .workspace .panel button.secondary { background:#fff; color:var(--primary); border-color:var(--primary); }
 .workspace .panel button:disabled,
 .app-main > header button:disabled { opacity:.45; cursor:not-allowed; }
+
+
+/* Compact, legible Gantt quick editor: one row per editable field. */
+.workspace .panel form.gantt-quick-edit {
+  width:min(440px,calc(100vw - 24px));
+  padding:14px;
+  gap:10px;
+  grid-template-columns:minmax(0,1fr);
+}
+.workspace .panel .gantt-quick-edit .quick-edit-heading {
+  display:block;
+  margin:0 0 2px;
+  font-size:var(--type-section);
+  font-weight:700;
+  line-height:1.25;
+}
+.workspace .panel .gantt-quick-edit label.quick-edit-field {
+  display:grid;
+  grid-template-columns:94px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  margin:0;
+  font-size:var(--type-body);
+  font-weight:600;
+}
+.workspace .panel .gantt-quick-edit .quick-edit-field input {
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  min-width:0;
+  height:var(--action-height);
+  min-height:var(--action-height);
+  padding:4px 10px;
+  margin:0;
+  border:1px solid #a8b7cb;
+  border-radius:var(--action-radius);
+  background:#fff;
+  color:inherit;
+  font-size:var(--type-body);
+  line-height:1.2;
+}
+.workspace .panel .gantt-quick-edit .quick-edit-field input[type="date"] {
+  color-scheme:light;
+  padding-right:8px;
+}
+.workspace .panel .gantt-quick-edit .quick-edit-field input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity:1;
+  cursor:pointer;
+}
+.workspace .panel .gantt-quick-edit .actions {
+  margin-top:4px;
+  gap:8px;
+}
+@media(max-width:480px) {
+  .workspace .panel .gantt-quick-edit label.quick-edit-field {
+    grid-template-columns:78px minmax(0,1fr);
+    gap:6px;
+  }
+}
