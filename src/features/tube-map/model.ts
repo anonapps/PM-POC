@@ -56,7 +56,6 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     laneCandidates.forEach((station, index) => stations.push({ ...station, lane: stream.lane, level: levels[index], y: top + 38 + levels[index] * 30 }));
     top += height;
   }
-  const visibleMilestoneIds = new Set(state.milestones.filter(milestone => !milestone.deletion.isDeleted).map(milestone => milestone.id));
   const stationsByMilestone = new Map<string, TubeStation[]>();
   for (const station of stations) {
     if (station.boundary !== "inside") continue;
@@ -64,7 +63,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     occurrences.push(station);
     stationsByMilestone.set(station.entityId, occurrences);
   }
-  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone" && visibleMilestoneIds.has(dependency.predecessor.id) && visibleMilestoneIds.has(dependency.successor.id)).flatMap((dependency) => {
+  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone").flatMap((dependency) => {
     const sources = stationsByMilestone.get(dependency.predecessor.id) ?? [];
     const targets = stationsByMilestone.get(dependency.successor.id) ?? [];
     let selected: { source: TubeStation; target: TubeStation; score: number } | undefined;
