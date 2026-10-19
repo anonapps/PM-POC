@@ -61,8 +61,11 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone" && visibleMilestoneIds.has(dependency.predecessor.id) && visibleMilestoneIds.has(dependency.successor.id)).flatMap((dependency) => {
     const sources = stationsByMilestone.get(dependency.predecessor.id) ?? [];
     const targets = stationsByMilestone.get(dependency.successor.id) ?? [];
-    const pairs = sources.flatMap((source) => targets.map((target) => ({ source, target, score: Math.abs(source.lane - target.lane) * 100 + Math.abs(source.x - target.x) })));
-    const selected = pairs.sort((left, right) => left.score - right.score || left.source.id.localeCompare(right.source.id) || left.target.id.localeCompare(right.target.id))[0];
+    let selected: { source: TubeStation; target: TubeStation; score: number } | undefined;
+    for (const source of sources) for (const target of targets) {
+      const score = Math.abs(source.lane - target.lane) * 100 + Math.abs(source.x - target.x);
+      if (!selected || score < selected.score || (score === selected.score && (source.id.localeCompare(selected.source.id) < 0 || (source.id === selected.source.id && target.id.localeCompare(selected.target.id) < 0)))) selected = { source, target, score };
+    }
     return selected ? [{ from: selected.source.entityId, to: selected.target.entityId, fromX: selected.source.x, fromY: selected.source.y, toX: selected.target.x, toY: selected.target.y }] : [];
   });
   return { start, end, weeks, streams, stations, connections, height: top };
