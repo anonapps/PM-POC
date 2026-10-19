@@ -270,3 +270,22 @@ table td.table-actions button { margin:.12rem; }
 /* Keep project preferences checkbox and label on the same baseline inside dialogs. */
 .dialog-backdrop label.toggle { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; }
 .dialog-backdrop label.toggle input[type="checkbox"] { width: auto; height: auto; flex: 0 0 auto; margin: 0; }
+
+/* Compact task grid: progress must not force horizontal overflow. */
+.tasks-table { width: 100%; table-layout: fixed; }
+.tasks-table th, .tasks-table td { padding: .4rem .3rem; vertical-align: middle; overflow-wrap: anywhere; }
+.tasks-table th:first-child { width: 5%; }
+.tasks-table th:nth-child(2) { width: 18%; }
+.tasks-table th:nth-child(3) { width: 9%; }
+.tasks-table th:nth-child(4) { width: 11%; }
+.tasks-table th:nth-last-child(4), .tasks-table th:nth-last-child(3) { width: 13%; }
+.tasks-table th:nth-last-child(2) { width: 11%; }
+.tasks-table th:last-child { width: 16%; }
+.tasks-table td input:not([type="checkbox"]), .tasks-table td select, .tasks-table td details.multi-select { width: 100%; min-width: 0; max-width: 100%; }
+.tasks-table .task-name-cell { position: relative; padding-top: 1.2rem; }
+.tasks-table .task-row-id { position: absolute; top: .12rem; left: .3rem; font-size: .67rem; line-height: 1; margin: 0; }
+.tasks-table .task-progress-field { display: flex; align-items: center; gap: .2rem; min-width: 0; white-space: nowrap; }
+.tasks-table .task-progress-field input.progress-input { flex: 1 1 auto; min-width: 0; }
+.tasks-table .task-progress-field span { flex: 0 0 auto; }
+.tasks-table td.table-actions { white-space: normal; overflow-wrap: normal; }
+.tasks-table td.table-actions button { padding: .35rem .45rem; font-size: .75rem; margin: .1rem; }
