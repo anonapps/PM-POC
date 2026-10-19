@@ -73,3 +73,18 @@ describe("store audit history", () => {
     expect(store.getState().auditHistory?.events).toHaveLength(0);
   });
 });
+
+
+describe("audit retention order", () => {
+  it("keeps the most recent five thousand changes in their original order", () => {
+    const store = createProjectStore({ ...initial, auditHistory: { enabled: true, events: [] } }, context);
+    for (let index = 0; index < 5002; index += 1) {
+      store.execute(rename(`Revision ${index}`));
+    }
+    const events = store.getState().auditHistory?.events ?? [];
+    expect(events).toHaveLength(5000);
+    expect(events[0].after).toBe("Revision 2");
+    expect(events.at(-1)?.after).toBe("Revision 5001");
+    expect(events.every(event => event.command === "edit-project")).toBe(true);
+  });
+});
