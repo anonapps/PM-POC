@@ -77,3 +77,8 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   });
   return { start, end, weeks, streams, stations, connections, height: top };
 }
+
+/** Count distinct milestones, not their appearances across multiple streams. */
+export function countTubeMilestones(stations: readonly TubeStation[], boundary: TubeStation["boundary"]): number {
+  return new Set(stations.filter(station => station.boundary === boundary).map(station => station.entityId)).size;
+}
