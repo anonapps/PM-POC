@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { tubeMapAnchorDate } from "./local-date";
+import { inclusiveTubeMapEnd, tubeMapAnchorDate } from "./local-date";
 
 describe("Tube Map local calendar anchor", () => {
   it("preserves the local calendar day rather than using the UTC date", () => {
@@ -14,5 +14,12 @@ describe("Tube Map local calendar anchor", () => {
     expect(tubeMapAnchorDate(localDate, 1)).toBe("2027-03-25");
     expect(tubeMapAnchorDate(localDate, -1)).toBe("2026-10-08");
     expect(tubeMapAnchorDate(localDate, 0)).toBe("2026-12-31");
+  });
+});
+
+describe("Tube Map visible date range", () => {
+  it("shows the last Sunday instead of the exclusive next Monday", () => {
+    expect(inclusiveTubeMapEnd("2026-12-07")).toBe("2026-12-06");
+    expect(inclusiveTubeMapEnd("2027-01-04")).toBe("2027-01-03");
   });
 });
