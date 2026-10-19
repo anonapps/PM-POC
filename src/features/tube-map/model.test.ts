@@ -82,3 +82,22 @@ describe("Tube Map stream sorting", () => {
     expect(descending.connections.map(connection => [connection.from, connection.to])).toEqual([["1", "2"]]);
   });
 });
+
+
+describe("Tube Map label collision boundaries", () => {
+  it("stacks adjacent labels near the right edge without changing their dates or positions", () => {
+    const state = makeProjectState({ milestones: [milestone("1", "2026-12-05"), milestone("2", "2026-12-06")] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.stations.map(station => station.boundary)).toEqual(["inside", "inside"]);
+    expect(model.stations[0].x).toBeLessThan(model.stations[1].x);
+    expect(model.stations.map(station => station.level)).toEqual([0, 1]);
+    expect(model.streams[0].height).toBe(106);
+  });
+
+  it("does not stack milestones that have sufficient separation", () => {
+    const state = makeProjectState({ milestones: [milestone("1", "2026-09-14"), milestone("2", "2026-12-06")] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.stations.map(station => station.level)).toEqual([0, 0]);
+    expect(model.streams[0].height).toBe(76);
+  });
+});
