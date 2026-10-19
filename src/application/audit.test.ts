@@ -38,6 +38,22 @@ describe("project audit history", () => {
     ]);
   });
 
+  it("records a change to a preserved legacy task due date", () => {
+    const before = {
+      ...initial,
+      auditHistory: { enabled: true, events: [] },
+      tasks: [{ id: "task-1", name: "Legacy task", legacyDueDate: "2026-10-20" }],
+    } as unknown as ProjectState;
+    const after = { ...before, tasks: [{ ...before.tasks[0], legacyDueDate: "2026-10-21" }] } as ProjectState;
+    const result = recordAuditChange(before, after, "edit-task", "2026-10-16T10:00:00Z");
+    expect(result.auditHistory?.events).toEqual([
+      expect.objectContaining({
+        entityType: "task", entityId: "task-1", field: "legacyDueDate",
+        before: "2026-10-20", after: "2026-10-21",
+      }),
+    ]);
+  });
+
   it("records when an optional field is cleared", () => {
     const before = { ...initial, project: { ...initial.project, description: "Previous description" }, auditHistory: { enabled: true, events: [] } } as unknown as ProjectState;
     const after = { ...before, project: { ...initial.project } };
