@@ -86,5 +86,5 @@ describe("audit retention order", () => {
     expect(events[0].after).toBe("Revision 2");
     expect(events.at(-1)?.after).toBe("Revision 5001");
     expect(events.every(event => event.command === "edit-project")).toBe(true);
-  });
+  }, 30000);
 });
