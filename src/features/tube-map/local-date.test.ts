@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inclusiveTubeMapEnd, tubeMapAnchorDate } from "./local-date";
+import { inclusiveTubeMapEnd, tubeMapAnchorDate, tubeMapDisplayDate } from "./local-date";
 
 describe("Tube Map local calendar anchor", () => {
   it("preserves the local calendar day rather than using the UTC date", () => {
@@ -21,5 +21,12 @@ describe("Tube Map visible date range", () => {
   it("shows the last Sunday instead of the exclusive next Monday", () => {
     expect(inclusiveTubeMapEnd("2026-12-07")).toBe("2026-12-06");
     expect(inclusiveTubeMapEnd("2027-01-04")).toBe("2027-01-03");
+  });
+});
+
+describe("Tube Map date display", () => {
+  it("formats range dates in day/month/year order without timezone shifts", () => {
+    expect(tubeMapDisplayDate("2026-09-14")).toBe("14/09/2026");
+    expect(tubeMapDisplayDate(inclusiveTubeMapEnd("2027-01-04"))).toBe("03/01/2027");
   });
 });
