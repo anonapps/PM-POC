@@ -9,3 +9,9 @@ export function inclusiveTubeMapEnd(exclusiveEnd: string): string {
   end.setUTCDate(end.getUTCDate() - 1);
   return end.toISOString().slice(0, 10);
 }
+
+/** Format a model ISO date as a day-first date without timezone conversion. */
+export function tubeMapDisplayDate(isoDate: string): string {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
+}
