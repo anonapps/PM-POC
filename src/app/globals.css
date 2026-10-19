@@ -588,3 +588,31 @@ table td.table-actions button { margin:.12rem; }
   font-size:var(--type-control);
   font-weight:400;
 }
+
+/* Tube Map uses Gantt-like week boundaries, a fixed lane rhythm and subdued labels. */
+.workspace .tube-map .tube-body {
+  background-image:linear-gradient(to right,#e2e7ed 1px,transparent 1px);
+  background-size:calc(100% / 12) 100%;
+  background-position:0 0;
+}
+.workspace .tube-map .tube-line .tube-stream-link {
+  color:#59687b;
+  font-size:var(--type-caption);
+  font-weight:600;
+}
+.workspace .tube-map .tube-station {
+  transform:translate(-50%,-13px);
+}
+.workspace .tube-map .tube-station .tube-station-link {
+  background:transparent;
+  color:#59687b;
+  font-size:var(--type-caption);
+  font-weight:600;
+  padding:0;
+  line-height:1.2;
+  z-index:3;
+}
+.workspace .tube-map .tube-connections path {
+  stroke-dasharray:4 5;
+  stroke-linecap:round;
+}
