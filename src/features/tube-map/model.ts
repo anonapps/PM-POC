@@ -50,11 +50,11 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const visibleLevels = levelsFor(visibleCandidates);
     const levelsById = new Map(visibleCandidates.map((station, index) => [station.id, visibleLevels[index]]));
     // Fixed-height lanes: collisions alternate above/below the centreline without resizing streams.
-    const height = 112;
+    const height = 88;
     streams.push({ ...stream, top, height });
     laneCandidates.forEach((station) => {
       const level = levelsById.get(station.id) ?? 0;
-      stations.push({ ...station, lane: stream.lane, level, y: top + height / 2 + (level === 0 ? 0 : (level % 2 === 1 ? -1 : 1) * 24) });
+      stations.push({ ...station, lane: stream.lane, level, y: top + height / 2 + (level === 0 ? 0 : (level % 2 === 1 ? -1 : 1) * 17) });
     });
     top += height;
   }
