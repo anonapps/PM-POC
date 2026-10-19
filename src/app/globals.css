@@ -283,9 +283,14 @@ table td.table-actions button { margin:.12rem; }
 .tasks-table th:last-child { width: 15%; }
 .tasks-table td input:not([type="checkbox"]), .tasks-table td select, .tasks-table td details.multi-select { width: 100%; min-width: 0; max-width: 100%; }
 .tasks-table .task-name-cell { position: relative; padding-top: 1.2rem; }
-.tasks-table .task-row-id { position: absolute; top: .12rem; left: .3rem; font-size: .67rem; line-height: 1; margin: 0; }
+.tasks-table .task-row-id { position: absolute; top: .38rem; left: .3rem; font-size: .67rem; line-height: 1; margin: 0; }
 .tasks-table .task-progress-field { display: flex; align-items: center; gap: .2rem; min-width: 0; white-space: nowrap; }
 .tasks-table .task-progress-field input.progress-input { flex: 1 1 auto; min-width: 0; }
 .tasks-table .task-progress-field span { flex: 0 0 auto; }
 .tasks-table td.table-actions { white-space: normal; overflow-wrap: normal; }
 .tasks-table td.table-actions button { padding: .35rem .45rem; font-size: .75rem; margin: .1rem; }
+
+/* Keep stable IDs above editable names without introducing a separate table column. */
+.entity-name-cell { position: relative; padding-top: 1.2rem; vertical-align: middle; }
+.entity-name-cell .entity-row-id { position: absolute; top: .38rem; left: .5rem; font-size: .67rem; line-height: 1; white-space: nowrap; color: #526176; }
+.entity-name-cell > input { width: 100%; min-width: 0; }
