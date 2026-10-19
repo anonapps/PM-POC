@@ -681,3 +681,16 @@ table td.table-actions button { margin:.12rem; }
   background-size:calc(100% / 12) 100%;
   background-position:0 0;
 }
+
+/* Keep the sticky Tube Map navigation visually opaque through the viewport's
+   bottom safe area, so stream labels cannot show underneath the controls. */
+.workspace .tube-map > footer.tube-navigation::after {
+  content:"";
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  height:80px;
+  background:var(--surface);
+  pointer-events:none;
+}
