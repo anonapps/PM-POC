@@ -49,11 +49,13 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const visibleCandidates = laneCandidates.filter(station => station.boundary === "inside");
     const visibleLevels = levelsFor(visibleCandidates);
     const levelsById = new Map(visibleCandidates.map((station, index) => [station.id, visibleLevels[index]]));
-    const levels = laneCandidates.map(station => levelsById.get(station.id) ?? 0);
-    const maxLevel = Math.max(0, ...visibleLevels);
+    const maxLevel = visibleLevels.reduce((maximum, level) => Math.max(maximum, level), 0);
     const height = 76 + maxLevel * 30;
     streams.push({ ...stream, top, height });
-    laneCandidates.forEach((station, index) => stations.push({ ...station, lane: stream.lane, level: levels[index], y: top + 38 + levels[index] * 30 }));
+    laneCandidates.forEach((station) => {
+      const level = levelsById.get(station.id) ?? 0;
+      stations.push({ ...station, lane: stream.lane, level, y: top + 38 + level * 30 });
+    });
     top += height;
   }
   const stationsByMilestone = new Map<string, TubeStation[]>();
