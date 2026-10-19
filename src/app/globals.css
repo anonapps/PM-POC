@@ -294,3 +294,9 @@ table td.table-actions button { margin:.12rem; }
 .entity-name-cell { position: relative; padding-top: 1.2rem; vertical-align: middle; }
 .entity-name-cell .entity-row-id { position: absolute; top: .38rem; left: .5rem; font-size: .67rem; line-height: 1; white-space: nowrap; color: #526176; }
 .entity-name-cell > input { width: 100%; min-width: 0; }
+
+/* Gantt section controls: keep the expand/collapse chevron beside its stream name. */
+.gantt-row.section > div:first-child { display: flex; align-items: center; gap: .25rem; }
+.gantt-row.section .gantt-open-stream { flex: 0 0 auto; margin-left: 0; }
+.gantt-row.section .sort-heading { display: inline-block; flex: 0 1 auto; min-width: 0; }
+.gantt-row.section > div:first-child > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
