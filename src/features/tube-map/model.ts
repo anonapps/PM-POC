@@ -5,7 +5,7 @@ const iso = (date: Date) => date.toISOString().slice(0, 10);
 export function mondayOf(date: string) { const value = parse(date); const weekday = value.getUTCDay() || 7; value.setUTCDate(value.getUTCDate() - weekday + 1); return iso(value); }
 export function isoWeek(date: string) { const value = parse(date); value.setUTCDate(value.getUTCDate() + 4 - (value.getUTCDay() || 7)); const yearStart = new Date(Date.UTC(value.getUTCFullYear(), 0, 1)); return Math.ceil((((value.getTime() - yearStart.getTime()) / day) + 1) / 7); }
 export interface TubeStream { id: string; label: string; lane: number; top: number; height: number }
-export interface TubeStation { id: string; entityId: string; label: string; date: string; x: number; lane: number; y: number; level: number; boundary: "before" | "inside" | "after" }
+export interface TubeStation { id: string; entityId: string; label: string; date: string; status: ProjectState["milestones"][number]["status"]; x: number; lane: number; y: number; level: number; boundary: "before" | "inside" | "after" }
 export interface TubeConnection { from: string; to: string; fromX: number; fromY: number; toX: number; toY: number }
 export interface TubeMapModel { start: string; end: string; weeks: readonly { date: string; label: string }[]; streams: readonly TubeStream[]; stations: readonly TubeStation[]; connections: readonly TubeConnection[]; height: number }
 
@@ -33,7 +33,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const boundary = stamp < startTime ? "before" as const : stamp >= endTime ? "after" as const : "inside" as const;
     const x = Math.max(0, Math.min(100, ((stamp - startTime) / (endTime - startTime)) * 100));
     const ids = milestone.scope.kind === "project" ? ["project"] : milestone.scope.streamIds;
-    return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, x, streamId, boundary }));
+    return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, status: milestone.status, x, streamId, boundary }));
   });
   const candidatesByStream = new Map<string, typeof candidates>();
   for (const station of candidates) {
