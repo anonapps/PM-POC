@@ -304,3 +304,11 @@ table td.table-actions button { margin:.12rem; }
 /* Reserve room for the full Zoom select border and native dropdown arrow. */
 .gantt-panel .title-row .gantt-zoom-control { display:inline-flex; align-items:center; gap:.4rem; flex:0 0 auto; margin-right:10px; }
 .gantt-panel .title-row .gantt-zoom-control select { box-sizing:border-box; width:116px; min-width:0; max-width:116px; padding: .35rem 1.4rem .35rem .45rem; border:1px solid #8293a8; border-radius:4px; background-color:#fff; }
+
+/* Compact Gantt rows to the same density as the project entity tables. */
+.gantt-panel .gantt-row > div { min-height:44px; padding:4px 8px; box-sizing:border-box; }
+.gantt-panel .gantt-row:not(.section) > div:first-child { display:flex; flex-direction:column; justify-content:center; gap:2px; }
+.gantt-panel .gantt-row:not(.section) .sort-heading { padding:0; margin:0; line-height:1.2; min-height:0; }
+.gantt-panel .gantt-row:not(.section) small { margin:0; line-height:1.2; }
+.gantt-panel .gantt-row .gantt-bar { top:12px; height:20px; }
+.gantt-panel .gantt-row .gantt-bar.milestone { top:15px; height:14px; }
