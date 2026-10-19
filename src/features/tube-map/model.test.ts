@@ -31,3 +31,15 @@ describe("Tube Map twelve-week boundaries", () => {
     expect(model.stations[2].x).toBe(100);
   });
 });
+
+
+describe("Tube Map dependency visibility", () => {
+  it("does not render a connector when its predecessor milestone is deleted", () => {
+    const deleted = { ...milestone("1", "2026-09-21"), deletion: { isDeleted: true } };
+    const active = milestone("2", "2026-10-01");
+    const state = makeProjectState({ milestones: [deleted, active], dependencies: [{ id: "d", projectId: "project-1", predecessor: { kind: "milestone", id: "1" }, successor: { kind: "milestone", id: "2" }, type: "Finish-to-Start" }] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.stations.map(station => station.entityId)).toEqual(["2"]);
+    expect(model.connections).toHaveLength(0);
+  });
+});
