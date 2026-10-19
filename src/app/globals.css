@@ -463,3 +463,9 @@ table td.table-actions button { margin:.12rem; }
   padding: .35rem .2rem;
   line-height: 1.2;
 }
+
+/* Milestone state colours share the same diamond shape and layout. */
+.tube-station.status-complete .tube-station-diamond i { background: #16a34a; }
+.tube-station.status-delayed .tube-station-diamond i { background: #fca5a5; }
+.tube-station.status-tentative .tube-station-diamond i { background: #93c5fd; }
+.tube-station.status-planned .tube-station-diamond i { background: #7c3aed; }
