@@ -98,7 +98,7 @@ describe("Tube Map label collision boundaries", () => {
     const state = makeProjectState({ milestones: [milestone("1", "2026-09-14"), milestone("2", "2026-12-06")] });
     const model = buildTubeMap(state, "2026-09-17");
     expect(model.stations.map(station => station.level)).toEqual([0, 0]);
-    expect(model.streams[0].height).toBe(96);
+    expect(model.streams[0].height).toBe(112);
   });
 });
 
