@@ -9,10 +9,10 @@ describe("Tube Map local calendar anchor", () => {
     expect(tubeMapAnchorDate(instant, 0)).toBe(`${instant.getFullYear()}-${String(instant.getMonth() + 1).padStart(2, "0")}-${String(instant.getDate()).padStart(2, "0")}`);
   });
 
-  it("moves exactly twelve weeks in either direction across a year boundary", () => {
+  it("moves exactly four weeks in either direction across a year boundary", () => {
     const localDate = new Date(2026, 11, 31, 12);
-    expect(tubeMapAnchorDate(localDate, 1)).toBe("2027-03-25");
-    expect(tubeMapAnchorDate(localDate, -1)).toBe("2026-10-08");
+    expect(tubeMapAnchorDate(localDate, 1)).toBe("2027-01-28");
+    expect(tubeMapAnchorDate(localDate, -1)).toBe("2026-12-03");
     expect(tubeMapAnchorDate(localDate, 0)).toBe("2026-12-31");
   });
 });
