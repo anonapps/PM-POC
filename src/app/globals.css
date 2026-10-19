@@ -469,3 +469,77 @@ table td.table-actions button { margin:.12rem; }
 .tube-station.status-delayed .tube-station-diamond i { background: #fca5a5; }
 .tube-station.status-tentative .tube-station-diamond i { background: #93c5fd; }
 .tube-station.status-planned .tube-station-diamond i { background: #7c3aed; }
+
+
+/* Shared compact quick-edit surface: matching task/milestone editors and app tokens. */
+.workspace .panel form.gantt-quick-edit,
+.workspace .panel form.tube-quick-edit {
+  position:fixed;
+  bottom:auto;
+  margin:0;
+  width:min(340px,calc(100vw - 24px));
+  max-height:calc(100vh - 16px);
+  overflow-y:auto;
+  padding:10px 12px;
+  gap:6px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  align-content:start;
+  font-size:var(--type-body);
+  border-radius:var(--action-radius);
+}
+.workspace .panel .gantt-quick-edit .quick-edit-heading,
+.workspace .panel .tube-quick-edit .quick-edit-heading {
+  margin:0 0 3px;
+  font-size:var(--type-section);
+  font-weight:700;
+  line-height:1.25;
+}
+.workspace .panel .gantt-quick-edit label.quick-edit-field,
+.workspace .panel .tube-quick-edit label.quick-edit-field {
+  display:grid;
+  grid-template-columns:76px minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  margin:0;
+  font-size:var(--type-body);
+  font-weight:600;
+  line-height:1.2;
+}
+.workspace .panel .gantt-quick-edit .quick-edit-field input,
+.workspace .panel .tube-quick-edit .quick-edit-field input {
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  min-width:0;
+  height:var(--action-height);
+  min-height:var(--action-height);
+  padding:3px 8px;
+  margin:0;
+  border:1px solid #a8b7cb;
+  border-radius:var(--action-radius);
+  background:#fff;
+  color:inherit;
+  font-size:var(--type-body);
+  font-weight:400;
+  line-height:1.2;
+}
+.workspace .panel .gantt-quick-edit .quick-edit-field input[type="date"],
+.workspace .panel .tube-quick-edit .quick-edit-field input[type="date"] {
+  color-scheme:light;
+  padding-right:6px;
+}
+.workspace .panel .gantt-quick-edit .actions,
+.workspace .panel .tube-quick-edit .actions {
+  margin-top:4px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+@media(max-width:480px) {
+  .workspace .panel .gantt-quick-edit label.quick-edit-field,
+  .workspace .panel .tube-quick-edit label.quick-edit-field {
+    grid-template-columns:72px minmax(0,1fr);
+    gap:6px;
+  }
+}
