@@ -114,3 +114,16 @@ describe("Tube Map dense milestone lanes", () => {
     expect(model.height).toBe(model.streams[0].height);
   });
 });
+
+
+describe("Tube Map multi-stream out-of-window counts", () => {
+  it("represents a shared milestone as multiple stations with one entity ID", () => {
+    const streams = [streamFixture(), streamFixture({ id: "s2", humanId: "STREAM-002" })];
+    const state = makeProjectState({ streams, milestones: [milestone("1", "2026-01-01", ["stream-1", "s2"]), milestone("2", "2027-01-01", ["stream-1", "s2"])] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.stations.filter(station => station.boundary === "before")).toHaveLength(2);
+    expect(new Set(model.stations.filter(station => station.boundary === "before").map(station => station.entityId)).size).toBe(1);
+    expect(model.stations.filter(station => station.boundary === "after")).toHaveLength(2);
+    expect(new Set(model.stations.filter(station => station.boundary === "after").map(station => station.entityId)).size).toBe(1);
+  });
+});
