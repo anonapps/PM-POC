@@ -345,3 +345,29 @@ table td.table-actions button { margin:.12rem; }
   height:30px; width:116px; min-width:116px; max-width:116px;
   padding:2px 24px 2px 8px; font-size:.78rem; line-height:1.1;
 }
+
+/* Unified action-button system: one 30px geometry, with semantic colour variants.
+   Excludes navigation, KPI cards, timeline cells and icon-only canvas controls. */
+:root { --action-height:30px; --action-radius:6px; --action-font:.78rem; }
+.app-main > header .header-actions button,
+.workspace .panel > .title-row button:not(.sort-heading),
+.workspace .panel .quick-actions button,
+.workspace .panel .warning-list button,
+.workspace .panel .search-results button,
+.workspace .panel .table-actions button,
+.workspace .panel .inline-form > button,
+.workspace .panel .form-actions button,
+.workspace .panel .tube-navigation button,
+.workspace .panel .gantt-quick-edit .actions button,
+.workspace .panel .tube-quick-edit .actions button {
+  box-sizing:border-box;
+  height:var(--action-height); min-height:var(--action-height);
+  padding:2px 10px; border-radius:var(--action-radius);
+  font-size:var(--action-font); font-weight:600; line-height:1.1;
+  display:inline-flex; align-items:center; justify-content:center;
+  white-space:nowrap;
+}
+.workspace .panel button.danger { background:#fff; color:#a12b20; border-color:#d78f87; }
+.workspace .panel button.secondary { background:#fff; color:var(--primary); border-color:var(--primary); }
+.workspace .panel button:disabled,
+.app-main > header button:disabled { opacity:.45; cursor:not-allowed; }
