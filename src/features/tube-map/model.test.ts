@@ -7,14 +7,14 @@ describe("Tube Map off-window lane sizing", () => {
   it("does not expand the project lane for milestones outside the displayed twelve weeks", () => {
     const state = makeProjectState({ milestones: [milestone("1", "2026-01-01"), milestone("2", "2026-01-01"), milestone("3", "2027-01-01")] });
     const model = buildTubeMap(state, "2026-09-17");
-    expect(model.streams[0].height).toBe(76);
+    expect(model.streams[0].height).toBe(96);
     expect(model.stations.filter(station => station.boundary !== "inside")).toHaveLength(3);
   });
 
   it("stacks visible milestones independently of overlapping off-window milestones", () => {
     const state = makeProjectState({ milestones: [milestone("1", "2026-01-01"), milestone("2", "2026-09-21"), milestone("3", "2026-09-21")] });
     const model = buildTubeMap(state, "2026-09-17");
-    expect(model.streams[0].height).toBe(106);
+    expect(model.streams[0].height).toBe(160);
     expect(model.stations.filter(station => station.boundary === "inside").map(station => station.level)).toEqual([0, 1]);
   });
 });
@@ -91,14 +91,14 @@ describe("Tube Map label collision boundaries", () => {
     expect(model.stations.map(station => station.boundary)).toEqual(["inside", "inside"]);
     expect(model.stations[0].x).toBeLessThan(model.stations[1].x);
     expect(model.stations.map(station => station.level)).toEqual([0, 1]);
-    expect(model.streams[0].height).toBe(106);
+    expect(model.streams[0].height).toBe(160);
   });
 
   it("does not stack milestones that have sufficient separation", () => {
     const state = makeProjectState({ milestones: [milestone("1", "2026-09-14"), milestone("2", "2026-12-06")] });
     const model = buildTubeMap(state, "2026-09-17");
     expect(model.stations.map(station => station.level)).toEqual([0, 0]);
-    expect(model.streams[0].height).toBe(76);
+    expect(model.streams[0].height).toBe(96);
   });
 });
 
@@ -110,7 +110,7 @@ describe("Tube Map dense milestone lanes", () => {
     const model = buildTubeMap(state, "2026-09-17");
     expect(model.stations).toHaveLength(120);
     expect(new Set(model.stations.map(station => station.level)).size).toBe(120);
-    expect(model.streams[0].height).toBe(76 + 119 * 30);
+    expect(model.streams[0].height).toBe(96 + Math.ceil(119 / 2) * 64);
     expect(model.height).toBe(model.streams[0].height);
   });
 });
