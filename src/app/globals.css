@@ -659,3 +659,25 @@ table td.table-actions button { margin:.12rem; }
   border-top:1px solid var(--border);
   box-shadow:0 -3px 10px #17243a12;
 }
+
+/* Tube Map: header dates and body grid share one fixed 160px label column
+   and twelve equal-width week columns, regardless of long month names. */
+.workspace .tube-map > .tube-axis {
+  display:grid;
+  grid-template-columns:160px repeat(12,minmax(0,1fr));
+  min-width:0;
+}
+.workspace .tube-map > .tube-axis > span {
+  min-width:0;
+  box-sizing:border-box;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.workspace .tube-map > .tube-body {
+  margin-left:160px;
+  width:calc(100% - 160px);
+  box-sizing:border-box;
+  background-size:calc(100% / 12) 100%;
+  background-position:0 0;
+}
