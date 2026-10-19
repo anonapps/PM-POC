@@ -56,3 +56,14 @@ describe("Tube Map multi-stream dependency selection", () => {
     expect(model.connections[0].to).toBe("2");
   });
 });
+
+
+describe("Tube Map deleted stream visibility", () => {
+  it("does not display milestone occurrences assigned only to deleted streams", () => {
+    const deletedStream = { ...streamFixture(), deletion: { isDeleted: true } };
+    const state = makeProjectState({ streams: [deletedStream], milestones: [milestone("1", "2026-09-21", ["stream-1"])] });
+    const model = buildTubeMap(state, "2026-09-17");
+    expect(model.streams.map(stream => stream.id)).toEqual(["project"]);
+    expect(model.stations).toHaveLength(0);
+  });
+});
