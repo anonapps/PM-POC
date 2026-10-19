@@ -266,3 +266,7 @@ table td.table-actions button { margin:.12rem; }
 .app-shell.sidebar-hidden .hero-nav .module-label { display:none; }
 .app-shell.sidebar-hidden .hero-nav .module-letter { display:inline-flex; align-items:center; justify-content:center; width:100%; font-size:1rem; }
 .app-shell.sidebar-hidden .workspace { padding-left:1.5rem; }
+
+/* Keep project preferences checkbox and label on the same baseline inside dialogs. */
+.dialog-backdrop label.toggle { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; }
+.dialog-backdrop label.toggle input[type="checkbox"] { width: auto; height: auto; flex: 0 0 auto; margin: 0; }
