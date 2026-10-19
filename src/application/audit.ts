@@ -45,7 +45,7 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
   const retained = after.auditHistory?.events ?? [];
   const incoming = events.slice(-MAX_AUDIT_EVENTS);
   const previousCount = Math.max(0, MAX_AUDIT_EVENTS - incoming.length);
-  return { ...after, auditHistory: { enabled: true, events: [...retained.slice(-previousCount || retained.length).slice(-previousCount), ...incoming] } };
+  return { ...after, auditHistory: { enabled: true, events: [...(previousCount > 0 ? retained.slice(-previousCount) : []), ...incoming] } };
 }
 
 export function setAuditEnabled(enabled: boolean) { return { type: "set-audit-enabled", apply(state: ProjectState): ProjectState { return { ...state, auditHistory: { enabled, events: state.auditHistory?.events ?? [] } }; } }; }
