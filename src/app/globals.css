@@ -330,3 +330,18 @@ table td.table-actions button { margin:.12rem; }
 .workspace .panel > .title-row select { box-sizing:border-box; height:30px; padding-top:2px; padding-bottom:2px; }
 .workspace .panel > .title-row .toggle { margin:0; }
 @media(max-width:850px){.workspace .panel > .title-row{min-height:38px;}}
+
+/* Match Gantt toolbar controls to the compact entity-module header controls. */
+.workspace .gantt-panel > .title-row .actions { gap:6px; align-items:center; }
+.workspace .gantt-panel > .title-row .actions > button {
+  height:30px; min-height:30px; padding:2px 10px;
+  font-size:.78rem; font-weight:600; line-height:1.1;
+  border-radius:6px;
+}
+.workspace .gantt-panel > .title-row .gantt-zoom-control {
+  margin-right:0; gap:6px; font-size:.78rem; line-height:1.1;
+}
+.workspace .gantt-panel > .title-row .gantt-zoom-control select {
+  height:30px; width:116px; min-width:116px; max-width:116px;
+  padding:2px 24px 2px 8px; font-size:.78rem; line-height:1.1;
+}
