@@ -1,5 +1,10 @@
 # v1.3.0 — UI design system
 
+## ARGOS PM v1.4.0 design-system update
+
+The v1.3 design-system baseline is retained below as historical context. v1.4 standardises compact page headings, buttons, control alignment, row heights and muted Scope pills, and updates sidebar icons and ordering. The People page control/pill height is the reference for other pages. Risk severity pills match the 3×3 matrix; deleted People use a distinct light-orange state. Gantt and Tube Map preserve their horizontal navigation, sticky headers and quick-edit interactions. See `V1.4_APPROVED_ENHANCEMENTS.md` for the approved v1.4 scope.
+
+
 This experiment is based on main, separate from the HeroUI experiment. It adds no dependencies or external fonts and preserves local .pmp persistence and inline editing.
 
 `src/app/design-system.css` owns the shared palette, six text sizes, 4px spacing scale, control sizing and shell layout. `globals.css` retains module-specific planning geometry. Core palette values use shared tokens. Superseded toolbar masks and fixed sticky offsets have been removed rather than layered with new masks.
