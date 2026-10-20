@@ -14,6 +14,10 @@ The recording uses fictional data in a disposable project. The managed capture b
 
 [Archived v1.3.0 recording](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4) · retained unchanged as historical footage.
 
+## UI reference manual
+
+Learn the consistent names for every page, region and control in the [illustrated UI reference manual](docs/ARGOS_PM_UI_REFERENCE.md): 85 terminology entries and 42 screenshots covering all workspace pages, creation forms, selectors, popovers, dialogs and feedback states. Download the [PDF](docs/ARGOS_PM_UI_REFERENCE.pdf) or [editable Word document](docs/ARGOS_PM_UI_REFERENCE.docx).
+
 ## Prerequisites
 
 - Node.js 20.9 or newer for the app; Node.js 22 or newer for the browser test harness

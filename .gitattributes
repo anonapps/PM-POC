@@ -1,0 +1,3 @@
+# Treat the generated reference manual downloads as binary artifacts.
+docs/ARGOS_PM_UI_REFERENCE.pdf binary
+docs/ARGOS_PM_UI_REFERENCE.docx binary
