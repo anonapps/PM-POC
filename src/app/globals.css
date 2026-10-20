@@ -704,5 +704,6 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 /* Milestones: align date/status/scope/owner/dependencies/actions to the name input baseline, not the ID + name stack midpoint. */
 .workspace .panel .milestones-table tbody td:not(:first-child) {
   vertical-align: bottom;
-  padding-bottom: 13px;
+  /* The ID/name cell is taller; place neighbouring controls on the input row. */
+  padding-bottom: 3px;
 }
