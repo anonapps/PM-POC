@@ -694,3 +694,9 @@ table td.table-actions button { margin:.12rem; }
   background:var(--surface);
   pointer-events:none;
 }
+
+/* Align row controls with the editable name field, not the ID/name stack midpoint.
+   Shared across entity tables; the ID remains directly above the name. */
+table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > td:not(.task-name-cell):not(:has(.milestone-name-cell, .entity-name-cell)) {
+  padding-top: calc(.4rem + 14px);
+}
