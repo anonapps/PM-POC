@@ -1,5 +1,10 @@
 # Acceptance Testing
 
+## v1.4.0 acceptance status
+
+The final ARGOS PM v1.4.0 feature-branch head `32093a9` passed both GitHub Actions validation workflows, including extended browser regression and the People Name blur-commit Undo/Redo scenario. Manual visual acceptance at varied viewport sizes, `.pmp` roundtrips for optional People fields/progress preferences, and 5,000-event audit viewer performance remain documented in `V1.4_ACCEPTANCE_REVIEW.md`. Do not confuse successful automated CI with completion of all manual acceptance criteria.
+
+
 ## Purpose
 
 The automated acceptance harness protects the completed Blocks 0–20 baseline without adding a browser-testing dependency to the application. It uses Node.js plus Chrome/Chromium's DevTools Protocol and runs entirely against the local application.

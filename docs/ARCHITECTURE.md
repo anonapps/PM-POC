@@ -1,7 +1,16 @@
-# Project Management POC — Architecture
+# ARGOS PM — Architecture (v1.4.0)
 
 **Status:** Implementation architecture supporting `docs/PROJECT_REQUIREMENTS.md`  
 **Authority:** This document explains *how* to implement the approved requirements. If it conflicts with `PROJECT_REQUIREMENTS.md`, the requirements take precedence.
+
+## v1.4 architectural additions
+
+- All quick edits in Gantt and Tube Map dispatch canonical application commands; visual components do not own separate project data.
+- Cross-module selection and navigation use stable entity IDs. Stream expansion, column sort direction and temporary quick-editor state are UI concerns.
+- The project preference controlling progress visibility affects rendering only; existing progress values and calculations remain intact in the canonical project state and `.pmp` file.
+- Person Role and Notes are optional persistent fields; compatibility with older `.pmp` files is required.
+- Optional audit history is stored in the `.pmp` project state, independent of Undo/Redo stacks. Record committed changes, not individual keystrokes; retain the most recent 5,000 events, expose up to 50 in the viewer, and permit searching/exporting all retained events. Disabling tracking preserves recorded history. CSV output must escape spreadsheet formula injection.
+- The local-first/offline and Project File Service boundaries remain unchanged.
 
 ## 1. Architectural Goals
 
