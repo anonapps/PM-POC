@@ -2,13 +2,13 @@
 
 A local-first ARGOS PM v1.4.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
-## 30-second product demo — v1.4.0
+## One-minute product demo — v1.4.0
 
-Create a local project, organise two streams and five tasks with five distinct owners, add shared milestones and risks, then edit the plan directly in Gantt and Tube Map.
+Create a local project, organise two streams and five tasks with five distinct owners, add shared milestones and risks, then edit the plan in Gantt and Tube Map. See a dependency conflict trigger a warning, correct its date and watch the warning clear.
 
-[![ARGOS PM v1.4.0 demo — project Gantt view](docs/media/argos-pm-demo-v1.4.0-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-30s-demo-v1.4.0.mp4)
+[![ARGOS PM v1.4.0 demo — project Gantt view](docs/media/argos-pm-demo-v1.4.0-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.4.0.mp4)
 
-**[Watch or download the 30-second demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-30s-demo-v1.4.0.mp4)** · 1920×1080 MP4 · 30 seconds · real v1.4.0 browser interactions, accelerated with captions and the existing original instrumental soundtrack.
+**[Watch or download the one-minute demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.4.0.mp4)** · 1920×1080 MP4 · 60 seconds · silent · real v1.4.0 browser excerpts at normal speed, with reading pauses and editorial chapter titles outside the product view.
 
 The recording uses fictional data in a disposable project. The managed capture browser blocks native filesystem pickers, so the recording uses the existing isolated picker test harness; the resulting `.pmp` was exported and verified. Native OS picker consent is not demonstrated. See the [production and verification notes](docs/V1.4_DEMO_VERIFICATION.md).
 

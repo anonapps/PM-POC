@@ -2,7 +2,8 @@
 
 ## v1.4.0 demo — 20 October 2026
 
-- [Watch the new 30-second ARGOS PM v1.4.0 product demo](media/argos-pm-30s-demo-v1.4.0.mp4), captured from the real application with a disposable fictional project.
+- [Watch the new one-minute ARGOS PM v1.4.0 product demo](media/argos-pm-60s-demo-v1.4.0.mp4), captured from the real application with a disposable fictional project.
+- Replace the initial 30-second cut with a silent 60-second version: normal-speed excerpts, separate editorial framing, and a real dependency warning/date correction/cleared-state sequence.
 - Expose the existing Task owner relationship in creation and inline editing, including retained deleted-owner labels; cover ownership through rename and save/reopen in the browser regression suite.
 - Preserve the v1.3.0 recording unchanged. See [capture verification and native picker limitation](V1.4_DEMO_VERIFICATION.md).
 
