@@ -707,3 +707,33 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   /* The ID/name cell is taller; place neighbouring controls on the input row. */
   padding-bottom: 3px;
 }
+
+
+/* Shared entity-row rhythm: align every control to the editable name/title input.
+   Applies only to rows containing a stacked ID + name, not detail/expansion rows. */
+.workspace .panel table tbody tr:is(
+  :has(.task-name-cell),
+  :has(.milestone-name-cell),
+  :has(.entity-name-cell),
+  :has(> td:first-child > small + input)
+) > td {
+  height: 72px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  vertical-align: bottom;
+}
+.workspace .panel table tbody tr:has(> td:first-child > small + input) > td:first-child > small {
+  display: block;
+  line-height: 16px;
+  margin: 0;
+}
+.workspace .panel table tbody tr:has(.milestone-name-cell) .milestone-name-cell > small:first-child {
+  display: block;
+  line-height: 16px;
+}
+.workspace .panel table tbody tr:has(.task-name-cell) > td:not(:has(.task-name-cell)),
+.workspace .panel table tbody tr:has(.milestone-name-cell) > td:not(:has(.milestone-name-cell)),
+.workspace .panel table tbody tr:has(.entity-name-cell) > td:not(:has(.entity-name-cell)) {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
