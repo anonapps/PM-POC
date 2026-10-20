@@ -1,9 +1,25 @@
-# Project Management POC — Authoritative Requirements
+# ARGOS PM — Authoritative Requirements
 
-**Document status:** Approved baseline for implementation  
+**Document status:** Approved baseline updated for v1.4.0  
 **Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
+
+---
+
+## v1.4.0 approved product additions
+
+The ARGOS PM v1.4.0 release extends the baseline requirements without changing the local-first, offline `.pmp` principle:
+
+- Gantt: compact task quick editor (name, start and end dates), stream navigation, sorting, expand/collapse per stream and globally, expanded by default, today marker and compact date labels.
+- Tube Map: milestone quick editor (name and date), stream navigation, Monday date axis, today marker, consistent lane/diamond/label positioning, and persistent navigation footer.
+- UI: house/search navigation icons, reordered planning modules, consistent compact headings and controls, sortable columns, muted consistent Scope pills, and risk severity colours matching the 3×3 matrix.
+- People: optional editable Role and Notes columns and differentiated deleted-state pills.
+- Project preferences: show/hide progress information without deleting underlying values; persist the preference in `.pmp`.
+- Audit history: opt-in recording; 5,000 latest events retained per project, default viewer hidden, at most 50 rows visible, searchable records and CSV export, with Undo/Redo events. Commit text edits on completion rather than every keystroke. Existing audit data remains available when recording is disabled.
+- Version and branding: product name ARGOS PM, release 1.4.0. Earlier implementation details remain historical where superseded by these approved additions.
+
+For acceptance evidence and outstanding visual checks, see `V1.4_ACCEPTANCE_REVIEW.md`.
 
 ---
 
