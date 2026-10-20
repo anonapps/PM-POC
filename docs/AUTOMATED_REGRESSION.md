@@ -1,5 +1,10 @@
 # Automated regression suite v2
 
+## v1.4.0 release validation
+
+The ARGOS PM v1.4.0 PR #9 head `32093a9` passed both workflows: v1.4 validation run `39404077976` and PM-POC validation run `39404077980`. The extended browser acceptance regression covers People Name blur-commit and Undo/Redo. The production-only dependency audit passed; the full development dependency audit reported five high-severity findings. These results are specific to the release candidate, not a guarantee that later commits pass.
+
+
 ## Commands and execution
 
 Run commands from the repository root after `npm ci`. The app supports Node.js 20.9+; browser tests require Node.js 22+ and a locally installed Chrome/Chromium executable. The harness uses Node's built-in WebSocket client and Chrome DevTools Protocol without adding a browser automation dependency to the app.
