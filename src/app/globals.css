@@ -754,3 +754,15 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 .workspace .panel table tbody tr:has(.entity-name-cell) .risk-level-chip {
   vertical-align:middle;
 }
+
+
+/* Task selection checkbox follows the same input row as Name, Status and dates,
+   rather than the vertical centre of the full ID + Name row. */
+.workspace .panel table tbody tr:has(.task-name-cell) > td:first-child {
+  vertical-align:bottom;
+  padding-bottom:8px;
+}
+.workspace .panel table tbody tr:has(.task-name-cell) > td:first-child input[type="checkbox"] {
+  display:block;
+  margin:10px auto;
+}
