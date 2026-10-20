@@ -737,3 +737,20 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
+
+/* Text and chips occupy the same 36px control band as adjacent inputs.
+   A bottom-aligned table cell otherwise positions unboxed text on the baseline
+   below its neighbouring controls. Keep multiline notes and editors untouched. */
+.workspace .panel table tbody tr:is(
+  :has(.task-name-cell),
+  :has(.milestone-name-cell),
+  :has(.entity-name-cell),
+  :has(> td:first-child > small + input)
+) > td:not(:has(input, select, textarea, button, details)):not(:first-child) {
+  line-height:36px;
+}
+.workspace .panel table tbody tr:has(> td:first-child > small + input) .risk-level-chip,
+.workspace .panel table tbody tr:has(.entity-name-cell) .risk-level-chip {
+  vertical-align:middle;
+}
