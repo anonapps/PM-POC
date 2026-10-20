@@ -1,5 +1,11 @@
 # Release notes
 
+## v1.4.0 demo — 20 October 2026
+
+- [Watch the new 30-second ARGOS PM v1.4.0 product demo](media/argos-pm-30s-demo-v1.4.0.mp4), captured from the real application with a disposable fictional project.
+- Expose the existing Task owner relationship in creation and inline editing, including retained deleted-owner labels; cover ownership through rename and save/reopen in the browser regression suite.
+- Preserve the v1.3.0 recording unchanged. See [capture verification and native picker limitation](V1.4_DEMO_VERIFICATION.md).
+
 ## v1.3.1 — 11 October 2026
 
 - Promote the user-tested HeroUI presentation to the main release.
