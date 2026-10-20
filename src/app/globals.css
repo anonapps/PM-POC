@@ -814,3 +814,23 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   outline:2px solid #8293a8;
   outline-offset:2px;
 }
+
+/* Warnings: compact spacing consistent with the editable module tables. */
+.workspace.module-warnings .panel > .muted {margin:8px 0 12px;font-size:var(--type-control);line-height:1.4;}
+.workspace.module-warnings .filters {display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin:8px 0 12px;}
+.workspace.module-warnings .filters label {gap:5px;font-size:var(--type-caption);}
+.workspace.module-warnings .filters select {height:36px;min-height:36px;padding:5px 30px 5px 10px;font-size:var(--type-control);}
+.workspace.module-warnings .warning-list {gap:8px;margin:0;padding:0;}
+.workspace.module-warnings .warning-list li {padding:10px 12px;min-height:76px;gap:12px;align-items:center;border-radius:6px;}
+.workspace.module-warnings .warning-list li strong {font-size:var(--type-control);}
+.workspace.module-warnings .warning-list li span {margin-top:2px;font-size:var(--type-caption);}
+.workspace.module-warnings .warning-list li p {margin:4px 0 0;font-size:var(--type-control);line-height:1.4;}
+.workspace.module-warnings .warning-list li .actions {flex-shrink:0;display:flex;align-items:center;gap:6px;}
+.workspace.module-warnings .warning-list li button {min-height:32px;padding:5px 12px;}
+@media(max-width:640px){.workspace.module-warnings .warning-list li {align-items:flex-start;flex-wrap:wrap;}.workspace.module-warnings .warning-list li .actions {width:100%;}}
+/* Deleted People have a subtle orange status, unlike the neutral Active pill. */
+.workspace.module-people table tr:has(input:disabled) .status,
+.workspace.module-people table tr:has(input:disabled) [data-slot="base"].status {
+  background:#f7e8d8;
+  color:#875323;
+}
