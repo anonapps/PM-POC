@@ -766,3 +766,35 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   display:block;
   margin:10px auto;
 }
+
+
+/* Shared compact pill dimensions: same visual height as People > Active. */
+.workspace .panel .risk-level-chip,
+.workspace .panel .scope-pill {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  height:24px;
+  padding:2px 11px;
+  border-radius:999px;
+  font-size:var(--type-caption);
+  line-height:20px;
+  white-space:nowrap;
+  vertical-align:middle;
+}
+.workspace .panel .scope-pill {font-weight:500;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.scope-pill--0 {background:#e7edf4;color:#334c67;}
+.scope-pill--1 {background:#e5eee9;color:#365e4b;}
+.scope-pill--2 {background:#eee9f2;color:#59476b;}
+.scope-pill--3 {background:#f1ece3;color:#66523a;}
+.scope-pill--4 {background:#e6eef0;color:#3c5b63;}
+.scope-pill--5 {background:#f1e8e9;color:#704b52;}
+.scope-pill--6 {background:#eceee5;color:#535f40;}
+.workspace .panel details.multi-select > summary.scope-summary {
+  display:flex;align-items:center;gap:4px;flex-wrap:wrap;min-height:36px;
+  list-style:none;
+}
+.workspace .panel details.multi-select > summary.scope-summary::-webkit-details-marker {display:none;}
+.scope-disclosure {flex:0 0 auto;font-size:12px;}
+.workspace .panel details.multi-select[open] > summary.scope-summary .scope-disclosure {transform:rotate(90deg);}
