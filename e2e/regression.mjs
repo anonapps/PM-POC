@@ -15,6 +15,22 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
     await waitFor(`document.body.innerText.includes('${prefix}-030')`);
     record(`${module}: 30 records render`, await evaluate(`new Set([...document.querySelectorAll('tbody tr')].flatMap(row=>row.innerText.match(/${prefix}-\\d{3}/g)||[])).size===30`), `${Date.now()-start} ms (diagnostic)`);
   }
+  await nav('Tasks');
+  await evaluate(`document.querySelector('input[aria-label="Select TASK-030"]').click()`);
+  for (const direction of ['ascending', 'descending']) {
+    await evaluate(`([...document.querySelectorAll('th button')].find(button=>button.textContent.trim().startsWith('Owner'))).click()`);
+    await waitFor(`[...document.querySelectorAll('th')].some(th=>th.textContent.trim().startsWith('Owner')&&th.getAttribute('aria-sort')==='${direction}')`);
+    record(`Task Owner sorts ${direction} by displayed Person name, missing last, preserving selection`, await evaluate(`(()=>{
+      const rows=[...document.querySelectorAll('tbody tr')];
+      const owners=rows.map(row=>{const owner=row.querySelector('select[aria-label^="Owner for "]');return owner.value?owner.selectedOptions[0].textContent:null});
+      const assigned=owners.filter(name=>name!==null),firstMissing=owners.indexOf(null);
+      const ordered=assigned.every((name,index)=>index===0||assigned[index-1].localeCompare(name,undefined,{numeric:true,sensitivity:'base'})${direction === 'ascending' ? '<=' : '>='}0);
+      const stable=rows.every((row,index)=>{if(index===0||owners[index]!==owners[index-1])return true;return rows[index-1].querySelector('.task-row-id').textContent<row.querySelector('.task-row-id').textContent});
+      return rows.length===30&&new Set(assigned).size===3&&assigned.length===15&&ordered&&firstMissing===15&&owners.slice(firstMissing).every(name=>name===null)&&stable&&document.querySelector('input[aria-label="Select TASK-030"]').checked&&[...document.querySelectorAll('th')].some(th=>th.textContent.trim().startsWith('Owner')&&th.getAttribute('aria-sort')==='${direction}');
+    })()`));
+  }
+  await evaluate(`document.querySelector('input[aria-label="Select TASK-030"]').click()`);
+  await click('ID');
   await nav('Tube Map');
   record('Large Tube Map retains 12 week labels and 31 lanes', await evaluate(`document.querySelectorAll('.tube-axis span').length===12 && document.querySelectorAll('.tube-line').length===31 && document.body.innerText.includes('Regression stream 30')`));
   await nav('Gantt');

@@ -276,13 +276,14 @@ table td.table-actions button { margin:.12rem; }
 /* Compact task grid: progress must not force horizontal overflow. */
 .tasks-table { width: 100%; table-layout: fixed; }
 .tasks-table th, .tasks-table td { padding: .4rem .3rem; vertical-align: middle; overflow-wrap: anywhere; }
-.tasks-table th:first-child { width: 5%; }
+.tasks-table th:first-child { width: 4%; }
 .tasks-table th:nth-child(2) { width: 18%; }
 .tasks-table th:nth-child(3) { width: 9%; }
 .tasks-table th:nth-child(4) { width: 10%; }
-.tasks-table th:nth-last-child(4), .tasks-table th:nth-last-child(3) { width: 12%; }
-.tasks-table th:nth-last-child(2) { width: 11%; }
-.tasks-table th:last-child { width: 15%; }
+.tasks-table th:nth-last-child(5), .tasks-table th:nth-last-child(4) { width: 10%; }
+.tasks-table th:nth-last-child(3) { width: 11%; }
+.tasks-table th:nth-last-child(2) { width: 9%; }
+.tasks-table th:last-child { width: 14%; }
 .tasks-table td input:not([type="checkbox"]), .tasks-table td select, .tasks-table td details.multi-select { width: 100%; min-width: 0; max-width: 100%; }
 .tasks-table .task-name-cell { position: relative; padding-top: 1.2rem; }
 .tasks-table .task-row-id { position: absolute; top: .38rem; left: .3rem; font-size:var(--type-caption); line-height: 1; margin: 0; }
