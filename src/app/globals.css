@@ -798,3 +798,19 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 .workspace .panel details.multi-select > summary.scope-summary::-webkit-details-marker {display:none;}
 .scope-disclosure {flex:0 0 auto;font-size:12px;}
 .workspace .panel details.multi-select[open] > summary.scope-summary .scope-disclosure {transform:rotate(90deg);}
+
+/* Scope pills are the visual container; keep the summary clickable without a surrounding box. */
+.workspace .panel .milestones-table details.multi-select > summary.scope-summary,
+.workspace .panel .milestones-table details.multi-select > summary.scope-summary:hover,
+.workspace .panel .milestones-table details.multi-select > summary.scope-summary:focus {
+  border:0;
+  box-shadow:none;
+  background:transparent;
+  border-radius:0;
+  padding-left:0;
+  padding-right:0;
+}
+.workspace .panel .milestones-table details.multi-select > summary.scope-summary:focus-visible {
+  outline:2px solid #8293a8;
+  outline-offset:2px;
+}
