@@ -1,7 +1,11 @@
 import type { Decision, Dependency, GenericRelationship, IdentifierSequences, Milestone, Person, Project, Risk, Stream, Task } from "../domain";
 import { EMPTY_IDENTIFIER_SEQUENCES, sequencesFromHumanIds } from "../domain";
 
+export interface AuditEvent { readonly timestamp: string; readonly command: string; readonly entityType: string; readonly entityId: string; readonly humanId?: string; readonly action: "created" | "updated" | "deleted" | "restored"; readonly field?: string; readonly before?: unknown; readonly after?: unknown }
+export interface AuditHistory { readonly enabled: boolean; readonly events: readonly AuditEvent[] }
+
 export interface ProjectState {
+  readonly auditHistory?: AuditHistory;
   readonly project: Project;
   readonly streams: readonly Stream[];
   readonly tasks: readonly Task[];

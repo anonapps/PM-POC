@@ -79,4 +79,6 @@ export interface ProjectDomainMetadata {
   readonly schemaVersion: number;
   readonly minimumAppVersion: string;
   readonly gettingStartedCompleted?: boolean;
+  /** Optional display preference; absent means enabled for existing PMP files. */
+  readonly showProgress?: boolean;
 }
