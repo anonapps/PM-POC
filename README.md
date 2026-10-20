@@ -1,16 +1,16 @@
-# Project Management POC
+# ARGOS PM
 
-A local-first Project Management POC v1.3.1 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first ARGOS PM v1.4.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
-## 30-second product demo
+## 30-second product demo (v1.3 recording — v1.4 update pending)
 
-See PM-POC in action before running it locally: create a project, organise two streams and five tasks, add people, milestones and risks, then explore the Gantt and Tube Map.
+See an earlier PM-POC recording in action before running it locally: create a project, organise two streams and five tasks, add people, milestones and risks, then explore the Gantt and Tube Map.
 
 [![PM-POC demo — project Gantt view](docs/media/pm-poc-demo-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)
 
 **[Watch or download the 30-second demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4)** · 1080p MP4 · recorded on v1.3.0 · accelerated real interactions, captions and original instrumental audio.
 
-The recording uses fictional data in a separate local project. Ownership is demonstrated for streams and milestones. The current v1.3.1 release includes HeroUI styling, a compact sidebar and live selection-list updates introduced after this recording.
+The recording uses fictional data in a separate local project. Ownership is demonstrated for streams and milestones. **Recording version notice:** This video was captured on v1.3.0 and does not demonstrate the ARGOS PM v1.4.0 interface or new features. Do not label or distribute it as a v1.4 recording. See [v1.4 demo production brief](docs/V1.4_DEMO_PRODUCTION.md) for the updated 30-second storyboard and recording acceptance criteria.
 
 ## Prerequisites
 
@@ -64,6 +64,12 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## POC status
 
 Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
+
+## v1.4.0 — ARGOS PM release
+
+Version 1.4.0 introduces streamlined sidebar navigation and page titles; Gantt and Tube Map quick editing, stream sorting and expanded-by-default lanes; consistent scope pills, table sorting, spacing and risk-level colours; optional People Role and Notes; project-wide progress visibility preference; and optional bounded audit history (5,000 retained events, 50 visible at once, searchable and CSV-exportable, with Undo/Redo events). People name edits commit on blur rather than per keystroke. The portable `.pmp` format and offline project-data model remain unchanged in principle. See [v1.4 approved scope](docs/V1.4_APPROVED_ENHANCEMENTS.md), [release acceptance](docs/V1.4_ACCEPTANCE_REVIEW.md), and [demo production brief](docs/V1.4_DEMO_PRODUCTION.md).
+
+Both v1.4 validation and PM-POC validation passed for release PR #9 head `32093a9`; merged to `main` as `22f68a7`. Manual visual checks remain documented separately. The production-only dependency audit passed; the full dependency audit reported five high-severity findings involving development dependencies.
 
 ## v1.3.1 — HeroUI release
 
