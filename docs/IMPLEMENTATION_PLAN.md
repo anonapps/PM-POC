@@ -1,8 +1,14 @@
-# Project Management POC — Implementation Plan
+# ARGOS PM — Implementation Plan (v1.4.0)
 
 **Status:** Approved implementation sequence  
 **Inputs:** `PROJECT_REQUIREMENTS.md` and `ARCHITECTURE.md`  
 **Method:** Incremental blocks with validation and commits after each completed block.
+
+## v1.4.0 delivery record
+
+The approved v1.4 phases (UI foundations, Gantt/Tube Map editing, People/progress preferences and optional audit history) were integrated via PR #9, merged as `22f68a7`. Both release-branch CI workflows passed on `32093a9`. Detailed scope: `V1.4_APPROVED_ENHANCEMENTS.md`. Evidence and remaining manual visual acceptance: `V1.4_ACCEPTANCE_REVIEW.md`. The 30-second video captured on v1.3.0 remains historical; the v1.4 recording brief is `V1.4_DEMO_PRODUCTION.md`.
+
+The Blocks 0–20 below describe the original implementation sequence, not uncompleted v1.4 release work.
 
 ## Operating Rules for Codex
 
