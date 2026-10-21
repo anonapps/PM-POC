@@ -28,3 +28,5 @@ describe("risk management", () => {
 });
 
   it("does not create a state change for unchanged risk descriptions and ratings",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk({...draft,description:"supplier delay"}));const state=store.getState();const id=state.risks[0].id;expect(editRisk(id,{description:"supplier delay"}).apply(state,context)).toBe(state);expect(editRisk(id,{probability:"Medium",impact:"High"}).apply(state,context)).toBe(state);});
+
+  it("restores an action at the nearest valid boundary",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const id=store.getState().risks[0].id;store.execute(addRiskAction(id,"first"));const before=store.getState();const action={id:"restored",description:"Recovered",status:"Open" as const};const next=restoreRiskAction(id,action,99).apply(before,context);expect(next.risks[0].actions.map(item=>item.id)).toEqual([before.risks[0].actions[0].id,"restored"]);});
