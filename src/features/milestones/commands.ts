@@ -47,7 +47,7 @@ export function editMilestone(id: string, patch: Partial<MilestoneDraft>): Proje
     // Historical deleted scope references do not block unrelated edits.
     if (errors.length && (patch.scope !== undefined || errors.some((error) => !error.includes("streams must be active")))) return state;
     const actualCompletionDate = patch.status ? (patch.status === "Complete" ? context.now().slice(0, 10) : undefined) : current.actualCompletionDate;
-    return { ...state, milestones: state.milestones.map((milestone) => milestone.id === id ? { ...milestone, ...patch, name: draft.name.trim(), actualCompletionDate } : milestone) };
+    return { ...state, milestones: state.milestones.map((milestone) => milestone.id === id ? { ...milestone, ...patch, name: capitaliseFirstLetter(draft.name.trim()), actualCompletionDate } : milestone) };
   } };
 }
 
