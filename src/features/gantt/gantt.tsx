@@ -15,7 +15,7 @@ export function ganttConnectorPaths(model: GanttModel): GanttConnectorPath[] {
     const toIndex = model.rows.findIndex((row) => row.kind === "task" && row.id === dependency.to);
     const from = model.rows[fromIndex];
     const to = model.rows[toIndex];
-    if (fromIndex < 0 || toIndex < 0 || !from.end || !to.start) return [];
+    if (fromIndex < 0 || toIndex < 0 || !from.end || !to.start || !barPosition(from.end,from.end,model.start,model.end) || !barPosition(to.start,to.start,model.start,model.end)) return [];
     const fromX = Math.max(0, Math.min(100, positionForDate(from.end, model.start, model.end)));
     const toX = Math.max(0, Math.min(100, positionForDate(to.start, model.start, model.end)));
     const fromY = fromIndex * 36 + 18;
