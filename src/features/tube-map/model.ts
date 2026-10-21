@@ -29,7 +29,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   const populatedStreams = new Set(state.milestones.filter(milestone=>!milestone.deletion.isDeleted&&milestone.scope.kind==="streams").flatMap(milestone=>milestone.scope.kind==="streams"?milestone.scope.streamIds:[]));
   const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted && (!hideEmptyStreams || populatedStreams.has(stream.id))); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
   const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...orderedStreams.map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
-  const candidates = state.milestones.filter((milestone) => !milestone.deletion.isDeleted && /^\d{4}-\d{2}-\d{2}$/.test(milestone.plannedDate) && Number.isFinite(parse(milestone.plannedDate).getTime())).flatMap((milestone) => {
+  const candidates = state.milestones.filter((milestone) => !milestone.deletion.isDeleted && /^\d{4}-\d{2}-\d{2}$/.test(milestone.plannedDate) && Number.isFinite(parse(milestone.plannedDate).getTime()) && iso(parse(milestone.plannedDate)) === milestone.plannedDate).flatMap((milestone) => {
     const stamp = parse(milestone.plannedDate).getTime();
     const boundary = stamp < startTime ? "before" as const : stamp >= endTime ? "after" as const : "inside" as const;
     const x = Math.max(0, Math.min(100, ((stamp - startTime) / (endTime - startTime)) * 100));
