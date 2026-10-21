@@ -24,7 +24,7 @@ describe("v1.5 search matching",()=>{
     expect(searchProject(state,"MIGRATION")[0]).toMatchObject({entityType:"Person",label:"Alex"});
   });
   it("supports case-insensitive partial matches on descriptive values",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Delivery",notes:"In Progress"})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery in progress"})]});
     expect(searchProject(state,"  progrESS  ")).toHaveLength(1);
   });
 });
