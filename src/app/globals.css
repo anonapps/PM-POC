@@ -858,3 +858,19 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   background-color: #f1f5f9;
   cursor: not-allowed;
 }
+
+/* ARGOS PM v1.5 — E012: abbreviated scope only where its container is narrow.
+   A container query follows the pill's available width rather than the viewport. */
+.scope-pill {
+  container-type: inline-size;
+}
+.scope-pill .scope-pill-short { display: none; }
+.scope-pill .scope-pill-full { display: inline; }
+@container (max-width: 92px) {
+  .scope-pill .scope-pill-full { display: none; }
+  .scope-pill .scope-pill-short { display: inline; }
+}
+.scope-pill:focus-visible {
+  outline: 2px solid var(--focus, #2563eb);
+  outline-offset: 2px;
+}
