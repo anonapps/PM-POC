@@ -877,3 +877,10 @@ td:has(> * > .scope-pill) {
   outline: 2px solid var(--focus, #2563eb);
   outline-offset: 2px;
 }
+
+/* E014: keep navigation rows fixed when sidebar width changes. */
+.app-shell #project-sidebar .sidebar-heading { min-height:42px; }
+.app-shell.sidebar-hidden #project-sidebar .sidebar-heading { display:block; visibility:hidden; }
+.app-shell #project-sidebar .sidebar-toggle { min-height:36px; }
+.app-shell #project-sidebar nav .hero-nav { min-height:38px; }
+.app-shell #project-sidebar nav .module-letter svg { flex-shrink:0; }
