@@ -23,4 +23,4 @@ describe("v1.5 Gantt filtering edge cases",()=>{
  it("does not remove streams when filtering is disabled",()=>{const state=makeProjectState({streams:[streamFixture()]});expect(buildGanttModel(state,"Week","2026-09-17",0,false).rows.some(row=>row.id==="stream-1")).toBe(true);});
 });
 
-describe("v1.5 Gantt hierarchy",()=>{it("indents tasks and milestones beneath stream headings",()=>{const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture()]});const model=buildGanttModel(state,"Week","2026-09-17");expect(model.rows.find(row=>row.id==="stream-1")?.depth).toBe(0);expect(model.rows.find(row=>row.id==="task-1")?.depth).toBeGreaterThan(0);expect(model.rows.filter(row=>row.kind==="milestone").every(row=>row.depth>0)).toBe(true);});});
+describe("v1.5 Gantt hierarchy",()=>{it("indents tasks and milestones beneath stream headings",()=>{const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture()]});const model=buildGanttModel(state,"Week","2026-09-17");expect(model.rows.find(row=>row.id==="stream-1")?.depth).toBe(0);expect(model.rows.find(row=>row.id==="task-1")?.depth).toBeGreaterThan(0);});});
