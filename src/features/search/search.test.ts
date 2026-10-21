@@ -28,3 +28,5 @@ describe("v1.5 search matching",()=>{
 });
 
 describe("v1.5 date search",()=>{it("matches stream start dates",()=>{const state=makeProjectState({streams:[streamFixture({name:"Planning",startDate:"2026-11-03"})]});expect(searchProject(state,"2026-11-03")[0]).toMatchObject({module:"Streams",label:"Planning"});});});
+
+describe("v1.5 risk action matching",()=>{it("searches action descriptions under the parent risk",()=>{const store=createProjectStore(makeProjectState(),{createId:(()=>{let i=0;return()=>`search-${++i}`})(),now:()=>"2026-09-15T00:00:00Z"});store.execute(createRisk({title:"Supplier delay",status:"Open",probability:"Medium",impact:"High",ownerId:null,projectWide:true,relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}));store.execute(addRiskAction(store.getState().risks[0].id,"Contact vendor"));expect(searchProject(store.getState(),"VENDOR")[0]).toMatchObject({module:"Risk Log",label:"Supplier delay"});});});
