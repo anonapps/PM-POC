@@ -1,9 +1,63 @@
 # ARGOS PM — Authoritative Requirements
 
-**Document status:** Approved baseline updated for v1.4.0  
+**Document status:** v1.5.0 requirements frozen; implementation pending  
 **Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
+
+---
+
+## v1.5.0 approved requirements (supersedes earlier behaviour where inconsistent)
+
+**Status:** Requirements frozen following 19 clarification batches (57 decisions). This section is authoritative for v1.5; the detailed acceptance checklist is in [V1.5_APPROVED_ENHANCEMENTS.md](V1.5_APPROVED_ENHANCEMENTS.md).
+
+## Approved enhancements
+
+| ID | Scope |
+| --- | --- |
+| 001 | Remove global Open Project and Close; right-align Saved, Save Now, Undo, Redo. Move Open Project, Close, Save As to File Information. |
+| 002 | Compact New Project and Project Details forms; mark mandatory fields with an asterisk and explanatory note. |
+| 003 | Capitalise the first letter of human-readable text on blur, not technical identifiers; one edit and one Undo/audit event. |
+| 004 | Rename audit section to “Audit Log (experimental)”. |
+| 005 | Store Last Saved local date/time, saving device timezone and UTC offset in .pmp only after successful writes; legacy files show “Timezone unavailable” until saved. |
+| 006 | Replace People and Tasks sidebar letters with the approved icons. |
+| 007 | Shared live Search/Filter bar, search/filter icon and popover; Show Deleted before Add Task. |
+| 008 | Dynamic shared toolbar for Search, Streams, People, Tasks, Milestones, Risk Log, Decision Log, Warnings; inline creation replaces search controls, search icon visible but disabled. |
+| 009 | Hide Decision Log Context display column while retaining editable relationships and underlying context. |
+| 010 | Consistent outlined inputs and textareas. |
+| 011 | Searchable dynamic-list dropdowns with search row and case-insensitive contains matching, including multi-select. |
+| 012 | Responsive Project-wide scope pill becomes ALL when narrow, with hover/focus tooltip. |
+| 013 | File Information links to version-matched UI Reference Manual; source in repository, PDF in GitHub Release; clearly labelled compatible same-minor fallback if exact manual unavailable. |
+| 014 | Sidebar collapse/expand preserves navigation vertical positions; sidebar fixed while content scrolls. |
+| 015 | Gantt milestone labels padded and hierarchical indentation consistent. |
+| 016 | Dotted red Today line spans timeline body in Gantt. |
+| 017 | Tube Map uses same shared Today marker component and design tokens. |
+| 018 | Independent Hide Empty Streams state for Gantt and Tube Map, synchronised between each chart's controls and its filter popover. |
+
+## Approved interaction and filtering rules
+
+- Search is immediate on each keystroke, case-insensitive contains matching, across all relevant fields including non-displayed fields.
+- Filters combine with AND across categories and OR within a category; update immediately, without Apply.
+- Reset search, filters and Show Deleted on navigation; after successful creation, clear active search/filters.
+- Inline creation shows mandatory fields only; optional fields remain available through existing inline editing. Inline validation appears beneath the invalid field.
+- On successful creation show a brief non-blocking notification, stay in creation mode, clear the form, and focus the first mandatory field.
+- Cancel discards the draft immediately. Navigation away from a populated draft warns first. Search icon remains disabled while creating.
+- Predictive multi-select preserves selections even when filtered out by search; clear search when dropdown closes.
+- Dynamic-list predictive search applies to People, Streams, Tasks, Milestones and dependencies; fixed short dropdowns retain normal behaviour.
+- Keyboard: Tab navigation, Enter submits valid single-line forms or selects dropdown results, arrow keys navigate results, Escape closes dropdowns, Ctrl/Cmd+Enter submits multiline forms.
+- Undo restores the original value in one operation, including automatic capitalisation. No separate formatting audit entry.
+- Unsaved Open Project presents Save / Discard / Cancel; Close returns to welcome and warns only if unsaved.
+- Last Saved displays original saving device's local timestamp and timezone, without conversion to viewer timezone.
+- Gantt counts any non-deleted task (including a parent with deleted children) or milestone as populating a stream; Tube Map counts milestones only. Each assigned stream counts for multi-stream milestones; undated/out-of-window records count. Deleted records do not.
+- Hide Empty Streams defaults off and is independent between charts.
+- Today marker starts below date headers and extends to the bottom of all timeline rows, using a shared component and tokens.
+- Sidebar icon tooltips and abbreviated ALL pill tooltips work on hover and keyboard focus.
+- UI manual is version-specific; maintain repository source and publish PDF release asset.
+- .pmp files from v1.4 must open safely without data loss. Preserve migration and security boundaries documented in PROJECT_REQUIREMENTS.md and ARCHITECTURE.md.
+
+
+
+**Compatibility constraint:** A v1.4 `.pmp` must open without data loss. Do not silently migrate a file that requires a technical schema migration; preserve the existing migration rules and keep the original file intact. New optional save-time metadata must be backward compatible.
 
 ---
 
