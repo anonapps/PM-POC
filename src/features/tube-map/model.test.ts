@@ -159,3 +159,5 @@ describe("v1.5 Tube Map filtering edge cases",()=>{
 });
 
 describe("v1.5 Tube Map shared milestone filtering",()=>{it("retains all streams referenced by a shared milestone",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"s2",humanId:"STREAM-002"}),streamFixture({id:"empty",humanId:"STREAM-003"})],milestones:[milestone("1","2027-01-01",["stream-1","s2"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1","s2"]);expect(model.stations.filter(station=>station.entityId==="1")).toHaveLength(2);});});
+
+describe("v1.5 project-wide milestones",()=>{it("preserves the project lane and project-wide stations when all streams are hidden",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("1","2026-10-01")]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);expect(model.stations.map(station=>station.entityId)).toEqual(["1"]);});});
