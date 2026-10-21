@@ -1,5 +1,6 @@
 import{describe,expect,it}from"vitest";import{createProjectStore,duplicate,softDelete}from"../../application";import{calculateStreamProgress,getTaskHierarchyDepth}from"../../domain";import{makeProjectState,streamFixture,taskFixture}from"../../domain/test-fixtures";import{addTaskDependency,bulkDeleteTasks,createTask,editTask,isTaskOverdue,validateTaskDraft,type TaskDraft}from"./commands";
 const ctx={createId:(()=>{let n=0;return()=>`new-${++n}`})(),now:()=>"2026-09-15T12:00:00Z"},base=(parentTaskId?:string):TaskDraft=>({name:"Task",scope:{kind:"stream",streamId:"stream-1"},parentTaskId,ownerId:null,status:"Not Started",progress:0});
+describe("v1.5 task no-op",()=>{it("keeps unchanged task names out of history",()=>{const store=createProjectStore(makeProjectState({streams:[streamFixture()]}),ctx);store.execute(createTask({...base(),name:"delivery"}));const before=store.getState();expect(editTask(before.tasks[0].id,{name:"delivery"}).apply(before,ctx)).toBe(before);});});
 describe("v1.5 task name commit",()=>{
   it("capitalises task names and undoes a committed rename",()=>{
     const store=createProjectStore(makeProjectState({streams:[streamFixture()]}),ctx);
