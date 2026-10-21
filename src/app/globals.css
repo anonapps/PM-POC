@@ -884,3 +884,8 @@ td:has(> * > .scope-pill) {
 .app-shell #project-sidebar .sidebar-toggle { min-height:36px; }
 .app-shell #project-sidebar nav .hero-nav { min-height:38px; }
 .app-shell #project-sidebar nav .module-letter svg { flex-shrink:0; }
+
+/* E016/E017: shared dotted red Today marker across both timelines. */
+.gantt-panel .today-line, .tube-map .tube-today-line { width:0; border-left:2px dotted #dc2626; background:none; pointer-events:none; }
+.gantt-panel .today-line { top:70px; bottom:42px; z-index:4; }
+.tube-map .tube-today-line { top:0; bottom:0; z-index:4; }
