@@ -150,3 +150,5 @@ describe("Tube Map fixed-height marker alignment", () => {
     expect(model.stations.map(station=>station.y)).toEqual([centre,centre-17,centre+17]);
   });
 });
+
+describe("v1.5 Tube Map empty stream filtering",()=>{it("keeps milestone-bearing streams even when milestones are outside the window",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"empty",humanId:"STREAM-002"})],milestones:[milestone("1","2025-01-01",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);});});
