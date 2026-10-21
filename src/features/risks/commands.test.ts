@@ -6,6 +6,7 @@ import { addRiskAction, createRisk, editRisk, editRiskAction, isRiskActionOverdu
 const context = { createId: (() => { let id = 0; return () => `id-${++id}`; })(), now: () => "2026-09-15T00:00:00Z" };
 const draft: RiskDraft = { title: "Schedule", status: "Open", probability: "Medium", impact: "High", ownerId: null, projectWide: true, relatedStreamIds: [], relatedTaskIds: [], relatedMilestoneIds: [] };
 describe("risk management", () => {
+  it("ignores empty risk edit patches",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const before=store.getState();expect(editRisk(before.risks[0].id,{}).apply(before,context)).toBe(before);});
   it("recognises unchanged nonempty relationship arrays",()=>{const stream=streamFixture();const store=createProjectStore(makeProjectState({streams:[stream]}),context);store.execute(createRisk({...draft,relatedStreamIds:[stream.id]}));const before=store.getState();expect(editRisk(before.risks[0].id,{relatedStreamIds:[stream.id]}).apply(before,context)).toBe(before);});
 
   it("ignores structurally unchanged risk relationships",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const state=store.getState();const id=state.risks[0].id;expect(editRisk(id,{relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}).apply(state,context)).toBe(state);});
