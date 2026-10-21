@@ -14,3 +14,15 @@ describe("v1.5 descriptive field search",()=>{
     expect(searchProject(state,"in progress",true)).toHaveLength(1);
   });
 });
+
+describe("v1.5 search matching",()=>{
+  it("matches role and notes fields without exposing them as result titles",()=>{
+    const state=makeProjectState({people:[{id:"person-1",projectId:"project-1",humanId:"PERSON-001",name:"Alex",role:"Delivery Lead",notes:"Critical migration",deletion:{isDeleted:false}}]});
+    expect(searchProject(state,"delivery lead")[0]).toMatchObject({entityType:"Person",label:"Alex"});
+    expect(searchProject(state,"MIGRATION")[0]).toMatchObject({entityType:"Person",label:"Alex"});
+  });
+  it("supports case-insensitive partial matches on descriptive values",()=>{
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery",status:"In Progress"})]});
+    expect(searchProject(state,"  progrESS  ")).toHaveLength(1);
+  });
+});
