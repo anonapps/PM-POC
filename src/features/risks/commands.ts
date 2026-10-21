@@ -13,8 +13,10 @@ export const selectOpenRisks = (state: ProjectState) => state.risks.filter((risk
 
 export function deleteRiskAction(riskId: string, actionId: string): ProjectCommand {
   return { type: "delete-risk-action", apply(state) {
-    return { ...state, risks: state.risks.map(risk => risk.id === riskId
-      ? { ...risk, actions: risk.actions.filter(action => action.id !== actionId) } : risk) };
+    const risk = state.risks.find(item => item.id === riskId && !item.deletion.isDeleted);
+    if (!risk?.actions.some(action => action.id === actionId)) return state;
+    return { ...state, risks: state.risks.map(item => item.id === riskId
+      ? { ...item, actions: item.actions.filter(action => action.id !== actionId) } : item) };
   } };
 }
 export function restoreRiskAction(riskId: string, action: RiskAction, index: number): ProjectCommand {
