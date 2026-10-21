@@ -41,3 +41,5 @@ describe("v1.5 Gantt invalid date ranges",()=>{it("omits reversed and malformed 
 describe("v1.5 Gantt date boundaries",()=>{it("renders a task that overlaps the start of the timeline",()=>{const bar=barPosition("2026-08-25","2026-09-03","2026-09-01","2026-09-30");expect(bar).not.toBeNull();expect(bar?.outside).toBe(false);expect(bar?.left).toBe(0);expect(bar?.width).toBeGreaterThan(0);});it("marks fully out-of-window tasks without rendering a bar",()=>{expect(barPosition("2027-01-01","2027-01-03","2026-09-01","2026-09-30")).toMatchObject({outside:true,width:0});});});
 
 describe("v1.5 impossible Gantt dates",()=>{it("rejects dates that JavaScript would normalise into another month",()=>{expect(barPosition("2026-02-30","2026-03-02","2026-02-01","2026-03-31")).toBeNull();expect(barPosition("2026-02-01","2026-02-30","2026-02-01","2026-03-31")).toBeNull();});});
+
+describe("v1.5 strict date-only Gantt bars",()=>{it("rejects timestamp strings and partial dates",()=>{expect(barPosition("2026-09-01T00:00:00Z","2026-09-02","2026-09-01","2026-09-30")).toBeNull();expect(barPosition("2026-09-01","2026-9-2","2026-09-01","2026-09-30")).toBeNull();});});
