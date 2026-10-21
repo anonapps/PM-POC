@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createProjectStore, duplicate, restore, softDelete } from "../../application";
 import { calculateRiskLevel, DEFAULT_RISK_MATRIX, type Risk } from "../../domain";
-import { makeProjectState } from "../../domain/test-fixtures";
+import { makeProjectState, streamFixture } from "../../domain/test-fixtures";
 import { addRiskAction, createRisk, editRisk, editRiskAction, isRiskActionOverdue, deleteRiskAction, restoreRiskAction, selectOpenRisks, validateRisk, type RiskDraft } from "./commands";
 const context = { createId: (() => { let id = 0; return () => `id-${++id}`; })(), now: () => "2026-09-15T00:00:00Z" };
 const draft: RiskDraft = { title: "Schedule", status: "Open", probability: "Medium", impact: "High", ownerId: null, projectWide: true, relatedStreamIds: [], relatedTaskIds: [], relatedMilestoneIds: [] };
