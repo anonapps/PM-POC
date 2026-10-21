@@ -5,13 +5,13 @@ describe("global search",()=>{const state=makeProjectState({streams:[streamFixtu
 
 describe("v1.5 descriptive field search",()=>{
   it("finds hidden descriptive fields without changing displayed result labels",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Delivery in progress"})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery",description:"In Progress"})]});
     const results=searchProject(state,"IN PROGRESS");
     expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({module:"Streams",label:"Delivery in progress"});
+    expect(results[0]).toMatchObject({module:"Streams",label:"Delivery"});
   });
   it("keeps deleted records excluded unless explicitly included",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Archived in progress",deletion:{isDeleted:true}})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Archived",description:"In Progress",deletion:{isDeleted:true}})]});
     expect(searchProject(state,"in progress")).toHaveLength(0);
     expect(searchProject(state,"in progress",true)).toHaveLength(1);
   });
@@ -24,7 +24,7 @@ describe("v1.5 search matching",()=>{
     expect(searchProject(state,"MIGRATION")[0]).toMatchObject({entityType:"Person",label:"Alex"});
   });
   it("supports case-insensitive partial matches on descriptive values",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Delivery in progress"})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery",description:"In Progress"})]});
     expect(searchProject(state,"  progrESS  ")).toHaveLength(1);
   });
 });
