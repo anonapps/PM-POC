@@ -26,3 +26,5 @@ describe("v1.5 search matching",()=>{
     expect(searchProject(state,"  progrESS  ")).toHaveLength(1);
   });
 });
+
+describe("v1.5 date search",()=>{it("matches stream start dates",()=>{const state=makeProjectState({streams:[streamFixture({name:"Planning",startDate:"2026-11-03"})]});expect(searchProject(state,"2026-11-03")[0]).toMatchObject({module:"Streams",label:"Planning"});});});
