@@ -1,3 +1,4 @@
+import { capitaliseFirstLetter } from "../shared/text-normalisation";
 import { issueHumanId, type DependencyEndpoint, type Milestone, type MilestoneScope, type MilestoneStatus } from "../../domain";
 import type { ProjectCommand, ProjectState } from "../../application";
 
@@ -31,7 +32,7 @@ export function createMilestone(draft: MilestoneDraft): ProjectCommand {
     if (validateMilestone(state, draft).length) return state;
     const issued = issueHumanId(state.identifierSequences, "milestone");
     const { predecessors = [], ...milestoneDraft } = draft;
-    const milestone: Milestone = { ...milestoneDraft, name: draft.name.trim(), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
+    const milestone: Milestone = { ...milestoneDraft, name: capitaliseFirstLetter(draft.name.trim()), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
     return { ...state, milestones: [...state.milestones, milestone], dependencies: [...state.dependencies,...predecessors.map(predecessor=>({id:context.createId(),projectId:state.project.id,predecessor,successor:{kind:"milestone" as const,id:milestone.id},type:"Finish-to-Start" as const}))], identifierSequences: issued.sequences };
   } };
 }
