@@ -21,7 +21,10 @@ export function deleteRiskAction(riskId: string, actionId: string): ProjectComma
 }
 export function restoreRiskAction(riskId: string, action: RiskAction, index: number): ProjectCommand {
   return { type: "restore-risk-action", apply(state) {
-    return { ...state, risks: state.risks.map(risk => risk.id === riskId && !risk.actions.some(a => a.id === action.id)
-      ? { ...risk, actions: [...risk.actions.slice(0,index), action, ...risk.actions.slice(index)] } : risk) };
+    const risk = state.risks.find(item => item.id === riskId && !item.deletion.isDeleted);
+    if (!risk || risk.actions.some(existing => existing.id === action.id)) return state;
+    const position = Math.max(0, Math.min(index, risk.actions.length));
+    return { ...state, risks: state.risks.map(item => item.id === riskId
+      ? { ...item, actions: [...item.actions.slice(0,position), action, ...item.actions.slice(position)] } : item) };
   } };
 }
