@@ -6,6 +6,8 @@ import { addRiskAction, createRisk, editRisk, editRiskAction, isRiskActionOverdu
 const context = { createId: (() => { let id = 0; return () => `id-${++id}`; })(), now: () => "2026-09-15T00:00:00Z" };
 const draft: RiskDraft = { title: "Schedule", status: "Open", probability: "Medium", impact: "High", ownerId: null, projectWide: true, relatedStreamIds: [], relatedTaskIds: [], relatedMilestoneIds: [] };
 describe("risk management", () => {
+  it("ignores structurally unchanged risk relationships",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const state=store.getState();const id=state.risks[0].id;expect(editRisk(id,{relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}).apply(state,context)).toBe(state);});
+
   it("capitalises risk descriptions on create and edit",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk({...draft,description:"supplier dependency"}));const id=store.getState().risks[0].id;expect(store.getState().risks[0].description).toBe("Supplier dependency");store.execute(editRisk(id,{description:"delivery escalation"}));expect(store.getState().risks[0].description).toBe("Delivery escalation");store.undo();expect(store.getState().risks[0].description).toBe("Supplier dependency");});
 
   it("does not edit a soft-deleted risk",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const id=store.getState().risks[0].id;store.execute(softDelete("risk",id));const before=store.getState();expect(editRisk(id,{title:"changed"}).apply(before,context)).toBe(before);});
