@@ -9,6 +9,10 @@ describe("capitaliseFirstLetter", () => {
   it("preserves whitespace and leading punctuation", () => {
     expect(capitaliseFirstLetter("  (hello world)")).toBe("  (Hello world)");
   });
+  it("does not change text that is already capitalised", () => {
+    expect(capitaliseFirstLetter("Project-wide")).toBe("Project-wide");
+    expect(capitaliseFirstLetter("NASA")).toBe("NASA");
+  });
   it("handles Unicode and empty text", () => {
     expect(capitaliseFirstLetter("équipe")).toBe("Équipe");
     expect(capitaliseFirstLetter("")).toBe("");
