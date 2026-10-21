@@ -5,13 +5,13 @@ describe("global search",()=>{const state=makeProjectState({streams:[streamFixtu
 
 describe("v1.5 descriptive field search",()=>{
   it("finds hidden descriptive fields without changing displayed result labels",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Delivery",notes:"In Progress"})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery in progress"})]});
     const results=searchProject(state,"IN PROGRESS");
     expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({module:"Streams",label:"Delivery"});
+    expect(results[0]).toMatchObject({module:"Streams",label:"Delivery in progress"});
   });
   it("keeps deleted records excluded unless explicitly included",()=>{
-    const state=makeProjectState({streams:[streamFixture({name:"Archived",notes:"In Progress",deletion:{isDeleted:true}})]});
+    const state=makeProjectState({streams:[streamFixture({name:"Archived in progress",deletion:{isDeleted:true}})]});
     expect(searchProject(state,"in progress")).toHaveLength(0);
     expect(searchProject(state,"in progress",true)).toHaveLength(1);
   });
