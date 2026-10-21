@@ -45,3 +45,5 @@ describe("v1.5 impossible Gantt dates",()=>{it("rejects dates that JavaScript wo
 describe("v1.5 strict date-only Gantt bars",()=>{it("rejects timestamp strings and partial dates",()=>{expect(barPosition("2026-09-01T00:00:00Z","2026-09-02","2026-09-01","2026-09-30")).toBeNull();expect(barPosition("2026-09-01","2026-9-2","2026-09-01","2026-09-30")).toBeNull();});});
 
 describe("v1.5 Gantt leap day",()=>{it("renders a valid leap day and rejects the same date in a non-leap year",()=>{expect(barPosition("2028-02-29","2028-02-29","2028-02-01","2028-03-31")?.outside).toBe(false);expect(barPosition("2027-02-29","2027-03-01","2027-02-01","2027-03-31")).toBeNull();});});
+
+describe("v1.5 Gantt cross-year dates",()=>{it("positions tasks spanning New Year without truncating their visible segment",()=>{const bar=barPosition("2026-12-28","2027-01-04","2027-01-01","2027-01-31");expect(bar).not.toBeNull();expect(bar?.outside).toBe(false);expect(bar?.left).toBe(0);expect(bar?.width).toBeGreaterThan(0);});});
