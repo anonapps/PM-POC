@@ -17,6 +17,7 @@ export function ganttConnectorPaths(model: GanttModel): GanttConnectorPath[] {
     const from = model.rows[fromIndex];
     const to = model.rows[toIndex];
     if (!from.end || !to.start || !barPosition(from.end,from.end,model.start,model.end) || !barPosition(to.start,to.start,model.start,model.end)) return [];
+    if (barPosition(from.end,from.end,model.start,model.end)?.outside && barPosition(to.start,to.start,model.start,model.end)?.outside) return [];
     const fromX = Math.max(0, Math.min(100, positionForDate(from.end, model.start, model.end)));
     const toX = Math.max(0, Math.min(100, positionForDate(to.start, model.start, model.end)));
     const fromY = fromIndex * 36 + 18;
