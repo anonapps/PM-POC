@@ -6,6 +6,14 @@ import { createMilestone, editMilestone, selectUpcomingMilestones, validateMiles
 const context = { createId: (() => { let id = 0; return () => `id-${++id}`; })(), now: () => "2026-09-15T12:00:00Z" };
 const draft: MilestoneDraft = { name: "Gate", plannedDate: "2026-10-01", status: "Planned", ownerId: null, scope: { kind: "project" }, relatedTaskIds: [] };
 describe("milestone management", () => {
+  it("ignores unchanged name edits without modifying project state", () => {
+    const store=createProjectStore(makeProjectState(),context);
+    store.execute(createMilestone(draft));
+    const before=store.getState();
+    const id=before.milestones[0].id;
+    expect(editMilestone(id,{name:"gate"}).apply(before,context)).toBe(before);
+  });
+
   it("capitalises milestone names and undoes one committed rename", () => { const store=createProjectStore(makeProjectState(),context);store.execute(createMilestone({...draft,name:"planning gate"}));const id=store.getState().milestones[0].id;expect(store.getState().milestones[0].name).toBe("Planning gate");store.execute(editMilestone(id,{name:"delivery gate"}));expect(store.getState().milestones[0].name).toBe("Delivery gate");store.undo();expect(store.getState().milestones[0].name).toBe("Planning gate"); });
 
   it("validates, creates, edits, completes and reopens through history", () => { const store = createProjectStore(makeProjectState(), context); expect(validateMilestone(store.getState(), { ...draft, plannedDate: "" })).toContain("Milestone date is required."); store.execute(createMilestone(draft)); const id = store.getState().milestones[0].id; store.execute(editMilestone(id, { name: "Launch", status: "Complete" })); expect(store.getState().milestones[0]).toMatchObject({ name: "Launch", actualCompletionDate: "2026-09-15" }); store.execute(editMilestone(id, { status: "Planned" })); expect(store.getState().milestones[0].actualCompletionDate).toBeUndefined(); expect(store.isDirty()).toBe(true); store.undo(); store.redo(); });
