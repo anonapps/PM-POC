@@ -17,3 +17,8 @@ describe("v1.2 Gantt milestone warning lookup",()=>{
 describe("v1.2 Gantt year boundaries",()=>{it("shows both years when a week crosses New Year",()=>{const columns=timelineColumns("Month","2026-12-31");const boundary=columns.find(c=>c.start==="2026-12-28");expect(boundary?.label).toBe("28/12–03/01");});it("keeps same-year weekly labels compact",()=>{const columns=timelineColumns("Month","2026-09-17");expect(columns.find(c=>c.start==="2026-09-14")?.label).toBe("14/09–20/09");});});
 
 describe("v1.5 Gantt empty stream filtering",()=>{it("retains undated tasks and hides only empty streams",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"empty",humanId:"STREAM-002",name:"Empty"})],tasks:[taskFixture({startDate:undefined,endDate:undefined})]});const model=buildGanttModel(state,"Week","2026-09-17",0,true);expect(model.rows.some(row=>row.id==="stream-1")).toBe(true);expect(model.rows.some(row=>row.id==="empty")).toBe(false);expect(model.rows[0].id).toBe("project");});});
+
+describe("v1.5 Gantt filtering edge cases",()=>{
+ it("does not count deleted tasks as stream content",()=>{const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({deletion:{isDeleted:true}})]});expect(buildGanttModel(state,"Week","2026-09-17",0,true).rows.map(row=>row.id)).toEqual(["project"]);});
+ it("does not remove streams when filtering is disabled",()=>{const state=makeProjectState({streams:[streamFixture()]});expect(buildGanttModel(state,"Week","2026-09-17",0,false).rows.some(row=>row.id==="stream-1")).toBe(true);});
+});
