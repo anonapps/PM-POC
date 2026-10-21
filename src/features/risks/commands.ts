@@ -23,7 +23,7 @@ export function restoreRiskAction(riskId: string, action: RiskAction, index: num
   return { type: "restore-risk-action", apply(state) {
     const risk = state.risks.find(item => item.id === riskId && !item.deletion.isDeleted);
     if (!risk || risk.actions.some(existing => existing.id === action.id)) return state;
-    const position = Math.max(0, Math.min(index, risk.actions.length));
+    const position = Number.isFinite(index) ? Math.max(0, Math.min(Math.trunc(index), risk.actions.length)) : risk.actions.length;
     return { ...state, risks: state.risks.map(item => item.id === riskId
       ? { ...item, actions: [...item.actions.slice(0,position), action, ...item.actions.slice(position)] } : item) };
   } };
