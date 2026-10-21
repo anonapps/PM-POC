@@ -29,6 +29,10 @@ describe("Gantt connector validation", () => {
   it("ignores a missing successor without accessing an undefined row", () => {
     expect(ganttConnectorPaths({ ...base, dependencies: [{ from: "a", to: "missing" }] })).toEqual([]);
   });
+  it("omits connectors when both dependency endpoints are outside the visible window", () => {
+    const rows = base.rows.map(row => ({ ...row, start: "2027-01-01", end: "2027-01-05" }));
+    expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
+  });
   it("omits connectors when a task is hidden or removed", () => {
     expect(ganttConnectorPaths({ ...base, rows: base.rows.slice(0, 1) })).toEqual([]);
   });
