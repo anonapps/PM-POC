@@ -8,6 +8,12 @@ describe("scope pills", () => {
     expect(scopeColourIndex("Delivery")).toBe(scopeColourIndex("delivery"));
     expect(scopeColourIndex(" Delivery ")).toBe(scopeColourIndex("delivery"));
   });
+  it("does not abbreviate ordinary stream scopes", () => {
+    const html=renderToStaticMarkup(createElement(ScopePill,{name:"Delivery"}));
+    expect(html).toContain("Delivery");
+    expect(html).not.toContain("scope-pill-short");
+    expect(html).not.toContain(">ALL<");
+  });
   it("renders both accessible full and abbreviated project-wide labels", () => {
     const html=renderToStaticMarkup(createElement(ScopePill,{name:"Project-wide"}));
     expect(html).toContain("Project-wide");
