@@ -13,6 +13,10 @@ describe("capitaliseFirstLetter", () => {
     expect(capitaliseFirstLetter("Project-wide")).toBe("Project-wide");
     expect(capitaliseFirstLetter("NASA")).toBe("NASA");
   });
+  it("returns the same value when applied twice", () => {
+    const once = capitaliseFirstLetter("example name");
+    expect(capitaliseFirstLetter(once)).toBe(once);
+  });
   it("handles Unicode and empty text", () => {
     expect(capitaliseFirstLetter("équipe")).toBe("Équipe");
     expect(capitaliseFirstLetter("")).toBe("");
