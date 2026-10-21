@@ -23,6 +23,12 @@ describe("Gantt connector validation", () => {
     const rows = base.rows.map(row => row.id === "b" ? { ...row, start: "2026-09-12T00:00:00Z" } : row);
     expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
   });
+  it("ignores a missing predecessor without accessing an undefined row", () => {
+    expect(ganttConnectorPaths({ ...base, dependencies: [{ from: "missing", to: "b" }] })).toEqual([]);
+  });
+  it("ignores a missing successor without accessing an undefined row", () => {
+    expect(ganttConnectorPaths({ ...base, dependencies: [{ from: "a", to: "missing" }] })).toEqual([]);
+  });
   it("omits connectors when a task is hidden or removed", () => {
     expect(ganttConnectorPaths({ ...base, rows: base.rows.slice(0, 1) })).toEqual([]);
   });
