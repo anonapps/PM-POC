@@ -861,7 +861,10 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 
 /* ARGOS PM v1.5 — E012: abbreviated scope only where its container is narrow.
    A container query follows the pill's available width rather than the viewport. */
-.scope-pill {
+/* Query the containing cell, not the pill itself: self-querying would
+   collapse the intrinsic width of the label. */
+td:has(> .scope-pill),
+td:has(> * > .scope-pill) {
   container-type: inline-size;
 }
 .scope-pill .scope-pill-short { display: none; }
