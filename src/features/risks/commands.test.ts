@@ -6,6 +6,9 @@ import { addRiskAction, createRisk, editRisk, editRiskAction, isRiskActionOverdu
 const context = { createId: (() => { let id = 0; return () => `id-${++id}`; })(), now: () => "2026-09-15T00:00:00Z" };
 const draft: RiskDraft = { title: "Schedule", status: "Open", probability: "Medium", impact: "High", ownerId: null, projectWide: true, relatedStreamIds: [], relatedTaskIds: [], relatedMilestoneIds: [] };
 describe("risk management", () => {
+  it("does not mutate state when deleting a missing action",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const before=store.getState();expect(deleteRiskAction(before.risks[0].id,"missing").apply(before,context)).toBe(before);});
+  it("does not restore an action twice",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const riskId=store.getState().risks[0].id;store.execute(addRiskAction(riskId,"contact supplier"));const before=store.getState();const action=before.risks[0].actions[0];expect(restoreRiskAction(riskId,action,0).apply(before,context)).toBe(before);});
+
   it("ignores action edits that do not change stored values",()=>{const store=createProjectStore(makeProjectState(),context);store.execute(createRisk(draft));const riskId=store.getState().risks[0].id;store.execute(addRiskAction(riskId,"contact supplier","2026-10-01"));const before=store.getState();const actionId=before.risks[0].actions[0].id;expect(editRiskAction(riskId,actionId,{description:"contact supplier"}).apply(before,context)).toBe(before);expect(editRiskAction(riskId,actionId,{dueDate:"2026-10-01"}).apply(before,context)).toBe(before);});
   it("does not add or edit actions on missing risks",()=>{const state=makeProjectState();expect(addRiskAction("missing","contact supplier").apply(state,context)).toBe(state);expect(editRiskAction("missing","missing",{description:"contact supplier"}).apply(state,context)).toBe(state);});
 
