@@ -152,3 +152,8 @@ describe("Tube Map fixed-height marker alignment", () => {
 });
 
 describe("v1.5 Tube Map empty stream filtering",()=>{it("keeps milestone-bearing streams even when milestones are outside the window",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"empty",humanId:"STREAM-002"})],milestones:[milestone("1","2025-01-01",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);});});
+
+describe("v1.5 Tube Map filtering edge cases",()=>{
+ it("ignores deleted milestones",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[{...milestone("1","2026-09-17",["stream-1"]),deletion:{isDeleted:true}}]});expect(buildTubeMap(state,"2026-09-17","original",true).streams.map(stream=>stream.id)).toEqual(["project"]);});
+ it("keeps empty streams when toggle is off",()=>{const state=makeProjectState({streams:[streamFixture()]});expect(buildTubeMap(state,"2026-09-17","original",false).streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);});
+});
