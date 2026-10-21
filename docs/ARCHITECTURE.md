@@ -1,5 +1,15 @@
 # ARGOS PM — Architecture (v1.4.0)
 
+## v1.5 architecture guidance (approved scope)
+
+- Reuse the application command boundary for text edits: normalise the first character of human-readable fields on blur as part of the same logical edit, so Undo and audit history contain no separate formatting mutation. Preserve IDs, emails, URLs, file paths and technical identifiers.
+- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient and resets on navigation. Predictive selection state must be independent of the currently typed search query.
+- Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and synchronised between its toolbar and filter popover.
+- Persist optional last-save timezone metadata in the existing .pmp manifest without silently migrating compatible v1.4 files. Preserve UTC instant, original saving-device local display time, IANA timezone name where available and UTC offset. Update metadata only after successful file writes; display “Timezone unavailable” for legacy files until saved.
+- Keep browser file-picker operations behind the Project File Service. Save/Discard/Cancel and navigation-draft warnings must not discard data without the user's chosen action.
+- Continue using Vitest and the existing Chrome DevTools Protocol harness; do not introduce Playwright solely for v1.5. Maintain the established offline/local-only architecture.
+
+
 **Status:** Implementation architecture supporting `docs/PROJECT_REQUIREMENTS.md`  
 **Authority:** This document explains *how* to implement the approved requirements. If it conflicts with `PROJECT_REQUIREMENTS.md`, the requirements take precedence.
 
