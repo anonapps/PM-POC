@@ -1,5 +1,24 @@
-import {describe,expect,it}from"vitest";import{createProjectStore,restore,softDelete}from"../../application";import{makeProjectState}from"../../domain/test-fixtures";import{createPerson,createStream,duplicateStream,editPerson,editStream}from"./commands";
+import {describe,expect,it}from"vitest";import{createProjectStore,restore,softDelete}from"../../application";import{makeProjectState}from"../../domain/test-fixtures";import{createPerson,createStream,duplicateStream,editPerson,editPersonDetails,editStream}from"./commands";
 const context={createId:(()=>{let i=0;return()=>`id-${++i}`})(),now:()=>"2026-09-15T00:00:00Z"};
+describe("v1.5 resource details and no-op edits",()=>{
+  it("capitalises role and notes and restores both in one undo",()=>{
+    const store=createProjectStore(makeProjectState(),context);
+    store.execute(createPerson("alex"));
+    const id=store.getState().people[0].id;
+    store.execute(editPersonDetails(id,{role:"delivery lead",notes:"coordinates migration"}));
+    expect(store.getState().people[0]).toMatchObject({role:"Delivery lead",notes:"Coordinates migration"});
+    store.undo();
+    expect(store.getState().people[0].role??"").toBe("");
+    expect(store.getState().people[0].notes??"").toBe("");
+  });
+  it("preserves state reference for unchanged stream names",()=>{
+    const store=createProjectStore(makeProjectState(),context);
+    store.execute(createStream({name:"delivery",ownerId:null,status:"Not Started"}));
+    const before=store.getState();
+    const stream=before.streams[0];
+    expect(editStream(stream.id,{name:"delivery"}).apply(before,context)).toBe(before);
+  });
+});
 describe("v1.5 name normalisation and undo",()=>{
   it("capitalises created names and treats one committed edit as one undo step",()=>{
     const store=createProjectStore(makeProjectState(),context);
