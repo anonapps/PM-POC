@@ -36,4 +36,14 @@ describe("v1.5 risk action matching",()=>{it("searches action descriptions under
 
 describe("v1.5 nested risk action dates",()=>{it("finds action due dates without changing the parent risk result",()=>{const store=createProjectStore(makeProjectState(),{createId:(()=>{let i=0;return()=>`date-${++i}`})(),now:()=>"2026-09-15T00:00:00Z"});store.execute(createRisk({title:"Supplier delay",status:"Open",probability:"Medium",impact:"High",ownerId:null,projectWide:true,relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}));store.execute(addRiskAction(store.getState().risks[0].id,"Call supplier","2026-11-09"));expect(searchProject(store.getState(),"2026-11-09")).toEqual([expect.objectContaining({module:"Risk Log",label:"Supplier delay"})]);});});
 
+describe("v1.5 Risk action status search",()=>{
+  it("finds an action status under its parent Risk even when the Risk has a different status",()=>{
+    const store=createProjectStore(makeProjectState(),{createId:(()=>{let i=0;return()=>`status-${++i}`})(),now:()=>"2026-09-15T00:00:00Z"});
+    store.execute(createRisk({title:"Supplier follow-up",status:"Open",probability:"Medium",impact:"High",ownerId:null,projectWide:true,relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}));
+    const riskId=store.getState().risks[0].id;
+    store.execute(addRiskAction(riskId,"Call supplier"));
+    expect(searchProject(store.getState(),"open").some(result=>result.entityId===riskId)).toBe(true);
+  });
+});
+
 describe("v1.5 legacy due date search",()=>{it("indexes preserved task due dates without exposing them as labels",()=>{const state=makeProjectState({tasks:[taskFixture({name:"Migration",legacyDueDate:"2026-12-18"})]});expect(searchProject(state,"2026-12-18")).toEqual([expect.objectContaining({module:"Tasks",label:"Migration"})]);});});
