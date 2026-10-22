@@ -66,7 +66,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     occurrences.push(station);
     stationsByMilestone.set(station.entityId, occurrences);
   }
-  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone").flatMap((dependency) => {
+  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone" && dependency.predecessor.id !== dependency.successor.id).flatMap((dependency) => {
     const sources = stationsByMilestone.get(dependency.predecessor.id) ?? [];
     const targets = stationsByMilestone.get(dependency.successor.id) ?? [];
     let selected: { source: TubeStation; target: TubeStation; score: number } | undefined;
