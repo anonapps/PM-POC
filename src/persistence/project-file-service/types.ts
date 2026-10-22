@@ -6,7 +6,7 @@ export interface ProjectFileError { readonly code: ProjectFileErrorCode; readonl
 export type FileServiceResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: ProjectFileError };
 export interface ProjectFileHandle { readonly id: string; readonly name: string }
 export interface FileInformation { readonly name: string; readonly size: number; readonly lastModified: number; readonly externallyModified: boolean }
-export interface LoadedProject { readonly handle: ProjectFileHandle; readonly state: ProjectState; readonly configuration: PmpProjectConfiguration; readonly createdAt: string; readonly lastSavedAt: string }
+export interface LoadedProject { readonly handle: ProjectFileHandle; readonly state: ProjectState; readonly configuration: PmpProjectConfiguration; readonly createdAt: string; readonly lastSavedAt: string; readonly savedTimeZone?: { readonly name: string; readonly utcOffsetMinutes: number } }
 export interface SaveResult { readonly handle: ProjectFileHandle; readonly savedAt: string; readonly bytesWritten: number }
 export interface SaveOptions { readonly runtimeVersion: string; readonly minimumRuntimeVersion?: string; readonly configuration?: PmpProjectConfiguration; readonly createdAt?: string }
 
