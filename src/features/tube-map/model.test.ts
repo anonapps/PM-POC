@@ -162,7 +162,7 @@ describe("v1.5 Tube Map shared milestone filtering",()=>{it("retains all streams
 
 describe("v1.5 Tube Map dependency integrity",()=>{
   it("ignores self-referential milestone dependencies",()=>{
-    const state=makeProjectState({milestones:[milestone("self","2026-10-01")],dependencies:[{id:"dependency-self",predecessor:{kind:"milestone",id:"self"},successor:{kind:"milestone",id:"self"},type:"Finish-to-Start"}] as ReturnType<typeof makeProjectState>["dependencies"]});
+    const state=makeProjectState({milestones:[milestone("self","2026-10-01")],dependencies:[{id:"dependency-self",projectId:"project-1",predecessor:{kind:"milestone",id:"self"},successor:{kind:"milestone",id:"self"},type:"Finish-to-Start"}]});
     expect(buildTubeMap(state,"2026-09-17").connections).toHaveLength(0);
   });
 });
