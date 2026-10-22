@@ -48,6 +48,11 @@ describe("Gantt connector validation", () => {
     const rows = [{ ...base.rows[0], end: "2026-08-29" }, { ...base.rows[1], start: "2026-08-31" }];
     expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
   });
+  it("renders independent connectors for separate valid dependencies", () => {
+    const rows = [...base.rows, { ...base.rows[1], id: "c", start: "2026-09-21" }];
+    const dependencies = [{ from: "a", to: "b" }, { from: "b", to: "c" }];
+    expect(ganttConnectorPaths({ ...base, rows, dependencies })).toHaveLength(2);
+  });
   it("omits self-referential task dependencies", () => {
     expect(ganttConnectorPaths({ ...base, dependencies: [{ from: "a", to: "a" }] })).toEqual([]);
   });
