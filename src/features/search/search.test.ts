@@ -79,4 +79,17 @@ describe("v1.5 relational search",()=>{
   });
 });
 
+describe("v1.5 Risk and Decision context search",()=>{
+  it("indexes a Risk linked stream name",()=>{
+    const store=createProjectStore(makeProjectState({streams:[streamFixture({id:"stream-1",name:"Network transition"})]}),{createId:()=> "risk-context",now:()=> "2026-09-15T00:00:00Z"});
+    store.execute(createRisk({title:"Supplier delay",status:"Open",probability:"Medium",impact:"High",ownerId:null,projectWide:false,relatedStreamIds:["stream-1"],relatedTaskIds:[],relatedMilestoneIds:[]}));
+    expect(searchProject(store.getState(),"Network transition")).toEqual(expect.arrayContaining([expect.objectContaining({module:"Risk Log",label:"Supplier delay"})]));
+  });
+  it("does not index deleted linked stream names",()=>{
+    const store=createProjectStore(makeProjectState({streams:[streamFixture({id:"stream-1",name:"Archived network",deletion:{isDeleted:true}})]}),{createId:()=> "risk-context",now:()=> "2026-09-15T00:00:00Z"});
+    store.execute(createRisk({title:"Supplier delay",status:"Open",probability:"Medium",impact:"High",ownerId:null,projectWide:false,relatedStreamIds:["stream-1"],relatedTaskIds:[],relatedMilestoneIds:[]}));
+    expect(searchProject(store.getState(),"Archived network")).toEqual([]);
+  });
+});
+
 describe("v1.5 legacy due date search",()=>{it("indexes preserved task due dates without exposing them as labels",()=>{const state=makeProjectState({tasks:[taskFixture({name:"Migration",legacyDueDate:"2026-12-18"})]});expect(searchProject(state,"2026-12-18")).toEqual([expect.objectContaining({module:"Tasks",label:"Migration"})]);});});
