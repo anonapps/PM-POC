@@ -36,9 +36,10 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const ids = milestone.scope.kind === "project" ? ["project"] : milestone.scope.streamIds;
     return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, status: milestone.status, x, streamId, boundary }));
   });
+  const laneIds = new Set(baseStreams.map(stream => stream.id));
   const candidatesByStream = new Map<string, typeof candidates>();
   for (const station of candidates) {
-    if (!baseStreams.some(stream => stream.id === station.streamId)) continue;
+    if (!laneIds.has(station.streamId)) continue;
     const lane = candidatesByStream.get(station.streamId) ?? [];
     lane.push(station);
     candidatesByStream.set(station.streamId, lane);
