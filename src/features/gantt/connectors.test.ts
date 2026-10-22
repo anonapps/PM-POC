@@ -33,6 +33,17 @@ describe("Gantt connector validation", () => {
     const rows = base.rows.map(row => ({ ...row, start: "2027-01-01", end: "2027-01-05" }));
     expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
   });
+  it("preserves connectors crossing the entire visible window", () => {
+    const rows = [
+      { ...base.rows[0], end: "2026-08-30" },
+      { ...base.rows[1], start: "2026-10-02" },
+    ];
+    expect(ganttConnectorPaths({ ...base, rows })).toHaveLength(1);
+  });
+  it("omits connectors when both endpoints are before the visible window", () => {
+    const rows = base.rows.map(row => ({ ...row, start: "2026-08-01", end: "2026-08-05" }));
+    expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
+  });
   it("omits connectors when a task is hidden or removed", () => {
     expect(ganttConnectorPaths({ ...base, rows: base.rows.slice(0, 1) })).toEqual([]);
   });
