@@ -69,6 +69,10 @@ describe("v1.5 relational search",()=>{
     const state=makeProjectState({streams:[streamFixture({id:"stream-1",name:"Infrastructure"})],tasks:[taskFixture({name:"Migration task",scope:{kind:"stream",streamId:"stream-1"}})]});
     expect(searchProject(state,"Infrastructure")).toEqual(expect.arrayContaining([expect.objectContaining({module:"Tasks",label:"Migration task"})]));
   });
+  it("finds project-wide tasks by their scope label",()=>{
+    const state=makeProjectState({tasks:[taskFixture({name:"Programme governance",scope:{kind:"project"}})]});
+    expect(searchProject(state,"project-wide")).toEqual([expect.objectContaining({module:"Tasks",label:"Programme governance"})]);
+  });
   it("does not index names of deleted owners",()=>{
     const state=makeProjectState({people:[{id:"person-1",projectId:"project-1",humanId:"PERSON-001",name:"Former Owner",deletion:{isDeleted:true}}],tasks:[taskFixture({name:"Active task",ownerId:"person-1"})]});
     expect(searchProject(state,"Former Owner")).toEqual([]);
