@@ -1,7 +1,8 @@
 import { readFile } from 'node:fs/promises';
 export async function runRegression({ evaluate, waitFor, click, nav, setLabel, record }) {
   if (!process.env.REGRESSION_PMP_PATH) return;
-  await click('Close');
+  await nav('File Information');
+  await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   const bytes = [...await readFile(process.env.REGRESSION_PMP_PATH)];
   await evaluate(`(async()=>{const writer=await window.__E2E_FILE__.createWritable();await writer.write(new Uint8Array(${JSON.stringify(bytes)}));await writer.close()})()`);
@@ -36,7 +37,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   await nav('Gantt');
   record('Large Gantt renders final task', await evaluate(`document.body.innerText.includes('Regression task 30')`));
   await nav('Search');
-  await setLabel('Search by name, title or ID','DECISION-030');
+  await setLabel('Search names, IDs, roles, notes, status and dates','DECISION-030');
   await waitFor(`document.body.innerText.includes('DECISION-030')`);
   record('Large project decision search', true);
   if (process.env.E2E_FULL_LIFECYCLE === '1') {
