@@ -51,7 +51,7 @@ describe("v1.5 Gantt cross-year dates",()=>{it("positions tasks spanning New Yea
 
 describe("v1.5 Gantt dependency integrity",()=>{
   it("excludes self-references without dropping valid task dependencies",()=>{
-    const state=makeProjectState({tasks:[taskFixture({id:"a",humanId:"TASK-001",startDate:"2026-09-17",endDate:"2026-09-18"}),taskFixture({id:"b",humanId:"TASK-002",startDate:"2026-09-21",endDate:"2026-09-22"})],dependencies:[
+    const state=makeProjectState({tasks:[taskFixture({id:"a",humanId:"TASK-001",scope:{kind:"project"},startDate:"2026-09-17",endDate:"2026-09-18"}),taskFixture({id:"b",humanId:"TASK-002",scope:{kind:"project"},startDate:"2026-09-21",endDate:"2026-09-22"})],dependencies:[
       {id:"self",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"a"},type:"Finish-to-Start"},
       {id:"valid",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"},type:"Finish-to-Start"},
     ]});
