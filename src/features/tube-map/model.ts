@@ -38,6 +38,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   });
   const candidatesByStream = new Map<string, typeof candidates>();
   for (const station of candidates) {
+    if (!baseStreams.some(stream => stream.id === station.streamId)) continue;
     const lane = candidatesByStream.get(station.streamId) ?? [];
     lane.push(station);
     candidatesByStream.set(station.streamId, lane);
