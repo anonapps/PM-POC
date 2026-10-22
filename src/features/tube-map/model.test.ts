@@ -201,3 +201,12 @@ describe("v1.5 stale milestone scopes",()=>{
     expect(buildTubeMap(state,"2026-09-17").stations).toHaveLength(0);
   });
 });
+
+
+describe("v1.5 valid lane retention",()=>{
+  it("retains stations for active streams while dropping stale stream references",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"live",name:"Live"}),streamFixture({id:"removed",humanId:"STREAM-002",deletion:{isDeleted:true}})],milestones:[milestone("gate","2026-10-01",["live","removed"])]});
+    const model=buildTubeMap(state,"2026-09-17");
+    expect(model.stations.map(station=>station.id)).toEqual(["gate:live"]);
+  });
+});
