@@ -39,3 +39,21 @@ describe("v1.5 unchanged Project Details edits",()=>{
     expect(store.canUndo()).toBe(false);
   });
 });
+
+
+describe("v1.5 project metadata no-op",()=>{
+  it("does not create history for an equivalent metadata object",()=>{
+    const store=createProjectStore(createInitialProjectState(draft,"p1"),{createId:()=>"x",now:()=>"2026-01-01"});
+    store.execute(updateProject({metadata:{...store.getState().project.metadata}}));
+    expect(store.isDirty()).toBe(false);
+    expect(store.canUndo()).toBe(false);
+  });
+  it("records actual metadata changes and permits undo",()=>{
+    const store=createProjectStore(createInitialProjectState(draft,"p1"),{createId:()=>"x",now:()=>"2026-01-01"});
+    store.execute(updateProject({metadata:{...store.getState().project.metadata,showProgress:false}}));
+    expect(store.isDirty()).toBe(true);
+    expect(store.getState().project.metadata.showProgress).toBe(false);
+    store.undo();
+    expect(store.getState().project.metadata.showProgress).toBeUndefined();
+  });
+});
