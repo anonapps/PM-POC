@@ -48,4 +48,16 @@ describe("v1.5 Risk action status search",()=>{
   });
 });
 
+describe("v1.5 completion and risk assessment search",()=>{
+  it("indexes milestone actual completion dates",()=>{
+    const state=makeProjectState({milestones:[{id:"m1",projectId:"project-1",humanId:"MILESTONE-001",name:"Deployment gate",plannedDate:"2026-10-01",actualCompletionDate:"2026-10-03",status:"Complete",ownerId:null,scope:{kind:"project"},relatedTaskIds:[],deletion:{isDeleted:false}}]});
+    expect(searchProject(state,"2026-10-03")).toEqual([expect.objectContaining({module:"Milestones",label:"Deployment gate"})]);
+  });
+  it("indexes Risk impact and probability without changing result labels",()=>{
+    const store=createProjectStore(makeProjectState(),{createId:()=> "risk-assessment",now:()=> "2026-09-15T00:00:00Z"});
+    store.execute(createRisk({title:"Supply chain",status:"Open",probability:"Low",impact:"High",ownerId:null,projectWide:true,relatedStreamIds:[],relatedTaskIds:[],relatedMilestoneIds:[]}));
+    expect(searchProject(store.getState(),"high")).toEqual([expect.objectContaining({module:"Risk Log",label:"Supply chain"})]);
+  });
+});
+
 describe("v1.5 legacy due date search",()=>{it("indexes preserved task due dates without exposing them as labels",()=>{const state=makeProjectState({tasks:[taskFixture({name:"Migration",legacyDueDate:"2026-12-18"})]});expect(searchProject(state,"2026-12-18")).toEqual([expect.objectContaining({module:"Tasks",label:"Migration"})]);});});
