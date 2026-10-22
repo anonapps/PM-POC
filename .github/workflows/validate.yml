@@ -1,7 +1,7 @@
 name: PM-POC validation
 on:
   push:
-    branches: [main, experiment/heroui-ui]
+    branches: [main, experiment/heroui-ui, feature/v1.5-approved-enhancements]
   pull_request:
     branches: [main]
   workflow_dispatch:
