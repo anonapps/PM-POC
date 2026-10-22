@@ -60,4 +60,19 @@ describe("v1.5 completion and risk assessment search",()=>{
   });
 });
 
+describe("v1.5 relational search",()=>{
+  it("finds tasks by assigned owner name",()=>{
+    const state=makeProjectState({people:[{id:"person-1",projectId:"project-1",humanId:"PERSON-001",name:"Jordan Rivera",deletion:{isDeleted:false}}],tasks:[taskFixture({name:"Delivery plan",ownerId:"person-1"})]});
+    expect(searchProject(state,"Jordan Rivera").some(result=>result.module==="Tasks"&&result.label==="Delivery plan")).toBe(true);
+  });
+  it("finds stream-scoped tasks by their stream name",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"stream-1",name:"Infrastructure"})],tasks:[taskFixture({name:"Migration task",scope:{kind:"stream",streamId:"stream-1"}})]});
+    expect(searchProject(state,"Infrastructure")).toEqual(expect.arrayContaining([expect.objectContaining({module:"Tasks",label:"Migration task"})]));
+  });
+  it("does not index names of deleted owners",()=>{
+    const state=makeProjectState({people:[{id:"person-1",projectId:"project-1",humanId:"PERSON-001",name:"Former Owner",deletion:{isDeleted:true}}],tasks:[taskFixture({name:"Active task",ownerId:"person-1"})]});
+    expect(searchProject(state,"Former Owner")).toEqual([]);
+  });
+});
+
 describe("v1.5 legacy due date search",()=>{it("indexes preserved task due dates without exposing them as labels",()=>{const state=makeProjectState({tasks:[taskFixture({name:"Migration",legacyDueDate:"2026-12-18"})]});expect(searchProject(state,"2026-12-18")).toEqual([expect.objectContaining({module:"Tasks",label:"Migration"})]);});});
