@@ -53,6 +53,10 @@ describe("Gantt connector validation", () => {
     const dependencies = [{ from: "a", to: "b" }, { from: "b", to: "c" }];
     expect(ganttConnectorPaths({ ...base, rows, dependencies })).toHaveLength(2);
   });
+  it("retains a valid connector when another dependency references a missing task", () => {
+    const dependencies = [{ from: "missing", to: "b" }, { from: "a", to: "b" }];
+    expect(ganttConnectorPaths({ ...base, dependencies })).toHaveLength(1);
+  });
   it("omits self-referential task dependencies", () => {
     expect(ganttConnectorPaths({ ...base, dependencies: [{ from: "a", to: "a" }] })).toEqual([]);
   });
