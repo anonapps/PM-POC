@@ -230,3 +230,17 @@ describe("v1.5 Tube Map live stream search",()=>{
     expect(buildTubeMap(state,"2026-09-17","original",true,"platform").streams.map(stream=>stream.id)).toEqual(["project","one"]);
   });
 });
+
+
+describe("v1.5 Tube Map milestone-name search",()=>{
+  it("finds a stream through a milestone title even when the stream name does not match",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"delivery",name:"Delivery"}),streamFixture({id:"security",humanId:"STREAM-002",name:"Security"})],milestones:[{...milestone("launch","2026-10-01",["delivery"]),name:"Launch approval"},milestone("security","2026-10-01",["security"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"approval");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project","delivery"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["launch"]);
+  });
+  it("does not match milestones that have been deleted",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"delivery",name:"Delivery"})],milestones:[{...milestone("launch","2026-10-01",["delivery"]),name:"Launch approval",deletion:{isDeleted:true}}]});
+    expect(buildTubeMap(state,"2026-09-17","original",false,"approval").streams.map(stream=>stream.id)).toEqual(["project"]);
+  });
+});
