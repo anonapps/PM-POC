@@ -44,6 +44,10 @@ describe("Gantt connector validation", () => {
     const rows = base.rows.map(row => ({ ...row, start: "2026-08-01", end: "2026-08-05" }));
     expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
   });
+  it("omits a connector when one endpoint is on the timeline boundary and the other is entirely before it", () => {
+    const rows = [{ ...base.rows[0], end: "2026-08-29" }, { ...base.rows[1], start: "2026-08-31" }];
+    expect(ganttConnectorPaths({ ...base, rows })).toEqual([]);
+  });
   it("omits connectors when a task is hidden or removed", () => {
     expect(ganttConnectorPaths({ ...base, rows: base.rows.slice(0, 1) })).toEqual([]);
   });
