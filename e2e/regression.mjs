@@ -56,7 +56,8 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   }
   await click('Save Now');
   await waitFor(`document.querySelector('[role="status"]')?.textContent.startsWith('Saved')`);
-  await click('Close');
+  await nav('File Information');
+  await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   await click('Open Project');
   await waitFor(`document.body.innerText.includes('Regression 180 records')`);
