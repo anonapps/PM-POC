@@ -17,3 +17,15 @@ describe("v1.5 New Project date validation",()=>{
     expect(validateProjectDraft({...draft,startDate:"2028-02-29",endDate:""})).toEqual({});
   });
 });
+
+
+describe("v1.5 project text normalisation",()=>{
+  it("capitalises project name and description on creation without lowercasing other characters",()=>{
+    const state=createInitialProjectState({name:"  project NASA ",description:"  launch PLAN ",startDate:"2026-10-22",status:"Not Started"},"p2");
+    expect(state.project.name).toBe("Project NASA");
+    expect(state.project.description).toBe("Launch PLAN");
+  });
+  it("does not modify empty optional descriptions",()=>{
+    expect(createInitialProjectState({...draft,description:"  "},"p3").project.description).toBeUndefined();
+  });
+});
