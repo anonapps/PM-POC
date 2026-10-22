@@ -10,6 +10,9 @@ describe("v1.5 New Project date validation",()=>{
     expect(validateProjectDraft({...draft,endDate:"2026-11-31"}).endDate).toBe("Enter a valid end date.");
     expect(validateProjectDraft({...draft,startDate:"2026-10-22T00:00:00Z"}).startDate).toBe("Enter a valid start date.");
   });
+  it("preserves invalid end-date feedback even when the start date is later",()=>{
+    expect(validateProjectDraft({...draft,startDate:"2026-12-20",endDate:"2026-11-31"}).endDate).toBe("Enter a valid end date.");
+  });
   it("accepts a real leap day and optional empty end date",()=>{
     expect(validateProjectDraft({...draft,startDate:"2028-02-29",endDate:""})).toEqual({});
   });
