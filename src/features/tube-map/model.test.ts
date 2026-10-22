@@ -213,6 +213,12 @@ describe("v1.5 valid lane retention",()=>{
 
 
 describe("v1.5 Tube Map live stream search",()=>{
+  it("retains Project-wide milestones while filtering other stream lanes",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform"})],milestones:[milestone("project-gate","2026-10-01"),milestone("stream-gate","2026-10-01",["one"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"nonexistent");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["project-gate"]);
+  });
   it("filters stream lanes case-insensitively while keeping Project-wide",()=>{
     const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform Delivery"}),streamFixture({id:"two",humanId:"STREAM-002",name:"Security"})],milestones:[milestone("one","2026-10-01",["one"]),milestone("two","2026-10-01",["two"])]});
     const model=buildTubeMap(state,"2026-09-17","original",false,"  PLATform  ");
