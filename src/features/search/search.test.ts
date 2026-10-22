@@ -9,6 +9,7 @@ describe("v1.5 descriptive field search",()=>{
     const results=searchProject(state,"CROSS-TEAM HANDOVER");
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({module:"Streams",label:"Delivery"});
+    expect(searchProject(state,"handover")).toHaveLength(1);
   });
   it("keeps deleted records excluded unless explicitly included",()=>{
     const state=makeProjectState({streams:[streamFixture({name:"Archived",description:"Cross-team handover",deletion:{isDeleted:true}})]});
