@@ -210,3 +210,17 @@ describe("v1.5 valid lane retention",()=>{
     expect(model.stations.map(station=>station.id)).toEqual(["gate:live"]);
   });
 });
+
+
+describe("v1.5 Tube Map live stream search",()=>{
+  it("filters stream lanes case-insensitively while keeping Project-wide",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform Delivery"}),streamFixture({id:"two",humanId:"STREAM-002",name:"Security"})],milestones:[milestone("one","2026-10-01",["one"]),milestone("two","2026-10-01",["two"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"  PLATform  ");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project","one"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["one"]);
+  });
+  it("combines Hide Empty Streams with a live stream query",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform Delivery"}),streamFixture({id:"two",humanId:"STREAM-002",name:"Platform Empty"})],milestones:[milestone("one","2026-10-01",["one"])]});
+    expect(buildTubeMap(state,"2026-09-17","original",true,"platform").streams.map(stream=>stream.id)).toEqual(["project","one"]);
+  });
+});
