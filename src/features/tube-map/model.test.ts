@@ -165,6 +165,13 @@ describe("v1.5 Tube Map dependency integrity",()=>{
     const state=makeProjectState({milestones:[milestone("self","2026-10-01")],dependencies:[{id:"dependency-self",projectId:"project-1",predecessor:{kind:"milestone",id:"self"},successor:{kind:"milestone",id:"self"},type:"Finish-to-Start"}]});
     expect(buildTubeMap(state,"2026-09-17").connections).toHaveLength(0);
   });
+  it("preserves valid milestone connections when another dependency references itself",()=>{
+    const state=makeProjectState({milestones:[milestone("1","2026-10-01"),milestone("2","2026-10-08")],dependencies:[
+      {id:"self",projectId:"project-1",predecessor:{kind:"milestone",id:"1"},successor:{kind:"milestone",id:"1"},type:"Finish-to-Start"},
+      {id:"valid",projectId:"project-1",predecessor:{kind:"milestone",id:"1"},successor:{kind:"milestone",id:"2"},type:"Finish-to-Start"},
+    ]});
+    expect(buildTubeMap(state,"2026-09-17").connections).toEqual([expect.objectContaining({from:"1",to:"2"})]);
+  });
 });
 
 describe("v1.5 project-wide milestones",()=>{it("preserves the project lane and project-wide stations when all streams are hidden",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("1","2026-10-01")]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);expect(model.stations.map(station=>station.entityId)).toEqual(["1"]);});});
