@@ -47,3 +47,14 @@ describe("v1.5 strict date-only Gantt bars",()=>{it("rejects timestamp strings a
 describe("v1.5 Gantt leap day",()=>{it("renders a valid leap day and rejects the same date in a non-leap year",()=>{expect(barPosition("2028-02-29","2028-02-29","2028-02-01","2028-03-31")?.outside).toBe(false);expect(barPosition("2027-02-29","2027-03-01","2027-02-01","2027-03-31")).toBeNull();});});
 
 describe("v1.5 Gantt cross-year dates",()=>{it("positions tasks spanning New Year without truncating their visible segment",()=>{const bar=barPosition("2026-12-28","2027-01-04","2027-01-01","2027-01-31");expect(bar).not.toBeNull();expect(bar?.outside).toBe(false);expect(bar?.left).toBe(0);expect(bar?.width).toBeGreaterThan(0);});});
+
+
+describe("v1.5 Gantt dependency integrity",()=>{
+  it("excludes self-references without dropping valid task dependencies",()=>{
+    const state=makeProjectState({tasks:[taskFixture({id:"a",humanId:"TASK-001",startDate:"2026-09-17",endDate:"2026-09-18"}),taskFixture({id:"b",humanId:"TASK-002",startDate:"2026-09-21",endDate:"2026-09-22"})],dependencies:[
+      {id:"self",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"a"},type:"Finish-to-Start"},
+      {id:"valid",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"},type:"Finish-to-Start"},
+    ]});
+    expect(buildGanttModel(state,"Week","2026-09-17").dependencies).toEqual([{from:"a",to:"b"}]);
+  });
+});
