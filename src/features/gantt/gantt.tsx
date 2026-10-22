@@ -20,7 +20,7 @@ export function ganttConnectorPaths(model: GanttModel): GanttConnectorPath[] {
     const fromBar = barPosition(from.end, from.end, model.start, model.end);
     const toBar = barPosition(to.start, to.start, model.start, model.end);
     if (!fromBar || !toBar) return [];
-    if (fromBar.outside && toBar.outside && ((from.end < model.start && to.start < model.start) || (from.end > model.end && to.start > model.end))) return [];
+    if ((from.end < model.start && to.start < model.start) || (from.end > model.end && to.start > model.end)) return [];
     const fromX = Math.max(0, Math.min(100, positionForDate(from.end, model.start, model.end)));
     const toX = Math.max(0, Math.min(100, positionForDate(to.start, model.start, model.end)));
     const fromY = fromIndex * 36 + 18;
