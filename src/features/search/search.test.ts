@@ -43,8 +43,8 @@ describe("v1.5 Risk action status search",()=>{
     const riskId=store.getState().risks[0].id;
     store.execute(addRiskAction(riskId,"Call supplier"));
     const actionId=store.getState().risks[0].actions[0].id;
-    store.execute(editRiskAction(riskId,actionId,{status:"Done"}));
-    expect(searchProject(store.getState(),"done")).toEqual([expect.objectContaining({entityId:riskId,module:"Risk Log"})]);
+    store.execute(editRiskAction(riskId,actionId,{status:"Complete"}));
+    expect(searchProject(store.getState(),"complete")).toEqual([expect.objectContaining({entityId:riskId,module:"Risk Log"})]);
   });
 });
 
