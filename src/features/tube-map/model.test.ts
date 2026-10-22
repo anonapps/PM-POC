@@ -187,3 +187,17 @@ describe("v1.5 invalid milestone dates",()=>{it("retains the stream but omits im
 describe("v1.5 Tube Map leap dates",()=>{it("accepts a real leap-day milestone",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("leap","2028-02-29",["stream-1"])]});const model=buildTubeMap(state,"2028-02-28","original",true);expect(model.stations.some(station=>station.entityId==="leap")).toBe(true);});});
 
 describe("v1.5 strict milestone date parsing",()=>{it("ignores timestamp-formatted milestone dates without losing stream lanes",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("timestamp","2026-09-17T12:00:00Z",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);expect(model.stations).toHaveLength(0);});});
+
+
+describe("v1.5 stale milestone scopes",()=>{
+  it("omits stations for deleted streams while preserving valid project stations",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"removed",deletion:{isDeleted:true}})],milestones:[milestone("stale","2026-10-01",["removed"]),milestone("valid","2026-10-01")]});
+    const model=buildTubeMap(state,"2026-09-17");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["valid"]);
+  });
+  it("omits stations for missing stream references",()=>{
+    const state=makeProjectState({milestones:[milestone("orphan","2026-10-01",["unknown-stream"])]});
+    expect(buildTubeMap(state,"2026-09-17").stations).toHaveLength(0);
+  });
+});
