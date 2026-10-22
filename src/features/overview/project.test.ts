@@ -29,3 +29,13 @@ describe("v1.5 project text normalisation",()=>{
     expect(createInitialProjectState({...draft,description:"  "},"p3").project.description).toBeUndefined();
   });
 });
+
+
+describe("v1.5 unchanged Project Details edits",()=>{
+  it("does not create undo history when the value is unchanged",()=>{
+    const store=createProjectStore(createInitialProjectState(draft,"p1"),{createId:()=>"x",now:()=>"2026-01-01"});
+    store.execute(updateProject({name:store.getState().project.name}));
+    expect(store.isDirty()).toBe(false);
+    expect(store.canUndo()).toBe(false);
+  });
+});
