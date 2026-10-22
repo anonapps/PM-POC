@@ -20,14 +20,15 @@ function levelsFor(stations: readonly { x: number; label: string }[]) {
   });
 }
 
-export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original", hideEmptyStreams = false): TubeMapModel {
+export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original", hideEmptyStreams = false, streamQuery = ""): TubeMapModel {
   const start = mondayOf(startDate);
   const startTime = parse(start).getTime();
   const endTime = startTime + 84 * day;
   const end = iso(new Date(endTime));
   const weeks = Array.from({ length: 12 }, (_, index) => { const date = iso(new Date(startTime + index * 7 * day)); return { date, label: `W${String(isoWeek(date)).padStart(2, "0")}` }; });
   const populatedStreams = new Set(state.milestones.filter(milestone=>!milestone.deletion.isDeleted&&milestone.scope.kind==="streams").flatMap(milestone=>milestone.scope.kind==="streams"?milestone.scope.streamIds:[]));
-  const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted && (!hideEmptyStreams || populatedStreams.has(stream.id))); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
+  const needle = streamQuery.trim().toLocaleLowerCase();
+  const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted && (!hideEmptyStreams || populatedStreams.has(stream.id)) && (!needle || stream.name.toLocaleLowerCase().includes(needle))); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
   const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...orderedStreams.map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
   const candidates = state.milestones.filter((milestone) => !milestone.deletion.isDeleted && /^\d{4}-\d{2}-\d{2}$/.test(milestone.plannedDate) && Number.isFinite(parse(milestone.plannedDate).getTime()) && iso(parse(milestone.plannedDate)) === milestone.plannedDate).flatMap((milestone) => {
     const stamp = parse(milestone.plannedDate).getTime();
