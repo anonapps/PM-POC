@@ -9,7 +9,7 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
 }) {
   const [query,setQuery]=useState("");
   const needle=query.trim().toLocaleLowerCase();
-  const terms=needle.split(/\\s+/).filter(Boolean);
+  const terms=needle.split(/\s+/).filter(Boolean);
   const options=people.filter(person=>terms.every(term=>person.name.toLocaleLowerCase().includes(term)||person.id.toLocaleLowerCase().includes(term)));
   const selected=people.find(person=>person.id===value);
   const visible=selected&&!options.some(person=>person.id===value)?[selected,...options]:options;
