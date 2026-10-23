@@ -9,9 +9,9 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
 }) {
   const [query,setQuery]=useState("");
   const needle=query.trim().toLocaleLowerCase();
-  const options=people.filter(person=>person.id===value||!needle||person.name.toLocaleLowerCase().includes(needle));
+  const options=people.filter(person=>person.id===value||!needle||person.name.toLocaleLowerCase().includes(needle)||person.id.toLocaleLowerCase().includes(needle));
   return <div className="searchable-owner-select">
-    <input type="search" aria-label={`Search ${label}`} placeholder="Search people" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)}/>
+    <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)}/>
     <select aria-label={label} value={value} disabled={disabled} onChange={event=>{onChange(event.target.value);setQuery("");}}>
       <option value="">Unassigned</option>
       {options.map(person=><option key={person.id} value={person.id} disabled={person.deleted}>{person.name}{person.deleted?" (Deleted)":""}</option>)}
