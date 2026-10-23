@@ -93,3 +93,17 @@ describe("v1.5 Risk and Decision context search",()=>{
 });
 
 describe("v1.5 legacy due date search",()=>{it("indexes preserved task due dates without exposing them as labels",()=>{const state=makeProjectState({tasks:[taskFixture({name:"Migration",legacyDueDate:"2026-12-18"})]});expect(searchProject(state,"2026-12-18")).toEqual([expect.objectContaining({module:"Tasks",label:"Migration"})]);});});
+
+
+describe("v1.5 global multi-term search",()=>{
+  it("matches ID and description terms regardless of order",()=>{
+    const state=makeProjectState({streams:[streamFixture({name:"Delivery",description:"Cross-team handover"})]});
+    expect(searchProject(state,"stream-001 handover")).toEqual([expect.objectContaining({module:"Streams",label:"Delivery"})]);
+    expect(searchProject(state,"handover stream-001")).toHaveLength(1);
+    expect(searchProject(state,"handover unrelated")).toHaveLength(0);
+  });
+  it("matches across a task title and its assigned owner",()=>{
+    const state=makeProjectState({people:[{id:"person-1",projectId:"project-1",humanId:"PERSON-001",name:"Jordan Rivera",deletion:{isDeleted:false}}],tasks:[taskFixture({name:"Delivery plan",ownerId:"person-1"})]});
+    expect(searchProject(state,"jordan delivery")).toEqual([expect.objectContaining({module:"Tasks",label:"Delivery plan"})]);
+  });
+});
