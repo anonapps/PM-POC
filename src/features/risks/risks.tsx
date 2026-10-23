@@ -1,5 +1,5 @@
-import { ModuleSearch } from "../shared/module-search";
 "use client";
+import { ModuleSearch } from "../shared/module-search";
 import { useProjectState } from "../shell/use-project-state";
 import { useState } from "react";
 import { nextSort, sortRows, type SortSelection } from "../shared/sorting";
