@@ -1,19 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 /** Consistent collapsible search toolbar for record-management modules. */
 export function ModuleSearch({title,value,onChange,placeholder}:{
   title:string;value:string;onChange:(value:string)=>void;placeholder:string;
 }) {
   const [expanded,setExpanded]=useState(false);
-  const open=expanded||value.trim().length>0;
+  const id=useId();
+  const active=value.trim().length>0;
+  const open=expanded||active;
   return <div className="module-search-toolbar">
-    <button type="button" className="secondary" aria-expanded={open} aria-controls={`search-${title.toLowerCase().split(" ").join("-")}`} onClick={()=>setExpanded(previous=>!previous)}>
-      Search {title}{value.trim()? " · Active":""}
+    <button type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
+      Search {title}{active?" · Active":""}
     </button>
-    {open&&<label className="search-input" id={`search-${title.toLowerCase().split(" ").join("-")}`}>
-      Search {title}
-      <input type="search" value={value} onChange={event=>onChange(event.target.value)} placeholder={placeholder}/>
-    </label>}
+    {open&&<div id={id} className="module-search-controls">
+      <label className="search-input">Search {title}
+        <input type="search" value={value} onChange={event=>onChange(event.target.value)} placeholder={placeholder}/>
+      </label>
+      {active&&<button type="button" className="secondary" onClick={()=>onChange("")} aria-label={`Clear ${title} search`}>Clear</button>}
+    </div>}
   </div>;
 }
