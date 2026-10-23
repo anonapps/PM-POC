@@ -9,17 +9,22 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
   emptyMessage?:string;
 }) {
   const [query,setQuery]=useState("");
-  const needle=query.trim().toLocaleLowerCase();
-  const terms=needle.split(/\s+/).filter(Boolean);
-  const matching=items.filter(item=>terms.every(term=>labelFor(item).toLocaleLowerCase().includes(term)));
+  const matching=items.filter(item=>matchesOption(item,query));
   return <div className="searchable-option-list">
     <input type="search" aria-label={label} placeholder={label} value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key!=="Escape")event.stopPropagation();}}/>
     {matching.length?matching.map(renderOption):<small role="status">{emptyMessage}</small>}
   </div>;
 }
+export function matchesOption<T>(item:T,query:string):boolean {
+  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const haystack=labelFor(item).toLocaleLowerCase();
+  return terms.every(term=>haystack.includes(term));
+}
 function labelFor<T>(item:T):string {
   if(typeof item==="string")return item;
-  if(item&&typeof item==="object"&&"label" in item)return String(item.label);
-  if(item&&typeof item==="object"&&"name" in item)return String(item.name);
+  if(item&&typeof item==="object") {
+    const values=["label","name","id"].filter(key=>key in item).map(key=>String((item as Record<string,unknown>)[key]??""));
+    if(values.length)return values.join(" ");
+  }
   return String(item);
 }
