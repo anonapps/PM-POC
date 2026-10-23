@@ -10,9 +10,10 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
 }) {
   const [query,setQuery]=useState("");
   const matching=items.filter(item=>matchesOption(item,query));
+  const noMatches=matching.length===0;
   return <div className="searchable-option-list">
     <input type="search" aria-label={label} placeholder={label} value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"){if(query){event.stopPropagation();setQuery("");}}else{event.stopPropagation();}}}/>
-    {matching.length?matching.map(renderOption):<small role="status">{emptyMessage}</small>}
+    {noMatches?<small role="status">{emptyMessage}</small>:matching.map(renderOption)}
   </div>;
 }
 export function matchesOption<T>(item:T,query:string):boolean {
