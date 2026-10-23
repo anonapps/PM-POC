@@ -56,6 +56,12 @@ describe("matchesOption", () => {
   it("matches accent-insensitive casing without discarding accents", () => {
     expect(matchesOption({name:"Équipe Réseau",id:"STREAM-009"},"équipe 009")).toBe(true);
   });
+  it("finds accented names with unaccented queries", () => {
+    expect(matchesOption({name:"Équipe Réseau",id:"STREAM-009"},"equipe reseau")).toBe(true);
+    expect(matchesOption({name:"José García"},"jose garcia")).toBe(true);
+    expect(matchesOption({name:"Malaga"},"MÁLAGA")).toBe(true);
+    expect(matchesOption({name:"Équipe Réseau"},"equipe finance")).toBe(false);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
