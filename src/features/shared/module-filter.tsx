@@ -8,7 +8,7 @@ export function ModuleFilter({title,active,onClear,children}:{
   const [expanded,setExpanded]=useState(false);
   const id=useId();
   return <div className="module-filter-toolbar">
-    <button type="button" className="secondary" aria-expanded={expanded} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
+    <button type="button" className="secondary" aria-expanded={expanded} aria-controls={id} onClick={()=>{if(expanded&&active){onClear();setExpanded(false);}else{setExpanded(previous=>!previous);}}}>
       Filter {title}{active?" · Active":""}
     </button>
     {expanded&&<div id={id} className="filters">{children}
