@@ -1,5 +1,6 @@
 "use client";
 import { ModuleSearch } from "../shared/module-search";
+import { matchesOption } from "../shared/searchable-option-list";
 import { ModuleFilter } from "../shared/module-filter";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import type { ProjectCommand, ProjectState, ProjectStore } from "../../application";
@@ -30,7 +31,7 @@ export function WarningsPanel({ store, navigate }: { store: ProjectStore; naviga
   const [query,setQuery]=useState("");
   const [entityType, setEntityType] = useState("All");
   const all = useMemo(() => deriveProjectWarnings(state), [state]);
-  const warnings = all.filter((warning) => (type === "All" || warning.type === type) && (entityType === "All" || warning.entityType === entityType) && (!query.trim() || [warning.type,warning.entityType,warning.humanId,warning.entityName,warning.description].some(value=>value.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))));
+  const warnings = all.filter((warning) => (type === "All" || warning.type === type) && (entityType === "All" || warning.entityType === entityType) && (!query.trim() || matchesOption({label:[warning.type,warning.entityType,warning.humanId,warning.entityName,warning.description].join(" ")},query)));
   const correct = (warning: ProjectWarning) => {
     if (!canApplyWarningCorrection(state, warning)) {
       window.alert("Select a valid replacement Scope in Milestones before removing the final deleted Stream reference.");
