@@ -53,6 +53,9 @@ describe("matchesOption", () => {
     const fields=["Missing dependency","Task","TASK-017","API migration","Predecessor has no dates"].join(" ");
     expect(matchesOption({label:fields},"task-017 predecessor dates")).toBe(true);
   });
+  it("matches accent-insensitive casing without discarding accents", () => {
+    expect(matchesOption({name:"Équipe Réseau",id:"STREAM-009"},"équipe 009")).toBe(true);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
