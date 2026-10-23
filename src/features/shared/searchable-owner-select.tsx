@@ -14,6 +14,7 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
     <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)}/>
     <select aria-label={label} value={value} disabled={disabled} onChange={event=>{onChange(event.target.value);setQuery("");}}>
       <option value="">Unassigned</option>
+      {value&&!options.some(person=>person.id===value)&&<option value={value} disabled>Previously assigned owner (unavailable)</option>}
       {options.map(person=><option key={person.id} value={person.id} disabled={person.deleted}>{person.name}{person.deleted?" (Deleted)":""}</option>)}
     </select>
   </div>;
