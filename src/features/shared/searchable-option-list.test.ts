@@ -68,6 +68,12 @@ describe("matchesOption", () => {
     expect(matchesOption(option,"a9b8 launch")).toBe(true);
     expect(matchesOption(option,"task-030")).toBe(false);
   });
+  it("finds owner options by human ID even when the internal UUID differs", () => {
+    const owner={id:"internal-person-42",humanId:"PERSON-042",name:"Sofía López",deleted:false};
+    expect(matchesOption(owner,"person-042")).toBe(true);
+    expect(matchesOption(owner,"sofia 042")).toBe(true);
+    expect(matchesOption(owner,"person-043")).toBe(false);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { matchesOption } from "./searchable-option-list";
 
-export interface OwnerOption {id:string;name:string;deleted?:boolean}
+export interface OwnerOption {id:string;name:string;humanId?:string;deleted?:boolean}
 
 /** Searchable owner selector. Keeps native select for keyboard and screen-reader support. */
 export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
@@ -19,7 +19,7 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
     <select aria-label={label} value={value} disabled={disabled} onChange={event=>{onChange(event.target.value);setQuery("");}}>
       <option value="">Unassigned</option>
       {value&&!selected&&<option value={value} disabled>Previously assigned owner (unavailable)</option>}
-      {visible.map(person=><option key={person.id} value={person.id} disabled={person.deleted}>{person.name}{person.deleted?" (Deleted)":""}</option>)}
+      {visible.map(person=><option key={person.id} value={person.id} disabled={person.deleted}>{person.name}{person.humanId?` · ${person.humanId}`:""}{person.deleted?" (Deleted)":""}</option>)}
     </select>
   </div>;
 }
