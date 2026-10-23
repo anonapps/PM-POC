@@ -1,5 +1,5 @@
-import { ModuleSearch } from "../shared/module-search";
 "use client";
+import { ModuleSearch } from "../shared/module-search";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import type { ProjectCommand, ProjectState, ProjectStore } from "../../application";
 import type { ModuleName } from "../shell/shell";
