@@ -25,7 +25,7 @@ describe("matchesOption", () => {
     expect(matchesOption({id:"PERSON-028",name:"Alex Morgan"},"alex missing")).toBe(false);
   });
   it("supports repeated spaces and tabs between search terms", () => {
-    expect(matchesOption({name:"Release Planning",id:"TASK-014"},"release   \\t 014")).toBe(true);
+    expect(matchesOption({name:"Release Planning",id:"TASK-014"},"release   \t 014")).toBe(true);
   });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
