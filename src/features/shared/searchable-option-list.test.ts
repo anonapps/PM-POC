@@ -39,6 +39,11 @@ describe("matchesOption", () => {
   it("matches across upper- and lowercase queries", () => {
     expect(matchesOption({name:"Quality Assurance",id:"TASK-018"},"QUALITY assurance")).toBe(true);
   });
+  it("matches multi-term queries regardless of term order", () => {
+    const option={label:"Go Live",name:"Delivery Milestone",id:"MS-042"};
+    expect(matchesOption(option,"042 go delivery")).toBe(true);
+    expect(matchesOption(option,"delivery 042 go")).toBe(true);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
