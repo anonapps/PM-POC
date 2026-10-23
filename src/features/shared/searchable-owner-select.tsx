@@ -14,7 +14,7 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
   const selected=people.find(person=>person.id===value);
   const visible=selected&&!options.some(person=>person.id===value)?[selected,...options]:options;
   return <div className="searchable-owner-select">
-    <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"&&query){event.stopPropagation();setQuery("");}}}/>
+    <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"&&query){event.stopPropagation();setQuery("");}else if(!event.ctrlKey&&!event.metaKey&&!event.altKey&&(event.key.length===1||event.key==="Backspace"||event.key==="Delete")){event.stopPropagation();}}}/>
     {needle&&<small role="status" aria-live="polite">{options.length===0?"No matching people":`${options.length} ${options.length===1?"matching person":"matching people"}`}</small>}
     <select aria-label={label} value={value} disabled={disabled} onChange={event=>{onChange(event.target.value);setQuery("");}}>
       <option value="">Unassigned</option>
