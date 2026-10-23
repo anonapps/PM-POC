@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { matchesOption } from "./searchable-option-list";
 
 export interface OwnerOption {id:string;name:string;deleted?:boolean}
 
@@ -8,9 +9,8 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
   label:string;value:string;disabled?:boolean;people:readonly OwnerOption[];onChange:(ownerId:string)=>void;
 }) {
   const [query,setQuery]=useState("");
-  const needle=query.trim().toLocaleLowerCase();
-  const terms=needle.split(/\s+/).filter(Boolean);
-  const options=people.filter(person=>terms.every(term=>person.name.toLocaleLowerCase().includes(term)||person.id.toLocaleLowerCase().includes(term)));
+  const needle=query.trim();
+  const options=people.filter(person=>matchesOption(person,query));
   const selected=people.find(person=>person.id===value);
   const visible=selected&&!options.some(person=>person.id===value)?[selected,...options]:options;
   return <div className="searchable-owner-select">
