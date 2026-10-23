@@ -1,5 +1,5 @@
-import { ModuleSearch } from "../shared/module-search";
 "use client";
+import { ModuleSearch } from "../shared/module-search";
 import { useProjectState } from "../shell/use-project-state";
 import { nextSort, sortRows, type SortSelection } from "../shared/sorting";
 import { ScopePill } from "../shared/scope-pill";
