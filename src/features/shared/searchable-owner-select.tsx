@@ -14,7 +14,7 @@ export function SearchableOwnerSelect({label,value,disabled,people,onChange}:{
   const selected=people.find(person=>person.id===value);
   const visible=selected&&!options.some(person=>person.id===value)?[selected,...options]:options;
   return <div className="searchable-owner-select">
-    <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)}/>
+    <input type="search" aria-label={`Search ${label}`} placeholder="Search people by name or ID" value={query} disabled={disabled} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"&&query){event.stopPropagation();setQuery("");}}}/>
     {needle&&options.length===0&&<small role="status">No matching people</small>}
     <select aria-label={label} value={value} disabled={disabled} onChange={event=>{onChange(event.target.value);setQuery("");}}>
       <option value="">Unassigned</option>
