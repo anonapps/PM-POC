@@ -62,6 +62,12 @@ describe("matchesOption", () => {
     expect(matchesOption({name:"Malaga"},"MÁLAGA")).toBe(true);
     expect(matchesOption({name:"Équipe Réseau"},"equipe finance")).toBe(false);
   });
+  it("matches displayed human-readable IDs as well as internal IDs", () => {
+    const option={id:"a9b8c7d6",humanId:"TASK-029",name:"Launch Readiness"};
+    expect(matchesOption(option,"task-029 readiness")).toBe(true);
+    expect(matchesOption(option,"a9b8 launch")).toBe(true);
+    expect(matchesOption(option,"task-030")).toBe(false);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });

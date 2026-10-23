@@ -28,7 +28,7 @@ export function matchesOption<T>(item:T,query:string):boolean {
 function labelFor<T>(item:T):string {
   if(typeof item==="string")return item;
   if(item&&typeof item==="object") {
-    const values=["label","name","id"].filter(key=>key in item).map(key=>String((item as Record<string,unknown>)[key]??""));
+    const values=["label","name","humanId","id"].filter(key=>key in item).map(key=>String((item as Record<string,unknown>)[key]??""));
     if(values.length)return values.join(" ");
   }
   return String(item);
