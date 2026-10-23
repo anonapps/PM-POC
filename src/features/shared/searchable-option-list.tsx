@@ -19,5 +19,6 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
 function labelFor<T>(item:T):string {
   if(typeof item==="string")return item;
   if(item&&typeof item==="object"&&"label" in item)return String(item.label);
+  if(item&&typeof item==="object"&&"name" in item)return String(item.name);
   return String(item);
 }
