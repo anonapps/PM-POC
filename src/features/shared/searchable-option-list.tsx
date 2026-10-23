@@ -19,8 +19,9 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
   </div>;
 }
 export function matchesOption<T>(item:T,query:string):boolean {
-  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-  const haystack=labelFor(item).toLocaleLowerCase();
+  const normalise=(value:string)=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase();
+  const terms=normalise(query.trim()).split(/\s+/).filter(Boolean);
+  const haystack=normalise(labelFor(item));
   return terms.every(term=>haystack.includes(term));
 }
 function labelFor<T>(item:T):string {
