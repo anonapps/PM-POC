@@ -11,7 +11,7 @@ export function ModuleFilter({title,active,onClear,children}:{
     <button type="button" className="secondary" aria-expanded={expanded} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
       Filter {title}{active?" · Active":""}
     </button>
-    {expanded&&<div id={id} className="filters">{children}
+    {expanded&&<div id={id} className="filters" onKeyDown={event=>{if(event.key==="Escape"){event.stopPropagation();setExpanded(false);}}}>{children}
       {active&&<button type="button" className="secondary" onClick={onClear}>Clear filters</button>}
     </div>}
   </div>;
