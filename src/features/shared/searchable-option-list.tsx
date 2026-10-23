@@ -12,7 +12,7 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
   const needle=query.trim().toLocaleLowerCase();
   const matching=items.filter(item=>labelFor(item).toLocaleLowerCase().includes(needle));
   return <div className="searchable-option-list">
-    <input type="search" aria-label={label} placeholder={label} value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>event.stopPropagation()}/>
+    <input type="search" aria-label={label} placeholder={label} value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key!=="Escape")event.stopPropagation();}}/>
     {matching.length?matching.map(renderOption):<small role="status">{emptyMessage}</small>}
   </div>;
 }
