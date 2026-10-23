@@ -107,3 +107,12 @@ describe("v1.5 global multi-term search",()=>{
     expect(searchProject(state,"jordan delivery")).toEqual([expect.objectContaining({module:"Tasks",label:"Delivery plan"})]);
   });
 });
+
+
+describe("v1.5 global accent-insensitive search",()=>{
+  it("finds an accented Stream name without requiring diacritics",()=>{
+    const state=makeProjectState({streams:[streamFixture({name:"Équipe Réseau",description:"Migration"})]});
+    expect(searchProject(state,"equipe reseau")).toEqual([expect.objectContaining({module:"Streams",label:"Équipe Réseau"})]);
+    expect(searchProject(state,"MIGRATION equipe")).toHaveLength(1);
+  });
+});
