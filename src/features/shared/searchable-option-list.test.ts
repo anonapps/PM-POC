@@ -27,6 +27,18 @@ describe("matchesOption", () => {
   it("supports repeated spaces and tabs between search terms", () => {
     expect(matchesOption({name:"Release Planning",id:"TASK-014"},"release   \t 014")).toBe(true);
   });
+  it("matches a milestone using its ID when the label is different", () => {
+    expect(matchesOption({label:"Go-live",id:"MILESTONE-031"},"milestone 031")).toBe(true);
+  });
+  it("supports name-only objects", () => {
+    expect(matchesOption({name:"Platform Delivery"},"delivery")).toBe(true);
+  });
+  it("does not match an unrelated identifier", () => {
+    expect(matchesOption({name:"Design Review",id:"TASK-014"},"TASK-015")).toBe(false);
+  });
+  it("matches across upper- and lowercase queries", () => {
+    expect(matchesOption({name:"Quality Assurance",id:"TASK-018"},"QUALITY assurance")).toBe(true);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
