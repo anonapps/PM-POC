@@ -1,5 +1,5 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /** Accessible, case-insensitive filtering of dynamic single- or multi-select option lists. */
 export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="No matching options"}:{
@@ -9,10 +9,18 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
   emptyMessage?:string;
 }) {
   const [query,setQuery]=useState("");
+  const rootRef=useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    const details=rootRef.current?.closest("details");
+    if(!details)return;
+    const resetOnClose=()=>{if(!details.open)setQuery("");};
+    details.addEventListener("toggle",resetOnClose);
+    return ()=>details.removeEventListener("toggle",resetOnClose);
+  },[]);
   const matching=items.filter(item=>matchesOption(item,query));
   const noMatches=matching.length===0;
   const searching=query.trim().length>0;
-  return <div className="searchable-option-list">
+  return <div ref={rootRef} className="searchable-option-list">
     <input type="search" aria-label={label} placeholder={label} value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"){if(query){event.stopPropagation();setQuery("");}else{event.stopPropagation();const details=event.currentTarget.closest("details");if(details){details.open=false;details.querySelector("summary")?.focus();}}}else if(!event.ctrlKey&&!event.metaKey&&!event.altKey&&(event.key.length===1||event.key==="Backspace"||event.key==="Delete")){event.stopPropagation();}}}/>
     {searching&&<small role="status" aria-live="polite">{matching.length} {matching.length===1?"matching option":"matching options"}</small>}
     {noMatches?<small>{emptyMessage}</small>:matching.map(renderOption)}
