@@ -44,6 +44,15 @@ describe("matchesOption", () => {
     expect(matchesOption(option,"042 go delivery")).toBe(true);
     expect(matchesOption(option,"delivery 042 go")).toBe(true);
   });
+  it("supports risk searches combining status, owner and risk ID", () => {
+    const fields=["RISK-021","Deployment delay","Open","High","Alex Morgan"].join(" ");
+    expect(matchesOption({label:fields},"alex high risk-021")).toBe(true);
+    expect(matchesOption({label:fields},"closed high")).toBe(false);
+  });
+  it("supports warning searches combining entity and description", () => {
+    const fields=["Missing dependency","Task","TASK-017","API migration","Predecessor has no dates"].join(" ");
+    expect(matchesOption({label:fields},"task-017 predecessor dates")).toBe(true);
+  });
   it("treats blank search as all options", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
