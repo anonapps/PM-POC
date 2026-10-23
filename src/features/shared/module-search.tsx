@@ -10,7 +10,7 @@ export function ModuleSearch({title,value,onChange,placeholder}:{
   const active=value.trim().length>0;
   const open=expanded||active;
   return <div className="module-search-toolbar">
-    <button type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
+    <button type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>{if(open&&active){onChange("");setExpanded(false);}else{setExpanded(previous=>!previous);}}}>
       Search {title}{active?" · Active":""}
     </button>
     {open&&<div id={id} className="module-search-controls">
