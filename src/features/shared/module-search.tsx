@@ -15,7 +15,7 @@ export function ModuleSearch({title,value,onChange,placeholder}:{
     </button>
     {open&&<div id={id} className="module-search-controls">
       <label className="search-input">Search {title}
-        <input type="search" value={value} onChange={event=>onChange(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"&&value){event.stopPropagation();onChange("");}}} placeholder={placeholder}/>
+        <input type="search" value={value} onChange={event=>onChange(event.target.value)} onKeyDown={event=>{if(event.key==="Escape"){event.stopPropagation();if(value)onChange("");else setExpanded(false);}}} placeholder={placeholder}/>
       </label>
       {active&&<button type="button" className="secondary" onClick={()=>onChange("")} aria-label={`Clear ${title} search`}>Clear</button>}
     </div>}
