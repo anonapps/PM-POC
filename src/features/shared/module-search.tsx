@@ -8,9 +8,9 @@ export function ModuleSearch({title,value,onChange,placeholder}:{
   const [expanded,setExpanded]=useState(false);
   const id=useId();
   const active=value.trim().length>0;
-  const open=expanded||active;
+  const open=expanded;
   return <div className="module-search-toolbar">
-    <button type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>{if(open&&active){onChange("");setExpanded(false);}else{setExpanded(previous=>!previous);}}}>
+    <button type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
       Search {title}{active?" · Active":""}
     </button>
     {open&&<div id={id} className="module-search-controls">
