@@ -1,5 +1,5 @@
 "use client";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 /** Consistent collapsible search toolbar for record-management modules. */
 export function ModuleSearch({title,value,onChange,placeholder}:{
@@ -8,9 +8,18 @@ export function ModuleSearch({title,value,onChange,placeholder}:{
   const [expanded,setExpanded]=useState(false);
   const id=useId();
   const triggerRef=useRef<HTMLButtonElement>(null);
+  const rootRef=useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    if(!expanded)return;
+    const onPointerDown=(event:PointerEvent)=>{
+      if(event.target instanceof Node&&!rootRef.current?.contains(event.target))setExpanded(false);
+    };
+    document.addEventListener("pointerdown",onPointerDown);
+    return ()=>document.removeEventListener("pointerdown",onPointerDown);
+  },[expanded]);
   const active=value.trim().length>0;
   const open=expanded;
-  return <div className="module-search-toolbar">
+  return <div ref={rootRef} className="module-search-toolbar">
     <button ref={triggerRef} type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
       Search {title}{active?" · Active":""}
     </button>
