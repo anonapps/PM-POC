@@ -5,6 +5,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     await cdp.send('Input.dispatchKeyEvent', { type: 'keyUp', key: name, code: name, windowsVirtualKeyCode: code });
   };
   const setSearch = async (selector, value) => {
+    await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)})?.checkVisibility())`);
     await evaluate(`(()=>{const input=document.querySelector(${JSON.stringify(selector)});input.focus();Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(value)});input.dispatchEvent(new Event('input',{bubbles:true}))})()`);
   };
   for (const [module, add, field, id] of [

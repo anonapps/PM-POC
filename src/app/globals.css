@@ -951,3 +951,23 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 
 .workspace .panel .milestones-table details.multi-select:has(>summary.scope-summary) { min-width:120px; }
 .workspace .panel details.multi-select>summary.scope-summary { height:auto; min-height:36px; padding-top:4px; padding-bottom:4px; }
+
+/* Equal outer tracks keep the search centre fixed to the content container. */
+.workspace .panel>.page-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 340px minmax(0,1fr); gap:10px; align-items:center; }
+.workspace .panel>.page-toolbar>:first-child { grid-column:1; grid-row:1; min-width:0; }
+.workspace .panel>.page-toolbar>.shared-search-filter { grid-column:2; grid-row:1; justify-self:center; width:340px; max-width:100%; min-width:0; height:34px; margin:0; }
+.workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:3; grid-row:1; justify-self:end; min-width:0; max-width:100%; margin-left:0; }
+.workspace .panel>.page-toolbar>.actions,.workspace .panel>.page-toolbar>.header-actions { justify-content:flex-end; flex-wrap:wrap; }
+.workspace .panel>.page-toolbar .gantt-zoom-control { margin-right:0; }
+@media(max-width:1100px) {
+  .workspace .panel>.page-toolbar { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  .workspace .panel>.page-toolbar>.shared-search-filter { grid-column:1 / -1; grid-row:2; width:340px; max-width:100%; order:0; }
+  .workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:2; }
+}
+
+/* Chart scrolling cannot move or obscure the shared footer below it. */
+.workspace .gantt-panel { overflow:visible; }
+.workspace .gantt-panel .gantt { min-width:0; width:100%; max-height:calc(100dvh - var(--module-toolbar-height,46px) - 144px); overflow:auto; }
+.workspace .panel footer.timeline-navigation { position:sticky; bottom:0; left:auto; right:auto; z-index:24; box-sizing:border-box; width:100%; margin:0; background:var(--surface); border-top:1px solid var(--border); box-shadow:0 -3px 10px #17243a12; }
+/* The chart can retain its horizontal extent without widening its page toolbar. */
+.workspace section.panel.tube-map { min-width:0; }

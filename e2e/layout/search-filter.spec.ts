@@ -23,6 +23,8 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   await expect(search).toHaveCount(1);await expect(input).toBeVisible();
   const title=await page.locator('h1').boundingBox(),box=await search.boundingBox();
   expect(Math.abs(title!.y+title!.height/2-box!.y-box!.height/2)).toBeLessThan(10);expect(box!.height).toBeLessThanOrEqual(36);
+  const content=await page.locator('.panel').boundingBox();expect(Math.abs(box!.x+box!.width/2-content!.x-content!.width/2)).toBeLessThan(1);
+  expect(box!.width).toBe(340);
   if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
   const panel=page.locator('.filter-popover');await expect(panel).toBeVisible();
   const rect=await panel.boundingBox();expect(rect!.x).toBeGreaterThanOrEqual(0);expect(rect!.x+rect!.width).toBeLessThanOrEqual(width);expect(rect!.y+rect!.height).toBeLessThanOrEqual(1000);

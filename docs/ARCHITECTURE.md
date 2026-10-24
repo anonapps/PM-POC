@@ -455,3 +455,6 @@ Dirty Open/Close actions use an explicit Save/Discard/Cancel dialog above the sh
 
 
 Shared Search/Filter remediation: ModuleSearch owns the compact toolbar input and a body portal for the filter panel. Shared pure geometry clamps/positions panels and flips them above when space is limited. PredictiveDisclosure uses native manual popovers for table option panels, retaining DOM ancestry and keyboard/query-reset behaviour while escaping table/scroll clipping. Filter styles are scoped to the panel to prevent broad workspace input rules inflating checkbox, search or Clear controls. No persistent state/command/file format change.
+
+
+PageToolbar renders one shared grid with equal outer tracks and a 340px centre search track; its narrow fallback puts search on a centred second row. The existing toolbar ResizeObserver continues measuring sticky-header height. TimelineNavigation shares Tube Map's footer styles and calendar-date formatter with Gantt; each caller owns offsets and inclusive/exclusive end conversion. Gantt navigation uses the unchanged model's 1/7/14-day increments. Gantt scrolls inside the chart, while its footer remains in normal flow below it and uses the same sticky presentation as Tube Map. No persistence/domain/application-command change.

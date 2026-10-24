@@ -4,6 +4,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
     await cdp.send('Input.dispatchKeyEvent',{type:'keyUp',key:name,code:name,windowsVirtualKeyCode:code,modifiers});
   };
   const search=async(selector,value)=>{
+    await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)})?.checkVisibility())`);
     await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});e.focus();Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(e,${JSON.stringify(value)});e.dispatchEvent(new Event('input',{bubbles:true}))})()`);
   };
   for(const moduleName of ['Search','Streams','People','Tasks','Milestones','Risk Log','Decision Log','Warnings']) {
