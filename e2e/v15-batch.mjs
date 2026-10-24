@@ -62,6 +62,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await waitFor(`document.querySelectorAll('tbody .risk-level-chip').length===${riskLevels.filter(level=>level==='Low').length}`);
   record('Risk matrix and toolbar share the same Level filter state',await evaluate(`document.querySelector('input[aria-label="Filter Level: Low"]').checked&&!document.querySelector('input[aria-label="Filter Level: High"]').checked&&!document.querySelector('input[aria-label="Filter Level: Medium"]').checked`));
   await click('Clear search and filters');
+  await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
   await nav('Risk Log');
   await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
   const riskSelections=await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').textContent`);
