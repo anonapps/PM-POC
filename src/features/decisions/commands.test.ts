@@ -29,3 +29,11 @@ it("context editing preserves hidden task and risk links through Undo/Redo", () 
   store.redo();
   expect(store.getState().decisions[0]).toMatchObject({ relatedTaskIds: ["task-1"], relatedRiskIds: ["risk-1"], description: "Updated notes" });
 });
+
+it("context editing changes explicit task/risk selections while retaining unedited fields",()=>{
+  const state=makeProjectState({tasks:[taskFixture()],decisions:[{...draft,id:"decision-1",projectId:"project-1",humanId:"DECISION-001",relatedTaskIds:["task-1"],description:"Before",deletion:{isDeleted:false}}]});
+  const store=createProjectStore(state,context);
+  store.execute(editDecisionContext("decision-1",{projectWide:false,relatedStreamIds:[],relatedMilestoneIds:[],relatedTaskIds:[],relatedRiskIds:[],description:"After"}));
+  expect(store.getState().decisions[0]).toMatchObject({title:draft.title,relatedTaskIds:[],description:"After"});
+  store.undo();expect(store.getState().decisions[0]).toEqual(state.decisions[0]);
+});

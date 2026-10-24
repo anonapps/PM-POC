@@ -1,3 +1,5 @@
+import { regressionFixture } from "../../testing/regression-fixture";
+import { matchesEntitySearch } from "./search";
 import {describe,expect,it}from"vitest";import{makeProjectState,streamFixture,taskFixture}from"../../domain/test-fixtures";import{searchProject}from"./search";
 import { createProjectStore } from "../../application";
 import { createRisk, addRiskAction, editRiskAction } from "../risks/commands";
@@ -114,5 +116,26 @@ describe("v1.5 global accent-insensitive search",()=>{
     const state=makeProjectState({streams:[streamFixture({name:"Équipe Réseau",description:"Migration"})]});
     expect(searchProject(state,"equipe reseau")).toEqual([expect.objectContaining({module:"Streams",label:"Équipe Réseau"})]);
     expect(searchProject(state,"MIGRATION equipe")).toHaveLength(1);
+  });
+});
+
+describe("shared hidden-field projection",()=>{
+  it("finds decision descriptions and task/risk human IDs with AND terms",()=>{
+    const state=regressionFixture();
+    const original=state.decisions[1];
+    const decision={...original,description:"Procurement rationale",relatedTaskIds:[state.tasks[3].id],relatedRiskIds:[state.risks[4].id]};
+    const next={...state,decisions:[decision]};
+    expect(matchesEntitySearch(next,decision,"procurement task-004 risk-005")).toBe(true);
+    expect(searchProject(next,"procurement task-004 risk-005").map(item=>item.entityId)).toEqual([decision.id]);
+    expect(matchesEntitySearch(next,decision,"procurement missing")).toBe(false);
+  });
+  it("indexes risk actions and dependency names without dropping original fields",()=>{
+    const state=regressionFixture();
+    const risk=state.risks.find(item=>item.actions.length>0)!;
+    expect(matchesEntitySearch(state,risk,"overdue mitigation")).toBe(true);
+    const edge=state.dependencies.find(item=>item.successor.kind==="task"&&item.predecessor.kind==="task")!;
+    const task=state.tasks.find(item=>item.id===edge.successor.id)!;
+    const predecessor=state.tasks.find(item=>item.id===edge.predecessor.id)!;
+    expect(matchesEntitySearch(state,task,predecessor.humanId)).toBe(true);
   });
 });

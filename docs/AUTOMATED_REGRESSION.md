@@ -77,3 +77,9 @@ On 11 October 2026, commit `14eb167` passed 27 Vitest files / 139 tests, TypeScr
 `e2e/v15-shared-controls.mjs`, included in acceptance and both larger suites, verifies repeat inline creation for People/Streams, filtered creation reset, inline validation, Search disabled during creation, Show Deleted keyboard order, outside-click dismissal, predictive arrows/Enter/Escape, retained hidden selections, and shared Today marker body geometry. Unit tests cover Gantt final-day/zoom positioning and preservation of hidden Decision relationships through context editing and Undo/Redo.
 
 Independent browser suites can share an immutable production server by explicitly setting `E2E_BASE_URL`, using separate `E2E_DEBUG_PORT` values and allowing each runner to create its own fixture/profile. Build before starting that server; run TypeScript checks after the build to avoid racing `.next/types` regeneration. Do not edit runtime source during a browser run.
+
+## v1.5 consolidated interaction batch
+
+The acceptance entry point also runs `e2e/v15-batch.mjs`. It checks the unified toolbar on all eight pages, multiple category selections, navigation resets, Risk Matrix/Level synchronisation, predictive owner IDs and selection without an extra history entry, context Cancel, multiline submission, hidden-field search and new Task/Risk relationship persistence through `.pmp` save/reopen. `v15-shared-controls.mjs` now exercises repeated filtered creation and inline validation for all six record types.
+
+Creation forms intentionally expose mandatory fields only. Smoke coverage creates Tasks/Milestones first, then edits optional scope and predecessors through row controls. Dynamic owner controls are native disclosures with searchable radio options; owner sorting checks the displayed selected summary. These changes preserve coverage while following the approved v1.5 interaction contract.

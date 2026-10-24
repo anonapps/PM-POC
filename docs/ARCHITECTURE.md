@@ -436,3 +436,11 @@ The approved `experiment/heroui-ui` branch adds bundled HeroUI v2 controls and a
 ## v1.3.1 presentation baseline
 
 HeroUI v2 Button/Chip controls and provider are part of the main presentation layer. Tailwind 4 runs through @tailwindcss/postcss and loads the existing theme configuration explicitly. Entity modules read project state through useSyncExternalStore so selection lists update directly on committed changes. The compact sidebar retains its own grid column; it never overlays the project header. Domain, file-service and persistence boundaries are unchanged.
+
+## v1.5 shared interaction implementation
+
+- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Module unmount resets this transient state.
+- Creation uses `CreationField`, pure calendar/required-field validation and `useCreationFeedback`. Only mandatory user inputs appear in creation; optional scope, owners and dependencies remain in row/context editing. Successful commands clear all creation inputs and active filters while retaining creation mode. No UI state is written to `.pmp`.
+- `PredictiveSelect`, `RelationshipPicker` and `SearchableOptionList` share query matching, arrows, Enter and Escape behaviour. Selection lives in canonical state or an explicit context draft, independently of query-filtered results. Native disclosure closing clears query state; outside clicks dismiss disclosures. Short fixed-value entity controls remain native selects.
+- `matchesEntitySearch` is the shared pure projection for module/global search, including descriptive text, owner and relationship names/human IDs, dependencies and risk actions. Matching itself lives in `option-matching.ts`, without React imports. Deleted related names remain excluded, preserving the established search contract.
+- Risk/Decision context drafts commit through existing commands and preserve relationships not being changed. Decision task/risk links are now explicitly editable, in addition to the existing Stream/Milestone context. Multiline context submission supports Ctrl/Cmd+Enter.

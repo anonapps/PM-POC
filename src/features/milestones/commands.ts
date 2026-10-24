@@ -1,3 +1,4 @@
+import { isCalendarDate } from "../shared/creation-validation";
 import { capitaliseFirstLetter } from "../shared/text-normalisation";
 import { issueHumanId, type DependencyEndpoint, type Milestone, type MilestoneScope, type MilestoneStatus } from "../../domain";
 import type { ProjectCommand, ProjectState } from "../../application";
@@ -17,7 +18,7 @@ export interface MilestoneDraft {
 export function validateMilestone(state: ProjectState, draft: MilestoneDraft, historicalStreamIds: readonly string[] = []): readonly string[] {
   const errors: string[] = [];
   if (!draft.name.trim()) errors.push("Milestone name is required.");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.plannedDate)) errors.push("Milestone date is required.");
+  if (!isCalendarDate(draft.plannedDate)) errors.push("Milestone date is required.");
   if (draft.ownerId && !state.people.some((person) => person.id === draft.ownerId && !person.deletion.isDeleted)) errors.push("Owner must be active.");
   if (draft.scope.kind === "streams" && draft.scope.streamIds.length === 0) errors.push("Select at least one active Stream or Project-wide.");
   if (draft.scope.kind === "streams" && draft.scope.streamIds.some((id) => !historicalStreamIds.includes(id) && !state.streams.some((stream) => stream.id === id && !stream.deletion.isDeleted))) errors.push("Related streams must be active.");

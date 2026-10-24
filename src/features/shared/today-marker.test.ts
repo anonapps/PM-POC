@@ -18,7 +18,7 @@ describe("creation toolbar", () => {
     const markup = renderToStaticMarkup(createElement(ModuleSearch, { title: "people", value: "existing query", onChange() {}, placeholder: "Search people", disabled: true }));
     expect(markup).toContain('disabled=""');
     expect(markup).toContain('aria-expanded="false"');
-    expect(markup).toContain('Search people');
+    expect(markup).toContain('Search and filter people');
     expect(markup).not.toContain('type="search"');
   });
 });

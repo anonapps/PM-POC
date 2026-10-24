@@ -1,4 +1,6 @@
 "use client";
+import { matchesOption } from "./option-matching";
+export { matchesOption } from "./option-matching";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 /** Accessible, case-insensitive filtering of dynamic single- or multi-select option lists. */
@@ -26,10 +28,10 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
     const options = Array.from(root.querySelectorAll<HTMLElement>('input:not([type="search"]):not(:disabled),button:not(:disabled),[role="option"]:not([aria-disabled="true"])'));
     if (event.key === "Escape") {
       event.preventDefault();
-      event.stopPropagation();
       setQuery("");
       const details = root.closest("details");
       if (details) {
+        event.stopPropagation();
         details.open = false;
         details.querySelector("summary")?.focus();
       }
@@ -53,19 +55,4 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
     {searching&&<small role="status" aria-live="polite">{matching.length} {matching.length===1?"matching option":"matching options"}</small>}
     {noMatches?<small>{emptyMessage}</small>:matching.map(renderOption)}
   </div>;
-}
-export function matchesOption<T>(item:T,query:string):boolean {
-  const normalise=(value:string)=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase();
-  const terms=normalise(query.trim()).split(/\s+/).filter(Boolean);
-  if(terms.length===0)return true;
-  const haystack=normalise(labelFor(item));
-  return terms.every(term=>haystack.includes(term));
-}
-function labelFor<T>(item:T):string {
-  if(typeof item==="string")return item;
-  if(item&&typeof item==="object") {
-    const values=["label","name","humanId","id"].filter(key=>key in item).map(key=>String((item as Record<string,unknown>)[key]??""));
-    if(values.length)return values.join(" ");
-  }
-  return String(item);
 }

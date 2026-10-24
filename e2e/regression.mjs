@@ -23,7 +23,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
     await waitFor(`[...document.querySelectorAll('th')].some(th=>th.textContent.trim().startsWith('Owner')&&th.getAttribute('aria-sort')==='${direction}')`);
     record(`Task Owner sorts ${direction} by displayed Person name, missing last, preserving selection`, await evaluate(`(()=>{
       const rows=[...document.querySelectorAll('tbody tr')];
-      const owners=rows.map(row=>{const owner=row.querySelector('select[aria-label^="Owner for "]');return owner.value?owner.selectedOptions[0].textContent:null});
+      const owners=rows.map(row=>{const owner=row.querySelector('summary[aria-label^="Owner for "]');return owner.dataset.value?owner.textContent:null});
       const assigned=owners.filter(name=>name!==null),firstMissing=owners.indexOf(null);
       const ordered=assigned.every((name,index)=>index===0||assigned[index-1].localeCompare(name,undefined,{numeric:true,sensitivity:'base'})${direction === 'ascending' ? '<=' : '>='}0);
       const stable=rows.every((row,index)=>{if(index===0||owners[index]!==owners[index-1])return true;return rows[index-1].querySelector('.task-row-id').textContent<row.querySelector('.task-row-id').textContent});

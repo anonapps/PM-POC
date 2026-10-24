@@ -90,7 +90,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   }
   await nav('Tasks');
   await click('Add Task');
-  record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
+  record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('.predictive-select label')].some(o=>o.textContent.includes('Fresh selection stream'))`));
   await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
   await nav('Overview');
   await click('Edit Project');

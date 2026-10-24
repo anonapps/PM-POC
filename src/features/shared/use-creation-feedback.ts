@@ -1,8 +1,9 @@
 "use client";
+import { validateCreationFields } from "./creation-validation";
 import { useEffect, useState } from "react";
 
 export function useCreationFeedback(firstFieldId: string) {
-  const [error, setError] = useState("");
+  const [errors,setErrors]=useState<Record<string,string>>({});
   const [notice, setNotice] = useState<{ text: string } | null>(null);
   useEffect(() => {
     if (!notice) return;
@@ -10,17 +11,21 @@ export function useCreationFeedback(firstFieldId: string) {
     return () => window.clearTimeout(timer);
   }, [notice]);
   return {
-    error,
+    error:errors.name,
+    errors,
+    validateFields(fields:Parameters<typeof validateCreationFields>[0]) {
+      const result=validateCreationFields(fields);setErrors(result);return Object.keys(result).length===0;
+    },
     notice: notice?.text,
     validate(name: string) {
-      setError(name.trim() ? "" : "Name is required.");
+      setErrors(name.trim()?{}:{name:"Name is required."});
       return Boolean(name.trim());
     },
     created(kind: string) {
-      setError("");
+      setErrors({});
       setNotice({ text: `${kind} created.` });
       document.getElementById(firstFieldId)?.focus();
     },
-    reset() { setError(""); setNotice(null); },
+    reset() { setErrors({}); setNotice(null); },
   };
 }

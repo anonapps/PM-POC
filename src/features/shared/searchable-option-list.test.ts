@@ -78,3 +78,7 @@ describe("matchesOption", () => {
     expect(matchesOption({name:"Any option"},"   ")).toBe(true);
   });
 });
+
+it("matches titled risk context options by title and human-readable ID",()=>{
+  expect(matchesOption({id:"internal-risk",humanId:"RISK-012",title:"Supplier disruption"},"supplier risk-012")).toBe(true);
+});

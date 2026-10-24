@@ -1,7 +1,7 @@
 "use client";
 import { ModuleSearch } from "../shared/module-search";
 import { matchesOption } from "../shared/searchable-option-list";
-import { ModuleFilter } from "../shared/module-filter";
+import { FilterChoices } from "../shared/record-filters";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import type { ProjectCommand, ProjectState, ProjectStore } from "../../application";
 import type { ModuleName } from "../shell/shell";
@@ -27,11 +27,11 @@ export const warningCorrection = (warning: ProjectWarning): ProjectCommand => ({
 
 export function WarningsPanel({ store, navigate }: { store: ProjectStore; navigate: (module: ModuleName, entityId?: string) => void }) {
   const state = useSyncExternalStore(store.subscribe, store.getState, store.getState);
-  const [type, setType] = useState("All");
+  const [types, setTypes] = useState<string[]>([]);
   const [query,setQuery]=useState("");
-  const [entityType, setEntityType] = useState("All");
+  const [entityTypes, setEntityTypes] = useState<string[]>([]);
   const all = useMemo(() => deriveProjectWarnings(state), [state]);
-  const warnings = all.filter((warning) => (type === "All" || warning.type === type) && (entityType === "All" || warning.entityType === entityType) && (!query.trim() || matchesOption({label:[warning.type,warning.entityType,warning.humanId,warning.entityName,warning.description].join(" ")},query)));
+  const warnings = all.filter((warning) => (!types.length || types.includes(warning.type)) && (!entityTypes.length || entityTypes.includes(warning.entityType)) && (!query.trim() || matchesOption({label:[warning.type,warning.entityType,warning.humanId,warning.entityName,warning.description].join(" ")},query)));
   const correct = (warning: ProjectWarning) => {
     if (!canApplyWarningCorrection(state, warning)) {
       window.alert("Select a valid replacement Scope in Milestones before removing the final deleted Stream reference.");
@@ -40,5 +40,5 @@ export function WarningsPanel({ store, navigate }: { store: ProjectStore; naviga
     }
     if (window.confirm(`${warning.action?.label}?`)) store.execute(warningCorrection(warning));
   };
-  return <section className="panel"><div className="title-row"><h1 className="module-page-title">WARNINGS ({all.length})</h1></div><p className="muted">Warnings are derived from current project state and disappear when corrected.</p><ModuleSearch title="warnings" value={query} onChange={setQuery} placeholder="Search types, IDs, names and descriptions"/><ModuleFilter title="warnings" active={type!=="All"||entityType!=="All"} onClear={()=>{setType("All");setEntityType("All")}}><label>Warning type<select value={type} onChange={(event) => setType(event.target.value)}><option>All</option>{[...new Set(all.map((warning) => warning.type))].map((value) => <option key={value}>{value}</option>)}</select></label><label>Entity type<select value={entityType} onChange={(event) => setEntityType(event.target.value)}><option>All</option>{[...new Set(all.map((warning) => warning.entityType))].map((value) => <option key={value}>{value}</option>)}</select></label></ModuleFilter>{warnings.length === 0 ? <EmptyState title={all.length ? "No matching warnings" : "No project warnings"} description={all.length ? "Change the filters to see other warnings." : "No active inconsistencies were found."} /> : <ul className="warning-list">{warnings.map((warning) => <li key={warning.id}><div><strong>{warning.type}</strong><span>{warning.entityType} · {warning.humanId} · {warning.entityName}</span><p>{warning.description}</p></div><div className="actions"><button onClick={() => navigate(warning.destination, warning.entityId)}>Open</button>{warning.action && <button className="danger" onClick={() => correct(warning)}>{warning.action.label}</button>}</div></li>)}</ul>}</section>;
+  return <section className="panel"><div className="title-row"><h1 className="module-page-title">WARNINGS ({all.length})</h1></div><p className="muted">Warnings are derived from current project state and disappear when corrected.</p><ModuleSearch title="warnings" value={query} onChange={setQuery} placeholder="Search types, IDs, names and descriptions" activeFilters={types.length>0||entityTypes.length>0} onClearFilters={()=>{setTypes([]);setEntityTypes([])}}><FilterChoices label="Warning type" options={[...new Set(all.map(w=>w.type))].map(id=>({id,label:id}))} selected={types} onChange={setTypes}/><FilterChoices label="Entity type" options={[...new Set(all.map(w=>w.entityType))].map(id=>({id,label:id}))} selected={entityTypes} onChange={setEntityTypes}/></ModuleSearch>{warnings.length === 0 ? <EmptyState title={all.length ? "No matching warnings" : "No project warnings"} description={all.length ? "Change the filters to see other warnings." : "No active inconsistencies were found."} /> : <ul className="warning-list">{warnings.map((warning) => <li key={warning.id}><div><strong>{warning.type}</strong><span>{warning.entityType} · {warning.humanId} · {warning.entityName}</span><p>{warning.description}</p></div><div className="actions"><button onClick={() => navigate(warning.destination, warning.entityId)}>Open</button>{warning.action && <button className="danger" onClick={() => correct(warning)}>{warning.action.label}</button>}</div></li>)}</ul>}</section>;
 }
