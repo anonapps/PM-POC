@@ -36,19 +36,19 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await nav('People');await nav('Tasks');
   record('Navigation resets search, filters and Show Deleted',await evaluate(`document.querySelectorAll('.tasks-table tbody tr').length===${baseline.length}&&!document.querySelector('.shared-search-filter>button').textContent.includes('Active')&&!document.querySelector('.panel .header-actions input').checked`));
   // Predictive owner selection uses human-readable ID, keyboard, and a single undoable edit.
-  await evaluate(`document.querySelector('summary[aria-label="Owner for TASK-005"]').click()`);
+  await evaluate(`(()=>{const trigger=document.querySelector('summary[aria-label="Owner for TASK-005"]');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   const ownerSearch='.predictive-select[open] input[type=search]';
   await search(ownerSearch,'PERSON-001');
   await waitFor(`document.querySelectorAll('.predictive-select[open] input[type=radio]').length===1`);
   await key('ArrowDown',40);await key('Enter',13);
   await waitFor(`!document.querySelector('.predictive-select[open]')`);
   record('Owner search resolves human ID and keyboard selection restores focus',await evaluate(`document.activeElement?.getAttribute('aria-label')==='Owner for TASK-005'&&document.activeElement.textContent.includes('Regression person')`));
-  await evaluate(`document.querySelector('summary[aria-label="Owner for TASK-005"]').click()`);
+  await evaluate(`(()=>{const trigger=document.querySelector('summary[aria-label="Owner for TASK-005"]');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   await search(ownerSearch,'PERSON-001');await key('Enter',13);
   await waitFor(`!document.querySelector('.predictive-select[open]')`);
   record('Enter on the current predictive option closes without another edit',true);
   await evaluate(`document.querySelector('button[aria-label="Undo"]').click()`);
-  await evaluate(`document.querySelector('summary[aria-label="Owner for TASK-005"]').click()`);
+  await evaluate(`(()=>{const trigger=document.querySelector('summary[aria-label="Owner for TASK-005"]');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   await waitFor(`document.querySelector('${ownerSearch}')?.value===''`);
   record('Owner dropdown clears query on close and Undo restores assignment',await evaluate(`document.querySelector('summary[aria-label="Owner for TASK-005"]').dataset.value===''`));
   await key('Escape',27);
@@ -68,7 +68,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await nav('Risk Log');
   await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
   const riskSelections=await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').textContent`);
-  await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').click()`);
+  await evaluate(`(()=>{const trigger=document.querySelector('.risk-context-editor .relationship-picker summary');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   await search('.risk-context-editor .relationship-picker[open] input[type=search]','STREAM-003');
   await waitFor(`document.querySelectorAll('.risk-context-editor .relationship-picker[open] input[type=checkbox]').length===1`);
   await key('ArrowDown',40);await key('Enter',13);
@@ -86,7 +86,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await nav('Decision Log');
   await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('DECISION-001'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
   for(const [label,id] of [['Decision tasks','TASK-004'],['Decision risks','RISK-005']]) {
-    await evaluate(`([...document.querySelectorAll('.decision-context-editor .relationship-picker summary')].find(x=>x.textContent.startsWith(${JSON.stringify(label)}))).click()`);
+    await evaluate(`(()=>{const trigger=[...document.querySelectorAll('.decision-context-editor .relationship-picker summary')].find(x=>x.getAttribute('aria-label')===${JSON.stringify(label)}||x.textContent.startsWith(${JSON.stringify(label)}));trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
     await search('.decision-context-editor .relationship-picker[open] input[type=search]',id);
     await key('ArrowDown',40);await key('Enter',13);await key('Escape',27);
   }

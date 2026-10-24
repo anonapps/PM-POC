@@ -1,32 +1,33 @@
 "use client";
-import { filterPanelPosition } from "./filter-panel-position";
-import { useEffect, useRef, type ComponentPropsWithRef, type Ref } from "react";
+import { positionAnchoredPanel } from "./filter-panel-position";
+import { useLayoutEffect, useRef, type ComponentPropsWithRef, type Ref } from "react";
 /** Native disclosure with consistent dismissal and keyboard focus restoration. */
 export function PredictiveDisclosure({children,disabled=false,ref:forwardedRef,...props}:ComponentPropsWithRef<"details">&{disabled?:boolean}) {
   const localRef=useRef<HTMLDetailsElement>(null);
-  useEffect(()=>{
+  useLayoutEffect(()=>{
     const root=localRef.current;
     // Native top-layer popovers retain DOM ancestry, query reset and selection semantics.
-    const panel=root?.querySelector<HTMLElement>(":scope > .multi-select-options, :scope > .relationship-options");
+    const panel=root?.querySelector<HTMLElement>(":scope > .multi-select-options, :scope > .relationship-options, :scope > .anchored-options");
+    panel?.setAttribute("popover","manual");
     const position=()=>{
       if(!root?.open||!panel)return;
-      const anchor=root.querySelector("summary")!.getBoundingClientRect();
-      const placement=filterPanelPosition(anchor,window.innerWidth,window.innerHeight);
-      Object.assign(panel.style,{left:`${placement.left}px`,top:`${placement.top}px`,width:`${Math.min(placement.width,Math.max(260,anchor.width))}px`,maxHeight:`${placement.maxHeight}px`});
+      const anchor=root.querySelector<HTMLElement>("summary")!;
+      if(!positionAnchoredPanel(anchor,panel,Math.min(400,Math.max(260,anchor.getBoundingClientRect().width)))){if(panel.matches(":popover-open"))panel.hidePopover();root.open=false;}
     };
     const toggle=()=>{
       if(!panel)return;
       panel.setAttribute("popover","manual");
-      if(root?.open){position();panel.showPopover();}else if(panel.matches(":popover-open"))panel.hidePopover();
+      if(root?.open){panel.showPopover();position();}else if(panel.matches(":popover-open"))panel.hidePopover();
     };
     const dismiss=(event:PointerEvent)=>{
       if(root?.open&&event.target instanceof Node&&!root.contains(event.target))root.open=false;
     };
+    const observer=new ResizeObserver(position);if(panel)observer.observe(panel);
     root?.addEventListener("toggle",toggle);
     document.addEventListener("pointerdown",dismiss);
     window.addEventListener("resize",position);
     window.addEventListener("scroll",position,true);
-    return ()=>{root?.removeEventListener("toggle",toggle);document.removeEventListener("pointerdown",dismiss);window.removeEventListener("resize",position);window.removeEventListener("scroll",position,true);if(panel?.matches(":popover-open"))panel.hidePopover();};
+    return ()=>{observer.disconnect();root?.removeEventListener("toggle",toggle);document.removeEventListener("pointerdown",dismiss);window.removeEventListener("resize",position);window.removeEventListener("scroll",position,true);if(panel?.matches(":popover-open"))panel.hidePopover();};
   },[]);
   const assign=(node:HTMLDetailsElement|null)=>{
     localRef.current=node;

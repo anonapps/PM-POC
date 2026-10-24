@@ -29,7 +29,7 @@ describe('180-record regression', () => {
     expect(state).toEqual(regressionFixture());
     collections.forEach(key => expect(state[key]).toHaveLength(30));
     expect(new Set(collections.flatMap(key => state[key].map(e => e.id))).size).toBe(180);
-    for (const key of ['streams','tasks'] as const) expect(pairs(state[key], e => e.status, e => !!e.ownerId)).toBe(10);
+    for (const key of ['streams','tasks'] as const) expect(pairs<{status:string;ownerId:string|null}>(state[key], e => e.status, e => !!e.ownerId)).toBe(10);
     expect(pairs(state.tasks, e => e.status, e => state.dependencies.some(d => d.successor.kind === 'task' && d.successor.id === e.id))).toBe(10);
     expect(pairs(state.milestones, e => e.status, e => state.dependencies.some(d => d.successor.kind === 'milestone' && d.successor.id === e.id))).toBe(8);
     expect(pairs(state.risks, e => e.probability, e => e.impact)).toBe(9);

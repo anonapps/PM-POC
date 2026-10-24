@@ -38,14 +38,18 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
   record('Sidebar collapse preserves every navigation vertical position',await evaluate(`[...document.querySelectorAll('nav button')].every((b,i)=>Math.abs(b.getBoundingClientRect().top-${JSON.stringify(positions)}[i])<2)`));
   await evaluate(`document.querySelector('.sidebar-toggle').click()`);
   await cdp.send('Emulation.setDeviceMetricsOverride',{width:768,height:900,deviceScaleFactor:1,mobile:false});
+  // Column widths now preserve readable controls with horizontal overflow. Exercise the
+  // existing container-query contract explicitly rather than infer it from viewport width.
+  await evaluate(`document.querySelector('.scope-pill[aria-label="Project-wide"]')?.closest('details').style.setProperty('width','80px')`);
   record('Narrow Project-wide pill shows ALL and exposes full focus label',await evaluate(`(()=>{const pill=[...document.querySelectorAll('.scope-pill[aria-label="Project-wide"]')].find(e=>e.getBoundingClientRect().width>0);if(!pill)return false;pill.focus();return pill.title==='Project-wide'&&pill.tabIndex===0&&getComputedStyle(pill.querySelector('.scope-pill-full')).display==='none'&&getComputedStyle(pill.querySelector('.scope-pill-short')).display!=='none'})()`));
+  await evaluate(`document.querySelector('.scope-pill[aria-label="Project-wide"]')?.closest('details').style.removeProperty('width')`);
   await cdp.send('Emulation.clearDeviceMetricsOverride');
   for(const moduleName of ['Gantt','Tube Map']){
     await nav(moduleName);
     await evaluate(`document.querySelector('.shared-search-filter button').click()`);
     record(`${moduleName}: Hide Empty Streams starts independently off`,await evaluate(`![...document.querySelectorAll('.filter-popover input[type=checkbox]')].some(e=>e.checked)`));
     await evaluate(`document.querySelector('.filter-popover input[type=checkbox]').click()`);
-    record(`${moduleName}: single Hide Empty Streams filter updates`,await evaluate(`document.querySelectorAll('.filter-popover input[type=checkbox]').length===1&&document.querySelector('.filter-popover input[type=checkbox]').checked&&document.querySelector('.filter-trigger').dataset.active==='true'`));
+    record(`${moduleName}: single Hide Empty Streams filter updates`,await evaluate(`[...document.querySelectorAll('.filter-popover label')].filter(e=>e.textContent.trim()==='Hide Empty Streams').length===1&&document.querySelector('.filter-popover input[type=checkbox]').checked&&document.querySelector('.filter-trigger').dataset.active==='true'`));
   }
   await click('Save Now');await waitFor(`document.querySelector('.save-state').textContent.startsWith('Saved')`);
   // Open bytes produced by the actual v1.4 serializer, not a v1.5 relabelled fixture.

@@ -45,7 +45,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     await evaluate(`document.querySelector('form[data-create-draft] .creation-footer button.secondary').click()`);
   }
   await nav('Tasks');
-  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('TASK-002'));row.querySelector('details:not(.predictive-select) summary').click()})()`);
+  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('TASK-002'));const trigger=row.querySelector('details:not(.predictive-select) summary');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   const search='details.multi-select:not(.predictive-select)[open] input[type=search]';
   await setSearch(search, 'no dependency matches');
   await waitFor(`document.querySelector('details.multi-select:not(.predictive-select)[open]')?.textContent.includes('No matching options')`);

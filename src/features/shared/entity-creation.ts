@@ -1,5 +1,5 @@
 import type { ProjectCommand, ProjectState } from '../../application';
-import { LIFECYCLE_STATUSES, MILESTONE_STATUSES, PRIORITIES, RISK_STATUSES, RISK_RATINGS, type LifecycleStatus, type Priority, type MilestoneStatus, type RiskRating, type RiskStatus, type RiskAction } from '../../domain';
+import { TASK_STATUSES, LIFECYCLE_STATUSES, MILESTONE_STATUSES, PRIORITIES, RISK_STATUSES, RISK_RATINGS, type TaskStatus, type LifecycleStatus, type Priority, type MilestoneStatus, type RiskRating, type RiskStatus, type RiskAction } from '../../domain';
 import { createPerson,createStream } from '../resources/commands';
 import { createTask,validateTaskDraft } from '../tasks/commands';
 import { createMilestone,validateMilestone } from '../milestones/commands';
@@ -23,7 +23,7 @@ export function prepareCreation(kind:CreationKind,d:CreationDraft,state:ProjectS
  if(kind==='milestone'||kind==='decision'){if(!d.date)errors.date=`${kind==='decision'?'Decision date':'Date'} is required.`;else if(!isCalendarDate(d.date))errors.date='Enter a valid date.';}
  for(const field of ['startDate','endDate','dueDate'] as const)if(d[field]&&!isCalendarDate(d[field]))errors[field]='Enter a valid date.';
  if(d.startDate&&d.endDate&&d.endDate<d.startDate)errors.endDate='End date must be on or after start date.';
- const statusOptions=kind==='milestone'?MILESTONE_STATUSES:kind==='risk'?RISK_STATUSES:LIFECYCLE_STATUSES;
+ const statusOptions=kind==='milestone'?MILESTONE_STATUSES:kind==='risk'?RISK_STATUSES:kind==='task'?TASK_STATUSES:LIFECYCLE_STATUSES;
  if(['stream','task','milestone','risk'].includes(kind)&&!(statusOptions as readonly string[]).includes(d.status))errors.status='Select a valid status.';
  if(d.priority&&!(PRIORITIES as readonly string[]).includes(d.priority))errors.priority='Select a valid priority.';
  if(d.ownerId&&!state.people.some(p=>p.id===d.ownerId&&!p.deletion.isDeleted))errors.ownerId='Select an active owner.';
@@ -33,7 +33,7 @@ export function prepareCreation(kind:CreationKind,d:CreationDraft,state:ProjectS
  if(kind==='person')command=createPerson(d.name,{role:d.role||undefined,notes:d.notes||undefined});
  else if(kind==='stream')command=createStream({name:d.name,description:d.description||undefined,ownerId:links.ownerId,status:d.status as LifecycleStatus,priority,startDate:d.startDate||null,endDate:d.endDate||null});
  else if(kind==='task'){
-  const draft={name:d.name,description:d.description||undefined,scope:d.scopeId?{kind:'stream' as const,streamId:d.scopeId}:{kind:'project' as const},ownerId:links.ownerId,status:d.status as LifecycleStatus,progress:Number(d.progress),priority,startDate:d.startDate||null,endDate:d.endDate||null,parentTaskId:d.parentTaskId||undefined,milestoneId:d.milestoneId||undefined,predecessorTaskIds:d.predecessors};
+  const draft={name:d.name,description:d.description||undefined,scope:d.scopeId?{kind:'stream' as const,streamId:d.scopeId}:{kind:'project' as const},ownerId:links.ownerId,status:d.status as TaskStatus,progress:Number(d.progress),priority,startDate:d.startDate||null,endDate:d.endDate||null,parentTaskId:d.parentTaskId||undefined,milestoneId:d.milestoneId||undefined,predecessorTaskIds:d.predecessors};
   if(d.parentTaskId&&!state.tasks.some(t=>t.id===d.parentTaskId&&!t.deletion.isDeleted))errors.parentTaskId='Select an active parent task.';
   if(d.milestoneId&&!state.milestones.some(m=>m.id===d.milestoneId&&!m.deletion.isDeleted))errors.milestoneId='Select an active milestone.';
   if(!d.progress.trim()||!Number.isInteger(Number(d.progress))||Number(d.progress)<0||Number(d.progress)>100)errors.progress='Progress must be a whole number from 0 to 100.';

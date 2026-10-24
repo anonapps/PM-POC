@@ -47,7 +47,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
 ])test(`Gantt footer at ${width}, ${scenario.name}`,async({page},testInfo)=>{
  await page.setViewportSize({width,height:900});await page.clock.setFixedTime(new Date(scenario.today));await openProject(page,scenario.range);
  await page.locator('nav').getByRole('button',{name:'Gantt',exact:true}).click();
- const footer=page.getByRole('navigation',{name:'Gantt date navigation'}),chart=page.locator('.gantt'),range=footer.locator('span');
+ const footer=page.getByRole('navigation',{name:'Gantt date navigation'}),chart=page.locator('.gantt'),range=footer.locator('span[data-start]');
  await expect(footer).toBeVisible();await expect(footer.locator('button')).toHaveCount(3);
  await expect(page.locator('.page-toolbar').getByRole('button',{name:/^(Previous|Today|Next)$/})).toHaveCount(0);
  expect(await footer.locator('button').allTextContents()).toEqual(['← Previous','Next →','Jump to today']);

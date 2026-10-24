@@ -3,6 +3,10 @@
 - Search stays centred against the page content across all ten modules, independently of title/action widths; narrow layouts use a centred second row.
 - Gantt Previous/Next and Jump to today move to a shared persistent timeline footer with an inclusive date range; original zoom increments and Tube Map behaviour are preserved.
 
+- Task-only Tentative status, six muted Gantt bar colours and status legend/filter; legacy task values remain unchanged.
+- Tube Map milestone legend/status filtering and compact footer; shared measured dropdown/warning anchoring, compact forms and aligned context controls.
+- Session-only collapsible Risk Matrix and content-sized Overview Quick Actions. Tentative-containing saves require the v1.5 reader; original-status files retain their prior minimum-runtime metadata.
+
 This candidate is prepared for validation on `feature/v1.5-approved-enhancements`; it is not published, deployed, tagged or approved for merge.
 
 - Compact live search in ten page title toolbars, integrated filter icon, compact viewport-constrained panels, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering. Table dropdowns clear sticky/scroll containers; charts expose one Hide Empty Streams control each.

@@ -31,7 +31,11 @@ function unzip(bytes: Uint8Array): PmpResult<Record<string, Uint8Array>> {
 }
 
 export function serializeProject(state: ProjectState, metadata: SerializeProjectMetadata): PmpResult<Uint8Array> {
-  const manifest = { formatIdentifier: PMP_FORMAT_IDENTIFIER, formatVersion: CURRENT_PMP_FORMAT_VERSION, schemaVersion: CURRENT_PROJECT_SCHEMA_VERSION, projectId: state.project.id, createdAt: metadata.createdAt, lastSavedAt: metadata.lastSavedAt, ...(metadata.savedTimeZone ? { savedTimeZone: metadata.savedTimeZone } : {}), compatibility: { minimumRuntimeVersion: metadata.minimumRuntimeVersion ?? metadata.runtimeVersion, createdByRuntimeVersion: metadata.runtimeVersion }, entries: { project: "project.json" as const, config: "config.json" as const } };
+  const suppliedMinimum=metadata.minimumRuntimeVersion??metadata.runtimeVersion;
+  const parts=/^(\d+)\.(\d+)\.(\d+)/.exec(suppliedMinimum);
+  const needsTaskStatusRuntime=state.tasks.some(task=>task.status==="Tentative");
+  const minimumRuntimeVersion=needsTaskStatusRuntime&&parts&&(Number(parts[1])<1||(Number(parts[1])===1&&Number(parts[2])<5))?"1.5.0-rc.1":suppliedMinimum;
+  const manifest = { formatIdentifier: PMP_FORMAT_IDENTIFIER, formatVersion: CURRENT_PMP_FORMAT_VERSION, schemaVersion: CURRENT_PROJECT_SCHEMA_VERSION, projectId: state.project.id, createdAt: metadata.createdAt, lastSavedAt: metadata.lastSavedAt, ...(metadata.savedTimeZone ? { savedTimeZone: metadata.savedTimeZone } : {}), compatibility: { minimumRuntimeVersion, createdByRuntimeVersion: metadata.runtimeVersion }, entries: { project: "project.json" as const, config: "config.json" as const } };
   const configuration = metadata.configuration ?? DEFAULT_PROJECT_CONFIGURATION;
   const validated = validateProjectContainer({ manifest, project: state, configuration }); if (!validated.ok) return validated;
   return { ok: true, value: zip({ "manifest.json": enc.encode(canonicalJson(manifest)), "project.json": enc.encode(canonicalJson(state)), "config.json": enc.encode(canonicalJson(configuration)) }) };

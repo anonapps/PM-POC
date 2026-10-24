@@ -1,7 +1,7 @@
 "use client";
 import { useState, type ReactNode, type ChangeEvent } from 'react';
 import type { ProjectStore } from '../../application';
-import { LIFECYCLE_STATUSES,MILESTONE_STATUSES,PRIORITIES,RISK_STATUSES,RISK_RATINGS } from '../../domain';
+import { TASK_STATUSES,LIFECYCLE_STATUSES,MILESTONE_STATUSES,PRIORITIES,RISK_STATUSES,RISK_RATINGS } from '../../domain';
 import { isCalendarDate } from './creation-validation';
 import { Dialog } from '../shell/shell';
 import { useProjectState } from '../shell/use-project-state';
@@ -36,7 +36,7 @@ export function EntityCreationPanel({kind,store,onClose,onCreated}:{kind:Creatio
     {(kind==='milestone'||kind==='decision')&&text('date',kind==='decision'?'Decision date':'Date',{required:true,date:true})}
     {kind==='person'?<>{text('role','Role')}{text('notes','Notes',{multiline:true})}</>:<>
      {text('description',kind==='decision'?'Additional information':'Description',{multiline:true})}{owner}
-     {kind!=='decision'&&select('status','Status',kind==='milestone'?MILESTONE_STATUSES:kind==='risk'?RISK_STATUSES:LIFECYCLE_STATUSES)}
+     {kind!=='decision'&&select('status','Status',kind==='milestone'?MILESTONE_STATUSES:kind==='risk'?RISK_STATUSES:kind==='task'?TASK_STATUSES:LIFECYCLE_STATUSES)}
      {['stream','task','milestone'].includes(kind)&&select('priority','Priority',PRIORITIES,true)}
      {(kind==='stream'||kind==='task')&&<>{text('startDate','Start date',{date:true})}{text('endDate','End date',{date:true})}</>}
      {kind==='task'&&<>{single('scopeId','Scope',state.streams.filter(s=>!s.deletion.isDeleted),'Project-wide')}{single('parentTaskId','Parent task',activeTasks)}{single('milestoneId','Milestone',activeMilestones)}{text('progress','Progress',{number:true})}{relationship('Predecessor tasks',activeTasks,'predecessors')}</>}

@@ -466,10 +466,6 @@ table td.table-actions button { margin:.12rem; }
 }
 
 /* Milestone state colours share the same diamond shape and layout. */
-.tube-station.status-complete .tube-station-diamond i { background: #16a34a; }
-.tube-station.status-delayed .tube-station-diamond i { background: #fca5a5; }
-.tube-station.status-tentative .tube-station-diamond i { background: #93c5fd; }
-.tube-station.status-planned .tube-station-diamond i { background: #7c3aed; }
 
 
 /* Shared compact quick-edit surface: matching task/milestone editors and app tokens. */
@@ -1031,3 +1027,54 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .workspace .panel>.risk-matrix { margin:8px 0; }
 .risk-context-editor>.form-field-error,.risk-context-editor>.actions { grid-column:1 / -1; margin:0; }
 .risk-context-editor>.actions { justify-content:flex-end; }
+
+/* Shared compact control geometry and content-centred table rhythm. */
+.workspace .panel table tbody td { vertical-align:middle; }
+.workspace .panel table th { white-space:nowrap; }
+.workspace .tasks-table th:nth-last-child(2) { width:116px; min-width:116px; }
+.workspace .tasks-table { min-width:1050px; }
+.workspace .tasks-table .task-progress-field input { min-width:38px; padding-left:4px; padding-right:2px; }
+.creation-fields { gap:2px 12px; }
+.creation-fields>.muted { margin:0 0 6px; }
+.creation-fields .form-field-error { height:24px; min-height:24px; line-height:12px; }
+.project-form-fields { grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 12px; margin-top:8px; }
+.project-form-fields .wide-field { grid-column:1 / -1; }
+.project-form-fields .form-field-error { height:24px; min-height:24px; line-height:12px; }
+.project-form-fields textarea { min-height:64px; height:64px; }
+.dialog-backdrop>section:has(.project-form-fields) { padding:18px; }
+.dialog-backdrop>section:has(.project-form-fields)>.form-grid { margin-top:4px; gap:4px; }
+.anchored-options:popover-open { position:fixed!important; inset:auto; margin:0!important; box-sizing:border-box; overflow:auto; padding:12px 12px 12px 28px; border:1px solid #acb8c7; border-radius:6px; background:white; color:#26364d; font-size:13px; line-height:1.45; box-shadow:0 8px 24px #0f172a26; }
+.timeline-status-legend { display:flex; flex:0 0 100%; flex-wrap:nowrap; align-items:center; gap:14px; height:24px; min-width:0; overflow-x:auto; white-space:nowrap; }
+.timeline-status-legend>span { display:inline-flex; align-items:center; gap:6px; font-size:12px; line-height:20px; }
+.timeline-status-legend i { display:inline-block; flex:0 0 auto; width:20px; height:10px; border-radius:3px; }
+.timeline-status-legend.milestone i { width:16px; height:16px; border-radius:1px; transform:rotate(45deg); margin:0 3px; }
+.workspace .panel footer.timeline-navigation { gap:4px 10px; }
+.workspace .tube-map>footer.tube-navigation::after { content:none; height:0; }
+.workspace .gantt-panel .gantt { max-height:calc(100dvh - var(--module-toolbar-height,46px) - 172px); }
+.gantt-bar.task i { position:absolute; left:0; bottom:0; height:3px; background:#26364d; opacity:.65; }
+.risk-matrix-section { margin:4px 0 8px; }
+.risk-matrix-toggle { display:inline-flex; align-items:center; gap:5px; min-height:30px; padding:3px 8px; font-size:13px; }
+.risk-matrix-section .risk-matrix { margin:4px 0 0; }
+.context-relationship-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; grid-column:1 / -1; }
+.context-picker,.decision-context-column { display:flex; flex-direction:column; align-items:stretch; min-width:0; gap:5px; }
+.context-picker>.relationship-picker,.decision-context-column>.relationship-picker { width:100%; margin:0; }
+.context-picker summary,.decision-context-column summary { box-sizing:border-box; height:34px; min-height:34px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.decision-context-columns { grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.decision-context-scope { display:flex; align-items:center; gap:16px; margin-bottom:8px; }
+.overview-grid { align-items:start; }
+@media(max-width:800px){.context-relationship-grid,.decision-context-columns { grid-template-columns:repeat(2,minmax(0,1fr)); }}
+@media(max-width:480px){.project-form-fields,.context-relationship-grid,.decision-context-columns { grid-template-columns:minmax(0,1fr); }}
+
+/* Reserve real column widths; overflow belongs to the table viewport, not clipped controls. */
+.workspace .panel .tasks-table { min-width:1296px; }
+.workspace .panel .tasks-table th { width:112px; }
+.workspace .panel .tasks-table th:first-child { width:32px; }
+.workspace .panel .tasks-table th:nth-child(2) { width:190px; }
+.workspace .panel .tasks-table th[data-task-column="progress"] { width:70px; }
+.workspace .panel .tasks-table th[data-task-column="startDate"],.workspace .panel .tasks-table th[data-task-column="endDate"] { width:126px; }
+.workspace .panel .tasks-table th:nth-last-child(3) { width:140px; }
+.workspace .panel .tasks-table th:nth-last-child(2) { width:116px; }
+.workspace .panel .tasks-table th:last-child { width:170px; }
+.workspace .panel table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:72px; }
+.workspace .panel .task-name-cell,.workspace .panel .milestone-name-cell,.workspace .panel .entity-name-cell,.workspace .panel td:has(>small+input) { position:relative; }
+.workspace .panel .task-name-cell>.task-row-id,.workspace .panel .entity-name-cell>.entity-row-id,.workspace .panel .milestone-name-cell>small:first-child,.workspace .panel td>small:has(+input) { position:absolute; top:calc(50% - 34px); left:8px; line-height:16px; margin:0; }

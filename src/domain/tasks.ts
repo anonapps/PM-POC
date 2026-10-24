@@ -1,5 +1,5 @@
 import type { Task } from "./entities";
-import type { LifecycleStatus, LocalDate, TaskId } from "./types";
+import type { LifecycleStatus, TaskStatus, LocalDate, TaskId } from "./types";
 
 export const MAX_TASK_HIERARCHY_DEPTH = 4;
 
@@ -70,7 +70,7 @@ export function deriveParentCompletion(
 
 export function setLeafTaskStatus(
   task: Task,
-  status: LifecycleStatus,
+  status: TaskStatus,
   currentDate: LocalDate,
 ): Task {
   return {
