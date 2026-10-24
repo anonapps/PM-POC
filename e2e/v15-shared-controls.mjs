@@ -27,15 +27,14 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     record(`${module}: creation keeps Search disabled and Show Deleted before Add`, await evaluate(`(()=>{const search=document.querySelector('.module-search-toolbar button'),header=document.querySelector('.panel .header-actions');return search.disabled&&!document.querySelector('.module-search-controls')&&header.firstElementChild.matches('label.toggle')&&Boolean(search.compareDocumentPosition(document.querySelector('form[data-create-draft]'))&Node.DOCUMENT_POSITION_FOLLOWING)})()`));
     await evaluate(`document.querySelector('form[data-create-draft]').requestSubmit()`);
     await waitFor(`document.querySelector('#${id}')?.getAttribute('aria-invalid')==='true'`);
-    record(`${module}: blank inline creation reports error beneath name`, await evaluate(`document.getElementById(document.querySelector('#${id}').getAttribute('aria-describedby'))?.textContent.includes('required.')`));
+    record(`${module}: blank panel creation reports error beneath name`, await evaluate(`document.getElementById(document.querySelector('#${id}').getAttribute('aria-describedby'))?.textContent.includes('required.')&&document.activeElement.id==='${id}'`));
     await setLabel(field, `Keyboard ${module} creation`);
     if(module==='Milestones')await setLabel('Date','2026-11-15');
     if(module==='Decision Log')await setLabel('Decision date','2026-10-24');
     await evaluate(`document.querySelector('#${id}').focus()`);
     await key('Enter', 13);
-    await waitFor(`Boolean(document.querySelector('#${id}')?.value===''&&document.activeElement?.id==='${id}'&&[...document.querySelectorAll('small[role=status]')].some(x=>x.textContent.includes('created.')))`);
-    record(`${module}: successful filtered creation resets, stays open and restores focus`, await evaluate(`document.querySelectorAll('tbody tr').length>0&&document.querySelector('.module-search-toolbar button').disabled`));
-    await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
+    await waitFor(`!document.querySelector('.creation-backdrop')`);
+    record(`${module}: successful creation closes panel and resets search/filters`, await evaluate(`document.querySelectorAll('tbody tr').length>0&&!document.querySelector('.module-search-toolbar button').disabled&&!document.querySelector('form[data-create-draft]')`));
     await evaluate(`document.querySelector('button[aria-label="Undo"]').click()`);
     record(`${module}: one Undo removes created record`, await evaluate(`![...document.querySelectorAll('tbody input[aria-label^="Name for"],tbody input[aria-label^="Title for"]')].some(x=>x.value===${JSON.stringify(`Keyboard ${module} creation`)})`));
   }
@@ -43,7 +42,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     await nav(module);
     await click(add);
     record(`${module}: creation preserves disabled Search and toolbar order`, await evaluate(`document.querySelector('.module-search-toolbar button')?.disabled&&document.querySelector('.panel .header-actions')?.firstElementChild.matches('label.toggle')`));
-    await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
+    await evaluate(`document.querySelector('form[data-create-draft] .creation-footer button.secondary').click()`);
   }
   await nav('Tasks');
   await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('TASK-002'));row.querySelector('details:not(.predictive-select) summary').click()})()`);

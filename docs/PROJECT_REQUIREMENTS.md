@@ -22,7 +22,7 @@
 | 005 | Store Last Saved local date/time, saving device timezone and UTC offset in .pmp only after successful writes; legacy files show “Timezone unavailable” until saved. |
 | 006 | Replace People and Tasks sidebar letters with the approved icons. |
 | 007 | Shared live Search/Filter bar, search/filter icon and popover; Show Deleted before Add Task. |
-| 008 | Dynamic shared toolbar for Search, Streams, People, Tasks, Milestones, Risk Log, Decision Log, Warnings; inline creation replaces search controls, search icon visible but disabled. |
+| 008 | Shared centred toolbar for all specified pages; full-field right-side creation panels for Streams, People, Tasks, Milestones, Risks and Decisions; no legacy inline creation route. |
 | 009 | Hide Decision Log Context display column while retaining editable relationships and underlying context. |
 | 010 | Consistent outlined inputs and textareas. |
 | 011 | Searchable dynamic-list dropdowns with search row and case-insensitive contains matching, including multi-select. |
@@ -2011,3 +2011,10 @@ The user's Search/Filter remediation instruction refines E007/E008/E018: use a c
 Gantt date navigation moves from the top toolbar to a persistent footer matching Tube Map: Previous, inclusive visible DD/MM/YYYY range, Next, Jump to today. Keep Gantt's existing one-column offsets (Week 1 day, Month 7 days, Quarter 14 days), zoom reset and Today marker; Tube Map retains its four-week offset. The footer remains outside the chart scroll area, without hiding the final row or dependency information. Top controls retain title, search/filter, Expand All, Collapse All and Zoom.
 
 All ten search pages use a shared three-region title/search/actions layout. Equal outer tracks place the fixed-width search input at the page content centre independently of title length, right actions, placeholder or filter state. Title stays left, actions right. At narrower widths use a centred second search row with controlled action wrapping. Preserve sticky positioning, existing query/filter/keyboard behaviour, data and `.pmp` compatibility. These are user-approved v1.5 corrections, not additional features.
+
+
+## Approved unified creation/layout correction — 24 October 2026
+
+This instruction supersedes the earlier mandatory-only repeat-inline-creation rules in E008. Each record Add opens the same right-side, dimmed, modal panel with all relevant required/optional fields. Preserve required semantics: Person/Stream/Task/Risk name/title, Milestone name/date, Decision title/date. Focus the first required text field; ordinary single-line Enter validates/submits, textarea Enter inserts a newline, predictive-list Enter selects. Keep Create enabled to validate, reserve associated error space, focus the first invalid required field, close/clear after success and restore Add focus. Cancel discards immediately. Dirty outside/Escape dismissal uses the established Stay/Discard confirmation; clean dismissal closes normally. No alternative inline record creation route remains. Relationships, dependencies, initial optional fields and initial Risk actions use one canonical creation command/Undo operation.
+
+New Project Status starts blank and must be explicitly selected; Choose File & Create stays disabled until all mandatory fields and dates are valid. Invalid submissions must not invoke file access. Use stable error slots across forms. Widen Risk/Decision context text, reuse searchable selection panels, remove rectangular chrome around scope pills, centre other contents in tall rows and fit People Notes within its column. Task bulk deletion sits in the right toolbar region before Show Deleted; the selection heading has a checkbox only. Remove redundant gaps between module toolbars and data. Preserve confirmed independent search centring, Gantt footer/navigation, dates, existing domain rules and `.pmp` compatibility.

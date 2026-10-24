@@ -6,7 +6,9 @@
 This candidate is prepared for validation on `feature/v1.5-approved-enhancements`; it is not published, deployed, tagged or approved for merge.
 
 - Compact live search in ten page title toolbars, integrated filter icon, compact viewport-constrained panels, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering. Table dropdowns clear sticky/scroll containers; charts expose one Hide Empty Streams control each.
-- Required-only repeat inline creation, field errors, success feedback and keyboard focus; optional relationships remain editable afterwards.
+- One full-field right-side creation panel across six record modules, with stable validation, keyboard operation, dirty-dismiss confirmation and close/reset on success; optional relationships/dependencies are created atomically.
+- New Project requires explicit Status selection before file creation; shared error slots prevent layout shifts.
+- Wider Risk/Decision context text and searchable selection panels, borderless scope controls, centred tall rows, wider People Notes and task bulk deletion in the centred-search toolbar.
 - Predictive owner/scope/context/dependency selection by name or human ID, keyboard navigation and retained filtered selections.
 - First-letter human text normalisation on blur, one committed edit/Undo/audit event, and no-op suppression without rewriting untouched legacy fields.
 - Explicit Save / Discard / Cancel for dirty Open/Close, including safe same-file discard and failure recovery.

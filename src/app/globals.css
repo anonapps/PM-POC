@@ -703,11 +703,6 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 }
 
 /* Milestones: align date/status/scope/owner/dependencies/actions to the name input baseline, not the ID + name stack midpoint. */
-.workspace .panel .milestones-table tbody td:not(:first-child) {
-  vertical-align: bottom;
-  /* The ID/name cell is taller; place neighbouring controls on the input row. */
-  padding-bottom: 3px;
-}
 
 
 /* Shared entity-row rhythm: align every control to the editable name/title input.
@@ -721,7 +716,7 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   height: 72px;
   padding-top: 8px;
   padding-bottom: 8px;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 .workspace .panel table tbody tr:has(> td:first-child > small + input) > td:first-child > small {
   display: block;
@@ -760,7 +755,7 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 /* Task selection checkbox follows the same input row as Name, Status and dates,
    rather than the vertical centre of the full ID + Name row. */
 .workspace .panel table tbody tr:has(.task-name-cell) > td:first-child {
-  vertical-align:bottom;
+  vertical-align:middle;
   padding-bottom:8px;
 }
 .workspace .panel table tbody tr:has(.task-name-cell) > td:first-child input[type="checkbox"] {
@@ -971,3 +966,68 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .workspace .panel footer.timeline-navigation { position:sticky; bottom:0; left:auto; right:auto; z-index:24; box-sizing:border-box; width:100%; margin:0; background:var(--surface); border-top:1px solid var(--border); box-shadow:0 -3px 10px #17243a12; }
 /* The chart can retain its horizontal extent without widening its page toolbar. */
 .workspace section.panel.tube-map { min-width:0; }
+
+/* Full-field creation uses one modal slide-over, never an inline table row. */
+.dialog-backdrop.creation-backdrop { padding:0; place-items:stretch end; }
+.creation-backdrop>section { width:min(560px,100vw); height:100dvh; max-height:100dvh; margin:0; border-radius:0; box-sizing:border-box; padding:18px; display:flex; flex-direction:column; overflow:hidden; box-shadow:-8px 0 28px #0f172a26; }
+.creation-backdrop>section>header { flex:0 0 auto; margin-bottom:12px; }
+.creation-backdrop form[data-create-draft] { flex:1; min-height:0; display:flex; flex-direction:column; margin:0; }
+.creation-fields { flex:1; overflow:auto; overscroll-behavior:contain; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-content:start; gap:4px 14px; padding:2px 4px 8px; }
+.creation-fields .wide-field { grid-column:1 / -1; }
+.creation-field,.creation-selector,.project-form-fields .form-field { display:flex; flex-direction:column; align-items:stretch; gap:4px; min-width:0; font-size:13px; font-weight:600; }
+.creation-fields input:not([type=checkbox]):not([type=radio]),.creation-fields select,.creation-fields textarea { box-sizing:border-box; width:100%; min-width:0; border:1px solid #acb8c7; border-radius:4px; background:white; color:var(--text); font:inherit; padding:6px 8px; }
+.creation-fields input:not([type=checkbox]):not([type=radio]),.creation-fields select { height:34px; }
+.creation-fields textarea { min-height:70px; resize:vertical; }
+.form-field-error { display:block; box-sizing:border-box; height:28px; min-height:28px; margin:0; line-height:14px; overflow:auto; color:#b42318; font-size:12px; font-weight:400; }
+.creation-footer { flex:0 0 auto; padding-top:10px; border-top:1px solid var(--border); background:white; }
+.creation-footer .actions { justify-content:flex-end; margin:0; }
+.creation-footer button,.creation-fields button { min-height:32px; padding:4px 12px; font-size:13px; }
+.creation-relations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-bottom:10px; }
+.creation-relations>.toggle { grid-column:1 / -1; }
+.creation-fields .multi-select,.creation-fields .relationship-picker { min-width:0; margin:0; }
+.creation-fields summary { padding:6px 8px; border:1px solid #acb8c7; border-radius:4px; cursor:pointer; overflow-wrap:anywhere; }
+.creation-fields .scope-pill { display:inline-flex; align-items:center; min-height:24px; padding:2px 9px; border-radius:99px; font-size:12px; }
+.creation-action { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
+.creation-action>label:first-child { grid-column:1 / -1; }
+.creation-action label { display:grid; gap:4px; }
+.creation-actions { display:grid; gap:8px; }
+@media(max-width:480px){.creation-fields,.creation-relations,.creation-action { grid-template-columns:minmax(0,1fr); }}
+
+/* Scope pills are the control surface; keep only disclosure/focus affordances. */
+.workspace .panel details.multi-select:has(>summary .scope-pill)>summary,
+.creation-fields details.multi-select:has(>summary .scope-pill)>summary { border:0; box-shadow:none; background:transparent; padding-left:0; padding-right:0; }
+.workspace .panel table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,textarea)>td,
+.workspace .panel table tbody tr:has(>td:first-child>small+input)>td { vertical-align:middle; padding-top:8px; padding-bottom:8px; }
+.workspace .panel table tbody tr:has(.task-name-cell)>td:first-child { vertical-align:middle; }
+.workspace.module-people table { table-layout:fixed; }
+.workspace.module-people table th:nth-child(1) { width:22%; }
+.workspace.module-people table th:nth-child(2) { width:16%; }
+.workspace.module-people table th:nth-child(3) { width:10%; }
+.workspace.module-people table th:last-child { width:94px; }
+.workspace.module-people table input,.workspace.module-people table textarea { box-sizing:border-box; width:100%; min-width:0; }
+.workspace.module-people table textarea { resize:vertical; }
+.workspace .panel>.page-toolbar { margin-bottom:0; }
+
+/* Context editors fill their table cell; long text uses horizontal space first. */
+.risk-context-editor { width:100%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:start; gap:10px 14px; padding:12px; box-sizing:border-box; background:#f7f9fc; }
+.risk-context-editor>label:has(textarea) { grid-column:1 / -1; display:flex; flex-direction:column; gap:4px; }
+.risk-context-editor textarea { width:100%; min-height:76px; box-sizing:border-box; resize:vertical; }
+.decision-context-editor { width:100%; box-sizing:border-box; align-items:stretch; }
+.decision-context-columns { width:100%; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.decision-context-notes { width:100%; margin-top:8px; }
+.decision-context-notes textarea { box-sizing:border-box; width:100%; min-height:76px; field-sizing:fixed; }
+.relationship-picker>summary { border:1px solid #acb8c7; border-radius:4px; padding:6px 8px; cursor:pointer; overflow-wrap:anywhere; }
+.relationship-options:popover-open { position:fixed!important; inset:auto; margin:0!important; box-sizing:border-box; overflow:auto; padding:10px; border:1px solid #acb8c7; border-radius:6px; background:white; color:#26364d; box-shadow:0 8px 24px #0f172a26; }
+.relationship-options:popover-open .searchable-option-list { display:flex; flex-direction:column; gap:5px; min-width:0; }
+.relationship-options:popover-open input[type=search] { width:100%; height:32px; min-width:0; box-sizing:border-box; padding:5px 8px; border:1px solid #acb8c7; border-radius:4px; }
+.relationship-options:popover-open label { display:flex; align-items:flex-start; gap:6px; white-space:normal; overflow-wrap:anywhere; }
+.relationship-options:popover-open input[type=checkbox] { width:15px; height:15px; flex:0 0 15px; margin:2px 0 0; }
+@media(max-width:800px){.risk-context-editor { grid-template-columns:minmax(0,1fr); }}
+.workspace .tasks-table td:has(>input[type=date]) { position:relative; }
+.workspace .tasks-table td>.field-error { position:absolute; left:4px; right:4px; bottom:1px; height:14px; line-height:14px; font-size:10px; max-width:none; white-space:nowrap; overflow:auto; }
+.decision-context-editor .decision-context-notes { align-items:stretch; }
+.workspace .panel .entity-name-cell .entity-row-id { position:static; display:block; line-height:16px; margin:0; }
+.workspace .panel>.search-result-count { margin:4px 0; }
+.workspace .panel>.risk-matrix { margin:8px 0; }
+.risk-context-editor>.form-field-error,.risk-context-editor>.actions { grid-column:1 / -1; margin:0; }
+.risk-context-editor>.actions { justify-content:flex-end; }

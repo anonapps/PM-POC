@@ -7,7 +7,7 @@ export function PredictiveDisclosure({children,disabled=false,ref:forwardedRef,.
   useEffect(()=>{
     const root=localRef.current;
     // Native top-layer popovers retain DOM ancestry, query reset and selection semantics.
-    const panel=root?.querySelector<HTMLElement>(":scope > .multi-select-options");
+    const panel=root?.querySelector<HTMLElement>(":scope > .multi-select-options, :scope > .relationship-options");
     const position=()=>{
       if(!root?.open||!panel)return;
       const anchor=root.querySelector("summary")!.getBoundingClientRect();

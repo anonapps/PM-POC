@@ -57,3 +57,11 @@ describe("v1.5 project metadata no-op",()=>{
     expect(store.getState().project.metadata.showProgress).toBeUndefined();
   });
 });
+
+describe('explicit project status selection',()=>{
+ it('rejects a blank or unknown status while accepting every existing status',()=>{
+  expect(validateProjectDraft({...draft,status:''})).toHaveProperty('status');
+  expect(validateProjectDraft({...draft,status:'Unknown' as typeof draft.status})).toHaveProperty('status');
+  for(const status of ['Not Started','In Progress','On Hold','Completed','Cancelled'] as const)expect(validateProjectDraft({...draft,status})).toEqual({});
+ });
+});
