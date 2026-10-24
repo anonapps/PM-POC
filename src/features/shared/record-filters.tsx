@@ -23,7 +23,7 @@ export function useRecordFilters(state: ProjectState, collection: Collection) {
   const [selected,setSelected]=useState<Record<string,string[]>>({});
   const entities=state[collection];
   const categories=["Status","Owner","Scope","Level"].map(category=>{
-    const ids=[...new Set(entities.filter(entity=>!entity.deletion.isDeleted).flatMap(entity=>recordFilterValues(entity)[category]))];
+    const ids=category==="Level"&&collection==="risks"?["Low","Medium","High"]:[...new Set(entities.filter(entity=>!entity.deletion.isDeleted).flatMap(entity=>recordFilterValues(entity)[category]))];
     return {category,options:ids.map(id=>({id,label:category==="Owner"?(id==="unassigned"?"Unassigned":[state.people.find(person=>person.id===id)?.name,state.people.find(person=>person.id===id)?.humanId].filter(Boolean).join(" · ")||"Unavailable owner"):category==="Scope"?(id==="project"?"Project-wide":[state.streams.find(stream=>stream.id===id)?.name,state.streams.find(stream=>stream.id===id)?.humanId].filter(Boolean).join(" · ")||"Unavailable stream"):id}))};
   }).filter(item=>item.options.length>0);
   return {
