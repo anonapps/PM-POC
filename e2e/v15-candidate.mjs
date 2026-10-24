@@ -42,9 +42,10 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
   await cdp.send('Emulation.clearDeviceMetricsOverride');
   for(const moduleName of ['Gantt','Tube Map']){
     await nav(moduleName);
-    record(`${moduleName}: Hide Empty Streams starts independently off`,await evaluate(`![...document.querySelectorAll('.chart-filter-menu input[type=checkbox]')].some(e=>e.checked)`));
-    await evaluate(`document.querySelector('.chart-filter-menu input[type=checkbox]').click()`);
-    record(`${moduleName}: chart/popover Hide Empty Streams controls synchronise`,await evaluate(`[...document.querySelectorAll('.title-row input[type=checkbox]')].length===2&&[...document.querySelectorAll('.title-row input[type=checkbox]')].every(e=>e.checked)`));
+    await evaluate(`document.querySelector('.shared-search-filter button').click()`);
+    record(`${moduleName}: Hide Empty Streams starts independently off`,await evaluate(`![...document.querySelectorAll('.filter-popover input[type=checkbox]')].some(e=>e.checked)`));
+    await evaluate(`document.querySelector('.filter-popover input[type=checkbox]').click()`);
+    record(`${moduleName}: single Hide Empty Streams filter updates`,await evaluate(`document.querySelectorAll('.filter-popover input[type=checkbox]').length===1&&document.querySelector('.filter-popover input[type=checkbox]').checked&&document.querySelector('.filter-trigger').dataset.active==='true'`));
   }
   await click('Save Now');await waitFor(`document.querySelector('.save-state').textContent.startsWith('Saved')`);
   // Open bytes produced by the actual v1.4 serializer, not a v1.5 relabelled fixture.

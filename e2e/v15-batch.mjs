@@ -9,14 +9,14 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   for(const moduleName of ['Search','Streams','People','Tasks','Milestones','Risk Log','Decision Log','Warnings']) {
     await nav(moduleName);
     record(`${moduleName}: exactly one shared Search/Filter trigger`,await evaluate(`document.querySelectorAll('.shared-search-filter>button').length===1&&!!document.querySelector('.shared-search-filter svg')`));
-    if(!await evaluate(`Boolean(document.querySelector('.shared-search-filter input[type=search]'))`))await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
+    if(!await evaluate(`Boolean(document.querySelector('.module-search-controls'))`))await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
     await search('.shared-search-filter input[type=search]','retained search');
     await key('Escape',27);
     await waitFor(`!document.querySelector('.module-search-controls')`);
     record(`${moduleName}: Escape closes popover and restores trigger focus`,await evaluate(`document.activeElement===document.querySelector('.shared-search-filter>button')`));
     await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
     record(`${moduleName}: reopening retains active query`,await evaluate(`document.querySelector('.shared-search-filter input[type=search]')?.value==='retained search'`));
-    await click('Clear search and filters');
+    await click('Clear all');
   }
   await nav('Tasks');
   const baseline=await evaluate(`Array.from(document.querySelectorAll('.tasks-table tbody tr'),row=>({status:row.querySelector('select[aria-label^="Status"]')?.value,owner:row.querySelector('summary[aria-label^="Owner"]')?.dataset.value||'unassigned'}))`);
@@ -60,8 +60,9 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   record('Risk levels use OR within the shared multi-select category',true);
   await evaluate(`document.querySelector('.risk-matrix button.severity-low').click()`);
   await waitFor(`document.querySelectorAll('tbody .risk-level-chip').length===${riskLevels.filter(level=>level==='Low').length}`);
+  if(!await evaluate(`Boolean(document.querySelector('.filter-popover'))`))await click('Search risks');
   record('Risk matrix and toolbar share the same Level filter state',await evaluate(`document.querySelector('input[aria-label="Filter Level: Low"]').checked&&!document.querySelector('input[aria-label="Filter Level: High"]').checked&&!document.querySelector('input[aria-label="Filter Level: Medium"]').checked`));
-  await click('Clear search and filters');
+  await click('Clear all');
   await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
   await nav('Risk Log');
   await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);

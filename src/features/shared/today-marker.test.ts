@@ -19,6 +19,7 @@ describe("creation toolbar", () => {
     expect(markup).toContain('disabled=""');
     expect(markup).toContain('aria-expanded="false"');
     expect(markup).toContain('Search and filter people');
-    expect(markup).not.toContain('type="search"');
+    expect(markup).toContain('type="search"');
+    expect(markup).not.toContain('filter-popover');
   });
 });

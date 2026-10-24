@@ -4,10 +4,10 @@
 
 - Reuse the application command boundary for text edits: normalise the first character of human-readable fields on blur as part of the same logical edit, so Undo and audit history contain no separate formatting mutation. Preserve IDs, emails, URLs, file paths and technical identifiers.
 - Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient and resets on navigation. Predictive selection state must be independent of the currently typed search query.
-- Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and synchronised between its toolbar and filter popover.
+- Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and exposed once in its shared filter panel (24 October manual acceptance correction).
 - Persist optional last-save timezone metadata in the existing .pmp manifest without silently migrating compatible v1.4 files. Preserve UTC instant, original saving-device local display time, IANA timezone name where available and UTC offset. Update metadata only after successful file writes; display “Timezone unavailable” for legacy files until saved.
 - Keep browser file-picker operations behind the Project File Service. Save/Discard/Cancel and navigation-draft warnings must not discard data without the user's chosen action.
-- Continue using Vitest and the existing Chrome DevTools Protocol harness; do not introduce Playwright solely for v1.5. Maintain the established offline/local-only architecture.
+- Continue using Vitest and the existing Chrome DevTools Protocol harness. The 24 October user instruction additionally requests Playwright layout assertions; its dev-only dependency does not affect the offline runtime. Maintain the established offline/local-only architecture.
 
 
 **Status:** Implementation architecture supporting `docs/PROJECT_REQUIREMENTS.md`  
@@ -452,3 +452,6 @@ HeroUI v2 Button/Chip controls and provider are part of the main presentation la
 The bundled manual resolver selects exact version metadata first, otherwise a clearly labelled compatible same-minor entry, and never constructs a link to an unpublished release asset. The candidate PDF is generated locally with Pandoc/XeLaTeX via `scripts/build-v15-manual.sh`; these are documentation-build tools, not application/runtime dependencies.
 
 Dirty Open/Close actions use an explicit Save/Discard/Cancel dialog above the shell. Autosave pauses while this choice is pending. Failed Save retains the dialog and in-memory work. Forced same-file open activates the newly read saved project; cancelling the picker preserves current memory instead of silently discarding it.
+
+
+Shared Search/Filter remediation: ModuleSearch owns the compact toolbar input and a body portal for the filter panel. Shared pure geometry clamps/positions panels and flips them above when space is limited. PredictiveDisclosure uses native manual popovers for table option panels, retaining DOM ancestry and keyboard/query-reset behaviour while escaping table/scroll clipping. Filter styles are scoped to the panel to prevent broad workspace input rules inflating checkbox, search or Clear controls. No persistent state/command/file format change.

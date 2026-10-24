@@ -1999,3 +1999,8 @@ Gantt has exactly twelve columns: calendar days for Week, Monday-Sunday weeks fo
 Tube Map is a twelve-week Monday-based roadmap with an always-visible Project-wide row, ordered active Stream rows, neutral Stream lines, and purple milestone diamonds at actual-date positions. Multi-stream visual occurrences remain one logical milestone and connections remain entity-level. Outside-window indicators are informational.
 
 Risk Log opens at Level All. Level filters the table (including deleted risks when requested), while the 3x3 matrix always represents all active risks. The always-visible Add Risk control follows the matrix.
+
+
+## Manual acceptance correction — 24 October 2026
+
+The user's Search/Filter remediation instruction refines E007/E008/E018: use a compact live search input in the title/Add toolbar with an integrated filter icon and a compact, viewport-constrained filter panel. Gantt/Tube Map use the same shared design and expose **one** Hide Empty Streams checkbox per chart in that panel, with independent chart state. This supersedes the earlier duplicated toolbar/popover presentation; population counting is unchanged. Keep all functional filters, query semantics, creation disabling, navigation resets and canonical `.pmp` data boundaries. The user explicitly requested Playwright layout checks in addition to existing regression/lifecycle coverage for this remediation.

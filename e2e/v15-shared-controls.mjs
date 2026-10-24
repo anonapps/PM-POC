@@ -17,7 +17,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
   ]) {
     await nav(module);
     await click(`Search ${{"Risk Log":"risks","Decision Log":"decisions"}[module]??module.toLowerCase()}`);
-    await setSearch('.module-search-controls input', 'no existing record matches this');
+    await setSearch('.shared-search-filter input', 'no existing record matches this');
     await waitFor(`document.querySelectorAll('tbody tr').length===0`);
     await evaluate(`document.querySelector('h1').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))`);
     await waitFor(`!document.querySelector('.module-search-controls')`);
@@ -69,10 +69,10 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
   await click('Search risks');
   await evaluate(`document.querySelector('input[aria-label="Filter Level: High"]').click()`);
   await evaluate(`document.querySelector('h1').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))`);
-  await waitFor(`!document.querySelector('.module-filter-toolbar .filters')`);
+  await waitFor(`!document.querySelector('.module-search-controls')`);
   await click('Search risks');
   record('Outside dismissal preserves active filters when reopened', await evaluate(`document.querySelector('input[aria-label="Filter Level: High"]')?.checked`));
-  await click('Clear search and filters');
+  await click('Clear all');
   for (const [module, bodySelector, headerSelector] of [['Gantt','.gantt-body','.gantt-time-heading'],['Tube Map','.tube-body','.tube-axis']]) {
     await nav(module);
     record(`${module}: shared dotted Today marker spans full body below header`, await evaluate(`(()=>{const body=document.querySelector('${bodySelector}'),marker=body?.querySelector('.timeline-today-marker'),header=document.querySelector('${headerSelector}');if(!marker)return false;const b=body.getBoundingClientRect(),m=marker.getBoundingClientRect(),h=header.getBoundingClientRect(),style=getComputedStyle(marker);return Math.abs(m.top-b.top)<2&&Math.abs(m.bottom-b.bottom)<2&&m.top>=h.bottom-2&&style.borderLeftStyle==='dotted'&&style.borderLeftColor==='rgb(220, 38, 38)'&&style.pointerEvents==='none'})()`));

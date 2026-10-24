@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "node e2e/acceptance.mjs",
     "test:regression": "node e2e/run-regression.mjs",
-    "test:lifecycle": "node e2e/run-regression.mjs --full"
+    "test:lifecycle": "node e2e/run-regression.mjs --full",
+    "test:layout": "playwright test"
   },
   "dependencies": {
     "@heroui/react": "2.8.10",
@@ -22,6 +23,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.18.3",
     "@types/react": "19.1.13",

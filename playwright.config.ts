@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'./e2e/layout',timeout:60000,workers:2,fullyParallel:true,reporter:'list',webServer:process.env.E2E_BASE_URL?undefined:{command:'npm run start -- --hostname 127.0.0.1 --port 3000',url:'http://127.0.0.1:3000',reuseExistingServer:!process.env.CI},outputDir:process.env.LAYOUT_OUTPUT_DIR??'test-results',use:{baseURL:process.env.E2E_BASE_URL??'http://127.0.0.1:3000',launchOptions:{executablePath:process.env.CHROME_PATH,args:['--no-sandbox']},screenshot:'only-on-failure'}});

@@ -1,0 +1,63 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
+const original=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
+if(!original.ok)throw new Error('Invalid layout fixture');
+const state=original.value.projectState;
+const stress={...state,people:state.people.map((person,index)=>({...person,humanId:`PERSON-${String(index+1).padStart(30,'0')}` as const})),streams:state.streams.map((stream,index)=>({...stream,humanId:`STREAM-${String(index+1).padStart(30,'0')}` as const}))};
+const encoded=serializeProject(stress,{createdAt:original.value.manifest.createdAt,lastSavedAt:original.value.manifest.lastSavedAt,runtimeVersion:'1.4.0',minimumRuntimeVersion:original.value.manifest.compatibility.minimumRuntimeVersion,configuration:original.value.configuration});
+if(!encoded.ok)throw new Error(JSON.stringify(encoded.errors));
+const bytes=[...encoded.value];
+const modules=['Search','People','Streams','Tasks','Milestones','Risk Log','Decision Log','Warnings','Gantt','Tube Map'];
+for(const width of [1280,1440,1920])test(`shared search/filter geometry and interactions at ${width}`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:1000});
+ await page.addInitScript(({bytes})=>{
+  let data=new Uint8Array(bytes),modified=Date.now();
+  const handle={name:'disposable-layout.pmp',async getFile(){return {name:this.name,size:data.length,lastModified:modified,arrayBuffer:async()=>data.slice().buffer};},async createWritable(){return {write:async(value:Uint8Array)=>{data=new Uint8Array(value);},close:async()=>{modified=Date.now();}};}};
+  Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle});
+ },{bytes});
+ await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();
+ for(const moduleName of modules){
+  await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
+  const search=page.locator('.shared-search-filter'),trigger=search.locator('button'),input=search.locator('input');
+  await expect(search).toHaveCount(1);await expect(input).toBeVisible();
+  const title=await page.locator('h1').boundingBox(),box=await search.boundingBox();
+  expect(Math.abs(title!.y+title!.height/2-box!.y-box!.height/2)).toBeLessThan(10);expect(box!.height).toBeLessThanOrEqual(36);
+  if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
+  const panel=page.locator('.filter-popover');await expect(panel).toBeVisible();
+  const rect=await panel.boundingBox();expect(rect!.x).toBeGreaterThanOrEqual(0);expect(rect!.x+rect!.width).toBeLessThanOrEqual(width);expect(rect!.y+rect!.height).toBeLessThanOrEqual(1000);
+  expect(await panel.evaluate(e=>e.parentElement===document.body)).toBe(true);
+  expect(await panel.locator('input[type=checkbox]').evaluateAll(inputs=>inputs.every(e=>e.getBoundingClientRect().width<=18&&e.getBoundingClientRect().height<=18))).toBe(true);
+  expect(await panel.locator('.filter-category').evaluateAll(sections=>sections.every((e,i)=>i===0||e.getBoundingClientRect().top>=sections[i-1].getBoundingClientRect().bottom))).toBe(true);
+  expect(await panel.locator('input[type=search]').evaluateAll(inputs=>inputs.every(e=>{const r=e.getBoundingClientRect();return r.width>100&&r.height<=34&&e.scrollWidth<=e.clientWidth+2;}))).toBe(true);
+  const checkbox=panel.locator('input[type=checkbox]').first();
+  if(await checkbox.count()){await checkbox.check();if(['People','Streams','Tasks','Milestones','Risk Log','Decision Log'].includes(moduleName)){await input.fill('zzzz-no-match');await expect(page.locator('tbody tr')).toHaveCount(0);await input.fill('');}await page.keyboard.press('Escape');await expect(trigger).toBeFocused();await trigger.click();await expect(checkbox).toBeChecked();}
+  await panel.getByRole('button',{name:'Clear all',exact:true}).click();
+  await expect(input).toHaveValue('');
+  if(moduleName==='Gantt'||moduleName==='Tube Map')await expect(page.getByText('Hide Empty Streams',{exact:true})).toHaveCount(1);
+  await page.screenshot({path:testInfo.outputPath(`${width}-${moduleName.replaceAll(' ','-')}-after.png`)});
+  await page.locator('.workspace').evaluate(e=>{e.scrollTop=180;});
+  expect(await panel.evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+20,r.y+15)?.closest('.filter-popover')===e;})).toBe(true);
+  await page.keyboard.press('Escape');await expect(panel).toHaveCount(0);
+  await input.fill('zzzz-no-match');await trigger.click();await panel.getByRole('button',{name:'Clear all'}).click();await expect(input).toHaveValue('');
+  await page.locator('h1').click();await expect(panel).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ }
+ await page.locator('nav').getByRole('button',{name:'Milestones',exact:true}).click();
+ expect(await page.locator('summary .scope-pill').evaluateAll(pills=>pills.length>0&&pills.every(pill=>{const parent=pill.parentElement!.getBoundingClientRect(),r=pill.getBoundingClientRect();return r.top>=parent.top&&r.bottom<=parent.bottom&&r.width>30;}))).toBe(true);
+ const summary=page.locator('summary[aria-label^="Owner for"]').nth(7);
+ await summary.scrollIntoViewIfNeeded();await summary.click();
+ const options=page.locator('.multi-select-options:popover-open');await expect(options).toBeVisible();
+ const geometry=await options.boundingBox();expect(geometry!.x+geometry!.width).toBeLessThanOrEqual(width);expect(geometry!.y+geometry!.height).toBeLessThanOrEqual(1000);
+ expect(await options.evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+20,r.y+15)?.closest('.multi-select-options')===e;})).toBe(true);
+ await options.locator('input[type=search]').fill('long name');
+ await expect(options.locator('[role=status]')).toContainText('matching option');
+ expect(await options.evaluate(e=>e.scrollWidth<=e.clientWidth+2)).toBe(true);
+ const inputBox=await options.locator('input[type=search]').boundingBox(),statusBox=await options.locator('[role=status]').boundingBox();expect(statusBox!.y).toBeGreaterThanOrEqual(inputBox!.y+inputBox!.height);
+ await page.keyboard.press('Escape');await expect(summary).toBeFocused();
+ const scope=page.locator('summary.scope-summary').first();await scope.click();
+ const scopeOptions=page.locator('.multi-select-options:popover-open');await expect(scopeOptions).toBeVisible();
+ expect(await scopeOptions.evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+20,r.y+15)?.closest('.multi-select-options')===e;})).toBe(true);
+ await scopeOptions.locator('input[type=search]').fill('long name');await expect(scopeOptions.locator('[role=status]')).toContainText('matching option');
+ await page.keyboard.press('Escape');await expect(scope).toBeFocused();
+});

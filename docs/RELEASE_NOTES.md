@@ -2,7 +2,7 @@
 
 This candidate is prepared for validation on `feature/v1.5-approved-enhancements`; it is not published, deployed, tagged or approved for merge.
 
-- One Search / Filter popover across eight modules, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering.
+- Compact live search in ten page title toolbars, integrated filter icon, compact viewport-constrained panels, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering. Table dropdowns clear sticky/scroll containers; charts expose one Hide Empty Streams control each.
 - Required-only repeat inline creation, field errors, success feedback and keyboard focus; optional relationships remain editable afterwards.
 - Predictive owner/scope/context/dependency selection by name or human ID, keyboard navigation and retained filtered selections.
 - First-letter human text normalisation on blur, one committed edit/Undo/audit event, and no-op suppression without rewriting untouched legacy fields.

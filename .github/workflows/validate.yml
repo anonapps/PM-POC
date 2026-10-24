@@ -38,6 +38,7 @@ jobs:
           CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
           CHROME_PATH="$CHROME_PATH" npm run test:regression
+          CHROME_PATH="$CHROME_PATH" npm run test:layout
 
   lifecycle-release-gate:
     if: github.ref == 'refs/heads/feature/v1.5-approved-enhancements'

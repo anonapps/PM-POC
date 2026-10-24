@@ -12,7 +12,7 @@
 6. Update user/technical documentation, illustrated UI manual and release assets; assess whether product demo requires new footage.
 7. Run unit/integration, Chrome regression/lifecycle, .pmp compatibility, build, lint, typecheck, audit and manual UI checks; prepare PR but do not merge until approval.
 
-**Important:** Current regression tooling is Vitest plus a custom Chrome DevTools Protocol browser harness, not Playwright. Existing v1.4 manual acceptance gaps and development dependency findings remain tracked until independently validated.
+**Important:** Regression tooling is Vitest plus a custom Chrome DevTools Protocol browser harness, supplemented by user-requested Playwright layout checks for the 24 October Search/Filter remediation. Existing v1.4 manual acceptance gaps and development dependency findings remain tracked until independently validated.
 
 
 **Status:** Approved implementation sequence  
