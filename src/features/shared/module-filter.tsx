@@ -1,5 +1,5 @@
 "use client";
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 
 /** Shared expandable filter panel; active selections stay visible until reset. */
 export function ModuleFilter({title,active,onClear,children}:{
@@ -8,7 +8,16 @@ export function ModuleFilter({title,active,onClear,children}:{
   const [expanded,setExpanded]=useState(false);
   const id=useId();
   const triggerRef=useRef<HTMLButtonElement>(null);
-  return <div className="module-filter-toolbar">
+  const rootRef=useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    if(!expanded)return;
+    const onPointerDown=(event:PointerEvent)=>{
+      if(event.target instanceof Node&&!rootRef.current?.contains(event.target))setExpanded(false);
+    };
+    document.addEventListener("pointerdown",onPointerDown);
+    return ()=>document.removeEventListener("pointerdown",onPointerDown);
+  },[expanded]);
+  return <div ref={rootRef} className="module-filter-toolbar">
     <button ref={triggerRef} type="button" className="secondary" aria-expanded={expanded} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
       Filter {title}{active?" · Active":""}
     </button>
