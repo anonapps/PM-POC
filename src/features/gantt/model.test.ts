@@ -1,3 +1,4 @@
+import { todayPosition, positionForDate } from "./model";
 import{describe,expect,it}from"vitest";import{makeProjectState,streamFixture,taskFixture}from"../../domain/test-fixtures";import{barPosition,buildGanttModel,timelineColumns}from"./model";
 describe("Gantt v1.1 model",()=>{it("always includes Project-wide and exactly twelve columns",()=>{const m=buildGanttModel(makeProjectState(),"Week","2026-09-17");expect(m.rows[0]).toMatchObject({id:"project"});expect(m.columns).toHaveLength(12);expect(m.columns[2].start).toBe("2026-09-17")});it("uses Monday weeks and biweeks",()=>{expect(timelineColumns("Month","2026-09-17")[2].start).toBe("2026-09-14");expect(timelineColumns("Quarter","2026-09-17")[3].start).toBe("2026-09-28")});it("requires both dates and renders same-day tasks",()=>{expect(barPosition("2026-09-17",null,"2026-09-01","2026-09-30")).toBeNull();expect(barPosition("2026-09-17","2026-09-17","2026-09-01","2026-09-30")?.width).toBeGreaterThan(0)});it("duplicates milestone occurrences, not entities",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"s2",humanId:"STREAM-002"})],milestones:[{id:"m",projectId:"project-1",humanId:"MILESTONE-001",name:"Gate",plannedDate:"2026-09-17",status:"Planned",ownerId:null,scope:{kind:"streams",streamIds:["stream-1","s2"]},relatedTaskIds:[],deletion:{isDeleted:false}}]});expect(buildGanttModel(state,"Month","2026-09-17").rows.filter(r=>r.kind==="milestone")).toHaveLength(2)});it("shows every scheduled visible dependency",()=>{const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({id:"a",startDate:"2026-09-01",endDate:"2026-09-02"}),taskFixture({id:"b",startDate:"2026-09-02",endDate:"2026-09-03"})],dependencies:[{id:"d",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"},type:"Finish-to-Start"}]});expect(buildGanttModel(state).dependencies).toHaveLength(1)})});
 
@@ -56,5 +57,21 @@ describe("v1.5 Gantt dependency integrity",()=>{
       {id:"valid",projectId:"project-1",predecessor:{kind:"task",id:"a"},successor:{kind:"task",id:"b"},type:"Finish-to-Start"},
     ]});
     expect(buildGanttModel(state,"Week","2026-09-17").dependencies).toEqual([{from:"a",to:"b"}]);
+  });
+});
+
+describe("Today marker calendar position", () => {
+  it("includes the final visible day and excludes adjacent days", () => {
+    expect(todayPosition("2026-10-24", "2026-10-13", "2026-10-24")).toBeCloseTo(95.833333);
+    expect(todayPosition("2026-10-25", "2026-10-13", "2026-10-24")).toBeNull();
+    expect(todayPosition("2026-10-12", "2026-10-13", "2026-10-24")).toBeNull();
+  });
+  it("uses half a day rather than half a column at every zoom", () => {
+    for (const zoom of ["Week", "Month", "Quarter"] as const) {
+      const columns = timelineColumns(zoom, "2026-10-24");
+      const start = columns[0].start, end = columns[columns.length - 1].end;
+      const days = (Date.parse(end) - Date.parse(start)) / 86400000 + 1;
+      expect(todayPosition("2026-10-24", start, end)).toBeCloseTo(positionForDate("2026-10-24", start, end) + 50 / days);
+    }
   });
 });

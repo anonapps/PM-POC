@@ -20,3 +20,7 @@ Do not use `npm audit fix --force`, downgrade `eslint-config-next` to Next 14, f
 ## Validation and scope
 
 The PR is not ready to merge until the latest commit passes unit tests, typecheck, lint, build, production audit and E2E. The E2E harness uses a mocked file picker and cannot replace manual consent and local file persistence checks. No new product features are intended.
+
+## v1.5 feature-branch maintenance — 24 October 2026
+
+The historical findings above are not the current feature-branch audit result. This block updates Vitest from 4.1.11 to 4.1.12 and refreshes compatible transitive Vite (8.3.5) and Zod (4.6.7) versions. It resolves the observed Vitest mock-registration/traversal, Vite development-server/editor, and Zod collection-validation advisories without force upgrades. The lockfile also refreshes the existing transitive `nanoid` dependency from 3.3.19 to 3.3.20; direct production versions are unchanged. Both full and production-only npm audits report zero vulnerabilities after the update. Audit results are time-specific and must be repeated for the final release candidate.

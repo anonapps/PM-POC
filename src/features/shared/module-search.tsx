@@ -2,8 +2,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 
 /** Consistent collapsible search toolbar for record-management modules. */
-export function ModuleSearch({title,value,onChange,placeholder}:{
-  title:string;value:string;onChange:(value:string)=>void;placeholder:string;
+export function ModuleSearch({title,value,onChange,placeholder,disabled=false}:{
+  title:string;value:string;onChange:(value:string)=>void;placeholder:string;disabled?:boolean;
 }) {
   const [expanded,setExpanded]=useState(false);
   const id=useId();
@@ -18,9 +18,9 @@ export function ModuleSearch({title,value,onChange,placeholder}:{
     return ()=>document.removeEventListener("pointerdown",onPointerDown);
   },[expanded]);
   const active=value.trim().length>0;
-  const open=expanded;
+  const open=expanded&&!disabled;
   return <div ref={rootRef} className="module-search-toolbar">
-    <button ref={triggerRef} type="button" className="secondary" aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
+    <button ref={triggerRef} type="button" className="secondary" disabled={disabled} aria-expanded={open} aria-controls={id} onClick={()=>setExpanded(previous=>!previous)}>
       Search {title}{active?" · Active":""}
     </button>
     {open&&<div id={id} className="module-search-controls">

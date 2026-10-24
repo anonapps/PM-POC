@@ -889,3 +889,9 @@ td:has(> * > .scope-pill) {
 .gantt-panel .today-line, .tube-map .tube-today-line { width:0; border-left:2px dotted #dc2626; background:none; pointer-events:none; }
 .gantt-panel .today-line { top:70px; bottom:42px; z-index:4; }
 .tube-map .tube-today-line { top:0; bottom:0; z-index:4; }
+
+/* Both timeline views anchor Today to their complete body, below date headers. */
+:root { --timeline-today-color:#dc2626; --timeline-today-width:2px; }
+.timeline-today-marker { position:absolute; top:0; bottom:0; width:0; border-left:var(--timeline-today-width) dotted var(--timeline-today-color); z-index:4; pointer-events:none; }
+.gantt-body { position:relative; grid-column:1 / -1; display:grid; grid-template-columns:subgrid; }
+.gantt-body .gantt-connectors { top:0; height:100%; }

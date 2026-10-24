@@ -71,3 +71,9 @@ Opening and module-navigation timings are diagnostic only, not hardware-dependen
 ## Recorded verification
 
 On 11 October 2026, commit `14eb167` passed 27 Vitest files / 139 tests, TypeScript, lint, production build and dependency checks. GitHub [normal validation](https://github.com/anonapps/PM-POC/actions/runs/38133053042) and [full lifecycle](https://github.com/anonapps/PM-POC/actions/runs/38133053022) both passed. Full lifecycle created all 180 additional entities and saved/reopened the large project without browser runtime errors. This is a dated result; the current Actions run is the authority for later commits.
+
+## v1.5 shared-controls coverage
+
+`e2e/v15-shared-controls.mjs`, included in acceptance and both larger suites, verifies repeat inline creation for People/Streams, filtered creation reset, inline validation, Search disabled during creation, Show Deleted keyboard order, outside-click dismissal, predictive arrows/Enter/Escape, retained hidden selections, and shared Today marker body geometry. Unit tests cover Gantt final-day/zoom positioning and preservation of hidden Decision relationships through context editing and Undo/Redo.
+
+Independent browser suites can share an immutable production server by explicitly setting `E2E_BASE_URL`, using separate `E2E_DEBUG_PORT` values and allowing each runner to create its own fixture/profile. Build before starting that server; run TypeScript checks after the build to avoid racing `.next/types` regeneration. Do not edit runtime source during a browser run.

@@ -39,7 +39,8 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   await click('Add Stream');
   await evaluate(`(()=>{const input=document.getElementById('new-stream-name');const set=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;set.call(input,'Fresh selection stream');input.dispatchEvent(new Event('input',{bubbles:true}))})()`);
   await evaluate(`document.querySelector('form[data-create-draft]').requestSubmit()`);
-  await waitFor(`!document.querySelector('form[data-create-draft]')`);
+  await waitFor(`document.getElementById('new-stream-name')?.value===''&&[...document.querySelectorAll('tbody input')].some(input=>input.value==='Fresh selection stream')`);
+  await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
   await nav('Milestones');
   record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
   await nav('Tube Map');
