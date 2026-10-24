@@ -1,4 +1,5 @@
 "use client";
+import { HumanTextArea } from "../shared/human-text";
 import { useState } from "react";
 import type { Risk } from "../../domain";
 import type { ProjectState, ProjectStore } from "../../application";
@@ -14,7 +15,7 @@ export function RiskContextEditor({risk,state,store,onClose}:{risk:Risk;state:Pr
     <RelationshipPicker label="Risk streams" items={state.streams} selected={draft.relatedStreamIds} onChange={ids=>setDraft(previous=>({...previous,relatedStreamIds:ids}))}/>
     <RelationshipPicker label="Risk tasks" items={state.tasks} selected={draft.relatedTaskIds} onChange={ids=>setDraft(previous=>({...previous,relatedTaskIds:ids}))}/>
     <RelationshipPicker label="Risk milestones" items={state.milestones} selected={draft.relatedMilestoneIds} onChange={ids=>setDraft(previous=>({...previous,relatedMilestoneIds:ids}))}/>
-    <label>Description<textarea value={draft.description} onChange={event=>setDraft(previous=>({...previous,description:event.target.value}))}/></label>
+    <label>Description<HumanTextArea value={draft.description} onChange={event=>setDraft(previous=>({...previous,description:event.target.value}))}/></label>
     {error&&<small role="alert">{error}</small>}
     <button type="submit">Save context</button><button type="button" className="secondary" onClick={onClose}>Cancel</button>
   </form>;

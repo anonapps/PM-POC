@@ -444,3 +444,11 @@ HeroUI v2 Button/Chip controls and provider are part of the main presentation la
 - `PredictiveSelect`, `RelationshipPicker` and `SearchableOptionList` share query matching, arrows, Enter and Escape behaviour. Selection lives in canonical state or an explicit context draft, independently of query-filtered results. Native disclosure closing clears query state; outside clicks dismiss disclosures. Short fixed-value entity controls remain native selects.
 - `matchesEntitySearch` is the shared pure projection for module/global search, including descriptive text, owner and relationship names/human IDs, dependencies and risk actions. Matching itself lives in `option-matching.ts`, without React imports. Deleted related names remain excluded, preserving the established search contract.
 - Risk/Decision context drafts commit through existing commands and preserve relationships not being changed. Decision task/risk links are now explicitly editable, in addition to the existing Stream/Milestone context. Multiline context submission supports Ctrl/Cmd+Enter.
+
+## v1.5 candidate text/manual/lifecycle preparation
+
+`HumanTextInput` and `HumanTextArea` normalise only completed human-readable UI edits, then invoke existing blur/commit handlers. Controlled draft callbacks update local draft state before Save; Cancel remains side-effect free. Feature commands normalise only explicitly supplied text patch fields and compare the normalised patch before committing, so unrelated edits leave legacy text untouched and repeated blur produces no history/audit mutation.
+
+The bundled manual resolver selects exact version metadata first, otherwise a clearly labelled compatible same-minor entry, and never constructs a link to an unpublished release asset. The candidate PDF is generated locally with Pandoc/XeLaTeX via `scripts/build-v15-manual.sh`; these are documentation-build tools, not application/runtime dependencies.
+
+Dirty Open/Close actions use an explicit Save/Discard/Cancel dialog above the shell. Autosave pauses while this choice is pending. Failed Save retains the dialog and in-memory work. Forced same-file open activates the newly read saved project; cancelling the picker preserves current memory instead of silently discarding it.

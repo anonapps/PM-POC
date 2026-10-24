@@ -39,3 +39,21 @@ it("writes the current application version while retaining the project's compati
     expect(options.minimumRuntimeVersion).toBe(state.project.metadata.minimumAppVersion);
   }
 });
+
+it("explicit discard reloads the same saved handle instead of keeping dirty memory",async()=>{
+ const loaded={handle:{id:"same-file",name:"legacy.pmp"},state:(await import("../domain/test-fixtures")).makeProjectState(),configuration:DEFAULT_PROJECT_CONFIGURATION,createdAt:"2026-01-01T00:00:00Z",lastSavedAt:"2026-01-01T00:00:00Z"};
+ const runtime=new ProjectRuntime(files(async()=>({ok:true,value:loaded})));runtime.activate(loaded);
+ const original=runtime.getSnapshot().active!.store;
+ original.execute({type:"rename",apply:s=>({...s,project:{...s.project,name:"Unsaved name"}})});
+ await runtime.openProject(true);
+ expect(runtime.getSnapshot().active!.store).not.toBe(original);
+ expect(runtime.getSnapshot().active!.store.getState().project.name).toBe(loaded.state.project.name);
+ expect(runtime.getSnapshot().active!.store.isDirty()).toBe(false);
+});
+it("cancelling the picker after a discard decision keeps current work available",async()=>{
+ const loaded={handle:{id:"same-file",name:"legacy.pmp"},state:(await import("../domain/test-fixtures")).makeProjectState(),configuration:DEFAULT_PROJECT_CONFIGURATION,createdAt:"2026-01-01T00:00:00Z",lastSavedAt:"2026-01-01T00:00:00Z"};
+ const runtime=new ProjectRuntime(files(async()=>({ok:false,error:{code:"CANCELLED",message:"Cancelled"}})));runtime.activate(loaded);
+ const store=runtime.getSnapshot().active!.store;store.execute({type:"rename",apply:s=>({...s,project:{...s.project,name:"Unsaved name"}})});
+ await runtime.openProject(true);
+ expect(runtime.getSnapshot().active!.store).toBe(store);expect(store.isDirty()).toBe(true);expect(store.getState().project.name).toBe("Unsaved name");
+});

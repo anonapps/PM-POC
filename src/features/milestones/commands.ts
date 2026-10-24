@@ -1,5 +1,5 @@
 import { isCalendarDate } from "../shared/creation-validation";
-import { capitaliseFirstLetter } from "../shared/text-normalisation";
+import { capitaliseFirstLetter, normaliseHumanTextPatch, patchMatchesEntity } from "../shared/text-normalisation";
 import { issueHumanId, type DependencyEndpoint, type Milestone, type MilestoneScope, type MilestoneStatus } from "../../domain";
 import type { ProjectCommand, ProjectState } from "../../application";
 
@@ -33,7 +33,7 @@ export function createMilestone(draft: MilestoneDraft): ProjectCommand {
     if (validateMilestone(state, draft).length) return state;
     const issued = issueHumanId(state.identifierSequences, "milestone");
     const { predecessors = [], ...milestoneDraft } = draft;
-    const milestone: Milestone = { ...milestoneDraft, name: capitaliseFirstLetter(draft.name.trim()), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
+    const milestone: Milestone = { ...normaliseHumanTextPatch(milestoneDraft), name: capitaliseFirstLetter(draft.name.trim()), id: context.createId(), projectId: state.project.id, humanId: issued.humanId, actualCompletionDate: draft.status === "Complete" ? context.now().slice(0, 10) : undefined, deletion: { isDeleted: false } };
     return { ...state, milestones: [...state.milestones, milestone], dependencies: [...state.dependencies,...predecessors.map(predecessor=>({id:context.createId(),projectId:state.project.id,predecessor,successor:{kind:"milestone" as const,id:milestone.id},type:"Finish-to-Start" as const}))], identifierSequences: issued.sequences };
   } };
 }
@@ -42,14 +42,15 @@ export function editMilestone(id: string, patch: Partial<MilestoneDraft>): Proje
   return { type: "edit-milestone", apply(state, context) {
     const current = state.milestones.find((milestone) => milestone.id === id);
     if (!current) return state;
-    const draft = { ...current, ...patch };
+    const normalized={...normaliseHumanTextPatch(patch,current),...(patch.name===undefined||patch.name===current.name?{}:{name:capitaliseFirstLetter(patch.name.trim())})};
+    const draft = { ...current, ...normalized };
     const historicalStreamIds = current.scope.kind === "streams" ? current.scope.streamIds.filter((streamId) => state.streams.some((stream) => stream.id === streamId && stream.deletion.isDeleted)) : [];
     const errors = validateMilestone(state, draft, historicalStreamIds);
     // Historical deleted scope references do not block unrelated edits.
     if (errors.length && (patch.scope !== undefined || errors.some((error) => !error.includes("streams must be active")))) return state;
-    if (Object.keys(patch).length===1 && patch.name!==undefined && capitaliseFirstLetter(draft.name.trim())===current.name) return state;
+    if(patchMatchesEntity(current,normalized))return state;
     const actualCompletionDate = patch.status ? (patch.status === "Complete" ? context.now().slice(0, 10) : undefined) : current.actualCompletionDate;
-    return { ...state, milestones: state.milestones.map((milestone) => milestone.id === id ? { ...milestone, ...patch, name: capitaliseFirstLetter(draft.name.trim()), actualCompletionDate } : milestone) };
+    return { ...state, milestones: state.milestones.map((milestone) => milestone.id === id ? { ...milestone, ...normalized, actualCompletionDate } : milestone) };
   } };
 }
 

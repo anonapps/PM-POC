@@ -1,0 +1,4024 @@
+{
+  "project": {
+    "id": "project-1",
+    "name": "Regression 180 records",
+    "startDate": "2026-10-01",
+    "endDate": "2026-12-31",
+    "status": "In Progress",
+    "progress": 25,
+    "metadata": {
+      "schemaVersion": 2,
+      "minimumAppVersion": "1.2.0",
+      "gettingStartedCompleted": true
+    }
+  },
+  "streams": [
+    {
+      "id": "stream-1",
+      "projectId": "project-1",
+      "humanId": "STREAM-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Not Started",
+      "ownerId": null,
+      "priority": "Low",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-2",
+      "projectId": "project-1",
+      "humanId": "STREAM-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream duplicate",
+      "status": "In Progress",
+      "ownerId": null,
+      "priority": "Medium",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-3",
+      "projectId": "project-1",
+      "humanId": "STREAM-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 3",
+      "status": "On Hold",
+      "ownerId": null,
+      "priority": "High",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-4",
+      "projectId": "project-1",
+      "humanId": "STREAM-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 4",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Low",
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-5",
+      "projectId": "project-1",
+      "humanId": "STREAM-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 5",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "Medium",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-6",
+      "projectId": "project-1",
+      "humanId": "STREAM-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 6",
+      "status": "Not Started",
+      "ownerId": "person-3",
+      "priority": "High",
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-7",
+      "projectId": "project-1",
+      "humanId": "STREAM-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 7",
+      "status": "In Progress",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-8",
+      "projectId": "project-1",
+      "humanId": "STREAM-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 8",
+      "status": "On Hold",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-9",
+      "projectId": "project-1",
+      "humanId": "STREAM-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 9",
+      "status": "Completed",
+      "ownerId": "person-3",
+      "priority": "High",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-10",
+      "projectId": "project-1",
+      "humanId": "STREAM-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 10",
+      "status": "Cancelled",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-11",
+      "projectId": "project-1",
+      "humanId": "STREAM-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Not Started",
+      "ownerId": null,
+      "priority": "Medium",
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-12",
+      "projectId": "project-1",
+      "humanId": "STREAM-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream duplicate",
+      "status": "In Progress",
+      "ownerId": null,
+      "priority": "High",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-13",
+      "projectId": "project-1",
+      "humanId": "STREAM-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 13",
+      "status": "On Hold",
+      "ownerId": null,
+      "priority": "Low",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-14",
+      "projectId": "project-1",
+      "humanId": "STREAM-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 14",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Medium",
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-15",
+      "projectId": "project-1",
+      "humanId": "STREAM-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 15",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "High",
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-16",
+      "projectId": "project-1",
+      "humanId": "STREAM-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 16",
+      "status": "Not Started",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-17",
+      "projectId": "project-1",
+      "humanId": "STREAM-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 17",
+      "status": "In Progress",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-18",
+      "projectId": "project-1",
+      "humanId": "STREAM-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 18",
+      "status": "On Hold",
+      "ownerId": "person-3",
+      "priority": "High",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-19",
+      "projectId": "project-1",
+      "humanId": "STREAM-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 19",
+      "status": "Completed",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-20",
+      "projectId": "project-1",
+      "humanId": "STREAM-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 20",
+      "status": "Cancelled",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-21",
+      "projectId": "project-1",
+      "humanId": "STREAM-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Not Started",
+      "ownerId": null,
+      "priority": "High",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-22",
+      "projectId": "project-1",
+      "humanId": "STREAM-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream duplicate",
+      "status": "In Progress",
+      "ownerId": null,
+      "priority": "Low",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-23",
+      "projectId": "project-1",
+      "humanId": "STREAM-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 23",
+      "status": "On Hold",
+      "ownerId": null,
+      "priority": "Medium",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-24",
+      "projectId": "project-1",
+      "humanId": "STREAM-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 24",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "High",
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-25",
+      "projectId": "project-1",
+      "humanId": "STREAM-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 25",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "Low",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-26",
+      "projectId": "project-1",
+      "humanId": "STREAM-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 26",
+      "status": "Not Started",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-27",
+      "projectId": "project-1",
+      "humanId": "STREAM-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 27",
+      "status": "In Progress",
+      "ownerId": "person-3",
+      "priority": "High",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-28",
+      "projectId": "project-1",
+      "humanId": "STREAM-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 28",
+      "status": "On Hold",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "stream-29",
+      "projectId": "project-1",
+      "humanId": "STREAM-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 29",
+      "status": "Completed",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "stream-30",
+      "projectId": "project-1",
+      "humanId": "STREAM-030",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression stream 30",
+      "status": "Cancelled",
+      "ownerId": "person-3",
+      "priority": "High",
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "projectId": "project-1",
+      "humanId": "TASK-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Low",
+      "progress": 0,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-2",
+      "projectId": "project-1",
+      "humanId": "TASK-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task duplicate",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Medium",
+      "progress": 0,
+      "scope": {
+        "kind": "project"
+      },
+      "parentTaskId": "task-1",
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-3",
+      "projectId": "project-1",
+      "humanId": "TASK-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 3",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "High",
+      "progress": 0,
+      "scope": {
+        "kind": "project"
+      },
+      "parentTaskId": "task-2",
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-4",
+      "projectId": "project-1",
+      "humanId": "TASK-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 4",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Low",
+      "progress": 0,
+      "scope": {
+        "kind": "project"
+      },
+      "parentTaskId": "task-3",
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-5",
+      "projectId": "project-1",
+      "humanId": "TASK-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 5",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "Medium",
+      "progress": 0,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-5"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-6",
+      "projectId": "project-1",
+      "humanId": "TASK-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 6",
+      "status": "Not Started",
+      "ownerId": "person-3",
+      "priority": "High",
+      "progress": 25,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-6"
+      },
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-7",
+      "projectId": "project-1",
+      "humanId": "TASK-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 7",
+      "status": "In Progress",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "progress": 25,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-8",
+      "projectId": "project-1",
+      "humanId": "TASK-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 8",
+      "status": "On Hold",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "progress": 25,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-8"
+      },
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-9",
+      "projectId": "project-1",
+      "humanId": "TASK-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 9",
+      "status": "Completed",
+      "ownerId": "person-3",
+      "priority": "High",
+      "progress": 25,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-9"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-10",
+      "projectId": "project-1",
+      "humanId": "TASK-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 10",
+      "status": "Cancelled",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "progress": 25,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-11",
+      "projectId": "project-1",
+      "humanId": "TASK-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Not Started",
+      "ownerId": null,
+      "priority": "Medium",
+      "progress": 50,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-11"
+      },
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-12",
+      "projectId": "project-1",
+      "humanId": "TASK-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task duplicate",
+      "status": "In Progress",
+      "ownerId": null,
+      "priority": "High",
+      "progress": 50,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-12"
+      },
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-13",
+      "projectId": "project-1",
+      "humanId": "TASK-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 13",
+      "status": "On Hold",
+      "ownerId": null,
+      "priority": "Low",
+      "progress": 50,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-14",
+      "projectId": "project-1",
+      "humanId": "TASK-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 14",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "Medium",
+      "progress": 50,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-14"
+      },
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-15",
+      "projectId": "project-1",
+      "humanId": "TASK-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 15",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "High",
+      "progress": 50,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-15"
+      },
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-16",
+      "projectId": "project-1",
+      "humanId": "TASK-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 16",
+      "status": "Not Started",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "progress": 75,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-17",
+      "projectId": "project-1",
+      "humanId": "TASK-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 17",
+      "status": "In Progress",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "progress": 75,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-17"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-18",
+      "projectId": "project-1",
+      "humanId": "TASK-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 18",
+      "status": "On Hold",
+      "ownerId": "person-3",
+      "priority": "High",
+      "progress": 75,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-18"
+      },
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-19",
+      "projectId": "project-1",
+      "humanId": "TASK-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 19",
+      "status": "Completed",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "progress": 75,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-20",
+      "projectId": "project-1",
+      "humanId": "TASK-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 20",
+      "status": "Cancelled",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "progress": 75,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-20"
+      },
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-21",
+      "projectId": "project-1",
+      "humanId": "TASK-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Not Started",
+      "ownerId": null,
+      "priority": "High",
+      "progress": 100,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-21"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-22",
+      "projectId": "project-1",
+      "humanId": "TASK-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task duplicate",
+      "status": "In Progress",
+      "ownerId": null,
+      "priority": "Low",
+      "progress": 100,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-23",
+      "projectId": "project-1",
+      "humanId": "TASK-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 23",
+      "status": "On Hold",
+      "ownerId": null,
+      "priority": "Medium",
+      "progress": 100,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-23"
+      },
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-24",
+      "projectId": "project-1",
+      "humanId": "TASK-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 24",
+      "status": "Completed",
+      "ownerId": null,
+      "priority": "High",
+      "progress": 100,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-24"
+      },
+      "startDate": "2027-01-01",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-25",
+      "projectId": "project-1",
+      "humanId": "TASK-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 25",
+      "status": "Cancelled",
+      "ownerId": null,
+      "priority": "Low",
+      "progress": 100,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-26",
+      "projectId": "project-1",
+      "humanId": "TASK-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 26",
+      "status": "Not Started",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "progress": 0,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-26"
+      },
+      "startDate": "2025-12-31",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-27",
+      "projectId": "project-1",
+      "humanId": "TASK-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 27",
+      "status": "In Progress",
+      "ownerId": "person-3",
+      "priority": "High",
+      "progress": 0,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-27"
+      },
+      "startDate": "2026-10-11",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-28",
+      "projectId": "project-1",
+      "humanId": "TASK-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 28",
+      "status": "On Hold",
+      "ownerId": "person-1",
+      "priority": "Low",
+      "progress": 0,
+      "scope": {
+        "kind": "project"
+      },
+      "startDate": "2026-11-15",
+      "endDate": "2027-02-01"
+    },
+    {
+      "id": "task-29",
+      "projectId": "project-1",
+      "humanId": "TASK-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 29",
+      "status": "Completed",
+      "ownerId": "person-2",
+      "priority": "Medium",
+      "progress": 0,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-29"
+      },
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "id": "task-30",
+      "projectId": "project-1",
+      "humanId": "TASK-030",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression task 30",
+      "status": "Cancelled",
+      "ownerId": "person-3",
+      "priority": "High",
+      "progress": 0,
+      "scope": {
+        "kind": "stream",
+        "streamId": "stream-30"
+      },
+      "startDate": "2026-12-31",
+      "endDate": "2027-02-01"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-1",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Tentative",
+      "ownerId": null,
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-2",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone duplicate",
+      "status": "Planned",
+      "ownerId": null,
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-2",
+          "stream-3"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-2"
+      ]
+    },
+    {
+      "id": "milestone-3",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 3",
+      "status": "Delayed",
+      "ownerId": null,
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-3",
+          "stream-4"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-4",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 4",
+      "status": "Complete",
+      "ownerId": null,
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": [
+        "task-4"
+      ]
+    },
+    {
+      "id": "milestone-5",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 5",
+      "status": "Tentative",
+      "ownerId": "person-2",
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-5",
+          "stream-6"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-6",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 6",
+      "status": "Planned",
+      "ownerId": "person-3",
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-6",
+          "stream-7"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-6"
+      ]
+    },
+    {
+      "id": "milestone-7",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 7",
+      "status": "Delayed",
+      "ownerId": "person-1",
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-8",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 8",
+      "status": "Complete",
+      "ownerId": "person-2",
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-8",
+          "stream-9"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-8"
+      ]
+    },
+    {
+      "id": "milestone-9",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 9",
+      "status": "Tentative",
+      "ownerId": null,
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-9",
+          "stream-10"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-10",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 10",
+      "status": "Planned",
+      "ownerId": null,
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": [
+        "task-10"
+      ]
+    },
+    {
+      "id": "milestone-11",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Delayed",
+      "ownerId": null,
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-11",
+          "stream-12"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-12",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone duplicate",
+      "status": "Complete",
+      "ownerId": null,
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-12",
+          "stream-13"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-12"
+      ]
+    },
+    {
+      "id": "milestone-13",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 13",
+      "status": "Tentative",
+      "ownerId": "person-1",
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-14",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 14",
+      "status": "Planned",
+      "ownerId": "person-2",
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-14",
+          "stream-15"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-14"
+      ]
+    },
+    {
+      "id": "milestone-15",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 15",
+      "status": "Delayed",
+      "ownerId": "person-3",
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-15",
+          "stream-16"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-16",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 16",
+      "status": "Complete",
+      "ownerId": "person-1",
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": [
+        "task-16"
+      ]
+    },
+    {
+      "id": "milestone-17",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 17",
+      "status": "Tentative",
+      "ownerId": null,
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-17",
+          "stream-18"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-18",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 18",
+      "status": "Planned",
+      "ownerId": null,
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-18",
+          "stream-19"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-18"
+      ]
+    },
+    {
+      "id": "milestone-19",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 19",
+      "status": "Delayed",
+      "ownerId": null,
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-20",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 20",
+      "status": "Complete",
+      "ownerId": null,
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-20",
+          "stream-21"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-20"
+      ]
+    },
+    {
+      "id": "milestone-21",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Tentative",
+      "ownerId": "person-3",
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-21",
+          "stream-22"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-22",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone duplicate",
+      "status": "Planned",
+      "ownerId": "person-1",
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": [
+        "task-22"
+      ]
+    },
+    {
+      "id": "milestone-23",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 23",
+      "status": "Delayed",
+      "ownerId": "person-2",
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-23",
+          "stream-24"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-24",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 24",
+      "status": "Complete",
+      "ownerId": "person-3",
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-24",
+          "stream-25"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-24"
+      ]
+    },
+    {
+      "id": "milestone-25",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 25",
+      "status": "Tentative",
+      "ownerId": null,
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-26",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 26",
+      "status": "Planned",
+      "ownerId": null,
+      "plannedDate": "2025-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-26",
+          "stream-27"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-26"
+      ]
+    },
+    {
+      "id": "milestone-27",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 27",
+      "status": "Delayed",
+      "ownerId": null,
+      "plannedDate": "2026-10-11",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-27",
+          "stream-28"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-28",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 28",
+      "status": "Complete",
+      "ownerId": null,
+      "plannedDate": "2026-11-15",
+      "scope": {
+        "kind": "project"
+      },
+      "relatedTaskIds": [
+        "task-28"
+      ]
+    },
+    {
+      "id": "milestone-29",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 29",
+      "status": "Tentative",
+      "ownerId": "person-2",
+      "plannedDate": "2027-01-01",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-29",
+          "stream-30"
+        ]
+      },
+      "relatedTaskIds": []
+    },
+    {
+      "id": "milestone-30",
+      "projectId": "project-1",
+      "humanId": "MILESTONE-030",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression milestone 30",
+      "status": "Planned",
+      "ownerId": "person-3",
+      "plannedDate": "2026-12-31",
+      "scope": {
+        "kind": "streams",
+        "streamIds": [
+          "stream-30",
+          "stream-1"
+        ]
+      },
+      "relatedTaskIds": [
+        "task-30"
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": "person-1",
+      "projectId": "project-1",
+      "humanId": "PERSON-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "notes": "  legacy notes\nsecond LINE  "
+    },
+    {
+      "id": "person-2",
+      "projectId": "project-1",
+      "humanId": "PERSON-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person duplicate"
+    },
+    {
+      "id": "person-3",
+      "projectId": "project-1",
+      "humanId": "PERSON-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 3"
+    },
+    {
+      "id": "person-4",
+      "projectId": "project-1",
+      "humanId": "PERSON-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 4"
+    },
+    {
+      "id": "person-5",
+      "projectId": "project-1",
+      "humanId": "PERSON-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 5"
+    },
+    {
+      "id": "person-6",
+      "projectId": "project-1",
+      "humanId": "PERSON-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 6"
+    },
+    {
+      "id": "person-7",
+      "projectId": "project-1",
+      "humanId": "PERSON-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 7"
+    },
+    {
+      "id": "person-8",
+      "projectId": "project-1",
+      "humanId": "PERSON-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 8"
+    },
+    {
+      "id": "person-9",
+      "projectId": "project-1",
+      "humanId": "PERSON-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 9"
+    },
+    {
+      "id": "person-10",
+      "projectId": "project-1",
+      "humanId": "PERSON-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 10"
+    },
+    {
+      "id": "person-11",
+      "projectId": "project-1",
+      "humanId": "PERSON-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ"
+    },
+    {
+      "id": "person-12",
+      "projectId": "project-1",
+      "humanId": "PERSON-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person duplicate"
+    },
+    {
+      "id": "person-13",
+      "projectId": "project-1",
+      "humanId": "PERSON-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 13"
+    },
+    {
+      "id": "person-14",
+      "projectId": "project-1",
+      "humanId": "PERSON-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 14"
+    },
+    {
+      "id": "person-15",
+      "projectId": "project-1",
+      "humanId": "PERSON-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 15"
+    },
+    {
+      "id": "person-16",
+      "projectId": "project-1",
+      "humanId": "PERSON-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 16"
+    },
+    {
+      "id": "person-17",
+      "projectId": "project-1",
+      "humanId": "PERSON-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 17"
+    },
+    {
+      "id": "person-18",
+      "projectId": "project-1",
+      "humanId": "PERSON-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 18"
+    },
+    {
+      "id": "person-19",
+      "projectId": "project-1",
+      "humanId": "PERSON-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 19"
+    },
+    {
+      "id": "person-20",
+      "projectId": "project-1",
+      "humanId": "PERSON-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 20"
+    },
+    {
+      "id": "person-21",
+      "projectId": "project-1",
+      "humanId": "PERSON-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ"
+    },
+    {
+      "id": "person-22",
+      "projectId": "project-1",
+      "humanId": "PERSON-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person duplicate"
+    },
+    {
+      "id": "person-23",
+      "projectId": "project-1",
+      "humanId": "PERSON-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 23"
+    },
+    {
+      "id": "person-24",
+      "projectId": "project-1",
+      "humanId": "PERSON-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 24"
+    },
+    {
+      "id": "person-25",
+      "projectId": "project-1",
+      "humanId": "PERSON-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 25"
+    },
+    {
+      "id": "person-26",
+      "projectId": "project-1",
+      "humanId": "PERSON-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 26"
+    },
+    {
+      "id": "person-27",
+      "projectId": "project-1",
+      "humanId": "PERSON-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 27"
+    },
+    {
+      "id": "person-28",
+      "projectId": "project-1",
+      "humanId": "PERSON-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 28"
+    },
+    {
+      "id": "person-29",
+      "projectId": "project-1",
+      "humanId": "PERSON-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "name": "Regression person 29"
+    },
+    {
+      "id": "person-30",
+      "projectId": "project-1",
+      "humanId": "PERSON-030",
+      "deletion": {
+        "isDeleted": true,
+        "deletedAt": "2026-10-11T12:30:00.000Z"
+      },
+      "name": "Regression person 30"
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-1",
+      "projectId": "project-1",
+      "humanId": "RISK-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Open",
+      "probability": "Low",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": []
+    },
+    {
+      "id": "risk-2",
+      "projectId": "project-1",
+      "humanId": "RISK-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk duplicate",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "Medium",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2026-10-11",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-2",
+        "stream-3"
+      ],
+      "relatedTaskIds": [
+        "task-2"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-2"
+      ],
+      "actions": [
+        {
+          "id": "action-1-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-1-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-3",
+      "projectId": "project-1",
+      "humanId": "RISK-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 3",
+      "status": "Closed",
+      "probability": "High",
+      "impact": "Low",
+      "riskLevel": "Medium",
+      "ownerId": null,
+      "dueDate": "2026-11-15",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-3",
+        "stream-4"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-2-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-2-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-4",
+      "projectId": "project-1",
+      "humanId": "RISK-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 4",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "Low",
+      "impact": "Medium",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2027-01-01",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-4"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-4"
+      ],
+      "actions": []
+    },
+    {
+      "id": "risk-5",
+      "projectId": "project-1",
+      "humanId": "RISK-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 5",
+      "status": "Open",
+      "probability": "Medium",
+      "impact": "Medium",
+      "riskLevel": "Medium",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-5",
+        "stream-6"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-4-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-4-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-6",
+      "projectId": "project-1",
+      "humanId": "RISK-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 6",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "High",
+      "impact": "Medium",
+      "riskLevel": "High",
+      "ownerId": "person-3",
+      "dueDate": "2025-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-6",
+        "stream-7"
+      ],
+      "relatedTaskIds": [
+        "task-6"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-6"
+      ],
+      "actions": [
+        {
+          "id": "action-5-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-5-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-7",
+      "projectId": "project-1",
+      "humanId": "RISK-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 7",
+      "status": "Closed",
+      "probability": "Low",
+      "impact": "High",
+      "riskLevel": "Medium",
+      "ownerId": "person-1",
+      "dueDate": "2026-10-11",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": []
+    },
+    {
+      "id": "risk-8",
+      "projectId": "project-1",
+      "humanId": "RISK-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 8",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "Medium",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": "person-2",
+      "dueDate": "2026-11-15",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-8",
+        "stream-9"
+      ],
+      "relatedTaskIds": [
+        "task-8"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-8"
+      ],
+      "actions": [
+        {
+          "id": "action-7-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-7-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-9",
+      "projectId": "project-1",
+      "humanId": "RISK-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 9",
+      "status": "Open",
+      "probability": "High",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-9",
+        "stream-10"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-8-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-8-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-10",
+      "projectId": "project-1",
+      "humanId": "RISK-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 10",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "Low",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2026-12-31",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-10"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-10"
+      ],
+      "actions": []
+    },
+    {
+      "id": "risk-11",
+      "projectId": "project-1",
+      "humanId": "RISK-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Closed",
+      "probability": "Medium",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2025-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-11",
+        "stream-12"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-10-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-10-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-12",
+      "projectId": "project-1",
+      "humanId": "RISK-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk duplicate",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "High",
+      "impact": "Low",
+      "riskLevel": "Medium",
+      "ownerId": null,
+      "dueDate": "2026-10-11",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-12",
+        "stream-13"
+      ],
+      "relatedTaskIds": [
+        "task-12"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-12"
+      ],
+      "actions": [
+        {
+          "id": "action-11-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-11-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-13",
+      "projectId": "project-1",
+      "humanId": "RISK-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 13",
+      "status": "Open",
+      "probability": "Low",
+      "impact": "Medium",
+      "riskLevel": "Low",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": []
+    },
+    {
+      "id": "risk-14",
+      "projectId": "project-1",
+      "humanId": "RISK-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 14",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "Medium",
+      "impact": "Medium",
+      "riskLevel": "Medium",
+      "ownerId": "person-2",
+      "dueDate": "2027-01-01",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-14",
+        "stream-15"
+      ],
+      "relatedTaskIds": [
+        "task-14"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-14"
+      ],
+      "actions": [
+        {
+          "id": "action-13-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-13-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-15",
+      "projectId": "project-1",
+      "humanId": "RISK-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 15",
+      "status": "Closed",
+      "probability": "High",
+      "impact": "Medium",
+      "riskLevel": "High",
+      "ownerId": "person-3",
+      "dueDate": "2026-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-15",
+        "stream-16"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-14-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-14-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-16",
+      "projectId": "project-1",
+      "humanId": "RISK-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 16",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "Low",
+      "impact": "High",
+      "riskLevel": "Medium",
+      "ownerId": "person-1",
+      "dueDate": "2025-12-31",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-16"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-16"
+      ],
+      "actions": []
+    },
+    {
+      "id": "risk-17",
+      "projectId": "project-1",
+      "humanId": "RISK-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 17",
+      "status": "Open",
+      "probability": "Medium",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-17",
+        "stream-18"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-16-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-16-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-18",
+      "projectId": "project-1",
+      "humanId": "RISK-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 18",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "High",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": null,
+      "dueDate": "2026-11-15",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-18",
+        "stream-19"
+      ],
+      "relatedTaskIds": [
+        "task-18"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-18"
+      ],
+      "actions": [
+        {
+          "id": "action-17-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-17-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-19",
+      "projectId": "project-1",
+      "humanId": "RISK-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 19",
+      "status": "Closed",
+      "probability": "Low",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2027-01-01",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": []
+    },
+    {
+      "id": "risk-20",
+      "projectId": "project-1",
+      "humanId": "RISK-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 20",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "Medium",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2026-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-20",
+        "stream-21"
+      ],
+      "relatedTaskIds": [
+        "task-20"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-20"
+      ],
+      "actions": [
+        {
+          "id": "action-19-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-19-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-21",
+      "projectId": "project-1",
+      "humanId": "RISK-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "status": "Open",
+      "probability": "High",
+      "impact": "Low",
+      "riskLevel": "Medium",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-21",
+        "stream-22"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-20-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-20-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-22",
+      "projectId": "project-1",
+      "humanId": "RISK-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk duplicate",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "Low",
+      "impact": "Medium",
+      "riskLevel": "Low",
+      "ownerId": "person-1",
+      "dueDate": "2026-10-11",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-22"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-22"
+      ],
+      "actions": []
+    },
+    {
+      "id": "risk-23",
+      "projectId": "project-1",
+      "humanId": "RISK-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 23",
+      "status": "Closed",
+      "probability": "Medium",
+      "impact": "Medium",
+      "riskLevel": "Medium",
+      "ownerId": "person-2",
+      "dueDate": "2026-11-15",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-23",
+        "stream-24"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-22-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-22-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-24",
+      "projectId": "project-1",
+      "humanId": "RISK-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 24",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "High",
+      "impact": "Medium",
+      "riskLevel": "High",
+      "ownerId": "person-3",
+      "dueDate": "2027-01-01",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-24",
+        "stream-25"
+      ],
+      "relatedTaskIds": [
+        "task-24"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-24"
+      ],
+      "actions": [
+        {
+          "id": "action-23-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-23-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-25",
+      "projectId": "project-1",
+      "humanId": "RISK-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 25",
+      "status": "Open",
+      "probability": "Low",
+      "impact": "High",
+      "riskLevel": "Medium",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": []
+    },
+    {
+      "id": "risk-26",
+      "projectId": "project-1",
+      "humanId": "RISK-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 26",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "Medium",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": null,
+      "dueDate": "2025-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-26",
+        "stream-27"
+      ],
+      "relatedTaskIds": [
+        "task-26"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-26"
+      ],
+      "actions": [
+        {
+          "id": "action-25-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-25-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-27",
+      "projectId": "project-1",
+      "humanId": "RISK-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 27",
+      "status": "Closed",
+      "probability": "High",
+      "impact": "High",
+      "riskLevel": "High",
+      "ownerId": null,
+      "dueDate": "2026-10-11",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-27",
+        "stream-28"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-26-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-26-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-28",
+      "projectId": "project-1",
+      "humanId": "RISK-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 28",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Accepted",
+      "probability": "Low",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": null,
+      "dueDate": "2026-11-15",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-28"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-28"
+      ],
+      "actions": []
+    },
+    {
+      "id": "risk-29",
+      "projectId": "project-1",
+      "humanId": "RISK-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 29",
+      "status": "Open",
+      "probability": "Medium",
+      "impact": "Low",
+      "riskLevel": "Low",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-29",
+        "stream-30"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "actions": [
+        {
+          "id": "action-28-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-28-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "risk-30",
+      "projectId": "project-1",
+      "humanId": "RISK-030",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression risk 30",
+      "description": "Detailed mitigation context <>& ñ",
+      "status": "Mitigated",
+      "probability": "High",
+      "impact": "Low",
+      "riskLevel": "Medium",
+      "ownerId": "person-3",
+      "dueDate": "2026-12-31",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-30",
+        "stream-1"
+      ],
+      "relatedTaskIds": [
+        "task-30"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-30"
+      ],
+      "actions": [
+        {
+          "id": "action-29-open",
+          "description": "Overdue mitigation",
+          "status": "Open",
+          "dueDate": "2026-10-01"
+        },
+        {
+          "id": "action-29-complete",
+          "description": "Completed mitigation",
+          "status": "Complete",
+          "dueDate": "2026-10-01"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision-1",
+      "projectId": "project-1",
+      "humanId": "DECISION-001",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-2",
+      "projectId": "project-1",
+      "humanId": "DECISION-002",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision duplicate",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-10-11",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-2",
+        "stream-3"
+      ],
+      "relatedTaskIds": [
+        "task-2"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-2"
+      ],
+      "relatedRiskIds": [
+        "risk-2",
+        "risk-3"
+      ]
+    },
+    {
+      "id": "decision-3",
+      "projectId": "project-1",
+      "humanId": "DECISION-003",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 3",
+      "decisionDate": "2026-11-15",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-3",
+        "stream-4"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-3",
+        "risk-4"
+      ]
+    },
+    {
+      "id": "decision-4",
+      "projectId": "project-1",
+      "humanId": "DECISION-004",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 4",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2027-01-01",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-4"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-4"
+      ],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-5",
+      "projectId": "project-1",
+      "humanId": "DECISION-005",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 5",
+      "decisionDate": "2026-12-31",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-5",
+        "stream-6"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-5",
+        "risk-6"
+      ]
+    },
+    {
+      "id": "decision-6",
+      "projectId": "project-1",
+      "humanId": "DECISION-006",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 6",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-6",
+        "stream-7"
+      ],
+      "relatedTaskIds": [
+        "task-6"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-6"
+      ],
+      "relatedRiskIds": [
+        "risk-6",
+        "risk-7"
+      ]
+    },
+    {
+      "id": "decision-7",
+      "projectId": "project-1",
+      "humanId": "DECISION-007",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 7",
+      "decisionDate": "2026-10-11",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-8",
+      "projectId": "project-1",
+      "humanId": "DECISION-008",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 8",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-11-15",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-8",
+        "stream-9"
+      ],
+      "relatedTaskIds": [
+        "task-8"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-8"
+      ],
+      "relatedRiskIds": [
+        "risk-8",
+        "risk-9"
+      ]
+    },
+    {
+      "id": "decision-9",
+      "projectId": "project-1",
+      "humanId": "DECISION-009",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 9",
+      "decisionDate": "2027-01-01",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-9",
+        "stream-10"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-9",
+        "risk-10"
+      ]
+    },
+    {
+      "id": "decision-10",
+      "projectId": "project-1",
+      "humanId": "DECISION-010",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 10",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-12-31",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-10"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-10"
+      ],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-11",
+      "projectId": "project-1",
+      "humanId": "DECISION-011",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-11",
+        "stream-12"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-11",
+        "risk-12"
+      ]
+    },
+    {
+      "id": "decision-12",
+      "projectId": "project-1",
+      "humanId": "DECISION-012",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision duplicate",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-10-11",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-12",
+        "stream-13"
+      ],
+      "relatedTaskIds": [
+        "task-12"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-12"
+      ],
+      "relatedRiskIds": [
+        "risk-12",
+        "risk-13"
+      ]
+    },
+    {
+      "id": "decision-13",
+      "projectId": "project-1",
+      "humanId": "DECISION-013",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 13",
+      "decisionDate": "2026-11-15",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-14",
+      "projectId": "project-1",
+      "humanId": "DECISION-014",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 14",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2027-01-01",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-14",
+        "stream-15"
+      ],
+      "relatedTaskIds": [
+        "task-14"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-14"
+      ],
+      "relatedRiskIds": [
+        "risk-14",
+        "risk-15"
+      ]
+    },
+    {
+      "id": "decision-15",
+      "projectId": "project-1",
+      "humanId": "DECISION-015",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 15",
+      "decisionDate": "2026-12-31",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-15",
+        "stream-16"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-15",
+        "risk-16"
+      ]
+    },
+    {
+      "id": "decision-16",
+      "projectId": "project-1",
+      "humanId": "DECISION-016",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 16",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-16"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-16"
+      ],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-17",
+      "projectId": "project-1",
+      "humanId": "DECISION-017",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 17",
+      "decisionDate": "2026-10-11",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-17",
+        "stream-18"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-17",
+        "risk-18"
+      ]
+    },
+    {
+      "id": "decision-18",
+      "projectId": "project-1",
+      "humanId": "DECISION-018",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 18",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-11-15",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-18",
+        "stream-19"
+      ],
+      "relatedTaskIds": [
+        "task-18"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-18"
+      ],
+      "relatedRiskIds": [
+        "risk-18",
+        "risk-19"
+      ]
+    },
+    {
+      "id": "decision-19",
+      "projectId": "project-1",
+      "humanId": "DECISION-019",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 19",
+      "decisionDate": "2027-01-01",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-20",
+      "projectId": "project-1",
+      "humanId": "DECISION-020",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 20",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-12-31",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-20",
+        "stream-21"
+      ],
+      "relatedTaskIds": [
+        "task-20"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-20"
+      ],
+      "relatedRiskIds": [
+        "risk-20",
+        "risk-21"
+      ]
+    },
+    {
+      "id": "decision-21",
+      "projectId": "project-1",
+      "humanId": "DECISION-021",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision — long name long name long name long name long name long name long name long name long name long name long name long name  <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-21",
+        "stream-22"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-21",
+        "risk-22"
+      ]
+    },
+    {
+      "id": "decision-22",
+      "projectId": "project-1",
+      "humanId": "DECISION-022",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision duplicate",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-10-11",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-22"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-22"
+      ],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-23",
+      "projectId": "project-1",
+      "humanId": "DECISION-023",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 23",
+      "decisionDate": "2026-11-15",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-23",
+        "stream-24"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-23",
+        "risk-24"
+      ]
+    },
+    {
+      "id": "decision-24",
+      "projectId": "project-1",
+      "humanId": "DECISION-024",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 24",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2027-01-01",
+      "ownerId": null,
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-24",
+        "stream-25"
+      ],
+      "relatedTaskIds": [
+        "task-24"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-24"
+      ],
+      "relatedRiskIds": [
+        "risk-24",
+        "risk-25"
+      ]
+    },
+    {
+      "id": "decision-25",
+      "projectId": "project-1",
+      "humanId": "DECISION-025",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 25",
+      "decisionDate": "2026-12-31",
+      "ownerId": null,
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-26",
+      "projectId": "project-1",
+      "humanId": "DECISION-026",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 26",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2025-12-31",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-26",
+        "stream-27"
+      ],
+      "relatedTaskIds": [
+        "task-26"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-26"
+      ],
+      "relatedRiskIds": [
+        "risk-26",
+        "risk-27"
+      ]
+    },
+    {
+      "id": "decision-27",
+      "projectId": "project-1",
+      "humanId": "DECISION-027",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 27",
+      "decisionDate": "2026-10-11",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-27",
+        "stream-28"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-27",
+        "risk-28"
+      ]
+    },
+    {
+      "id": "decision-28",
+      "projectId": "project-1",
+      "humanId": "DECISION-028",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 28",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-11-15",
+      "ownerId": "person-1",
+      "projectWide": true,
+      "relatedStreamIds": [],
+      "relatedTaskIds": [
+        "task-28"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-28"
+      ],
+      "relatedRiskIds": []
+    },
+    {
+      "id": "decision-29",
+      "projectId": "project-1",
+      "humanId": "DECISION-029",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 29",
+      "decisionDate": "2027-01-01",
+      "ownerId": "person-2",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-29",
+        "stream-30"
+      ],
+      "relatedTaskIds": [],
+      "relatedMilestoneIds": [],
+      "relatedRiskIds": [
+        "risk-29",
+        "risk-30"
+      ]
+    },
+    {
+      "id": "decision-30",
+      "projectId": "project-1",
+      "humanId": "DECISION-030",
+      "deletion": {
+        "isDeleted": false
+      },
+      "title": "Regression decision 30",
+      "description": "Rationale with <>& ñ",
+      "decisionDate": "2026-12-31",
+      "ownerId": "person-3",
+      "projectWide": false,
+      "relatedStreamIds": [
+        "stream-30",
+        "stream-1"
+      ],
+      "relatedTaskIds": [
+        "task-30"
+      ],
+      "relatedMilestoneIds": [
+        "milestone-30"
+      ],
+      "relatedRiskIds": [
+        "risk-30",
+        "risk-1"
+      ]
+    }
+  ],
+  "relationships": [],
+  "dependencies": [
+    {
+      "id": "dependency-task-5",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-5"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-6"
+      }
+    },
+    {
+      "id": "dependency-milestone-5",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-5"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-6"
+      }
+    },
+    {
+      "id": "dependency-task-7",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-7"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-8"
+      }
+    },
+    {
+      "id": "dependency-milestone-7",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-7"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-8"
+      }
+    },
+    {
+      "id": "dependency-task-8",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-8"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-9"
+      }
+    },
+    {
+      "id": "dependency-milestone-8",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-8"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-9"
+      }
+    },
+    {
+      "id": "dependency-task-10",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-10"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-11"
+      }
+    },
+    {
+      "id": "dependency-milestone-10",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-10"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-11"
+      }
+    },
+    {
+      "id": "dependency-task-11",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-11"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-12"
+      }
+    },
+    {
+      "id": "dependency-milestone-11",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-11"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-12"
+      }
+    },
+    {
+      "id": "dependency-task-13",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-13"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-14"
+      }
+    },
+    {
+      "id": "dependency-milestone-13",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-13"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-14"
+      }
+    },
+    {
+      "id": "dependency-task-14",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-14"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-15"
+      }
+    },
+    {
+      "id": "dependency-milestone-14",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-14"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-15"
+      }
+    },
+    {
+      "id": "dependency-task-16",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-16"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-17"
+      }
+    },
+    {
+      "id": "dependency-milestone-16",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-16"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-17"
+      }
+    },
+    {
+      "id": "dependency-task-17",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-17"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-18"
+      }
+    },
+    {
+      "id": "dependency-milestone-17",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-17"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-18"
+      }
+    },
+    {
+      "id": "dependency-task-19",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-19"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-20"
+      }
+    },
+    {
+      "id": "dependency-milestone-19",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-19"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-20"
+      }
+    },
+    {
+      "id": "dependency-task-20",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-20"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-21"
+      }
+    },
+    {
+      "id": "dependency-milestone-20",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-20"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-21"
+      }
+    },
+    {
+      "id": "dependency-task-22",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-22"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-23"
+      }
+    },
+    {
+      "id": "dependency-milestone-22",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-22"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-23"
+      }
+    },
+    {
+      "id": "dependency-task-23",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-23"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-24"
+      }
+    },
+    {
+      "id": "dependency-milestone-23",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-23"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-24"
+      }
+    },
+    {
+      "id": "dependency-task-25",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-25"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-26"
+      }
+    },
+    {
+      "id": "dependency-milestone-25",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-25"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-26"
+      }
+    },
+    {
+      "id": "dependency-task-26",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-26"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-27"
+      }
+    },
+    {
+      "id": "dependency-milestone-26",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-26"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-27"
+      }
+    },
+    {
+      "id": "dependency-task-28",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-28"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-29"
+      }
+    },
+    {
+      "id": "dependency-milestone-28",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-28"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-29"
+      }
+    },
+    {
+      "id": "dependency-task-29",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-29"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-30"
+      }
+    },
+    {
+      "id": "dependency-milestone-29",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "milestone",
+        "id": "milestone-29"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-30"
+      }
+    },
+    {
+      "id": "multiple-task-predecessor",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-5"
+      },
+      "successor": {
+        "kind": "task",
+        "id": "task-9"
+      }
+    },
+    {
+      "id": "task-to-milestone",
+      "projectId": "project-1",
+      "type": "Finish-to-Start",
+      "predecessor": {
+        "kind": "task",
+        "id": "task-30"
+      },
+      "successor": {
+        "kind": "milestone",
+        "id": "milestone-30"
+      }
+    }
+  ],
+  "identifierSequences": {
+    "stream": 30,
+    "task": 30,
+    "milestone": 30,
+    "person": 30,
+    "risk": 30,
+    "decision": 30
+  },
+  "auditHistory": {
+    "enabled": true,
+    "events": [
+      {
+        "timestamp": "2026-10-11T12:30:00.000Z",
+        "command": "soft-delete",
+        "entityType": "person",
+        "entityId": "person-30",
+        "humanId": "PERSON-030",
+        "action": "deleted"
+      }
+    ]
+  }
+}

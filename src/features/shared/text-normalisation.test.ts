@@ -23,3 +23,7 @@ describe("capitaliseFirstLetter", () => {
     expect(capitaliseFirstLetter("123 -")).toBe("123 -");
   });
 });
+
+it("capitalises supplementary Unicode letters without splitting surrogate pairs",()=>{
+ expect(capitaliseFirstLetter("𐐨eep CASE")).toBe("𐐀eep CASE");
+});

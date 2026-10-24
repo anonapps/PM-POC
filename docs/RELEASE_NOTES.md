@@ -1,3 +1,20 @@
+# ARGOS PM v1.5.0-rc.1 — unreleased candidate
+
+This candidate is prepared for validation on `feature/v1.5-approved-enhancements`; it is not published, deployed, tagged or approved for merge.
+
+- One Search / Filter popover across eight modules, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering.
+- Required-only repeat inline creation, field errors, success feedback and keyboard focus; optional relationships remain editable afterwards.
+- Predictive owner/scope/context/dependency selection by name or human ID, keyboard navigation and retained filtered selections.
+- First-letter human text normalisation on blur, one committed edit/Undo/audit event, and no-op suppression without rewriting untouched legacy fields.
+- Explicit Save / Discard / Cancel for dirty Open/Close, including safe same-file discard and failure recovery.
+- File Information actions/save metadata, optional saving-device timezone, experimental Audit Log naming, scope/sidebar improvements and shared timeline Today markers/empty-Stream rules.
+- Bundled version-matched candidate manual (Markdown and PDF); compatible same-minor fallback is explicitly labelled. No release asset has been published.
+- Frozen genuine v1.4 `.pmp` acceptance fixture and expanded unit/browser compatibility coverage. Format/schema remain unchanged; no `.mpp` conversion.
+
+See [the manual](V1.5_UI_REFERENCE.md), [compatibility/native checks](V1.5_COMPATIBILITY.md), [desktop checklist](V1.5_DESKTOP_ACCEPTANCE.md), [demo brief](V1.5_DEMO_PRODUCTION.md) and [readiness register](V1.5_RELEASE_READINESS.md). Native Windows/macOS and visual acceptance, final CI conclusions and explicit release approval remain gates. Existing v1.3/v1.4 videos are historical; no v1.5 video is claimed.
+
+---
+
 # Release notes
 
 ## v1.4.0 demo — 20 October 2026

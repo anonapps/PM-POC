@@ -861,12 +861,13 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 
 /* ARGOS PM v1.5 — E012: abbreviated scope only where its container is narrow.
    A container query follows the pill's available width rather than the viewport. */
-/* Query the containing cell, not the pill itself: self-querying would
-   collapse the intrinsic width of the label. */
-td:has(> .scope-pill),
-td:has(> * > .scope-pill) {
+/* Query the disclosure, not the pill or table cell: Chromium does not
+   evaluate inline-size queries on the internal table-cell box. */
+details.multi-select:has(> summary .scope-pill) {
   container-type: inline-size;
+  width:100%;
 }
+td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .scope-pill .scope-pill-short { display: none; }
 .scope-pill .scope-pill-full { display: inline; }
 @container (max-width: 92px) {
