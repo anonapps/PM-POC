@@ -1,7 +1,7 @@
 export interface UiManual {version:string;pdf:string;source:string;status:"candidate"|"published"}
 export const UI_MANUALS:readonly UiManual[]=[{
-  version:"1.5.0-rc.1",pdf:"/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf",
-  source:"https://github.com/anonapps/PM-POC/blob/feature/v1.5-approved-enhancements/docs/V1.5_UI_REFERENCE.md",status:"candidate",
+  version:"1.5.0",pdf:"/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf",
+  source:"https://github.com/anonapps/PM-POC/blob/main/docs/V1.5_UI_REFERENCE.md",status:"published",
 }];
 const versionParts=(version:string)=>/^(\d+)\.(\d+)\.(\d+)(?:-[\w.-]+)?$/.exec(version);
 /** Never present a different minor series as compatible, or a missing asset as published. */

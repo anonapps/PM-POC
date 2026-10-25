@@ -44,3 +44,8 @@ Also consult `docs/ARCHITECTURE.md` and `docs/IMPLEMENTATION_PLAN.md`. If suppor
 ## Historical note — HeroUI promotion (11 October 2026)
 
 HeroUI was promoted to `main` as v1.3.1. The earlier direct-to-main workflow is superseded for v1.5 by the branch policy above.
+
+
+## v1.5 promotion — 25 October 2026
+
+The owner explicitly authorised merging PR #12 and publishing v1.5.0 as GitHub latest. After promotion, main is the stable v1.5 baseline. Keep future changes behind PRs and retain every v1.5 unit, layout, regression and lifecycle check; the main/PR lifecycle gate is mandatory. Publication permission for this release does not authorise future releases or production deployments. Native physical-machine evidence must remain accurately marked, never inferred from Linux file-picker mocks.

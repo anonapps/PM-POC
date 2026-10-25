@@ -7,7 +7,7 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "Europe/Madrid"
-    target-branch: "feature/v1.5-approved-enhancements"
+    target-branch: "main"
     open-pull-requests-limit: 5
     groups:
       nextjs:
@@ -29,5 +29,5 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "Europe/Madrid"
-    target-branch: "feature/v1.5-approved-enhancements"
+    target-branch: "main"
     open-pull-requests-limit: 3

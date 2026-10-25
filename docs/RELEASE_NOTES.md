@@ -1,4 +1,4 @@
-# ARGOS PM v1.5.0-rc.1 — unreleased candidate
+# ARGOS PM v1.5.0 — 25 October 2026
 
 - Search stays centred against the page content across all ten modules, independently of title/action widths; narrow layouts use a centred second row.
 - Gantt Previous/Next and Jump to today move to a shared persistent timeline footer with an inclusive date range; original zoom increments and Tube Map behaviour are preserved.
@@ -7,7 +7,7 @@
 - Tube Map milestone legend/status filtering and compact footer; shared measured dropdown/warning anchoring, compact forms and aligned context controls.
 - Session-only collapsible Risk Matrix and content-sized Overview Quick Actions. Tentative-containing saves require the v1.5 reader; original-status files retain their prior minimum-runtime metadata.
 
-This candidate is prepared for validation on `feature/v1.5-approved-enhancements`; it is not published, deployed, tagged or approved for merge.
+The repository owner authorised merging PR #12 and publishing v1.5.0 as the latest GitHub release on 25 October 2026. Publication does not deploy a production service.
 
 - Compact live search in ten page title toolbars, integrated filter icon, compact viewport-constrained panels, immediate AND/OR filters, navigation resets and shared Risk Matrix filtering. Table dropdowns clear sticky/scroll containers; charts expose one Hide Empty Streams control each.
 - One full-field right-side creation panel across six record modules, with stable validation, keyboard operation, dirty-dismiss confirmation and close/reset on success; optional relationships/dependencies are created atomically.
@@ -17,10 +17,10 @@ This candidate is prepared for validation on `feature/v1.5-approved-enhancements
 - First-letter human text normalisation on blur, one committed edit/Undo/audit event, and no-op suppression without rewriting untouched legacy fields.
 - Explicit Save / Discard / Cancel for dirty Open/Close, including safe same-file discard and failure recovery.
 - File Information actions/save metadata, optional saving-device timezone, experimental Audit Log naming, scope/sidebar improvements and shared timeline Today markers/empty-Stream rules.
-- Bundled version-matched candidate manual (Markdown and PDF); compatible same-minor fallback is explicitly labelled. No release asset has been published.
+- Bundled version-matched v1.5.0 manual (Markdown and PDF); compatible same-minor fallback is explicitly labelled. The PDF and actual v1.5.0 demo accompany the GitHub release.
 - Frozen genuine v1.4 `.pmp` acceptance fixture and expanded unit/browser compatibility coverage. Format/schema remain unchanged; no `.mpp` conversion.
 
-See [the manual](V1.5_UI_REFERENCE.md), [compatibility/native checks](V1.5_COMPATIBILITY.md), [desktop checklist](V1.5_DESKTOP_ACCEPTANCE.md), [demo brief](V1.5_DEMO_PRODUCTION.md) and [readiness register](V1.5_RELEASE_READINESS.md). Native Windows/macOS and visual acceptance, final CI conclusions and explicit release approval remain gates. Existing v1.3/v1.4 videos are historical; no v1.5 video is claimed.
+See [the manual](V1.5_UI_REFERENCE.md), [compatibility/native checks](V1.5_COMPATIBILITY.md), [desktop checklist](V1.5_DESKTOP_ACCEPTANCE.md), [demo brief](V1.5_DEMO_PRODUCTION.md) and [readiness register](V1.5_RELEASE_READINESS.md). Physical Windows/macOS native consent and permission checks remain unverified by this Linux environment. Fresh CI and media verification are recorded separately. Existing v1.3/v1.4 videos remain historical; the README links the new v1.5 footage.
 
 ---
 

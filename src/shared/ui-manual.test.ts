@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { resolveUiManual, type UiManual } from "./ui-manual";
 const entry=(version:string):UiManual=>({version,pdf:`/${version}.pdf`,source:"/source",status:"published"});
 describe("version-matched UI manuals",()=>{
-  it("links the actual bundled candidate PDF without claiming release publication",()=>{
-    const result=resolveUiManual("1.5.0-rc.1")!;
-    expect(result.exact).toBe(true);expect(result.manual.pdf).toBe("/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf");expect(result.label).toContain("not published");
+  it("links the version-matched stable manual and main-branch source",()=>{
+    const result=resolveUiManual("1.5.0")!;
+    expect(result.exact).toBe(true);expect(result.manual.pdf).toBe("/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf");expect(result.manual.status).toBe("published");expect(result.manual.source).toContain("/blob/main/");expect(result.label).not.toContain("not published");
   });
   it("labels a compatible same-minor fallback explicitly",()=>{
     const result=resolveUiManual("1.5.3",[entry("1.5.1"),entry("1.5.2"),entry("1.4.9"),entry("1.5.4")])!;
@@ -19,8 +19,8 @@ describe("version-matched UI manuals",()=>{
   });
 });
 
-it("ships the linked candidate PDF rather than a missing release asset",()=>{
- const manual=resolveUiManual("1.5.0-rc.1")!;
+it("ships the linked stable PDF rather than a missing release asset",()=>{
+ const manual=resolveUiManual("1.5.0")!;
  const bytes=readFileSync(new URL("../../public"+manual.manual.pdf,import.meta.url));
  expect(bytes.subarray(0,5).toString()).toBe("%PDF-");
 });
