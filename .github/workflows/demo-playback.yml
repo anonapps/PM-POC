@@ -1,0 +1,23 @@
+name: GitHub video playback markup
+on:
+  push:
+    branches: [feature/v1.5-demo-recapture, main]
+    paths: [docs/V1.5_DEMO_PLAYER.md, .github/workflows/demo-playback.yml]
+  pull_request:
+    paths: [docs/V1.5_DEMO_PLAYER.md, .github/workflows/demo-playback.yml]
+permissions:
+  contents: read
+jobs:
+  github-player:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify GitHub preserves the actual inline video player
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/player.json",JSON.stringify({text:fs.readFileSync("docs/V1.5_DEMO_PLAYER.md","utf8"),mode:"gfm",context:process.env.GH_REPO}))'
+          gh api markdown --input /tmp/player.json > /tmp/player.html
+          cat /tmp/player.html
+          node -e 'const fs=require("fs");if(!/<video[\s>]/.test(fs.readFileSync("/tmp/player.html","utf8")))throw new Error("GitHub stripped the video element; do not merge without a verified playback solution")'
