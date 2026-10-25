@@ -1078,3 +1078,48 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .workspace .panel table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:72px; }
 .workspace .panel .task-name-cell,.workspace .panel .milestone-name-cell,.workspace .panel .entity-name-cell,.workspace .panel td:has(>small+input) { position:relative; }
 .workspace .panel .task-name-cell>.task-row-id,.workspace .panel .entity-name-cell>.entity-row-id,.workspace .panel .milestone-name-cell>small:first-child,.workspace .panel td>small:has(+input) { position:absolute; top:calc(50% - 34px); left:8px; line-height:16px; margin:0; }
+
+
+/* v1.5 acceptance: prevent sticky toolbar and timeline footer bleed-through.
+   A full-width opaque paint surface must cover both the visible toolbar and
+   the horizontal overflow beyond its controls, regardless of table scroll. */
+.workspace .panel > .title-row,
+.workspace .panel > .page-toolbar {
+  position:sticky;
+  top:0;
+  z-index:40;
+  isolation:isolate;
+  background:var(--canvas);
+  background-clip:border-box;
+}
+.workspace .panel > .title-row::after,
+.workspace .panel > .page-toolbar::after {
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:100%;
+  width:100vw;
+  background:var(--canvas);
+  pointer-events:none;
+}
+.workspace .panel > table thead th { z-index:15; }
+
+/* The Tube Map footer is the last visible chart surface. Paint the entire
+   area below its navigation to prevent lower stream rows/diamonds showing
+   through a narrow bottom strip during vertical scrolling. */
+.workspace .tube-map > footer.tube-navigation {
+  z-index:35;
+  isolation:isolate;
+  background:var(--surface);
+}
+.workspace .tube-map > footer.tube-navigation::after {
+  content:"";
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  height:100dvh;
+  background:var(--surface);
+  pointer-events:none;
+}
