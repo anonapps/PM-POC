@@ -1112,14 +1112,12 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
   z-index:35;
   isolation:isolate;
   background:var(--surface);
+  /* Paint below the footer without a box that enlarges scroll overflow.
+     Clip the shadow above/at the sides so chart content stays visible. */
+  box-shadow:0 100dvh 0 100dvh var(--surface);
+  clip-path:inset(0 0 -200dvh);
 }
 .workspace .tube-map > footer.tube-navigation::after {
-  content:"";
-  position:absolute;
-  top:100%;
-  left:0;
-  right:0;
-  height:100dvh;
-  background:var(--surface);
-  pointer-events:none;
+  content:none;
+  height:0;
 }

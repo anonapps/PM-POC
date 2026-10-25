@@ -77,3 +77,26 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
  }
  await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
+
+// PR #12: footer paint must not extend scroll overflow and unstick the axis.
+for(const width of [1440,1080,768,375])for(const length of ['short','long'])test(`Tube Map sticky bounds at ${width} with ${length} streams`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:900});await openProject(page);
+ await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
+ if(length==='short')await page.locator('.shared-search-filter input').fill(fixture.projectState.streams[0].name);
+ const laneCount=await page.locator('.tube-line').count();expect(length==='short'?laneCount<5:laneCount>=31).toBe(true);
+ const workspace=page.locator('.workspace');
+ // Include the axis/footer in the bound; no decorative paint should add a viewport of scrolling.
+ const overflow=await workspace.evaluate(w=>{const panel=w.querySelector('section.panel.tube-map')!,bounds=w.getBoundingClientRect(),end=panel.getBoundingClientRect().bottom-bounds.top+w.scrollTop;return w.scrollHeight-Math.max(w.clientHeight,end);});
+ expect(overflow).toBeLessThan(40);
+ for(const fraction of [0,.5,1]){
+  await workspace.evaluate((w,f)=>{w.scrollTop=(w.scrollHeight-w.clientHeight)*f;},fraction);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const geometry=await page.locator('.tube-axis').evaluate(axis=>{const toolbar=document.querySelector('.page-toolbar')!.getBoundingClientRect(),w=document.querySelector('.workspace')!.getBoundingClientRect(),r=axis.getBoundingClientRect();return{axisTop:r.top,toolbarBottom:toolbar.bottom,workspaceBottom:w.bottom,labels:axis.querySelectorAll('span').length};});
+  expect(geometry.axisTop).toBeGreaterThanOrEqual(geometry.toolbarBottom-2);expect(geometry.axisTop).toBeLessThan(geometry.workspaceBottom);expect(geometry.labels).toBe(12);
+  const footer=page.getByRole('navigation',{name:'Tube Map date navigation'});const rect=(await footer.boundingBox())!;expect(rect.y+rect.height).toBeLessThanOrEqual(902);expect(rect.y).toBeGreaterThan(geometry.toolbarBottom);
+ }
+ const last=(await page.locator('.tube-line').last().boundingBox())!,footer=(await page.getByRole('navigation',{name:'Tube Map date navigation'}).boundingBox())!;
+ expect(last.y+last.height).toBeLessThanOrEqual(footer.y+1);
+ await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+});

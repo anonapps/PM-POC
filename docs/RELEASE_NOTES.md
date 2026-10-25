@@ -57,3 +57,5 @@ See [the manual](V1.5_UI_REFERENCE.md), [compatibility/native checks](V1.5_COMPA
 Validation: 140 unit tests (including application-version metadata coverage), TypeScript, ESLint, production build, full form-creation/save/reopen lifecycle and new UI browser regressions passed during implementation. Native OS picker and launcher behaviour still requires the target Windows/macOS platforms.
 
 This release uses existing custom React/CSS components. The HeroUI branch remains a separate experiment. It adds no external fonts, runtime services, database or network dependencies.
+
+- Corrected the Tube Map footer paint regression found by PR #12 CI: the opaque shield no longer adds a viewport of scroll overflow, so the sticky date axis and last lane remain visible through bottom scrolling. Existing toolbar shielding, navigation and milestone data are preserved.
