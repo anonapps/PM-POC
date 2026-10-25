@@ -4,15 +4,15 @@ A local-first ARGOS PM v1.5.0 built with TypeScript, React and Next.js. The auth
 
 ## Product demo — ARGOS PM v1.5.0
 
-Explore a local project, create a Tentative Task in the shared side panel, combine search and filters, navigate Gantt and Tube Map, collapse the Risk Matrix, record a Decision, Undo/Redo and save/reopen the plan.
+**Atlas Software Delivery replacement: verified recording, GitHub Pages publication pending.** Create a new project, four streams, five people and eight tasks; populate nine milestones, two risks and two decisions; edit Tube Map, correct a real dependency warning, inspect the Audit Log, save and close.
 
-[![ARGOS PM v1.5.0 demo — actual application footage](docs/media/argos-pm-demo-v1.5.0-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.5.0.mp4)
+[![ARGOS PM v1.5 — Atlas Software Delivery preview](docs/media/argos-pm-demo-v1.5.0-preview.jpg)](https://anonapps.github.io/PM-POC/videos/latest/)
 
-**[Watch or download the one-minute demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.5.0.mp4)** · 1920×1080 MP4 · 60 seconds · silent · real v1.5.0 browser interactions at normal speed, with reading pauses and editorial chapter titles outside the product view.
+**[Watch Video](https://anonapps.github.io/PM-POC/videos/latest/)** · 78 seconds · 1920×1080 · 30 fps · silent H.264. The video-only GitHub Pages site must be enabled and pass native playback verification before publication is declared complete.
 
-The recording uses fictional data in a disposable project. The managed capture browser blocks native filesystem pickers, so the recording uses the existing isolated picker test harness; the resulting `.pmp` was exported and verified. Native OS picker consent is not demonstrated. See the [production and verification notes](docs/V1.5_DEMO_VERIFICATION.md).
+Real application interactions, jump cuts over repeated entry, and visible pointer/click/focus cues. The disposable project's saved `.pmp` is verified. Native file-picker consent is not shown; a test adapter and editorial pointer cues are disclosed. See [verification and pending playback](docs/V1.5_DEMO_VERIFICATION.md).
 
-[Archived v1.3.0 recording](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4) · retained unchanged as historical footage.
+[Archived v1.3 recording](docs/media/pm-poc-30s-demo-v1.3.0.mp4) and [v1.4 recording](docs/media/argos-pm-60s-demo-v1.4.0.mp4) remain unchanged.
 
 ## v1.5 documentation and acceptance
 

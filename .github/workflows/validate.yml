@@ -41,7 +41,7 @@ jobs:
           CHROME_PATH="$CHROME_PATH" npm run test:layout
 
   lifecycle-release-gate:
-    if: github.ref == 'refs/heads/feature/v1.5-approved-enhancements' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/feature/v1.5-demo-recapture' || github.ref == 'refs/heads/feature/v1.5-approved-enhancements' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

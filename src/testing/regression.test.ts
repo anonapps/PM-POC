@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { regressionFixture, REGRESSION_TODAY } from './regression-fixture';
 import { serializeProject, deserializeProject } from '../persistence/pmp/codec';
@@ -116,4 +117,9 @@ describe('180-record regression', () => {
     expect(store.getState().decisions[1].relatedRiskIds).toEqual(['risk-30']);
     roundTrip(store.getState());
   });
+});
+
+
+it('round-trips the real Atlas software delivery demonstration file and its relationships',()=>{
+ const result=deserializeProject(new Uint8Array(readFileSync('docs/media/Atlas-Software-Delivery.pmp')));expect(result.ok).toBe(true);if(!result.ok)return;const s=result.value.projectState;expect(s.project.name).toBe('Atlas Software Delivery');expect(s.project.metadata.showProgress).toBe(false);expect([s.streams.length,s.people.length,s.tasks.length,s.milestones.length,s.risks.length,s.decisions.length]).toEqual([4,5,8,9,2,2]);expect(s.streams.map(stream=>s.tasks.filter(t=>t.scope.kind==='stream'&&t.scope.streamId===stream.id).length)).toEqual([2,2,2,2]);expect(s.streams.map(stream=>s.milestones.filter(m=>m.scope.kind==='streams'&&m.scope.streamIds.includes(stream.id)).length)).toEqual([2,2,5,0]);expect(s.dependencies).toHaveLength(7);expect(s.risks.map(r=>[r.probability,r.impact])).toEqual([['Low','Medium'],['High','High']]);expect(s.risks.every(r=>r.actions.length===1)).toBe(true);expect(s.auditHistory!.events).toHaveLength(39);const bytes=serializeProject(s,{createdAt:result.value.manifest.createdAt,lastSavedAt:result.value.manifest.lastSavedAt,runtimeVersion:'1.5.0',configuration:result.value.configuration});expect(bytes.ok).toBe(true);if(bytes.ok){const again=deserializeProject(bytes.value);expect(again.ok).toBe(true);if(again.ok)expect(again.value.projectState).toEqual(s);}
 });
