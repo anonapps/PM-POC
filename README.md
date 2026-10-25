@@ -30,6 +30,38 @@ The v1.5 release includes shared search and filtering, anchored pickers, updated
 
 Use the current [v1.5 UI Reference Manual](docs/V1.5_UI_REFERENCE.md) and [versioned PDF](public/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf), also bundled in File Information. The [earlier illustrated reference](docs/ARGOS_PM_UI_REFERENCE.md) remains an archive.
 
+## Quick start — first run (macOS / Terminal)
+
+You need [Node.js](https://nodejs.org/) 20.9+ (including npm), [Git](https://git-scm.com/) and desktop Chrome. ARGOS PM runs locally; these commands do not deploy it to a server.
+
+1. **Download the repository.** Open Terminal and run:
+
+   ```bash
+   git clone https://github.com/anonapps/PM-POC.git
+   cd PM-POC
+   ```
+
+   Alternatively, use **Code → Download ZIP** on GitHub, extract it, and open Terminal in the extracted folder.
+
+2. **Install dependencies and start ARGOS PM.** From the `PM-POC` folder, run:
+
+   ```bash
+   npm ci
+   npm run dev
+   ```
+
+3. **Open Chrome** at **http://localhost:3000** (or the Local URL printed by Next.js if port 3000 is in use). Keep Terminal running while using the application.
+
+4. **Stop** the local server with **Ctrl+C** in Terminal.
+
+**Returning later:** open Terminal, run `cd ~/PM-POC` (if cloned into your home folder), then `npm run dev`. You do not need to reinstall dependencies for every launch.
+
+**Get the latest version:** in the repository folder, check `git status --short` first. If there are no local changes, run `git switch main`, `git pull --ff-only origin main`, and `npm ci` before `npm run dev`. If Git reports local changes or a conflict, stop rather than resetting or discarding files.
+
+**Troubleshooting:** `npm` not found means Node.js/npm needs installing. A `package.json` not found error means Terminal is not inside the project folder. Type `npm run dev` exactly (without a trailing `~`). The `#` explanation lines in examples are not commands. A non-blocking dependency deprecation warning does not by itself mean installation failed.
+
+Project data stays in your local `.pmp` files. Keep backups of important project files.
+
 ## Prerequisites
 
 - Node.js 20.9 or newer for the app; Node.js 22 or newer for the browser test harness
