@@ -33,13 +33,19 @@ Also consult `docs/ARCHITECTURE.md` and `docs/IMPLEMENTATION_PLAN.md`. If suppor
 
 ## Branch Policy
 
-- `main` is the only development and publication branch for this POC.
-- Do not create, switch to, publish, or require feature, work, recovery, or PR branches.
-- Commit completed and validated blocks directly to `main`.
-- Never force-push or rewrite published `main` history.
-- Before changing files, verify the task is based on current `origin/main`; after publication verify local/remote HEAD alignment when the execution environment supports GitHub authentication.
-- If the execution environment supplies a temporary checkout branch, treat it only as an execution detail: do not publish it and do not make it part of the repository workflow.
+- `main` is the stable release and publication branch. Do not commit v1.5 development directly to `main`.
+- ARGOS PM v1.5 development takes place on `feature/v1.5-approved-enhancements`, created from current `main`.
+- Keep feature work in incremental, tested commits. Preserve existing project behaviour and the local-first `.pmp` file contract.
+- Open a pull request targeting `main` when the approved enhancements, documentation, compatibility checks and automated regression suite are complete.
+- Do not merge, tag, or publish v1.5 until explicit user approval after manual visual acceptance.
+- Never force-push or rewrite published `main` history. Check current refs before merging.
+- Subsequent release branches require explicit project-level direction; do not assume v1.5 branch policy applies permanently to all versions.
 
-## HeroUI promotion (11 October 2026)
+## Historical note — HeroUI promotion (11 October 2026)
 
-The user authorised promoting the HeroUI UI and its fixes to `main` as v1.3.1. The experiment is now part of the released baseline; further development follows the main branch policy above.
+HeroUI was promoted to `main` as v1.3.1. The earlier direct-to-main workflow is superseded for v1.5 by the branch policy above.
+
+
+## v1.5 promotion — 25 October 2026
+
+The owner explicitly authorised merging PR #12 and publishing v1.5.0 as GitHub latest. After promotion, main is the stable v1.5 baseline. Keep future changes behind PRs and retain every v1.5 unit, layout, regression and lifecycle check; the main/PR lifecycle gate is mandatory. Publication permission for this release does not authorise future releases or production deployments. Native physical-machine evidence must remain accurately marked, never inferred from Linux file-picker mocks.

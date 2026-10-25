@@ -466,10 +466,6 @@ table td.table-actions button { margin:.12rem; }
 }
 
 /* Milestone state colours share the same diamond shape and layout. */
-.tube-station.status-complete .tube-station-diamond i { background: #16a34a; }
-.tube-station.status-delayed .tube-station-diamond i { background: #fca5a5; }
-.tube-station.status-tentative .tube-station-diamond i { background: #93c5fd; }
-.tube-station.status-planned .tube-station-diamond i { background: #7c3aed; }
 
 
 /* Shared compact quick-edit surface: matching task/milestone editors and app tokens. */
@@ -703,11 +699,6 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 }
 
 /* Milestones: align date/status/scope/owner/dependencies/actions to the name input baseline, not the ID + name stack midpoint. */
-.workspace .panel .milestones-table tbody td:not(:first-child) {
-  vertical-align: bottom;
-  /* The ID/name cell is taller; place neighbouring controls on the input row. */
-  padding-bottom: 3px;
-}
 
 
 /* Shared entity-row rhythm: align every control to the editable name/title input.
@@ -721,7 +712,7 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
   height: 72px;
   padding-top: 8px;
   padding-bottom: 8px;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 .workspace .panel table tbody tr:has(> td:first-child > small + input) > td:first-child > small {
   display: block;
@@ -760,7 +751,7 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 /* Task selection checkbox follows the same input row as Name, Status and dates,
    rather than the vertical centre of the full ID + Name row. */
 .workspace .panel table tbody tr:has(.task-name-cell) > td:first-child {
-  vertical-align:bottom;
+  vertical-align:middle;
   padding-bottom:8px;
 }
 .workspace .panel table tbody tr:has(.task-name-cell) > td:first-child input[type="checkbox"] {
@@ -834,4 +825,299 @@ table tbody tr:has(.task-name-cell, .milestone-name-cell, .entity-name-cell) > t
 .workspace.module-people table tr:has(input:disabled) [data-slot="base"].status {
   background:#f7e8d8;
   color:#875323;
+}
+
+/* ARGOS PM v1.5 — E010: shared, visible multiline field boundaries.
+   Scope to editable workspace and launcher forms; preserve readonly/disabled
+   semantics and existing layout dimensions. */
+:where(.workspace, .dialog-backdrop, .launcher) textarea:not([data-unstyled]) {
+  border: 1px solid var(--border, #acb8c7);
+  border-radius: 6px;
+  background-color: #fff;
+  color: var(--text-primary, #0f172a);
+  box-shadow: inset 0 1px 2px rgb(15 23 42 / 4%);
+}
+:where(.workspace, .dialog-backdrop, .launcher) textarea:not([data-unstyled]):hover:not(:disabled):not(:read-only) {
+  border-color: #8293a8;
+}
+:where(.workspace, .dialog-backdrop, .launcher) textarea:not([data-unstyled]):focus-visible {
+  outline: 2px solid var(--focus, #2563eb);
+  outline-offset: 1px;
+  border-color: var(--focus, #2563eb);
+}
+:where(.workspace, .dialog-backdrop, .launcher) textarea:not([data-unstyled]):disabled {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+}
+
+/* ARGOS PM v1.5 — E012: abbreviated scope only where its container is narrow.
+   A container query follows the pill's available width rather than the viewport. */
+/* Query the disclosure, not the pill or table cell: Chromium does not
+   evaluate inline-size queries on the internal table-cell box. */
+details.multi-select:has(> summary .scope-pill) {
+  container-type: inline-size;
+  width:100%;
+}
+td:has(.scope-pill) .predictive-select > summary { min-width:0; }
+.scope-pill .scope-pill-short { display: none; }
+.scope-pill .scope-pill-full { display: inline; }
+@container (max-width: 92px) {
+  .scope-pill .scope-pill-full { display: none; }
+  .scope-pill .scope-pill-short { display: inline; }
+}
+.scope-pill:focus-visible {
+  outline: 2px solid var(--focus, #2563eb);
+  outline-offset: 2px;
+}
+
+/* E014: keep navigation rows fixed when sidebar width changes. */
+.app-shell #project-sidebar .sidebar-heading { min-height:42px; }
+.app-shell.sidebar-hidden #project-sidebar .sidebar-heading { display:block; visibility:hidden; }
+.app-shell #project-sidebar .sidebar-toggle { min-height:36px; }
+.app-shell #project-sidebar nav .hero-nav { min-height:38px; }
+.app-shell #project-sidebar nav .module-letter svg { flex-shrink:0; }
+
+/* E016/E017: shared dotted red Today marker across both timelines. */
+.gantt-panel .today-line, .tube-map .tube-today-line { width:0; border-left:2px dotted #dc2626; background:none; pointer-events:none; }
+.gantt-panel .today-line { top:70px; bottom:42px; z-index:4; }
+.tube-map .tube-today-line { top:0; bottom:0; z-index:4; }
+
+/* Both timeline views anchor Today to their complete body, below date headers. */
+:root { --timeline-today-color:#dc2626; --timeline-today-width:2px; }
+.timeline-today-marker { position:absolute; top:0; bottom:0; width:0; border-left:var(--timeline-today-width) dotted var(--timeline-today-color); z-index:4; pointer-events:none; }
+.gantt-body { position:relative; grid-column:1 / -1; display:grid; grid-template-columns:subgrid; }
+.gantt-body .gantt-connectors { top:0; height:100%; }
+
+.shared-search-filter { position:relative; margin-block:.5rem; z-index:12; }
+.shared-search-filter>button { display:inline-flex; align-items:center; gap:.35rem; }
+.shared-search-filter>.module-search-controls { position:absolute; top:calc(100% + 4px); left:0; width:min(520px,calc(100vw - 64px)); max-height:65vh; overflow:auto; display:flex; flex-wrap:wrap; gap:.6rem; padding:.75rem; background:var(--surface,#fff); border:1px solid var(--border); border-radius:6px; box-shadow:0 8px 24px #0f172a26; }
+.shared-search-filter .search-input { flex:1 0 100%; }
+.filter-category { min-width:120px; flex:1; border:1px solid var(--border); padding:.5rem; }
+.filter-category>label,.filter-category .searchable-option-list>label { display:flex; align-items:center; gap:.4rem; }
+.predictive-select>summary { border:1px solid var(--border); padding:.3rem .45rem; border-radius:4px; cursor:pointer; min-width:100px; }
+.predictive-select>summary[aria-disabled="true"] { opacity:.6; cursor:default; }
+.relationship-picker { position:relative; margin:.4rem 0; }
+.relationship-options { padding:.5rem; border:1px solid var(--border); max-height:240px; overflow:auto; }
+.relationship-options label { display:flex; align-items:center; gap:.4rem; }
+
+/* Compact shared page toolbar; filter panels live at body level above sticky content. */
+.workspace .panel>.title-row { gap:10px; align-items:center; }
+.workspace .panel>.title-row>div:first-child { flex:0 0 auto; }
+.workspace .panel>.title-row .shared-search-filter { display:flex; flex:1 1 210px; max-width:340px; min-width:180px; height:34px; margin:0; position:relative; z-index:auto; }
+.workspace .panel>.title-row .shared-search-filter input { width:100%; min-width:0; height:34px; padding:5px 38px 5px 10px; border:1px solid #acb8c7; border-radius:5px; background:white; font:inherit; font-size:13px; }
+.workspace .panel>.title-row .shared-search-filter>.filter-trigger { position:absolute; right:1px; top:1px; width:32px; height:32px; min-height:0; padding:6px; border:0; border-left:1px solid var(--border); border-radius:0 4px 4px 0; color:var(--primary); background:white; }
+.workspace .panel>.title-row .filter-trigger[data-active] { background:#e2ecfa; box-shadow:inset 0 -3px var(--primary); }
+.workspace .panel>.title-row>.header-actions,.workspace .panel>.title-row>.actions { margin-left:auto; flex-wrap:wrap; gap:6px; }
+.filter-popover { position:fixed; z-index:1000; box-sizing:border-box; overflow:auto; overscroll-behavior:contain; padding:12px; background:#fff; color:#26364d; border:1px solid #acb8c7; border-radius:7px; box-shadow:0 8px 26px #0f172a30; font:13px/1.4 Arial,sans-serif; }
+.filter-panel-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+.filter-panel-heading button { width:auto; min-height:28px; padding:3px 8px; font-size:12px; }
+.filter-sections { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+.filter-popover .filter-category { margin:0; min-width:0; padding:0; border:0; }
+.filter-popover legend { font-weight:700; padding:0; margin-bottom:5px; }
+.filter-popover label,.filter-popover .check,.filter-popover .toggle { display:flex; align-items:flex-start; gap:7px; margin:0; padding:3px 0; min-width:0; font-size:13px; font-weight:400; white-space:normal; overflow-wrap:anywhere; }
+.filter-popover input[type=checkbox] { appearance:auto; width:15px; height:15px; min-width:15px; min-height:15px; flex:0 0 15px; margin:2px 0 0; padding:0; }
+.filter-popover .searchable-option-list { display:flex; flex-direction:column; gap:3px; max-height:180px; overflow:auto; position:static; min-width:0; }
+.filter-popover input[type=search] { display:block; flex:0 0 32px; width:100%; min-width:0; height:32px; margin:0 0 3px; padding:5px 8px; border:1px solid #acb8c7; border-radius:4px; font:inherit; }
+.filter-popover small { display:block; position:static; margin:0; color:#66758a; }
+.filter-popover :focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+@media(max-width:700px){.workspace .panel>.title-row .shared-search-filter { order:2; flex-basis:100%; max-width:none; }.workspace .panel>.title-row>.header-actions { margin-left:auto; }}
+.multi-select-options:popover-open { position:fixed!important; inset:auto; margin:0!important; box-sizing:border-box; overflow:auto; padding:10px!important; border:1px solid #acb8c7; border-radius:6px; background:white; color:#26364d; box-shadow:0 8px 24px #0f172a26; }
+.multi-select-options:popover-open .searchable-option-list { display:flex; flex-direction:column; gap:5px; min-width:0; }
+.multi-select-options:popover-open input[type=search] { flex:0 0 32px; width:100%; min-width:0; height:32px; margin:0; padding:5px 8px; box-sizing:border-box; }
+.multi-select-options:popover-open label { display:flex; align-items:flex-start; gap:6px; white-space:normal; overflow-wrap:anywhere; min-width:0; padding:3px 0; }
+.multi-select-options:popover-open input[type=checkbox],.multi-select-options:popover-open input[type=radio] { flex:0 0 15px; width:15px; height:15px; min-height:15px; margin:2px 0 0; }
+.multi-select-options:popover-open small { position:static; display:block; margin:0; }
+
+.workspace .panel>.title-row .shared-search-filter>.toolbar-search-label { display:block; width:100%; min-width:0; margin:0; }
+/* Long selected owner text must not determine the entire table's column width. */
+.panel table .predictive-select { width:clamp(100px,14vw,220px); max-width:100%; }
+.panel table .predictive-select>summary { width:100%; max-width:220px; box-sizing:border-box; }
+.panel table .entity-name-cell,.panel table .milestone-name-cell { min-width:150px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.panel table .multi-select:has(>summary .scope-pill) { min-width:70px; }
+.panel table .multi-select:has(>summary .scope-pill)>summary { display:flex; align-items:center; gap:4px; list-style:none; }
+.panel table .multi-select:has(>summary .scope-pill)>summary::-webkit-details-marker { display:none; }
+.panel table .multi-select:has(>summary .scope-pill)>summary:not(.scope-summary)::before { content:'▸'; flex:0 0 7px; }
+.panel table .multi-select>summary .scope-pill { min-width:0; max-width:calc(100% - 11px); }
+
+.workspace .panel .milestones-table details.multi-select:has(>summary.scope-summary) { min-width:120px; }
+.workspace .panel details.multi-select>summary.scope-summary { height:auto; min-height:36px; padding-top:4px; padding-bottom:4px; }
+
+/* Equal outer tracks keep the search centre fixed to the content container. */
+.workspace .panel>.page-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 340px minmax(0,1fr); gap:10px; align-items:center; }
+.workspace .panel>.page-toolbar>:first-child { grid-column:1; grid-row:1; min-width:0; }
+.workspace .panel>.page-toolbar>.shared-search-filter { grid-column:2; grid-row:1; justify-self:center; width:340px; max-width:100%; min-width:0; height:34px; margin:0; }
+.workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:3; grid-row:1; justify-self:end; min-width:0; max-width:100%; margin-left:0; }
+.workspace .panel>.page-toolbar>.actions,.workspace .panel>.page-toolbar>.header-actions { justify-content:flex-end; flex-wrap:wrap; }
+.workspace .panel>.page-toolbar .gantt-zoom-control { margin-right:0; }
+@media(max-width:1100px) {
+  .workspace .panel>.page-toolbar { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  .workspace .panel>.page-toolbar>.shared-search-filter { grid-column:1 / -1; grid-row:2; width:340px; max-width:100%; order:0; }
+  .workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:2; }
+}
+
+/* Chart scrolling cannot move or obscure the shared footer below it. */
+.workspace .gantt-panel { overflow:visible; }
+.workspace .gantt-panel .gantt { min-width:0; width:100%; max-height:calc(100dvh - var(--module-toolbar-height,46px) - 144px); overflow:auto; }
+.workspace .panel footer.timeline-navigation { position:sticky; bottom:0; left:auto; right:auto; z-index:24; box-sizing:border-box; width:100%; margin:0; background:var(--surface); border-top:1px solid var(--border); box-shadow:0 -3px 10px #17243a12; }
+/* The chart can retain its horizontal extent without widening its page toolbar. */
+.workspace section.panel.tube-map { min-width:0; }
+
+/* Full-field creation uses one modal slide-over, never an inline table row. */
+.dialog-backdrop.creation-backdrop { padding:0; place-items:stretch end; }
+.creation-backdrop>section { width:min(560px,100vw); height:100dvh; max-height:100dvh; margin:0; border-radius:0; box-sizing:border-box; padding:18px; display:flex; flex-direction:column; overflow:hidden; box-shadow:-8px 0 28px #0f172a26; }
+.creation-backdrop>section>header { flex:0 0 auto; margin-bottom:12px; }
+.creation-backdrop form[data-create-draft] { flex:1; min-height:0; display:flex; flex-direction:column; margin:0; }
+.creation-fields { flex:1; overflow:auto; overscroll-behavior:contain; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-content:start; gap:4px 14px; padding:2px 4px 8px; }
+.creation-fields .wide-field { grid-column:1 / -1; }
+.creation-field,.creation-selector,.project-form-fields .form-field { display:flex; flex-direction:column; align-items:stretch; gap:4px; min-width:0; font-size:13px; font-weight:600; }
+.creation-fields input:not([type=checkbox]):not([type=radio]),.creation-fields select,.creation-fields textarea { box-sizing:border-box; width:100%; min-width:0; border:1px solid #acb8c7; border-radius:4px; background:white; color:var(--text); font:inherit; padding:6px 8px; }
+.creation-fields input:not([type=checkbox]):not([type=radio]),.creation-fields select { height:34px; }
+.creation-fields textarea { min-height:70px; resize:vertical; }
+.form-field-error { display:block; box-sizing:border-box; height:28px; min-height:28px; margin:0; line-height:14px; overflow:auto; color:#b42318; font-size:12px; font-weight:400; }
+.creation-footer { flex:0 0 auto; padding-top:10px; border-top:1px solid var(--border); background:white; }
+.creation-footer .actions { justify-content:flex-end; margin:0; }
+.creation-footer button,.creation-fields button { min-height:32px; padding:4px 12px; font-size:13px; }
+.creation-relations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-bottom:10px; }
+.creation-relations>.toggle { grid-column:1 / -1; }
+.creation-fields .multi-select,.creation-fields .relationship-picker { min-width:0; margin:0; }
+.creation-fields summary { padding:6px 8px; border:1px solid #acb8c7; border-radius:4px; cursor:pointer; overflow-wrap:anywhere; }
+.creation-fields .scope-pill { display:inline-flex; align-items:center; min-height:24px; padding:2px 9px; border-radius:99px; font-size:12px; }
+.creation-action { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
+.creation-action>label:first-child { grid-column:1 / -1; }
+.creation-action label { display:grid; gap:4px; }
+.creation-actions { display:grid; gap:8px; }
+@media(max-width:480px){.creation-fields,.creation-relations,.creation-action { grid-template-columns:minmax(0,1fr); }}
+
+/* Scope pills are the control surface; keep only disclosure/focus affordances. */
+.workspace .panel details.multi-select:has(>summary .scope-pill)>summary,
+.creation-fields details.multi-select:has(>summary .scope-pill)>summary { border:0; box-shadow:none; background:transparent; padding-left:0; padding-right:0; }
+.workspace .panel table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,textarea)>td,
+.workspace .panel table tbody tr:has(>td:first-child>small+input)>td { vertical-align:middle; padding-top:8px; padding-bottom:8px; }
+.workspace .panel table tbody tr:has(.task-name-cell)>td:first-child { vertical-align:middle; }
+.workspace.module-people table { table-layout:fixed; }
+.workspace.module-people table th:nth-child(1) { width:22%; }
+.workspace.module-people table th:nth-child(2) { width:16%; }
+.workspace.module-people table th:nth-child(3) { width:10%; }
+.workspace.module-people table th:last-child { width:94px; }
+.workspace.module-people table input,.workspace.module-people table textarea { box-sizing:border-box; width:100%; min-width:0; }
+.workspace.module-people table textarea { resize:vertical; }
+.workspace .panel>.page-toolbar { margin-bottom:0; }
+
+/* Context editors fill their table cell; long text uses horizontal space first. */
+.risk-context-editor { width:100%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:start; gap:10px 14px; padding:12px; box-sizing:border-box; background:#f7f9fc; }
+.risk-context-editor>label:has(textarea) { grid-column:1 / -1; display:flex; flex-direction:column; gap:4px; }
+.risk-context-editor textarea { width:100%; min-height:76px; box-sizing:border-box; resize:vertical; }
+.decision-context-editor { width:100%; box-sizing:border-box; align-items:stretch; }
+.decision-context-columns { width:100%; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.decision-context-notes { width:100%; margin-top:8px; }
+.decision-context-notes textarea { box-sizing:border-box; width:100%; min-height:76px; field-sizing:fixed; }
+.relationship-picker>summary { border:1px solid #acb8c7; border-radius:4px; padding:6px 8px; cursor:pointer; overflow-wrap:anywhere; }
+.relationship-options:popover-open { position:fixed!important; inset:auto; margin:0!important; box-sizing:border-box; overflow:auto; padding:10px; border:1px solid #acb8c7; border-radius:6px; background:white; color:#26364d; box-shadow:0 8px 24px #0f172a26; }
+.relationship-options:popover-open .searchable-option-list { display:flex; flex-direction:column; gap:5px; min-width:0; }
+.relationship-options:popover-open input[type=search] { width:100%; height:32px; min-width:0; box-sizing:border-box; padding:5px 8px; border:1px solid #acb8c7; border-radius:4px; }
+.relationship-options:popover-open label { display:flex; align-items:flex-start; gap:6px; white-space:normal; overflow-wrap:anywhere; }
+.relationship-options:popover-open input[type=checkbox] { width:15px; height:15px; flex:0 0 15px; margin:2px 0 0; }
+@media(max-width:800px){.risk-context-editor { grid-template-columns:minmax(0,1fr); }}
+.workspace .tasks-table td:has(>input[type=date]) { position:relative; }
+.workspace .tasks-table td>.field-error { position:absolute; left:4px; right:4px; bottom:1px; height:14px; line-height:14px; font-size:10px; max-width:none; white-space:nowrap; overflow:auto; }
+.decision-context-editor .decision-context-notes { align-items:stretch; }
+.workspace .panel .entity-name-cell .entity-row-id { position:static; display:block; line-height:16px; margin:0; }
+.workspace .panel>.search-result-count { margin:4px 0; }
+.workspace .panel>.risk-matrix { margin:8px 0; }
+.risk-context-editor>.form-field-error,.risk-context-editor>.actions { grid-column:1 / -1; margin:0; }
+.risk-context-editor>.actions { justify-content:flex-end; }
+
+/* Shared compact control geometry and content-centred table rhythm. */
+.workspace .panel table tbody td { vertical-align:middle; }
+.workspace .panel table th { white-space:nowrap; }
+.workspace .tasks-table th:nth-last-child(2) { width:116px; min-width:116px; }
+.workspace .tasks-table { min-width:1050px; }
+.workspace .tasks-table .task-progress-field input { min-width:38px; padding-left:4px; padding-right:2px; }
+.creation-fields { gap:2px 12px; }
+.creation-fields>.muted { margin:0 0 6px; }
+.creation-fields .form-field-error { height:24px; min-height:24px; line-height:12px; }
+.project-form-fields { grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 12px; margin-top:8px; }
+.project-form-fields .wide-field { grid-column:1 / -1; }
+.project-form-fields .form-field-error { height:24px; min-height:24px; line-height:12px; }
+.project-form-fields textarea { min-height:64px; height:64px; }
+.dialog-backdrop>section:has(.project-form-fields) { padding:18px; }
+.dialog-backdrop>section:has(.project-form-fields)>.form-grid { margin-top:4px; gap:4px; }
+.anchored-options:popover-open { position:fixed!important; inset:auto; margin:0!important; box-sizing:border-box; overflow:auto; padding:12px 12px 12px 28px; border:1px solid #acb8c7; border-radius:6px; background:white; color:#26364d; font-size:13px; line-height:1.45; box-shadow:0 8px 24px #0f172a26; }
+.timeline-status-legend { display:flex; flex:0 0 100%; flex-wrap:nowrap; align-items:center; gap:14px; height:24px; min-width:0; overflow-x:auto; white-space:nowrap; }
+.timeline-status-legend>span { display:inline-flex; align-items:center; gap:6px; font-size:12px; line-height:20px; }
+.timeline-status-legend i { display:inline-block; flex:0 0 auto; width:20px; height:10px; border-radius:3px; }
+.timeline-status-legend.milestone i { width:16px; height:16px; border-radius:1px; transform:rotate(45deg); margin:0 3px; }
+.workspace .panel footer.timeline-navigation { gap:4px 10px; }
+.workspace .tube-map>footer.tube-navigation::after { content:none; height:0; }
+.workspace .gantt-panel .gantt { max-height:calc(100dvh - var(--module-toolbar-height,46px) - 172px); }
+.gantt-bar.task i { position:absolute; left:0; bottom:0; height:3px; background:#26364d; opacity:.65; }
+.risk-matrix-section { margin:4px 0 8px; }
+.risk-matrix-toggle { display:inline-flex; align-items:center; gap:5px; min-height:30px; padding:3px 8px; font-size:13px; }
+.risk-matrix-section .risk-matrix { margin:4px 0 0; }
+.context-relationship-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; grid-column:1 / -1; }
+.context-picker,.decision-context-column { display:flex; flex-direction:column; align-items:stretch; min-width:0; gap:5px; }
+.context-picker>.relationship-picker,.decision-context-column>.relationship-picker { width:100%; margin:0; }
+.context-picker summary,.decision-context-column summary { box-sizing:border-box; height:34px; min-height:34px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.decision-context-columns { grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.decision-context-scope { display:flex; align-items:center; gap:16px; margin-bottom:8px; }
+.overview-grid { align-items:start; }
+@media(max-width:800px){.context-relationship-grid,.decision-context-columns { grid-template-columns:repeat(2,minmax(0,1fr)); }}
+@media(max-width:480px){.project-form-fields,.context-relationship-grid,.decision-context-columns { grid-template-columns:minmax(0,1fr); }}
+
+/* Reserve real column widths; overflow belongs to the table viewport, not clipped controls. */
+.workspace .panel .tasks-table { min-width:1296px; }
+.workspace .panel .tasks-table th { width:112px; }
+.workspace .panel .tasks-table th:first-child { width:32px; }
+.workspace .panel .tasks-table th:nth-child(2) { width:190px; }
+.workspace .panel .tasks-table th[data-task-column="progress"] { width:70px; }
+.workspace .panel .tasks-table th[data-task-column="startDate"],.workspace .panel .tasks-table th[data-task-column="endDate"] { width:126px; }
+.workspace .panel .tasks-table th:nth-last-child(3) { width:140px; }
+.workspace .panel .tasks-table th:nth-last-child(2) { width:116px; }
+.workspace .panel .tasks-table th:last-child { width:170px; }
+.workspace .panel table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:72px; }
+.workspace .panel .task-name-cell,.workspace .panel .milestone-name-cell,.workspace .panel .entity-name-cell,.workspace .panel td:has(>small+input) { position:relative; }
+.workspace .panel .task-name-cell>.task-row-id,.workspace .panel .entity-name-cell>.entity-row-id,.workspace .panel .milestone-name-cell>small:first-child,.workspace .panel td>small:has(+input) { position:absolute; top:calc(50% - 34px); left:8px; line-height:16px; margin:0; }
+
+
+/* v1.5 acceptance: prevent sticky toolbar and timeline footer bleed-through.
+   A full-width opaque paint surface must cover both the visible toolbar and
+   the horizontal overflow beyond its controls, regardless of table scroll. */
+.workspace .panel > .title-row,
+.workspace .panel > .page-toolbar {
+  position:sticky;
+  top:0;
+  z-index:40;
+  isolation:isolate;
+  background:var(--canvas);
+  background-clip:border-box;
+}
+.workspace .panel > .title-row::after,
+.workspace .panel > .page-toolbar::after {
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:100%;
+  width:100vw;
+  background:var(--canvas);
+  pointer-events:none;
+}
+.workspace .panel > table thead th { z-index:15; }
+
+/* The Tube Map footer is the last visible chart surface. Paint the entire
+   area below its navigation to prevent lower stream rows/diamonds showing
+   through a narrow bottom strip during vertical scrolling. */
+.workspace .tube-map > footer.tube-navigation {
+  z-index:35;
+  isolation:isolate;
+  background:var(--surface);
+  /* Paint below the footer without a box that enlarges scroll overflow.
+     Clip the shadow above/at the sides so chart content stays visible. */
+  box-shadow:0 100dvh 0 100dvh var(--surface);
+  clip-path:inset(0 0 -200dvh);
+}
+.workspace .tube-map > footer.tube-navigation::after {
+  content:none;
+  height:0;
 }

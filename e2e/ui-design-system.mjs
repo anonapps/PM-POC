@@ -20,7 +20,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
     await evaluate(`document.querySelector('[aria-label="Collapse sidebar"]')?.click()`);
     await waitFor(`Boolean(document.querySelector('[aria-label="Expand sidebar"]'))`);
-    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(b.getAttribute('aria-label')==='Overview'||b.getAttribute('aria-label')==='Search'?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
+    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(['Overview','Search','People','Tasks'].includes(b.getAttribute('aria-label'))?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
     await nav('People');
     record(`Collapsed navigation works at ${width}px`, await evaluate(`document.querySelector('nav [aria-current="page"]').getAttribute('aria-label')==='People'`));
     await evaluate(`document.querySelector('[aria-label="Expand sidebar"]').click()`);
@@ -39,7 +39,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   await click('Add Stream');
   await evaluate(`(()=>{const input=document.getElementById('new-stream-name');const set=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;set.call(input,'Fresh selection stream');input.dispatchEvent(new Event('input',{bubbles:true}))})()`);
   await evaluate(`document.querySelector('form[data-create-draft]').requestSubmit()`);
-  await waitFor(`!document.querySelector('form[data-create-draft]')`);
+  await waitFor(`!document.querySelector('.creation-backdrop')&&[...document.querySelectorAll('tbody input')].some(input=>input.value==='Fresh selection stream')`);
   await nav('Milestones');
   record('New stream available in milestone scope after navigation', await evaluate(`[...document.querySelectorAll('.multi-select-options label')].some(l=>l.textContent.includes('Fresh selection stream'))`));
   await nav('Tube Map');
@@ -89,8 +89,8 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
   }
   await nav('Tasks');
   await click('Add Task');
-  record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('select option')].some(o=>o.textContent.includes('Fresh selection stream'))`));
-  await evaluate(`document.querySelector('form[data-create-draft] button.secondary').click()`);
+  record('New stream available in task selection after navigation', await evaluate(`[...document.querySelectorAll('.predictive-select label')].some(o=>o.textContent.includes('Fresh selection stream'))`));
+  await evaluate(`document.querySelector('form[data-create-draft] .creation-footer button.secondary').click()`);
   await nav('Overview');
   await click('Edit Project');
   await waitFor(`Boolean(document.querySelector('[role="dialog"]'))`);

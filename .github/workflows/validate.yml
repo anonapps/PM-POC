@@ -1,7 +1,7 @@
 name: PM-POC validation
 on:
   push:
-    branches: [main, experiment/heroui-ui]
+    branches: [main, experiment/heroui-ui, feature/v1.5-approved-enhancements]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
@@ -38,3 +38,21 @@ jobs:
           CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
           CHROME_PATH="$CHROME_PATH" npm run test:regression
+          CHROME_PATH="$CHROME_PATH" npm run test:layout
+
+  lifecycle-release-gate:
+    if: github.ref == 'refs/heads/feature/v1.5-approved-enhancements' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Full lifecycle browser tests
+        run: |
+          CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
+          test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run test:lifecycle

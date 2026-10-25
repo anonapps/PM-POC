@@ -1,5 +1,20 @@
 # ARGOS PM — Implementation Plan (v1.4.0)
 
+## v1.5 implementation sequence (approved, not yet validated)
+
+**Development branch:** `feature/v1.5-approved-enhancements`. `main` is release-only until explicit user approval. Detailed scope and acceptance criteria: [V1.5_APPROVED_ENHANCEMENTS.md](V1.5_APPROVED_ENHANCEMENTS.md).
+
+1. Confirm v1.4 baseline, persistence compatibility and existing CI/test results.
+2. Add shared inputs, predictive selectors, keyboard/focus behaviours, search/filter controls and notification primitives.
+3. Update shell/sidebar, project forms, file actions, audit naming and last-saved metadata.
+4. Integrate live search, filters and mandatory-only inline creation into the eight approved modules.
+5. Update Decision Log, scope pills, Gantt hierarchy, shared Today marker and chart-specific empty-stream filtering.
+6. Update user/technical documentation, illustrated UI manual and release assets; assess whether product demo requires new footage.
+7. Run unit/integration, Chrome regression/lifecycle, .pmp compatibility, build, lint, typecheck, audit and manual UI checks; prepare PR but do not merge until approval.
+
+**Important:** Regression tooling is Vitest plus a custom Chrome DevTools Protocol browser harness, supplemented by user-requested Playwright layout checks for the 24 October Search/Filter remediation. Existing v1.4 manual acceptance gaps and development dependency findings remain tracked until independently validated.
+
+
 **Status:** Approved implementation sequence  
 **Inputs:** `PROJECT_REQUIREMENTS.md` and `ARCHITECTURE.md`  
 **Method:** Incremental blocks with validation and commits after each completed block.

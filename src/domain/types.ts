@@ -40,6 +40,8 @@ export const LIFECYCLE_STATUSES = [
   "Cancelled",
 ] as const;
 export type LifecycleStatus = (typeof LIFECYCLE_STATUSES)[number];
+export const TASK_STATUSES = ["Tentative", ...LIFECYCLE_STATUSES] as const;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
 
 export const PRIORITIES = ["Low", "Medium", "High"] as const;
 export type Priority = (typeof PRIORITIES)[number];

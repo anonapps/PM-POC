@@ -3,6 +3,7 @@ import type {
   HumanId,
   InternalId,
   LifecycleStatus,
+  TaskStatus,
   LocalDate,
   MilestoneId,
   MilestoneScope,
@@ -42,7 +43,7 @@ export interface Task extends EntityIdentity, SoftDeletable {
   readonly name: string;
   readonly description?: string;
   readonly scope: TaskScope;
-  readonly status: LifecycleStatus;
+  readonly status: TaskStatus;
   readonly startDate?: LocalDate | null;
   readonly endDate?: LocalDate | null;
   /** Preserved v1.0 Due value; not a v1.1 scheduling date. */

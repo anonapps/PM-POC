@@ -135,3 +135,26 @@ describe("v1.4 audit history persistence", () => {
     expect(serializeProject(state, meta).ok).toBe(false);
   });
 });
+
+
+describe("v1.5 saving-device timezone compatibility",()=>{
+  it("round-trips timezone details without changing the PMP format version",()=>{
+    const encoded=serializeProject(makeProjectState(),{...meta,savedTimeZone:{name:"Europe/Madrid",utcOffsetMinutes:120}});
+    expect(encoded.ok).toBe(true);
+    if(!encoded.ok)return;
+    const decoded=deserializeProject(encoded.value);
+    expect(decoded.ok).toBe(true);
+    if(decoded.ok){expect(decoded.value.manifest.savedTimeZone).toEqual({name:"Europe/Madrid",utcOffsetMinutes:120});expect(decoded.value.manifest.formatVersion).toBe(1);}
+  });
+  it("continues opening legacy PMP files without timezone metadata",()=>{
+    const encoded=serializeProject(makeProjectState(),meta);
+    expect(encoded.ok).toBe(true);
+    if(!encoded.ok)return;
+    const decoded=deserializeProject(encoded.value);
+    expect(decoded.ok).toBe(true);
+    if(decoded.ok)expect(decoded.value.manifest.savedTimeZone).toBeUndefined();
+  });
+  it("rejects invalid timezone offsets",()=>{
+    expect(serializeProject(makeProjectState(),{...meta,savedTimeZone:{name:"Europe/Madrid",utcOffsetMinutes:9999}}).ok).toBe(false);
+  });
+});

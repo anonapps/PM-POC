@@ -1,7 +1,10 @@
 import { readFile } from 'node:fs/promises';
 export async function runRegression({ evaluate, waitFor, click, nav, setLabel, record }) {
   if (!process.env.REGRESSION_PMP_PATH) return;
-  await click('Close');
+  await nav('File Information');
+  await click('Close Project');
+  await waitFor(`Boolean(document.querySelector('main.launcher')||document.querySelector('[role=dialog]'))`);
+  if(await evaluate(`Boolean(document.querySelector('[role=dialog]'))`))await click('Save');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   const bytes = [...await readFile(process.env.REGRESSION_PMP_PATH)];
   await evaluate(`(async()=>{const writer=await window.__E2E_FILE__.createWritable();await writer.write(new Uint8Array(${JSON.stringify(bytes)}));await writer.close()})()`);
@@ -22,7 +25,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
     await waitFor(`[...document.querySelectorAll('th')].some(th=>th.textContent.trim().startsWith('Owner')&&th.getAttribute('aria-sort')==='${direction}')`);
     record(`Task Owner sorts ${direction} by displayed Person name, missing last, preserving selection`, await evaluate(`(()=>{
       const rows=[...document.querySelectorAll('tbody tr')];
-      const owners=rows.map(row=>{const owner=row.querySelector('select[aria-label^="Owner for "]');return owner.value?owner.selectedOptions[0].textContent:null});
+      const owners=rows.map(row=>{const owner=row.querySelector('summary[aria-label^="Owner for "]');return owner.dataset.value?owner.textContent:null});
       const assigned=owners.filter(name=>name!==null),firstMissing=owners.indexOf(null);
       const ordered=assigned.every((name,index)=>index===0||assigned[index-1].localeCompare(name,undefined,{numeric:true,sensitivity:'base'})${direction === 'ascending' ? '<=' : '>='}0);
       const stable=rows.every((row,index)=>{if(index===0||owners[index]!==owners[index-1])return true;return rows[index-1].querySelector('.task-row-id').textContent<row.querySelector('.task-row-id').textContent});
@@ -36,7 +39,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   await nav('Gantt');
   record('Large Gantt renders final task', await evaluate(`document.body.innerText.includes('Regression task 30')`));
   await nav('Search');
-  await setLabel('Search by name, title or ID','DECISION-030');
+  await setLabel('Search names, IDs, roles, notes, status and dates','DECISION-030');
   await waitFor(`document.body.innerText.includes('DECISION-030')`);
   record('Large project decision search', true);
   if (process.env.E2E_FULL_LIFECYCLE === '1') {
@@ -55,7 +58,8 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   }
   await click('Save Now');
   await waitFor(`document.querySelector('[role="status"]')?.textContent.startsWith('Saved')`);
-  await click('Close');
+  await nav('File Information');
+  await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   await click('Open Project');
   await waitFor(`document.body.innerText.includes('Regression 180 records')`);

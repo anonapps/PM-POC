@@ -1,5 +1,15 @@
 # ARGOS PM — Architecture (v1.4.0)
 
+## v1.5 architecture guidance (approved scope)
+
+- Reuse the application command boundary for text edits: normalise the first character of human-readable fields on blur as part of the same logical edit, so Undo and audit history contain no separate formatting mutation. Preserve IDs, emails, URLs, file paths and technical identifiers.
+- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient and resets on navigation. Predictive selection state must be independent of the currently typed search query.
+- Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and exposed once in its shared filter panel (24 October manual acceptance correction).
+- Persist optional last-save timezone metadata in the existing .pmp manifest without silently migrating compatible v1.4 files. Preserve UTC instant, original saving-device local display time, IANA timezone name where available and UTC offset. Update metadata only after successful file writes; display “Timezone unavailable” for legacy files until saved.
+- Keep browser file-picker operations behind the Project File Service. Save/Discard/Cancel and navigation-draft warnings must not discard data without the user's chosen action.
+- Continue using Vitest and the existing Chrome DevTools Protocol harness. The 24 October user instruction additionally requests Playwright layout assertions; its dev-only dependency does not affect the offline runtime. Maintain the established offline/local-only architecture.
+
+
 **Status:** Implementation architecture supporting `docs/PROJECT_REQUIREMENTS.md`  
 **Authority:** This document explains *how* to implement the approved requirements. If it conflicts with `PROJECT_REQUIREMENTS.md`, the requirements take precedence.
 
@@ -426,3 +436,41 @@ The approved `experiment/heroui-ui` branch adds bundled HeroUI v2 controls and a
 ## v1.3.1 presentation baseline
 
 HeroUI v2 Button/Chip controls and provider are part of the main presentation layer. Tailwind 4 runs through @tailwindcss/postcss and loads the existing theme configuration explicitly. Entity modules read project state through useSyncExternalStore so selection lists update directly on committed changes. The compact sidebar retains its own grid column; it never overlays the project header. Domain, file-service and persistence boundaries are unchanged.
+
+## v1.5 shared interaction implementation
+
+- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Module unmount resets this transient state.
+- Creation uses `CreationField`, pure calendar/required-field validation and `useCreationFeedback`. Only mandatory user inputs appear in creation; optional scope, owners and dependencies remain in row/context editing. Successful commands clear all creation inputs and active filters while retaining creation mode. No UI state is written to `.pmp`.
+- `PredictiveSelect`, `RelationshipPicker` and `SearchableOptionList` share query matching, arrows, Enter and Escape behaviour. Selection lives in canonical state or an explicit context draft, independently of query-filtered results. Native disclosure closing clears query state; outside clicks dismiss disclosures. Short fixed-value entity controls remain native selects.
+- `matchesEntitySearch` is the shared pure projection for module/global search, including descriptive text, owner and relationship names/human IDs, dependencies and risk actions. Matching itself lives in `option-matching.ts`, without React imports. Deleted related names remain excluded, preserving the established search contract.
+- Risk/Decision context drafts commit through existing commands and preserve relationships not being changed. Decision task/risk links are now explicitly editable, in addition to the existing Stream/Milestone context. Multiline context submission supports Ctrl/Cmd+Enter.
+
+## v1.5 candidate text/manual/lifecycle preparation
+
+`HumanTextInput` and `HumanTextArea` normalise only completed human-readable UI edits, then invoke existing blur/commit handlers. Controlled draft callbacks update local draft state before Save; Cancel remains side-effect free. Feature commands normalise only explicitly supplied text patch fields and compare the normalised patch before committing, so unrelated edits leave legacy text untouched and repeated blur produces no history/audit mutation.
+
+The bundled manual resolver selects exact version metadata first, otherwise a clearly labelled compatible same-minor entry, and never constructs a link to an unpublished release asset. The candidate PDF is generated locally with Pandoc/XeLaTeX via `scripts/build-v15-manual.sh`; these are documentation-build tools, not application/runtime dependencies.
+
+Dirty Open/Close actions use an explicit Save/Discard/Cancel dialog above the shell. Autosave pauses while this choice is pending. Failed Save retains the dialog and in-memory work. Forced same-file open activates the newly read saved project; cancelling the picker preserves current memory instead of silently discarding it.
+
+
+Shared Search/Filter remediation: ModuleSearch owns the compact toolbar input and a body portal for the filter panel. Shared pure geometry clamps/positions panels and flips them above when space is limited. PredictiveDisclosure uses native manual popovers for table option panels, retaining DOM ancestry and keyboard/query-reset behaviour while escaping table/scroll clipping. Filter styles are scoped to the panel to prevent broad workspace input rules inflating checkbox, search or Clear controls. No persistent state/command/file format change.
+
+
+PageToolbar renders one shared grid with equal outer tracks and a 340px centre search track; its narrow fallback puts search on a centred second row. The existing toolbar ResizeObserver continues measuring sticky-header height. TimelineNavigation shares Tube Map's footer styles and calendar-date formatter with Gantt; each caller owns offsets and inclusive/exclusive end conversion. Gantt navigation uses the unchanged model's 1/7/14-day increments. Gantt scrolls inside the chart, while its footer remains in normal flow below it and uses the same sticky presentation as Tube Map. No persistence/domain/application-command change.
+
+
+Unified creation: EntityCreationPanel owns local draft/dirty/error state and uses the established Dialog with a right-side variant, required-field initial focus, visible-control Tab cycling, topmost-dialog handling and restoration. A shared pure prepareCreation boundary validates panel fields and returns one existing entity command; People creation accepts optional Role/Notes atomically, Risk creation can include validated initial actions. Domain/persistence/schema are unchanged. Optional selectors reuse PredictiveSelect/RelationshipPicker and native top-layer positioning. Cancel discards; outside/Escape dirty dismissal uses the same Stay/Discard dialog. Creation success resets page search/filters and unmounts the draft; there is no inline record form.
+
+ProjectFormFields shares stable accessible error slots between New Project and Project Details. New Project uses an empty UI status sentinel accepted only by form validation, never persisted. The file operation has an independent validity/busy guard as well as a disabled button. Existing valid ProjectDraft/domain types and project file APIs remain unchanged. Task bulk selection is rendered inside the existing right toolbar region; active selections determine count and deletion. Tall table rows centre content, and wide context text/Notes stay within their available columns.
+
+
+Status/layout extension: TaskStatus/TASK_STATUSES extend LifecycleStatus for Tasks only; Project/Stream retain their original five-value set. Persisted Task validation accepts only the six defined statuses. A Tentative-containing save raises an older manifest minimum-runtime value to 1.5.0-rc.1; original-status files and higher supplied minima are retained. Format/schema are unchanged, and old data is never relabelled on load. Existing duplication still resets its new copy to Not Started, preserving the source.
+
+Chart projections receive transient status arrays (empty means unrestricted). Gantt filters Tasks before population/hierarchy projection, retains Milestones and full hierarchy depth references. Tube filters Milestones before search/lane population/stations/connections. Neither mutates canonical state. TimelineStatusLegend uses the same typed colour maps as actual bars/diamonds; the shared navigation footer hosts the compact legend above existing controls.
+
+Positioning uses actual popup scroll height and viewport geometry. Portal/native top-layer panels are positioned before paint and observed for content changes, scroll and resize; above panels end six pixels above the field rather than leaving an estimated-height gap. PredictiveDisclosure also owns Gantt warning overlays. Risk Matrix expansion is sessionStorage-only presentation state. Context pickers use stable headings/counts, and Overview cards size independently.
+
+Tube Map caption clearance is measured from rendered station labels rather than a fixed footer spacer. SVG connection height stays tied to lane coordinates while only the body grows for overflowing captions. Shared popup placement also dismisses a panel once its trigger leaves its visible scroll container.
+
+Tube Map footer shielding uses a clipped paint-only shadow below the sticky footer. An absolutely positioned viewport-height pseudo-element would enlarge workspace scroll overflow and let scrolling exceed the chart containing block, pushing the sticky axis offscreen. Keep decorative painting separate from layout/scroll extents; native top-layer selectors remain above this surface.

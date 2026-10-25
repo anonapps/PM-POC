@@ -1,3 +1,4 @@
+import type { MilestoneStatus } from "../../domain";
 import type { ProjectState } from "../../application";
 const day = 86_400_000;
 const parse = (date: string) => new Date(`${date}T00:00:00Z`);
@@ -20,23 +21,29 @@ function levelsFor(stations: readonly { x: number; label: string }[]) {
   });
 }
 
-export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original"): TubeMapModel {
+export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original", hideEmptyStreams = false, streamQuery = "",statuses:readonly MilestoneStatus[]=[]): TubeMapModel {
+  const milestones=state.milestones.filter(m=>!statuses.length||statuses.includes(m.status));
   const start = mondayOf(startDate);
   const startTime = parse(start).getTime();
   const endTime = startTime + 84 * day;
   const end = iso(new Date(endTime));
   const weeks = Array.from({ length: 12 }, (_, index) => { const date = iso(new Date(startTime + index * 7 * day)); return { date, label: `W${String(isoWeek(date)).padStart(2, "0")}` }; });
-  const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
+  const populatedStreams = new Set(milestones.filter(milestone=>!milestone.deletion.isDeleted&&milestone.scope.kind==="streams").flatMap(milestone=>milestone.scope.kind==="streams"?milestone.scope.streamIds:[]));
+  const needle = streamQuery.trim().toLocaleLowerCase();
+  const matchingMilestoneStreams = new Set(milestones.filter(milestone => !milestone.deletion.isDeleted && milestone.name.toLocaleLowerCase().includes(needle) && milestone.scope.kind === "streams").flatMap(milestone => milestone.scope.kind === "streams" ? milestone.scope.streamIds : []));
+  const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted && (!hideEmptyStreams || populatedStreams.has(stream.id)) && (!needle || stream.name.toLocaleLowerCase().includes(needle) || matchingMilestoneStreams.has(stream.id))); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
   const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...orderedStreams.map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
-  const candidates = state.milestones.filter((milestone) => !milestone.deletion.isDeleted).flatMap((milestone) => {
+  const candidates = milestones.filter((milestone) => !milestone.deletion.isDeleted && /^\d{4}-\d{2}-\d{2}$/.test(milestone.plannedDate) && Number.isFinite(parse(milestone.plannedDate).getTime()) && iso(parse(milestone.plannedDate)) === milestone.plannedDate).flatMap((milestone) => {
     const stamp = parse(milestone.plannedDate).getTime();
     const boundary = stamp < startTime ? "before" as const : stamp >= endTime ? "after" as const : "inside" as const;
     const x = Math.max(0, Math.min(100, ((stamp - startTime) / (endTime - startTime)) * 100));
     const ids = milestone.scope.kind === "project" ? ["project"] : milestone.scope.streamIds;
     return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, status: milestone.status, x, streamId, boundary }));
   });
+  const laneIds = new Set(baseStreams.map(stream => stream.id));
   const candidatesByStream = new Map<string, typeof candidates>();
   for (const station of candidates) {
+    if (!laneIds.has(station.streamId)) continue;
     const lane = candidatesByStream.get(station.streamId) ?? [];
     lane.push(station);
     candidatesByStream.set(station.streamId, lane);
@@ -65,7 +72,7 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     occurrences.push(station);
     stationsByMilestone.set(station.entityId, occurrences);
   }
-  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone").flatMap((dependency) => {
+  const connections = state.dependencies.filter((dependency) => dependency.predecessor.kind === "milestone" && dependency.successor.kind === "milestone" && dependency.predecessor.id !== dependency.successor.id).flatMap((dependency) => {
     const sources = stationsByMilestone.get(dependency.predecessor.id) ?? [];
     const targets = stationsByMilestone.get(dependency.successor.id) ?? [];
     let selected: { source: TubeStation; target: TubeStation; score: number } | undefined;

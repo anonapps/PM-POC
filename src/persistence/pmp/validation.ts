@@ -18,6 +18,7 @@ export function inspectProjectCompatibility(manifest: unknown): CompatibilityIns
 
 function validateManifest(v: unknown): PmpResult<PmpManifest> {
   if (!obj(v) || v.formatIdentifier !== PMP_FORMAT_IDENTIFIER || typeof v.formatVersion !== "number" || typeof v.schemaVersion !== "number" || typeof v.projectId !== "string" || !iso(v.createdAt) || !iso(v.lastSavedAt) || !obj(v.compatibility) || typeof v.compatibility.minimumRuntimeVersion !== "string" || typeof v.compatibility.createdByRuntimeVersion !== "string" || !obj(v.entries) || v.entries.project !== "project.json" || v.entries.config !== "config.json") return err("MALFORMED_MANIFEST", "Manifest is missing required PMP v1 fields.");
+  if (v.savedTimeZone !== undefined && (!obj(v.savedTimeZone) || typeof v.savedTimeZone.name !== "string" || !v.savedTimeZone.name.trim() || !Number.isInteger(v.savedTimeZone.utcOffsetMinutes) || Math.abs(v.savedTimeZone.utcOffsetMinutes as number) > 14 * 60)) return err("MALFORMED_MANIFEST", "Saved timezone metadata is invalid.");
   return { ok: true, value: v as unknown as PmpManifest };
 }
 

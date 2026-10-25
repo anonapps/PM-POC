@@ -1,10 +1,10 @@
 name: PM-POC full lifecycle regression
 on:
   push:
-    branches: [main]
+    branches: [main, feature/v1.5-approved-enhancements]
     paths:
       - "e2e/**"
-      - "src/testing/**"
+      - "src/**"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/regression-lifecycle.yml"
@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm

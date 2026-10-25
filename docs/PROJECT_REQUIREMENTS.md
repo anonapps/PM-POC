@@ -1,9 +1,63 @@
 # ARGOS PM — Authoritative Requirements
 
-**Document status:** Approved baseline updated for v1.4.0  
+**Document status:** v1.5.0 requirements frozen; implementation pending  
 **Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
+
+---
+
+## v1.5.0 approved requirements (supersedes earlier behaviour where inconsistent)
+
+**Status:** Requirements frozen following 19 clarification batches (57 decisions). This section is authoritative for v1.5; the detailed acceptance checklist is in [V1.5_APPROVED_ENHANCEMENTS.md](V1.5_APPROVED_ENHANCEMENTS.md).
+
+## Approved enhancements
+
+| ID | Scope |
+| --- | --- |
+| 001 | Remove global Open Project and Close; right-align Saved, Save Now, Undo, Redo. Move Open Project, Close, Save As to File Information. |
+| 002 | Compact New Project and Project Details forms; mark mandatory fields with an asterisk and explanatory note. |
+| 003 | Capitalise the first letter of human-readable text on blur, not technical identifiers; one edit and one Undo/audit event. |
+| 004 | Rename audit section to “Audit Log (experimental)”. |
+| 005 | Store Last Saved local date/time, saving device timezone and UTC offset in .pmp only after successful writes; legacy files show “Timezone unavailable” until saved. |
+| 006 | Replace People and Tasks sidebar letters with the approved icons. |
+| 007 | Shared live Search/Filter bar, search/filter icon and popover; Show Deleted before Add Task. |
+| 008 | Shared centred toolbar for all specified pages; full-field right-side creation panels for Streams, People, Tasks, Milestones, Risks and Decisions; no legacy inline creation route. |
+| 009 | Hide Decision Log Context display column while retaining editable relationships and underlying context. |
+| 010 | Consistent outlined inputs and textareas. |
+| 011 | Searchable dynamic-list dropdowns with search row and case-insensitive contains matching, including multi-select. |
+| 012 | Responsive Project-wide scope pill becomes ALL when narrow, with hover/focus tooltip. |
+| 013 | File Information links to version-matched UI Reference Manual; source in repository, PDF in GitHub Release; clearly labelled compatible same-minor fallback if exact manual unavailable. |
+| 014 | Sidebar collapse/expand preserves navigation vertical positions; sidebar fixed while content scrolls. |
+| 015 | Gantt milestone labels padded and hierarchical indentation consistent. |
+| 016 | Dotted red Today line spans timeline body in Gantt. |
+| 017 | Tube Map uses same shared Today marker component and design tokens. |
+| 018 | Independent Hide Empty Streams state for Gantt and Tube Map, synchronised between each chart's controls and its filter popover. |
+
+## Approved interaction and filtering rules
+
+- Search is immediate on each keystroke, case-insensitive contains matching, across all relevant fields including non-displayed fields.
+- Filters combine with AND across categories and OR within a category; update immediately, without Apply.
+- Reset search, filters and Show Deleted on navigation; after successful creation, clear active search/filters.
+- Inline creation shows mandatory fields only; optional fields remain available through existing inline editing. Inline validation appears beneath the invalid field.
+- On successful creation show a brief non-blocking notification, stay in creation mode, clear the form, and focus the first mandatory field.
+- Cancel discards the draft immediately. Navigation away from a populated draft warns first. Search icon remains disabled while creating.
+- Predictive multi-select preserves selections even when filtered out by search; clear search when dropdown closes.
+- Dynamic-list predictive search applies to People, Streams, Tasks, Milestones and dependencies; fixed short dropdowns retain normal behaviour.
+- Keyboard: Tab navigation, Enter submits valid single-line forms or selects dropdown results, arrow keys navigate results, Escape closes dropdowns, Ctrl/Cmd+Enter submits multiline forms.
+- Undo restores the original value in one operation, including automatic capitalisation. No separate formatting audit entry.
+- Unsaved Open Project presents Save / Discard / Cancel; Close returns to welcome and warns only if unsaved.
+- Last Saved displays original saving device's local timestamp and timezone, without conversion to viewer timezone.
+- Gantt counts any non-deleted task (including a parent with deleted children) or milestone as populating a stream; Tube Map counts milestones only. Each assigned stream counts for multi-stream milestones; undated/out-of-window records count. Deleted records do not.
+- Hide Empty Streams defaults off and is independent between charts.
+- Today marker starts below date headers and extends to the bottom of all timeline rows, using a shared component and tokens.
+- Sidebar icon tooltips and abbreviated ALL pill tooltips work on hover and keyboard focus.
+- UI manual is version-specific; maintain repository source and publish PDF release asset.
+- .pmp files from v1.4 must open safely without data loss. Preserve migration and security boundaries documented in PROJECT_REQUIREMENTS.md and ARCHITECTURE.md.
+
+
+
+**Compatibility constraint:** A v1.4 `.pmp` must open without data loss. Do not silently migrate a file that requires a technical schema migration; preserve the existing migration rules and keep the original file intact. New optional save-time metadata must be backward compatible.
 
 ---
 
@@ -1945,3 +1999,33 @@ Gantt has exactly twelve columns: calendar days for Week, Monday-Sunday weeks fo
 Tube Map is a twelve-week Monday-based roadmap with an always-visible Project-wide row, ordered active Stream rows, neutral Stream lines, and purple milestone diamonds at actual-date positions. Multi-stream visual occurrences remain one logical milestone and connections remain entity-level. Outside-window indicators are informational.
 
 Risk Log opens at Level All. Level filters the table (including deleted risks when requested), while the 3x3 matrix always represents all active risks. The always-visible Add Risk control follows the matrix.
+
+
+## Manual acceptance correction — 24 October 2026
+
+The user's Search/Filter remediation instruction refines E007/E008/E018: use a compact live search input in the title/Add toolbar with an integrated filter icon and a compact, viewport-constrained filter panel. Gantt/Tube Map use the same shared design and expose **one** Hide Empty Streams checkbox per chart in that panel, with independent chart state. This supersedes the earlier duplicated toolbar/popover presentation; population counting is unchanged. Keep all functional filters, query semantics, creation disabling, navigation resets and canonical `.pmp` data boundaries. The user explicitly requested Playwright layout checks in addition to existing regression/lifecycle coverage for this remediation.
+
+
+## Approved Gantt/footer and centred-search correction — 24 October 2026
+
+Gantt date navigation moves from the top toolbar to a persistent footer matching Tube Map: Previous, inclusive visible DD/MM/YYYY range, Next, Jump to today. Keep Gantt's existing one-column offsets (Week 1 day, Month 7 days, Quarter 14 days), zoom reset and Today marker; Tube Map retains its four-week offset. The footer remains outside the chart scroll area, without hiding the final row or dependency information. Top controls retain title, search/filter, Expand All, Collapse All and Zoom.
+
+All ten search pages use a shared three-region title/search/actions layout. Equal outer tracks place the fixed-width search input at the page content centre independently of title length, right actions, placeholder or filter state. Title stays left, actions right. At narrower widths use a centred second search row with controlled action wrapping. Preserve sticky positioning, existing query/filter/keyboard behaviour, data and `.pmp` compatibility. These are user-approved v1.5 corrections, not additional features.
+
+
+## Approved unified creation/layout correction — 24 October 2026
+
+This instruction supersedes the earlier mandatory-only repeat-inline-creation rules in E008. Each record Add opens the same right-side, dimmed, modal panel with all relevant required/optional fields. Preserve required semantics: Person/Stream/Task/Risk name/title, Milestone name/date, Decision title/date. Focus the first required text field; ordinary single-line Enter validates/submits, textarea Enter inserts a newline, predictive-list Enter selects. Keep Create enabled to validate, reserve associated error space, focus the first invalid required field, close/clear after success and restore Add focus. Cancel discards immediately. Dirty outside/Escape dismissal uses the established Stay/Discard confirmation; clean dismissal closes normally. No alternative inline record creation route remains. Relationships, dependencies, initial optional fields and initial Risk actions use one canonical creation command/Undo operation.
+
+New Project Status starts blank and must be explicitly selected; Choose File & Create stays disabled until all mandatory fields and dates are valid. Invalid submissions must not invoke file access. Use stable error slots across forms. Widen Risk/Decision context text, reuse searchable selection panels, remove rectangular chrome around scope pills, centre other contents in tall rows and fit People Notes within its column. Task bulk deletion sits in the right toolbar region before Show Deleted; the selection heading has a checkbox only. Remove redundant gaps between module toolbars and data. Preserve confirmed independent search centring, Gantt footer/navigation, dates, existing domain rules and `.pmp` compatibility.
+
+
+## Approved status/legend/dropdown/layout batch — 24 October 2026
+
+- Add **Tentative to Tasks only** alongside the five existing statuses; keep default Not Started and existing task-duplication reset to Not Started. Preserve old task values and `.pmp` data. New Tentative-containing saves require a v1.5 reader and raise an older manifest minimum-runtime value to the candidate version; files using old statuses retain their original minimum. No technical schema/format conversion.
+- Shared measured popup positioning: directly below the field, or directly above using its actual content height; recalculate after content/scroll/resize and use the top layer to escape tables/modals/sticky content. Apply to Gantt warnings too, without altering warning messages/calculations.
+- All table controls share a vertical centreline, rows grow for pills without clipping, and Tasks Dependencies is a single-line heading with adequate date/progress/control widths. Keep creation panel keyboard/validation/dirty-dismiss/success behaviour; compact creation/Edit Project spacing and scroll only panel content with accessible header/footer.
+- Gantt task bars use six muted status colours; an always-complete single-line bar legend sits above date navigation. Task Status multi-select combines with search/Hide Empty Streams and clears together, without modifying data. Hide Empty Streams counts status-filtered Tasks and existing Milestones; preserve grouping/dated and undated population rules.
+- Tube Map uses existing milestone colours in a single-line diamond legend above date navigation and a multi-status filter. Status filtering precedes lane population and combines with search/Hide Empty Streams; Clear all restores unrestricted statuses. Remove extra footer scroll space, preserving the last lane, sticky axis and navigation.
+- Risk Matrix is one expanded-by-default section, with accessible Risk Matrix chevron toggle and session-only remembered state. Context relationship headings and equal-height selectors align across Risk/Decision editors; Decision Streams/Milestones/Tasks/Risks share one desktop line, with existing Project-wide exclusivity. Overview Quick Actions sizes to content independently of Timeline.
+- These controls are presentation/transient state except the explicitly selected Task status. Keep the confirmed search centre, timeline dates/navigation, canonical command history and local-first project-file boundaries. No merge/tag/release/deploy/publish authorised.

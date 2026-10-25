@@ -1,22 +1,34 @@
 # ARGOS PM
 
-A local-first ARGOS PM v1.4.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first ARGOS PM v1.5.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
-## One-minute product demo — v1.4.0
+## Product demo — ARGOS PM v1.5.0
 
-Create a local project, organise two streams and five tasks with five distinct owners, add shared milestones and risks, then edit the plan in Gantt and Tube Map. See a dependency conflict trigger a warning, correct its date and watch the warning clear.
+Explore a local project, create a Tentative Task in the shared side panel, combine search and filters, navigate Gantt and Tube Map, collapse the Risk Matrix, record a Decision, Undo/Redo and save/reopen the plan.
 
-[![ARGOS PM v1.4.0 demo — project Gantt view](docs/media/argos-pm-demo-v1.4.0-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.4.0.mp4)
+[![ARGOS PM v1.5.0 demo — actual application footage](docs/media/argos-pm-demo-v1.5.0-preview.jpg)](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.5.0.mp4)
 
-**[Watch or download the one-minute demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.4.0.mp4)** · 1920×1080 MP4 · 60 seconds · silent · real v1.4.0 browser excerpts at normal speed, with reading pauses and editorial chapter titles outside the product view.
+**[Watch or download the one-minute demo](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/argos-pm-60s-demo-v1.5.0.mp4)** · 1920×1080 MP4 · 60 seconds · silent · real v1.5.0 browser interactions at normal speed, with reading pauses and editorial chapter titles outside the product view.
 
-The recording uses fictional data in a disposable project. The managed capture browser blocks native filesystem pickers, so the recording uses the existing isolated picker test harness; the resulting `.pmp` was exported and verified. Native OS picker consent is not demonstrated. See the [production and verification notes](docs/V1.4_DEMO_VERIFICATION.md).
+The recording uses fictional data in a disposable project. The managed capture browser blocks native filesystem pickers, so the recording uses the existing isolated picker test harness; the resulting `.pmp` was exported and verified. Native OS picker consent is not demonstrated. See the [production and verification notes](docs/V1.5_DEMO_VERIFICATION.md).
 
 [Archived v1.3.0 recording](https://github.com/anonapps/PM-POC/raw/refs/heads/main/docs/media/pm-poc-30s-demo-v1.3.0.mp4) · retained unchanged as historical footage.
 
+## v1.5 documentation and acceptance
+
+The v1.5 release includes shared search and filtering, anchored pickers, updated creation and editing, a task-only Tentative status, Gantt task-status colours and filtering, Tube Map milestone-status filtering and a compact legend, collapsible Risk Matrix, and consistent opaque sticky toolbars and timeline footers. The final two toolbar and Tube Map fixes were visually accepted on 25 October 2026.
+
+- [v1.5 approved requirements](docs/V1.5_APPROVED_ENHANCEMENTS.md)
+- [v1.5 release readiness and validation](docs/V1.5_RELEASE_READINESS.md)
+- [v1.5 desktop acceptance guide](docs/V1.5_DESKTOP_ACCEPTANCE.md)
+- [v1.5 native file compatibility guide](docs/V1.5_COMPATIBILITY.md)
+- [v1.5 demo production brief](docs/V1.5_DEMO_PRODUCTION.md)
+
+[Latest GitHub release](https://github.com/anonapps/PM-POC/releases/latest) · [Archived v1.4 demo](docs/media/argos-pm-60s-demo-v1.4.0.mp4). Historical footage remains unchanged. Physical Windows/macOS native permission checks are documented separately; this release does not claim those checks were performed.
+
 ## UI reference manual
 
-Learn the consistent names for every page, region and control in the [illustrated UI reference manual](docs/ARGOS_PM_UI_REFERENCE.md): 85 terminology entries and 42 screenshots covering all workspace pages, creation forms, selectors, popovers, dialogs and feedback states. Download the [PDF](docs/ARGOS_PM_UI_REFERENCE.pdf) or [editable Word document](docs/ARGOS_PM_UI_REFERENCE.docx).
+Use the current [v1.5 UI Reference Manual](docs/V1.5_UI_REFERENCE.md) and [versioned PDF](public/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf), also bundled in File Information. The [earlier illustrated reference](docs/ARGOS_PM_UI_REFERENCE.md) remains an archive.
 
 ## Prerequisites
 
@@ -45,6 +57,7 @@ npm run lint
 npm run build
 npm audit --omit=dev --audit-level=moderate
 npm run test:regression
+npm run test:lifecycle
 ```
 
 The regression suite includes 30 streams, people, tasks, milestones, risks and decisions (180 varied records). `npm run test:e2e` runs the original smoke flow; `npm run test:regression` adds the large dataset; `npm run test:lifecycle` also creates 30 additional records per module through the UI. See [`docs/AUTOMATED_REGRESSION.md`](docs/AUTOMATED_REGRESSION.md) for scenarios, CI triggers and commands, and [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for native file-picker checks.

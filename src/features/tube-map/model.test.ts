@@ -150,3 +150,97 @@ describe("Tube Map fixed-height marker alignment", () => {
     expect(model.stations.map(station=>station.y)).toEqual([centre,centre-17,centre+17]);
   });
 });
+
+describe("v1.5 Tube Map empty stream filtering",()=>{it("keeps milestone-bearing streams even when milestones are outside the window",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"empty",humanId:"STREAM-002"})],milestones:[milestone("1","2025-01-01",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);});});
+
+describe("v1.5 Tube Map filtering edge cases",()=>{
+ it("ignores deleted milestones",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[{...milestone("1","2026-09-17",["stream-1"]),deletion:{isDeleted:true}}]});expect(buildTubeMap(state,"2026-09-17","original",true).streams.map(stream=>stream.id)).toEqual(["project"]);});
+ it("keeps empty streams when toggle is off",()=>{const state=makeProjectState({streams:[streamFixture()]});expect(buildTubeMap(state,"2026-09-17","original",false).streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);});
+});
+
+describe("v1.5 Tube Map shared milestone filtering",()=>{it("retains all streams referenced by a shared milestone",()=>{const state=makeProjectState({streams:[streamFixture(),streamFixture({id:"s2",humanId:"STREAM-002"}),streamFixture({id:"empty",humanId:"STREAM-003"})],milestones:[milestone("1","2027-01-01",["stream-1","s2"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1","s2"]);expect(model.stations.filter(station=>station.entityId==="1")).toHaveLength(2);});});
+
+describe("v1.5 Tube Map dependency integrity",()=>{
+  it("ignores self-referential milestone dependencies",()=>{
+    const state=makeProjectState({milestones:[milestone("self","2026-10-01")],dependencies:[{id:"dependency-self",projectId:"project-1",predecessor:{kind:"milestone",id:"self"},successor:{kind:"milestone",id:"self"},type:"Finish-to-Start"}]});
+    expect(buildTubeMap(state,"2026-09-17").connections).toHaveLength(0);
+  });
+  it("preserves valid milestone connections when another dependency references itself",()=>{
+    const state=makeProjectState({milestones:[milestone("1","2026-10-01"),milestone("2","2026-10-08")],dependencies:[
+      {id:"self",projectId:"project-1",predecessor:{kind:"milestone",id:"1"},successor:{kind:"milestone",id:"1"},type:"Finish-to-Start"},
+      {id:"valid",projectId:"project-1",predecessor:{kind:"milestone",id:"1"},successor:{kind:"milestone",id:"2"},type:"Finish-to-Start"},
+    ]});
+    expect(buildTubeMap(state,"2026-09-17").connections).toEqual([expect.objectContaining({from:"1",to:"2"})]);
+  });
+});
+
+describe("v1.5 project-wide milestones",()=>{it("preserves the project lane and project-wide stations when all streams are hidden",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("1","2026-10-01")]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);expect(model.stations.map(station=>station.entityId)).toEqual(["1"]);});});
+
+describe("v1.5 Tube Map stream sorting with filtering",()=>{it("sorts only populated streams while retaining the project lane first",()=>{const state=makeProjectState({streams:[streamFixture({id:"z",humanId:"STREAM-001",name:"Zeta"}),streamFixture({id:"empty",humanId:"STREAM-002",name:"Empty"}),streamFixture({id:"a",humanId:"STREAM-003",name:"Alpha"})],milestones:[milestone("1","2026-10-01",["z","a"])]});const model=buildTubeMap(state,"2026-09-17","asc",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","a","z"]);expect(model.stations.filter(station=>station.entityId==="1")).toHaveLength(2);});});
+
+describe("v1.5 Tube Map empty stream sorting",()=>{it("keeps the original stream order when filtering is enabled",()=>{const state=makeProjectState({streams:[streamFixture({id:"z",humanId:"STREAM-001",name:"Zeta"}),streamFixture({id:"empty",humanId:"STREAM-002",name:"Empty"}),streamFixture({id:"a",humanId:"STREAM-003",name:"Alpha"})],milestones:[milestone("1","2026-10-01",["z","a"])]});expect(buildTubeMap(state,"2026-09-17","original",true).streams.map(stream=>stream.id)).toEqual(["project","z","a"]);});});
+
+describe("v1.5 undated Tube Map milestones",()=>{it("keeps the populated stream but does not render invalid stations",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("1","",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);expect(model.stations).toHaveLength(0);});});
+
+describe("v1.5 invalid milestone dates",()=>{it("retains the stream but omits impossible calendar dates",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("invalid","2026-02-30",["stream-1"])]});const model=buildTubeMap(state,"2026-02-16","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);expect(model.stations).toHaveLength(0);});});
+
+describe("v1.5 Tube Map leap dates",()=>{it("accepts a real leap-day milestone",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("leap","2028-02-29",["stream-1"])]});const model=buildTubeMap(state,"2028-02-28","original",true);expect(model.stations.some(station=>station.entityId==="leap")).toBe(true);});});
+
+describe("v1.5 strict milestone date parsing",()=>{it("ignores timestamp-formatted milestone dates without losing stream lanes",()=>{const state=makeProjectState({streams:[streamFixture()],milestones:[milestone("timestamp","2026-09-17T12:00:00Z",["stream-1"])]});const model=buildTubeMap(state,"2026-09-17","original",true);expect(model.streams.map(stream=>stream.id)).toEqual(["project","stream-1"]);expect(model.stations).toHaveLength(0);});});
+
+
+describe("v1.5 stale milestone scopes",()=>{
+  it("omits stations for deleted streams while preserving valid project stations",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"removed",deletion:{isDeleted:true}})],milestones:[milestone("stale","2026-10-01",["removed"]),milestone("valid","2026-10-01")]});
+    const model=buildTubeMap(state,"2026-09-17");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["valid"]);
+  });
+  it("omits stations for missing stream references",()=>{
+    const state=makeProjectState({milestones:[milestone("orphan","2026-10-01",["unknown-stream"])]});
+    expect(buildTubeMap(state,"2026-09-17").stations).toHaveLength(0);
+  });
+});
+
+
+describe("v1.5 valid lane retention",()=>{
+  it("retains stations for active streams while dropping stale stream references",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"live",name:"Live"}),streamFixture({id:"removed",humanId:"STREAM-002",deletion:{isDeleted:true}})],milestones:[milestone("gate","2026-10-01",["live","removed"])]});
+    const model=buildTubeMap(state,"2026-09-17");
+    expect(model.stations.map(station=>station.id)).toEqual(["gate:live"]);
+  });
+});
+
+
+describe("v1.5 Tube Map live stream search",()=>{
+  it("retains Project-wide milestones while filtering other stream lanes",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform"})],milestones:[milestone("project-gate","2026-10-01"),milestone("stream-gate","2026-10-01",["one"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"nonexistent");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["project-gate"]);
+  });
+  it("filters stream lanes case-insensitively while keeping Project-wide",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform Delivery"}),streamFixture({id:"two",humanId:"STREAM-002",name:"Security"})],milestones:[milestone("one","2026-10-01",["one"]),milestone("two","2026-10-01",["two"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"  PLATform  ");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project","one"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["one"]);
+  });
+  it("combines Hide Empty Streams with a live stream query",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"one",name:"Platform Delivery"}),streamFixture({id:"two",humanId:"STREAM-002",name:"Platform Empty"})],milestones:[milestone("one","2026-10-01",["one"])]});
+    expect(buildTubeMap(state,"2026-09-17","original",true,"platform").streams.map(stream=>stream.id)).toEqual(["project","one"]);
+  });
+});
+
+
+describe("v1.5 Tube Map milestone-name search",()=>{
+  it("finds a stream through a milestone title even when the stream name does not match",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"delivery",name:"Delivery"}),streamFixture({id:"security",humanId:"STREAM-002",name:"Security"})],milestones:[{...milestone("launch","2026-10-01",["delivery"]),name:"Launch approval"},milestone("security","2026-10-01",["security"])]});
+    const model=buildTubeMap(state,"2026-09-17","original",false,"approval");
+    expect(model.streams.map(stream=>stream.id)).toEqual(["project","delivery"]);
+    expect(model.stations.map(station=>station.entityId)).toEqual(["launch"]);
+  });
+  it("does not match milestones that have been deleted",()=>{
+    const state=makeProjectState({streams:[streamFixture({id:"delivery",name:"Delivery"})],milestones:[{...milestone("launch","2026-10-01",["delivery"]),name:"Launch approval",deletion:{isDeleted:true}}]});
+    expect(buildTubeMap(state,"2026-09-17","original",false,"approval").streams.map(stream=>stream.id)).toEqual(["project"]);
+  });
+});

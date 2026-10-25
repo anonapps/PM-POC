@@ -14,6 +14,7 @@ export interface PmpManifest {
   readonly projectId: string;
   readonly createdAt: string;
   readonly lastSavedAt: string;
+  readonly savedTimeZone?: { readonly name: string; readonly utcOffsetMinutes: number };
   readonly compatibility: { readonly minimumRuntimeVersion: string; readonly createdByRuntimeVersion: string };
   readonly entries: { readonly project: "project.json"; readonly config: "config.json" };
 }
@@ -32,7 +33,7 @@ export const DEFAULT_PROJECT_CONFIGURATION: PmpProjectConfiguration = Object.fre
   moduleVisibility: Object.freeze({ streams: true, people: true, tasks: true, milestones: true, gantt: true, tubeMap: true, risks: true, decisions: true }),
 });
 
-export interface SerializeProjectMetadata { readonly createdAt: string; readonly lastSavedAt: string; readonly runtimeVersion: string; readonly minimumRuntimeVersion?: string; readonly configuration?: PmpProjectConfiguration }
+export interface SerializeProjectMetadata { readonly createdAt: string; readonly lastSavedAt: string; readonly runtimeVersion: string; readonly minimumRuntimeVersion?: string; readonly configuration?: PmpProjectConfiguration; readonly savedTimeZone?: { readonly name: string; readonly utcOffsetMinutes: number } }
 export type CompatibilityStatus = "SUPPORTED" | "UNSUPPORTED_OLDER" | "UNSUPPORTED_NEWER" | "INVALID";
 export type PmpErrorCode = "INVALID_CONTAINER" | "MISSING_ENTRY" | "UNEXPECTED_ENTRY" | "MALFORMED_MANIFEST" | "MALFORMED_PROJECT_DATA" | "MALFORMED_CONFIGURATION" | "UNSUPPORTED_OLDER_VERSION" | "UNSUPPORTED_NEWER_VERSION" | "PROJECT_ID_MISMATCH" | "SCHEMA_VALIDATION_FAILURE" | "MIGRATION_FAILURE";
 export interface PmpError { readonly code: PmpErrorCode; readonly message: string; readonly path?: string }
