@@ -4,15 +4,9 @@ A local-first ARGOS PM v1.5.0 built with TypeScript, React and Next.js. The auth
 
 ## Product demo — ARGOS PM v1.5.0
 
-**Atlas Software Delivery replacement: verified recording and published player.** Create a new project, four streams, five people and eight tasks; populate nine milestones, two risks and two decisions; edit Tube Map, correct a real dependency warning, inspect the Audit Log, save and close.
-
 [![ARGOS PM v1.5 — Atlas Software Delivery preview](docs/media/argos-pm-demo-v1.5.0-preview.jpg)](https://anonapps.github.io/PM-POC/videos/latest/)
 
-**[Watch Video](https://anonapps.github.io/PM-POC/videos/latest/)** · 78 seconds · 1920×1080 · 30 fps · silent H.264. The video-only GitHub Pages player passed native playback verification.
-
-Real application interactions, jump cuts over repeated entry, and visible pointer/click/focus cues. The disposable project's saved `.pmp` is verified. Native file-picker consent is not shown; a test adapter and editorial pointer cues are disclosed. See [verification and playback evidence](docs/V1.5_DEMO_VERIFICATION.md).
-
-[Archived v1.3 recording](docs/media/pm-poc-30s-demo-v1.3.0.mp4) and [v1.4 recording](docs/media/argos-pm-60s-demo-v1.4.0.mp4) remain unchanged.
+**[Watch Video](https://anonapps.github.io/PM-POC/videos/latest/)** · 78 seconds 
 
 ## v1.5 documentation and acceptance
 
@@ -112,20 +106,3 @@ The 11 October 2026 regression baseline passed 27 Vitest files / 139 tests, Type
 
 The `.pmp` project file is the sole source of truth for project data. Persistence remains behind the Project File Service abstraction. The application does not depend on cloud storage, a database, browser local storage or an application backend for project data.
 
-## POC status
-
-Implementation Blocks 0–20 are complete. Automated unit/integration validation and the end-to-end Chrome acceptance flow are green. Native operating-system file-picker consent remains a deliberately manual browser/OS boundary; its checks are documented in [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md).
-
-## v1.4.0 — ARGOS PM release
-
-Version 1.4.0 introduces streamlined sidebar navigation and page titles; Gantt and Tube Map quick editing, stream sorting and expanded-by-default lanes; consistent scope pills, table sorting, spacing and risk-level colours; optional People Role and Notes; project-wide progress visibility preference; and optional bounded audit history (5,000 retained events, 50 visible at once, searchable and CSV-exportable, with Undo/Redo events). People name edits commit on blur rather than per keystroke. The portable `.pmp` format and offline project-data model remain unchanged in principle. See [v1.4 approved scope](docs/V1.4_APPROVED_ENHANCEMENTS.md), [release acceptance](docs/V1.4_ACCEPTANCE_REVIEW.md), and [demo production brief](docs/V1.4_DEMO_PRODUCTION.md).
-
-Both v1.4 validation and PM-POC validation passed for release PR #9 head `32093a9`; merged to `main` as `22f68a7`. Manual visual checks remain documented separately. The production-only dependency audit passed; the full dependency audit reported five high-severity findings involving development dependencies.
-
-## v1.3.1 — HeroUI release
-
-The tested HeroUI presentation is now the main baseline: dark navigation, a compact letter rail with left/right chevrons, improved controls and live entity selection lists. It uses HeroUI 2.8.10 and Tailwind 4.3.3, bundled locally. Run `git switch main`, `git pull --ff-only origin main`, `npm ci` and `npm run dev` to update your local runtime. No hosted service is required.
-
-## v1.3.0 — UI design system
-
-Version 1.3.0 introduces shared visual tokens, content-sized shell layout and measured sticky toolbar offsets. See [UI_DESIGN_SYSTEM.md](docs/UI_DESIGN_SYSTEM.md) for the scoped changes and browser validation.
