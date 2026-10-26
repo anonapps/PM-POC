@@ -6,7 +6,7 @@
 - Add optional Gantt historical overlays/variance and a separate, aligned Tube Map historical milestone strip; retain live chart interactions and dependency visibility controls.
 - Inspect/filter/sort/edit existing cross-stream dependencies, retain supported types/IDs, reject cycles/invalid links/duplicates and recalculate informational warnings without changing dates.
 - Add regression coverage and a version-matched candidate guide/PDF.
-- Extended Gantt awaits explicit mockup approval; it is not implemented. Complete-release acceptance remains pending that gate. No release, merge or deployment.
+- Add approved Extended Gantt: resizable compact chart/Tasks panes, independent scrolling and shared edits/history, centered Search and unchanged status colors. Reuse the exact standalone Tasks creation panel at full page height/right edge. No release, merge or deployment.
 
 # ARGOS PM v1.5.0 — 25 October 2026
 

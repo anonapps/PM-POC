@@ -578,3 +578,6 @@ The user approved HeroUI promotion after testing the compact sidebar rail and li
 ## v1.6 consolidated development
 
 See V1.6_IMPLEMENTATION.md for approved phases, V1.6_PROGRESS.md for actual validation, and V1.6_EXTENDED_MODE_MOCKUP.md for the mandatory gate. Continue on feature/v1.6-consolidated-enhancements. The original viewport-fitting requirements and consolidated baseline/dependency scope were reconciled on 26 October 2026. Implement no Extended Mode code before explicit mockup approval, and do not merge, tag, release or deploy without separate approval.
+
+
+The owner subsequently approved the revised Extended Mode mockup conditional on exact standalone Tasks creation-panel equivalence. Phase 6 implementation reuses the existing modules/panel, with scoped compact surfaces and a shared page-level modal. Continue the same v1.6 draft PR through consolidated regression/documentation checks; merge/release/deployment still require separate approval.

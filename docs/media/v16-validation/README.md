@@ -8,3 +8,5 @@ These are real application screenshots from the final focused Chromium/Playwrigh
 - [Cross-stream dependency workspace](cross-stream-dependencies.png)
 
 Phase results and known limits are recorded in `docs/V1.6_PROGRESS.md`. No screenshot depicts an implemented Extended Mode.
+
+The subsequently approved Extended Mode implementation and exact standalone-panel comparison evidence are in [v16-extended](../v16-extended/README.md).
