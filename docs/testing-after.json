@@ -1,0 +1,116 @@
+{
+  "quick": {
+    "seconds": 2.95,
+    "files": 7,
+    "tests": 60
+  },
+  "core": {
+    "wall_seconds": 26.686,
+    "checkpoints": 46
+  },
+  "volume": {
+    "stage_seconds": 9.23,
+    "wall_seconds": 10.252,
+    "checkpoints": 20
+  },
+  "non_full_regression_and_e2e_alias": {
+    "wall_seconds": 124.399,
+    "checkpoints": 240,
+    "atlas_cases": 1
+  },
+  "full_pipeline": [
+    {
+      "name": "unit",
+      "seconds": 36.19,
+      "code": 0,
+      "counts": [
+        "Test Files  51 passed (51)",
+        "Tests  453 passed (453)"
+      ]
+    },
+    {
+      "name": "typecheck",
+      "seconds": 9.06,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "lint",
+      "seconds": 10.47,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "build",
+      "seconds": 34.73,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "lifecycle",
+      "seconds": 111.9,
+      "code": 0,
+      "counts": [
+        "Acceptance: 245 passed, 0 failed (all)"
+      ]
+    },
+    {
+      "name": "layout",
+      "seconds": 315.6,
+      "code": 0,
+      "counts": [
+        "54 passed (5.2m)"
+      ]
+    },
+    {
+      "name": "production-audit",
+      "seconds": 1.11,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "development-audit",
+      "seconds": 1.53,
+      "code": 0,
+      "counts": []
+    }
+  ],
+  "stage_seconds_total": 520.59,
+  "checkpoint_parity": {
+    "non_full": 240,
+    "full_without_atlas": 245,
+    "atlas_retained_in_layout": true
+  },
+  "retained_expect_calls": [
+    {
+      "spec": "e2e/layout/creation-panels.spec.ts",
+      "before_expect_calls": 67,
+      "after_expect_calls": 67
+    },
+    {
+      "spec": "e2e/layout/demo-lifecycle.spec.ts",
+      "before_expect_calls": 66,
+      "after_expect_calls": 66
+    },
+    {
+      "spec": "e2e/layout/release-smoke.spec.ts",
+      "before_expect_calls": 37,
+      "after_expect_calls": 37
+    },
+    {
+      "spec": "e2e/layout/search-filter.spec.ts",
+      "before_expect_calls": 37,
+      "after_expect_calls": 37
+    },
+    {
+      "spec": "e2e/layout/status-batch.spec.ts",
+      "before_expect_calls": 46,
+      "after_expect_calls": 46
+    },
+    {
+      "spec": "e2e/layout/timeline-toolbar.spec.ts",
+      "before_expect_calls": 45,
+      "after_expect_calls": 45
+    }
+  ]
+}

@@ -10,10 +10,14 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "node e2e/acceptance.mjs",
+    "test:e2e": "node e2e/run-regression.mjs",
     "test:regression": "node e2e/run-regression.mjs",
     "test:lifecycle": "node e2e/run-regression.mjs --full",
-    "test:layout": "playwright test"
+    "test:layout": "playwright test",
+    "validate:quick": "node scripts/validate.mjs quick",
+    "test:targeted": "node scripts/validate.mjs targeted",
+    "validate:pr": "node scripts/validate.mjs pr",
+    "validate:release": "node scripts/validate.mjs release"
   },
   "dependencies": {
     "@heroui/react": "2.8.10",

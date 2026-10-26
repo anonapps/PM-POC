@@ -37,7 +37,7 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   await panel.getByRole('button',{name:'Clear all',exact:true}).click();
   await expect(input).toHaveValue('');
   if(moduleName==='Gantt'||moduleName==='Tube Map')await expect(page.getByText('Hide Empty Streams',{exact:true})).toHaveCount(1);
-  await page.screenshot({path:testInfo.outputPath(`${width}-${moduleName.replaceAll(' ','-')}-after.png`)});
+  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${moduleName.replaceAll(' ','-')}-after.png`)});
   await page.locator('.workspace').evaluate(e=>{e.scrollTop=180;});
   expect(await panel.evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+20,r.y+15)?.closest('.filter-popover')===e;})).toBe(true);
   await page.keyboard.press('Escape');await expect(panel).toHaveCount(0);

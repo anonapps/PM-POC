@@ -1,20 +1,13 @@
 name: PM-POC full lifecycle regression
 on:
-  push:
-    branches: [main, feature/v1.5-approved-enhancements, feature/v1.5-demo-recapture]
-    paths:
-      - "e2e/**"
-      - "src/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/regression-lifecycle.yml"
+  # Main/PR pushes are gated by validate.yml; retain nightly/manual defence.
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: regression-lifecycle
+  group: regression-lifecycle-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   lifecycle:

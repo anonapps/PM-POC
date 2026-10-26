@@ -36,7 +36,7 @@ for(const width of [900,1024,1280,1440,1920])test(`independent search centre acr
   // Different action widths/absence cannot change the centre track.
   await page.locator('.page-toolbar>.header-actions').evaluateAll(elements=>elements.forEach(e=>(e as HTMLElement).style.visibility='hidden'));
   expect(await centred(page)).toBeCloseTo(centre,0);
-  await page.screenshot({path:testInfo.outputPath(`${width}-${name.replaceAll(' ','-')}-centred.png`)});
+  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${name.replaceAll(' ','-')}-centred.png`)});
  }
  await page.locator('.sidebar-toggle').click();await centred(page);
  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
@@ -75,7 +75,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
   await page.getByRole('button',{name:'Expand All',exact:true}).click();
   await chart.evaluate(e=>{e.scrollTop=0;e.scrollLeft=0;});
  }
- await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
 
 // PR #12: footer paint must not extend scroll overflow and unstick the axis.
@@ -97,6 +97,6 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  }
  const last=(await page.locator('.tube-line').last().boundingBox())!,footer=(await page.getByRole('navigation',{name:'Tube Map date navigation'}).boundingBox())!;
  expect(last.y+last.height).toBeLessThanOrEqual(footer.y+1);
- await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
