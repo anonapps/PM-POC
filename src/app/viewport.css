@@ -365,3 +365,32 @@
  .workspace .panel .milestones-table .milestone-warning>summary::-webkit-details-marker { display:none; }
 }
 .app-main .workspace.module-risk-log>.panel>table.fit-table .risk-level-chip { min-width:0; max-width:100%; }
+
+/* One internal text band for editable boxes; sizes vary, text placement does not. */
+:root { --field-height:36px; --field-text-line:20px; --field-text-inset:8px; }
+.creation-fields,.context-picker,.decision-context-column { --field-height:34px; }
+.workspace .gantt-extended .gantt-tasks-pane { --field-height:30px; }
+:is(.app-main,.dialog-backdrop) :is(.workspace .panel table.fit-table,.creation-fields,.form-grid,.context-picker,.decision-context-column) :is(input:not([type=checkbox]):not([type=radio]),select,textarea,details.multi-select>summary:not(:has(.scope-pill)):not(.scope-summary),.relationship-picker>summary) {
+ box-sizing:border-box;
+ height:var(--field-height);
+ min-height:var(--field-height);
+ padding-block:calc((var(--field-height) - var(--field-text-line) - 2px)/2);
+ padding-inline:var(--field-text-inset);
+ line-height:var(--field-text-line);
+ font-family:Arial,Helvetica,sans-serif;
+ font-weight:400;
+ vertical-align:middle;
+}
+:is(.app-main,.dialog-backdrop) :is(.creation-fields,.form-grid) textarea { height:auto; min-height:80px; }
+:is(.app-main,.dialog-backdrop) :is(.workspace .panel table.fit-table,.creation-fields,.form-grid) input[type=date]::-webkit-datetime-edit { padding:0; }
+/* Native select painting otherwise discards the shared line-height in Chromium. */
+:is(.app-main,.dialog-backdrop) :is(.workspace .panel table.fit-table,.creation-fields,.form-grid,.context-picker,.decision-context-column) select {
+ appearance:none;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23526174' stroke-width='1.5'/%3E%3C/svg%3E");
+ background-repeat:no-repeat;
+ background-position:right var(--field-text-inset) center;
+ background-size:12px;
+ padding-right:calc(var(--field-text-inset) + 16px);
+}
+/* Reserve the indicator inside the column instead of overpainting selected text. */
+.app-main .workspace .panel table.fit-table select { width:100%; }

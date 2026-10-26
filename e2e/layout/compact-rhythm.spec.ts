@@ -53,3 +53,27 @@ for(const width of [900,1024,1152,1280,1366,1440,1920])test(`desktop Gantt Searc
   await page.getByRole('button',{name:'Extended',exact:true}).click();const extended=(await page.locator('.gantt-panel .shared-search-filter').boundingBox())!;expect(extended).toEqual(reference);
  }
 });
+
+test('boxed fields reuse a centered internal text band across pages and sizes',async({page},info)=>{
+ await page.setViewportSize({width:1366,height:900});await open(page);
+ for(const name of ['People','Streams','Tasks','Milestones','Risk Log','Decision Log','Gantt']){
+  await nav(page,name);if(name==='Gantt')await page.getByRole('button',{name:'Extended',exact:true}).click();
+  const table=page.locator(name==='Gantt'?'.gantt-tasks-pane table.fit-table':'table.fit-table').first();
+  const controls=table.locator('tbody tr').first().locator('input:not([type=checkbox]):not([type=radio]),select,textarea,details.multi-select>summary:not(:has(.scope-pill)):not(.scope-summary)');
+  const metrics=await controls.evaluateAll(nodes=>nodes.filter(e=>!e.closest('.multi-select-options,.relationship-options')).map(e=>{
+   const style=getComputedStyle(e),rect=e.getBoundingClientRect();let textCenter:number|null=null;
+   if(e.tagName==='SUMMARY'){const range=document.createRange();range.selectNodeContents(e);const text=range.getBoundingClientRect();textCenter=text.top+text.height/2;}
+   return {tag:e.tagName,line:style.lineHeight,inset:style.paddingLeft,top:parseFloat(style.paddingTop),bottom:parseFloat(style.paddingBottom),height:rect.height,font:style.fontFamily,weight:style.fontWeight,textOffset:textCenter===null?null:textCenter-(rect.top+rect.height/2)};
+  }));
+  expect(metrics.length,name).toBeGreaterThan(1);
+  for(const field of metrics){expect(field.line,`${name} ${field.tag}`).toBe('20px');expect(field.inset,name).toBe('8px');expect(field.top,name).toBe(field.bottom);expect(field.top*2+22,name).toBe(field.height);expect(field.font,name).toBe('Arial, Helvetica, sans-serif');expect(field.weight,name).toBe('400');if(field.textOffset!==null)expect(Math.abs(field.textOffset),`${name} rendered selector text`).toBeLessThanOrEqual(1.5);}
+  for(const select of await controls.all()){if(await select.evaluate(e=>e.tagName==='SELECT')){const fit=await select.evaluate(e=>{const select=e as HTMLSelectElement,style=getComputedStyle(e),canvas=document.createElement('canvas'),context=canvas.getContext('2d')!;context.font=`${style.fontSize} ${style.fontFamily}`;return {text:context.measureText(select.selectedOptions[0]?.textContent??'').width,available:e.getBoundingClientRect().width-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-2};});expect(fit.text,name).toBeLessThanOrEqual(fit.available);}}
+  if(name==='Streams')await page.screenshot({path:info.outputPath('shared-field-text-streams.png')});
+ }
+ await nav(page,'Tasks');await page.getByRole('button',{name:'Add Task',exact:true}).click();
+ const panel=page.locator('.creation-fields--task');
+ for(const field of await panel.locator('input:not([type=checkbox]):not([type=radio]),select,.predictive-select>summary:not(:has(.scope-pill)),.relationship-picker>summary').all()){
+  await expect(field).toHaveCSS('line-height','20px');await expect(field).toHaveCSS('padding-left','8px');await expect(field).toHaveCSS('height','34px');
+ }
+ await page.screenshot({path:info.outputPath('shared-field-text-create-task.png')});
+});
