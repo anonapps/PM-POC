@@ -158,3 +158,9 @@ describe("v1.5 saving-device timezone compatibility",()=>{
     expect(serializeProject(makeProjectState(),{...meta,savedTimeZone:{name:"Europe/Madrid",utcOffsetMinutes:9999}}).ok).toBe(false);
   });
 });
+
+it('rejects valid accumulated UTF-8 baseline history before producing an unreadable PMP',async()=>{
+ const {oversizedBaselineFixture}=await import('../../testing/oversized-baseline-fixture');
+ const result=serializeProject(oversizedBaselineFixture(),{...meta,runtimeVersion:'1.6.0'});
+ expect(result.ok).toBe(false);if(!result.ok)expect(result.errors[0].message).toContain('16 MiB PMP entry limit');
+});

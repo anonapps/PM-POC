@@ -1,3 +1,13 @@
+# v1.6.0 development candidate — unreleased
+
+- Fit desktop workspaces without horizontal scrolling; preserve every record field, sorting and action using responsive vertical layouts.
+- Create/select/rename/delete multiple named schedule baselines; preserve immutable historical dates and stream references independently of optional audit recording.
+- Compare baseline/current dates, calendar-day variance, additions/removals and undated entities; save/open validated snapshots in the native PMP format.
+- Add optional Gantt historical overlays/variance and a separate, aligned Tube Map historical milestone strip; retain live chart interactions and dependency visibility controls.
+- Inspect/filter/sort/edit existing cross-stream dependencies, retain supported types/IDs, reject cycles/invalid links/duplicates and recalculate informational warnings without changing dates.
+- Add regression coverage and a version-matched candidate guide/PDF.
+- Add approved Extended Gantt: resizable compact chart/Tasks panes, independent scrolling and shared edits/history, centered Search and unchanged status colors. Reuse the exact standalone Tasks creation panel at full page height/right edge. No release, merge or deployment.
+
 # ARGOS PM v1.5.0 — 25 October 2026
 
 - Search stays centred against the page content across all ten modules, independently of title/action widths; narrow layouts use a centred second row.

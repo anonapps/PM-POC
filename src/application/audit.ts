@@ -1,7 +1,7 @@
 import type { ProjectState, AuditEvent } from "./state";
 
-const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions", "relationships", "dependencies"] as const;
-const ENTITY_TYPES = { streams: "stream", tasks: "task", milestones: "milestone", people: "person", risks: "risk", decisions: "decision", relationships: "relationship", dependencies: "dependency" } as const;
+const COLLECTIONS = ["streams", "tasks", "milestones", "people", "risks", "decisions", "relationships", "dependencies", "baselines"] as const;
+const ENTITY_TYPES = { streams: "stream", tasks: "task", milestones: "milestone", people: "person", risks: "risk", decisions: "decision", relationships: "relationship", dependencies: "dependency", baselines: "baseline" } as const;
 export const MAX_AUDIT_EVENTS = 5000;
 const MAX_SNAPSHOT_CHARS = 2000;
 function compact(value: unknown): unknown {
@@ -39,8 +39,8 @@ export function recordAuditChange(before: ProjectState, after: ProjectState, com
   };
   inspect("project", before.project as unknown as Record<string, unknown>, after.project as unknown as Record<string, unknown>, after.project.id);
   for (const collection of COLLECTIONS) {
-    const previous = new Map(before[collection].map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
-    const current = new Map(after[collection].map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
+    const previous = new Map((before[collection]??[]).map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
+    const current = new Map((after[collection]??[]).map(entity => [entity.id, entity as unknown as Record<string, unknown>]));
     for (const id of new Set([...previous.keys(), ...current.keys()])) inspect(ENTITY_TYPES[collection], previous.get(id), current.get(id), id);
   }
   if (!events.length) return after;

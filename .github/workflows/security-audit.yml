@@ -1,7 +1,7 @@
 name: ARGOS PM dependency security audit
 on:
   push:
-    branches: [main, feature/v1.5-approved-enhancements]
+    branches: [main, feature/v1.6-consolidated-enhancements, feature/v1.5-approved-enhancements]
     paths: [package.json, package-lock.json, .github/workflows/security-audit.yml]
   pull_request:
     paths: [package.json, package-lock.json, .github/workflows/security-audit.yml]
