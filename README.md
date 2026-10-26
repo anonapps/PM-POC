@@ -4,13 +4,13 @@ A local-first ARGOS PM v1.5.0 built with TypeScript, React and Next.js. The auth
 
 ## Product demo — ARGOS PM v1.5.0
 
-**Atlas Software Delivery replacement: verified recording, GitHub Pages publication pending.** Create a new project, four streams, five people and eight tasks; populate nine milestones, two risks and two decisions; edit Tube Map, correct a real dependency warning, inspect the Audit Log, save and close.
+**Atlas Software Delivery replacement: verified recording and published player.** Create a new project, four streams, five people and eight tasks; populate nine milestones, two risks and two decisions; edit Tube Map, correct a real dependency warning, inspect the Audit Log, save and close.
 
 [![ARGOS PM v1.5 — Atlas Software Delivery preview](docs/media/argos-pm-demo-v1.5.0-preview.jpg)](https://anonapps.github.io/PM-POC/videos/latest/)
 
-**[Watch Video](https://anonapps.github.io/PM-POC/videos/latest/)** · 78 seconds · 1920×1080 · 30 fps · silent H.264. The video-only GitHub Pages site must be enabled and pass native playback verification before publication is declared complete.
+**[Watch Video](https://anonapps.github.io/PM-POC/videos/latest/)** · 78 seconds · 1920×1080 · 30 fps · silent H.264. The video-only GitHub Pages player passed native playback verification.
 
-Real application interactions, jump cuts over repeated entry, and visible pointer/click/focus cues. The disposable project's saved `.pmp` is verified. Native file-picker consent is not shown; a test adapter and editorial pointer cues are disclosed. See [verification and pending playback](docs/V1.5_DEMO_VERIFICATION.md).
+Real application interactions, jump cuts over repeated entry, and visible pointer/click/focus cues. The disposable project's saved `.pmp` is verified. Native file-picker consent is not shown; a test adapter and editorial pointer cues are disclosed. See [verification and playback evidence](docs/V1.5_DEMO_VERIFICATION.md).
 
 [Archived v1.3 recording](docs/media/pm-poc-30s-demo-v1.3.0.mp4) and [v1.4 recording](docs/media/argos-pm-60s-demo-v1.4.0.mp4) remain unchanged.
 
