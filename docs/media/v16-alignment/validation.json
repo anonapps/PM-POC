@@ -212,5 +212,78 @@
     ],
     "resolvedDuringValidation": "900px heading overflow corrected without weakening checks.",
     "notes": "Mockup approved by owner; actual app date formats, labels and shell retained. No domain or persistence implementation change; broader earlier evidence remains historical."
+  },
+  "finalCombinedPRValidation": {
+    "applicationCommit": "7e497710dd918606cc5116411a84fb911429340b",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "result": "passed",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.99,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.29,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.33,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.1,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 148.85,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 149.82,
+        "code": 0,
+        "counts": [
+          "83 passed (2.5m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "githubCI": {
+      "run": "https://github.com/anonapps/PM-POC/actions/runs/40373016033",
+      "result": "success",
+      "jobs": {
+        "validate": "success",
+        "lifecycle-release-gate": "success"
+      },
+      "productionAudit": "success",
+      "fullAudit": "success",
+      "reviewThreads": 0
+    },
+    "reactReview": "Reviewed two changed TSX components with React best-practices checklist; no additional scope-relevant issues. Existing hooks/store/commands retained, no new dependencies/effects/requests; full text stays in DOM and signed variance carries meaning without color alone.",
+    "limitations": [
+      "Native Windows/macOS file-picker consent and physical-machine disk acceptance remain manual.",
+      "CI evidence is for the application commit above; documentation-only evidence commit follows without rerunning successful local checks."
+    ],
+    "releaseActions": "No merge, deploy, tag, publication or release."
   }
 }

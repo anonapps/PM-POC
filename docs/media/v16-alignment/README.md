@@ -56,3 +56,8 @@ This generated proposal illustrates a continuous comparison table and aligned si
 - [Actual implementation at 900px](900-baselines-aligned.png)
 
 The approved proposal is implemented with existing application styles/labels: continuous nine-column comparison table, single-line aligned rows, compact baseline list with aligned actions, centered single-line toolbar, existing DD/MM/YYYY schedule dates and signed variance. Long entity/stream values remain in the DOM and in full-text titles; search retains full-name matching. Existing baseline selection/CRUD/Undo/save/reopen and historical stream behavior remain. All 44 targeted unit cases and 7 browser cases passed, plus build/typecheck/lint. See validation.json for scope/counts/timings.
+
+
+## Final combined verification
+
+All approved UI changes together passed `npm run validate:pr` on application commit `7e49771`: **477 unit/integration tests, 245 lifecycle checkpoints and all 83 Playwright cases**, plus typecheck, lint and production build. GitHub validation and the mandatory lifecycle gate also passed for that SHA; dependency audit steps succeeded and no review threads were present. Earlier targeted/initial failure records remain historical. Final counts/timings/CI link and native-OS limitations are recorded in validation.json and the reconciliation report. No merge or release action was performed.
