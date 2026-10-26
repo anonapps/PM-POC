@@ -11,6 +11,13 @@ export function GanttWorkspace({store,navigate}:{store:ProjectStore;navigate:(mo
   const [fraction,setFraction]=useState(.55),[minimumUpper,setMinimumUpper]=useState(260),[available,setAvailable]=useState(800);
   const workspace=useRef<HTMLDivElement>(null),tasks=useRef<HTMLDivElement>(null),dragging=useRef(false);
   useLayoutEffect(()=>{
+    const root=workspace.current;if(!root)return;
+    const measure=()=>root.style.setProperty('--gantt-available-height',`${Math.max(1,Math.floor(window.innerHeight-root.getBoundingClientRect().top))}px`);
+    const observer=new ResizeObserver(measure);observer.observe(root.closest('main')!);observer.observe(root.closest('.app-main')!.querySelector('header')!);
+    window.addEventListener('resize',measure);measure();
+    return()=>{observer.disconnect();window.removeEventListener('resize',measure);};
+  },[]);
+  useLayoutEffect(()=>{
     const root=workspace.current,lower=tasks.current;if(!root||!extended)return;
     const controls=[...root.querySelectorAll<HTMLElement>('.gantt-panel>.page-toolbar,.gantt-panel>.baseline-controls,.gantt-panel>footer')];
     const taskToolbar=lower?.querySelector<HTMLElement>('.page-toolbar');

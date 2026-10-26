@@ -155,9 +155,9 @@ for(const width of [900,1024,1280,1440,1920])test(`Gantt and embedded Tasks tool
    const regions=[...e.children].map(child=>{const b=child.getBoundingClientRect();return {left:b.left,right:b.right};});
    return {rect:r.toJSON(),searchCenter:search.x+search.width/2,searchRight:search.right,searchWidth:search.width,searchTop:search.top,controls,regions,overflow:e.scrollWidth-e.clientWidth};
   });
-  const band=geometry.controls.filter(c=>!c.search);expect(Math.max(...band.map(c=>c.center))-Math.min(...band.map(c=>c.center))).toBeLessThan(2);expect(geometry.searchWidth).toBe(340);
+  const band=geometry.controls.filter(c=>c.action);expect(Math.max(...band.map(c=>c.center))-Math.min(...band.map(c=>c.center))).toBeLessThan(2);expect(geometry.searchWidth).toBe(340);
   for(const control of geometry.controls){expect(control.left).toBeGreaterThanOrEqual(geometry.rect.left-1);expect(control.right).toBeLessThanOrEqual(geometry.rect.right+1);if(control.action&&Math.abs(control.center-(geometry.searchTop+17))<2)expect(control.left).toBeGreaterThanOrEqual(geometry.searchRight+1);}
-  if(Math.abs(band[0].center-(geometry.searchTop+17))<2){expect(geometry.regions[0].right).toBeLessThanOrEqual(geometry.regions[1].left);expect(geometry.regions[1].right).toBeLessThanOrEqual(geometry.regions[2].left);}else expect(geometry.searchTop).toBeGreaterThan(band[0].center);
+  if(Math.abs(band[0].center-(geometry.searchTop+17))<2){expect(geometry.regions[0].right).toBeLessThanOrEqual(geometry.regions[1].left);expect(geometry.regions[1].right).toBeLessThanOrEqual(geometry.regions[2].left);}else expect(Math.abs(geometry.searchTop+17-band[0].center)).toBeGreaterThan(20);
   expect(geometry.searchCenter).toBeCloseTo(geometry.rect.x+geometry.rect.width/2,0);expect(geometry.overflow).toBeLessThanOrEqual(1);
  };
  for(const collapsed of [false,true]){

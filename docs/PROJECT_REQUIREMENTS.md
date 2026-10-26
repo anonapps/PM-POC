@@ -2077,3 +2077,9 @@ The latest Gantt Search size/position correction uses the standard shared 340px 
 ## Approved shared field text position — 26 October 2026
 
 All boxed editable fields must reuse shared internal text metrics across pages: consistent font family/weight, line height, horizontal text inset and vertically centered single-line text. Inputs, native selects, dates and disclosure/predictive selectors must align their text, not only their outer borders. Preserve established regular/creation/embedded control heights through shared size variables; wrapping scope pills and multiline text remain supported. Keep native disclosure affordances and all editing/popup semantics.
+
+## Approved Gantt surface and viewport correction — 26 October 2026
+
+Gantt mode/expand/collapse/zoom controls must use ordinary page action font/height tokens rather than special tiny desktop fonts. Keep Search centered at its shared width; if standard controls cannot fit, use additional toolbar space instead of reducing typography or clipping actions. Comparison controls use the compact shared secondary-control rhythm, vertically centered field text and aligned labels/checkboxes. Dropdown search inputs throughout the app must visibly look editable even when unfocused.
+
+Render baseline schedules as noticeable grey comparison bars with dashed outlines, with red delayed-finish segments following the approved mockup reference, retaining status-colored current bars, variance labels, immutable snapshot calculations and toggle semantics. Maximize the chart's available viewport space and dock its legend/date footer to the bottom of the Simple workspace or upper Extended pane. Extended Tasks must occupy all remaining space to the viewport bottom, preserve scrolling/resizing and standalone behavior, fully show Add Task/focus outline, and align its heading/selection controls and table header checkbox. Preserve all prior shell/file boundaries; no merge/deploy/release.

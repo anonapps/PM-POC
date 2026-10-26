@@ -75,3 +75,10 @@ describe("Today marker calendar position", () => {
     }
   });
 });
+
+import { baselineDelayPosition } from "./model";
+describe("baseline finish delay display",()=>{
+ it("renders only days strictly after approved finish",()=>{expect(baselineDelayPosition("2026-10-26","2026-10-29","2026-10-24","2026-11-04")).toEqual({left:25,width:25,outside:false});});
+ it("omits unchanged, earlier and missing finishes",()=>{for(const current of ["2026-10-25","2026-10-26",null])expect(baselineDelayPosition("2026-10-26",current,"2026-10-24","2026-11-04")).toBeNull();});
+ it("clips the delayed segment at visible bounds",()=>{expect(baselineDelayPosition("2026-10-20","2026-11-10","2026-10-24","2026-11-04")).toEqual({left:0,width:100,outside:false});expect(baselineDelayPosition("2026-11-10","2026-11-12","2026-10-24","2026-11-04")?.outside).toBe(true);});
+});
