@@ -43,6 +43,7 @@ describe('180-record regression', () => {
     const bytes = roundTrip();
     if (process.env.REGRESSION_PMP_PATH) writeFileSync(process.env.REGRESSION_PMP_PATH, bytes);
     expect(bytes).toEqual(roundTrip());
+    expect(bytes).toEqual(new Uint8Array(readFileSync('src/testing/fixtures/regression-180.pmp')));
   });
   it('finds every record by ID across all six modules', () => {
     const state = regressionFixture();

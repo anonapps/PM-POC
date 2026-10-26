@@ -1,7 +1,8 @@
 name: PM-POC full lifecycle regression
 on:
+  # Preserve the ongoing v1.6 branch workflow; main is covered by validate.yml.
   push:
-    branches: [main, feature/v1.6-consolidated-enhancements, feature/v1.5-approved-enhancements, feature/v1.5-demo-recapture]
+    branches: [feature/v1.6-consolidated-enhancements]
     paths:
       - "e2e/**"
       - "src/**"
@@ -14,7 +15,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: regression-lifecycle
+  group: regression-lifecycle-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   lifecycle:

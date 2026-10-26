@@ -18,7 +18,7 @@ npm run test:regression
 
 The harness starts the Next.js development server unless `E2E_BASE_URL` is supplied, launches an isolated headless Chrome profile, and exits non-zero on the first failed acceptance assertion. Set `CHROME_PATH` if Chrome is installed in a non-standard location. `E2E_DEBUG_PORT` can override the default DevTools port 9222.
 
-`npm run test:e2e` retains the original smoke flow. `npm run test:lifecycle` adds 180 form-created records to the 180-record fixture. See [Automated regression suite v2](AUTOMATED_REGRESSION.md) for the coverage matrix and CI schedule. Browser commands require Node.js 22 or newer because the harness uses the built-in WebSocket client.
+`npm run test:e2e` shares the fixture-backed regression entry point. For the independent core smoke flow, run `node e2e/run-regression.mjs --scenario=core`. See [testing optimisation](TESTING_OPTIMISATION.md) for the four validation levels. `npm run test:lifecycle` adds 180 form-created records to the 180-record fixture. See [Automated regression suite v2](AUTOMATED_REGRESSION.md) for the coverage matrix and CI schedule. Browser commands require Node.js 22 or newer because the harness uses the built-in WebSocket client.
 
 ## Automated coverage
 
@@ -49,7 +49,7 @@ The suite verifies:
 
 The visual regression assertions use DOM geometry and content rather than screenshots, so they catch missing labels and grid misalignment without introducing snapshot dependencies. They are lightweight smoke checks, not a full cross-browser or multi-viewport visual comparison.
 
-The test data is deterministic and disposable. The regression runner writes codec-generated fixture bytes to an OS temporary directory and removes it after the run. Browser persistence uses an in-memory `.pmp` handle and an isolated temporary profile. User project files are never accessed.
+The test data is deterministic and disposable. The regression runner copies the committed, codec-generated fixture bytes to an OS temporary directory and removes it after the run. The unit round-trip test verifies those bytes against the deterministic generator. Browser persistence uses an in-memory `.pmp` handle and an isolated temporary profile. User project files are never accessed.
 
 ## Why the file picker is mocked
 

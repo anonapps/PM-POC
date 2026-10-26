@@ -1,0 +1,52 @@
+[
+  {
+    "suite": "vitest",
+    "wall_seconds": 65.894,
+    "custom_pass_checkpoints": 0,
+    "summaries": [
+      " Test Files  51 passed (51)",
+      "      Tests  453 passed (453)"
+    ]
+  },
+  {
+    "suite": "build",
+    "wall_seconds": 78.324,
+    "custom_pass_checkpoints": 0,
+    "summaries": []
+  },
+  {
+    "suite": "e2e",
+    "wall_seconds": 26.546,
+    "custom_pass_checkpoints": 115,
+    "summaries": []
+  },
+  {
+    "suite": "regression",
+    "wall_seconds": 120.681,
+    "custom_pass_checkpoints": 240,
+    "summaries": [
+      " Test Files  1 passed (1)",
+      "      Tests  18 passed (18)",
+      "  1 passed (1.3m)"
+    ]
+  },
+  {
+    "suite": "lifecycle",
+    "wall_seconds": 741.439,
+    "custom_pass_checkpoints": 246,
+    "summaries": [
+      " Test Files  1 passed (1)",
+      "      Tests  18 passed (18)",
+      "  1 passed (1.3m)"
+    ]
+  },
+  {
+    "suite": "layout",
+    "wall_seconds": 585.221,
+    "custom_pass_checkpoints": 0,
+    "summaries": [
+      "  1 failed",
+      "  53 passed (9.7m)"
+    ]
+  }
+]

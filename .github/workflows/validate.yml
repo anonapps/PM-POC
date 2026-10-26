@@ -33,12 +33,18 @@ jobs:
       - name: Full audit (informational until upstream dev-tool fixes)
         run: npm audit --audit-level=moderate
         continue-on-error: true
-      - name: Extended browser regression
+      # Full custom regression and Atlas run in the mandatory lifecycle gate below.
+      - name: Layout and Aurora release regression (Atlas covered by lifecycle gate)
+        env:
+          FULL_LIFECYCLE_GATE: ${{ github.ref == 'refs/heads/feature/v1.6-consolidated-enhancements' || github.ref == 'refs/heads/feature/v1.5-demo-recapture' || github.ref == 'refs/heads/feature/v1.5-approved-enhancements' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
         run: |
           CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$CHROME_PATH" || { echo "No Chrome/Chromium executable on runner"; exit 1; }
-          CHROME_PATH="$CHROME_PATH" npm run test:regression
-          CHROME_PATH="$CHROME_PATH" npm run test:layout
+          # Preserve custom regression/Atlas for dispatches or legacy branches without the full gate.
+          if [ "$FULL_LIFECYCLE_GATE" != true ]; then
+            CHROME_PATH="$CHROME_PATH" npm run test:regression
+          fi
+          CHROME_PATH="$CHROME_PATH" npm run test:layout -- --grep-invert "Atlas software"
 
   lifecycle-release-gate:
     if: github.ref == 'refs/heads/feature/v1.6-consolidated-enhancements' || github.ref == 'refs/heads/feature/v1.5-demo-recapture' || github.ref == 'refs/heads/feature/v1.5-approved-enhancements' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request'

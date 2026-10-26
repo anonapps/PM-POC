@@ -1,11 +1,13 @@
 import { readFile } from 'node:fs/promises';
 export async function runRegression({ evaluate, waitFor, click, nav, setLabel, record }) {
   if (!process.env.REGRESSION_PMP_PATH) return;
+  if(await evaluate(`Boolean(document.querySelector('nav'))`)){
   await nav('File Information');
   await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher')||document.querySelector('[role=dialog]'))`);
   if(await evaluate(`Boolean(document.querySelector('[role=dialog]'))`))await click('Save');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
+  }
   const bytes = [...await readFile(process.env.REGRESSION_PMP_PATH)];
   await evaluate(`(async()=>{const writer=await window.__E2E_FILE__.createWritable();await writer.write(new Uint8Array(${JSON.stringify(bytes)}));await writer.close()})()`);
   const started = Date.now();

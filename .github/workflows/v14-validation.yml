@@ -9,6 +9,8 @@ on:
   workflow_dispatch:
 jobs:
   validate:
+    # Main PR checks are owned by validate.yml; preserve non-main development and manual runs.
+    if: github.event_name == 'workflow_dispatch' || github.base_ref != 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

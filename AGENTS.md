@@ -49,3 +49,15 @@ HeroUI was promoted to `main` as v1.3.1. The earlier direct-to-main workflow is 
 ## v1.5 promotion — 25 October 2026
 
 The owner explicitly authorised merging PR #12 and publishing v1.5.0 as GitHub latest. After promotion, main is the stable v1.5 baseline. Keep future changes behind PRs and retain every v1.5 unit, layout, regression and lifecycle check; the main/PR lifecycle gate is mandatory. Publication permission for this release does not authorise future releases or production deployments. Native physical-machine evidence must remain accurately marked, never inferred from Linux file-picker mocks.
+
+## Testing and validation cost
+
+- Choose the smallest relevant suite from `docs/TESTING_OPTIMISATION.md`. `validate:quick` is a smoke check, never a substitute for relevant regression coverage.
+- For a local change, run `npm run test:targeted -- unit <test-path...>`, `npm run test:targeted -- layout <spec-path> [--grep <scenario>]`, or `npm run test:targeted -- volume [--full]` as appropriate. Supply selectors; targeted unit/layout commands reject an empty selection.
+- Use `validate:pr` before opening a ready PR and `validate:release` for release verification. Both retain the full lifecycle gate, every unit case, and every Playwright case. Validation does not authorise merging, tagging, publishing or deploying.
+- A successful suite on the current relevant code state counts: do not rerun it through overlapping aliases, or after documentation-only edits. Rerun affected checks after code changes, failures or a concrete unresolved concern. Baseline/after measurement is a justified rerun; do not loop to obtain a favourable timing.
+- Never run browser suites concurrently against the same server/profile/debug port. Batch independent analysis and static checks; serialize browser validation. Prefer the production server shared by `validate:pr`/`validate:release` after their single build. Set `E2E_BASE_URL` only to intentionally reuse a known server.
+- Prefer deterministic `.pmp` fixtures for setup. Keep UI creation where creation itself is under test, especially the complete 180-form lifecycle and Atlas journey. Never seed away the behavior being asserted.
+- Keep assertions, viewport matrices, persistence/dependency checks and release coverage. No test deletion or assertion weakening for speed. Fixture bytes must match their generator; regenerate explicitly with `REGRESSION_PMP_PATH=<path> npm test -- src/testing/regression.test.ts` when an intended fixture update is needed.
+- Retain logs under ignored `work/`; report command/scope, pass/fail, test counts, elapsed time, and relevant failures in a concise summary. Do not paste successful test lists, browser stderr or duplicate final PASS logs. Use `E2E_VERBOSE=1` and `CAPTURE_LAYOUT=1` only for investigation or requested visual evidence; failure screenshots remain automatic.
+- Do not change application functionality, requirements or the `.pmp` contract as a testing optimisation. Stop and report a regression that cannot be safely fixed within the authorised scope.
