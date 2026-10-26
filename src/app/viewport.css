@@ -167,3 +167,43 @@
  .workspace .gantt-workspace .gantt-panel>.page-toolbar .gantt-zoom-control { gap:2px; font-size:9px; }
  .workspace .gantt-workspace .gantt-panel>.page-toolbar .gantt-zoom-control select { width:56px; min-width:56px; max-width:56px; padding-inline:2px 10px; font-size:9px; }
 }
+/* Approved Baselines mockup: continuous comparison rows instead of cards. */
+.workspace .panel.baselines-panel .baseline-list { margin:0 0 14px; }
+.workspace .panel.baselines-panel .baseline-list li { display:grid; grid-template-columns:minmax(100px,auto) auto minmax(0,1fr) auto auto; align-items:center; gap:8px; }
+.workspace .panel.baselines-panel .baseline-list li>button:first-child { max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.workspace .panel.baselines-panel .baseline-list li>span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.workspace .panel.baselines-panel .baseline-list li>button[aria-label^="Rename"] { grid-column:4; }
+.workspace .panel.baselines-panel .baseline-list li>button[aria-label^="Delete"] { grid-column:5; }
+.workspace .panel.baselines-panel .baseline-list button { min-height:30px; padding:4px 10px; font-size:var(--type-control); }
+.workspace .panel.baselines-panel>.baseline-controls { gap:12px; padding-block:10px; }
+.workspace .panel.baselines-panel>.baseline-controls p { margin:0; font-size:12px; }
+.workspace .panel.baselines-panel>h2 { margin:0 0 8px; font-size:var(--type-section); }
+.workspace .panel.baselines-panel table.comparison-table { display:table; table-layout:fixed; width:100%; }
+.workspace .panel.baselines-panel .comparison-table thead { display:table-header-group; }
+.workspace .panel.baselines-panel .comparison-table tbody { display:table-row-group; }
+.workspace .panel.baselines-panel .comparison-table tr { display:table-row; padding:0; }
+.workspace .panel.baselines-panel .comparison-table :is(th,td) { display:table-cell; width:auto; min-width:0; padding:10px 6px; vertical-align:middle; white-space:nowrap; font-size:12px; }
+.workspace .panel.baselines-panel .comparison-table th { width:10%; background:#edf1f5; color:#445268; }
+.workspace .panel.baselines-panel .comparison-table th:first-child { width:20%; }
+.workspace .panel.baselines-panel .comparison-table th:nth-child(2) { width:8%; }
+.workspace .panel.baselines-panel .comparison-table th:nth-child(3) { width:12%; }
+.workspace .panel.baselines-panel .comparison-table td { height:48px; min-height:0; border-bottom:1px solid var(--border); overflow:hidden; text-overflow:ellipsis; }
+.workspace .panel.baselines-panel .comparison-table td::before { content:none; }
+.workspace .panel.baselines-panel .comparison-table .comparison-entity { display:inline-block; max-width:calc(100% - 40px); overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
+.workspace .panel.baselines-panel .comparison-table .comparison-kind { display:inline; position:static; margin:0 0 0 5px; font-size:10px; color:var(--text-muted); }
+.workspace .panel.baselines-panel .comparison-table td[data-variance="later"] { color:#805b00; }
+.workspace .panel.baselines-panel .comparison-table td[data-variance="earlier"] { color:#237244; }
+@container (max-width:1050px) {
+ .workspace .panel.baselines-panel .comparison-table :is(th,td) { padding-inline:3px; font-size:10px; }
+ .workspace .panel.baselines-panel .comparison-table th { font-size:9px; }
+ .workspace .panel.baselines-panel .comparison-table .comparison-kind { font-size:9px; }
+ .workspace .panel.baselines-panel .baseline-list li { grid-template-columns:minmax(80px,1fr) auto minmax(0,1fr) auto auto; gap:5px; }
+ .workspace .panel.baselines-panel .baseline-list time { font-size:10px; white-space:nowrap; }
+ .workspace .panel.baselines-panel .baseline-list button { padding-inline:6px; font-size:11px; }
+}
+.workspace .panel.baselines-panel>.page-toolbar { --baseline-search-width:clamp(160px,calc(100cqw - 360px),340px); grid-template-columns:minmax(0,1fr) var(--baseline-search-width) minmax(0,1fr); }
+.workspace .panel.baselines-panel>.page-toolbar>.shared-search-filter { grid-column:2; grid-row:1; width:var(--baseline-search-width); }
+.workspace .panel.baselines-panel>.page-toolbar>:last-child { grid-column:3; grid-row:1; white-space:nowrap; }
+@container (max-width:750px) {
+ .workspace .panel.baselines-panel .comparison-table th { padding-inline:2px; font-size:8.5px; }
+}

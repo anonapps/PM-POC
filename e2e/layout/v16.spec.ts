@@ -56,3 +56,25 @@ test('comparison preserves and searches historical stream names after rename and
  await search.fill('Renamed delivery stream');await expect(removed).toHaveCount(0);expect(await page.locator('.comparison-table tbody tr').count()).toBeGreaterThan(0);
  const streams=page.locator('.comparison-table tbody tr').first().locator('td').nth(2);await expect(streams.locator('span').nth(0)).toContainText(originalName);await expect(streams.locator('span').nth(0)).not.toContainText('Renamed delivery stream');await expect(streams.locator('span').nth(1)).toContainText('Renamed delivery stream');
 });
+
+for(const width of [900,1024,1440,1920])test(`approved Baselines continuous comparison layout at ${width}`,async({page},testInfo)=>{
+ const original=source.projectState,dated=original.tasks.find(t=>!t.deletion.isDeleted&&t.startDate&&t.endDate)!;
+ const finish=new Date(`${dated.endDate}T00:00:00Z`);finish.setUTCDate(finish.getUTCDate()+3);
+ const baseline={id:'approved-layout',name:'Original plan',description:'Approved schedule',createdAt:'2026-10-26T12:00:00Z',snapshot:captureSchedule(original)};
+ const state={...original,tasks:original.tasks.map(t=>t.id===dated.id?{...t,endDate:finish.toISOString().slice(0,10)}:t),baselines:[baseline,{...baseline,id:'delivery-layout',name:'Approved delivery',description:undefined}]};
+ await page.setViewportSize({width,height:1000});await open(page,state);await nav(page,'Baselines');
+ const panel=page.locator('.baselines-panel'),table=panel.locator('.comparison-table');
+ await expect(table).toHaveCSS('display','table');await expect(table.locator('th')).toHaveCount(9);
+ const toolbar=await panel.locator('.page-toolbar').evaluate(e=>{const r=e.getBoundingClientRect(),search=e.querySelector('.shared-search-filter')!.getBoundingClientRect();return {centers:[...e.children].map(child=>{const b=child.getBoundingClientRect();return b.y+b.height/2;}),center:r.x+r.width/2,search:search.x+search.width/2};});expect(Math.max(...toolbar.centers)-Math.min(...toolbar.centers)).toBeLessThan(2);expect(toolbar.search).toBeCloseTo(toolbar.center,0);
+ const headers=await table.locator('th').evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,height:r.height,overflow:e.scrollWidth-e.clientWidth,background:getComputedStyle(e).backgroundColor};}));
+ for(const [index,header] of headers.entries()){expect(header.y).toBe(headers[0].y);expect(header.height).toBe(headers[0].height);expect(header.background).toBe(headers[0].background);expect(header.overflow).toBeLessThanOrEqual(1);if(index)expect(header.x).toBeCloseTo(headers[index-1].right,0);}
+ const rows=await table.locator('tbody tr').evaluateAll(nodes=>nodes.map(row=>{const r=row.getBoundingClientRect();return {height:r.height,cells:[...row.children].map(cell=>{const b=cell.getBoundingClientRect();return {x:b.x,right:b.right,y:b.y,height:b.height,whiteSpace:getComputedStyle(cell).whiteSpace,label:getComputedStyle(cell,'::before').content};})};}));
+ for(const row of rows){expect(row.height).toBeLessThanOrEqual(50);for(const [index,cell] of row.cells.entries()){expect(cell.y).toBe(row.cells[0].y);expect(cell.height).toBe(row.cells[0].height);expect(cell.x).toBeCloseTo(headers[index].x,0);expect(cell.right).toBeCloseTo(headers[index].right,0);expect(cell.whiteSpace).toBe('nowrap');expect(['none','normal']).toContain(cell.label);}}
+ const entity=table.locator('tbody tr').first().locator('td').first();await expect(entity).toHaveAttribute('title',new RegExp(original.tasks[0].humanId));await expect(entity.locator('.comparison-entity')).toContainText(original.tasks[0].name);
+ const changed=table.locator('tbody tr').filter({hasText:dated.humanId});await expect(changed.locator('td').last()).toHaveText('+3d');await expect(changed.locator('td').last()).toHaveAttribute('data-variance','later');
+ const actions=await panel.locator('.baseline-list li').evaluateAll(items=>items.map(item=>[...item.querySelectorAll('button')].slice(-2).map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y+r.height/2};})));
+ expect(actions[0][0].x).toBe(actions[1][0].x);expect(actions[0][1].x).toBe(actions[1][1].x);for(const pair of actions)expect(pair[0].y).toBe(pair[1].y);
+ expect(await panel.evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ await page.screenshot({path:testInfo.outputPath(`${width}-baselines-aligned.png`)});
+ const search=panel.locator('.shared-search-filter input');await search.fill(dated.humanId);await expect(table.locator('tbody tr')).toHaveCount(1);await expect(changed.locator('td').last()).toHaveText('+3d');
+});

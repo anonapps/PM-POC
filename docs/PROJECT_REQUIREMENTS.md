@@ -2059,3 +2059,7 @@ Owner clarification: keep all Extended task columns visible without horizontal s
 ## Approved Gantt toolbar alignment correction — 26 October 2026
 
 Gantt's title, Search, Simple/Extended, Expand All, Collapse All and Zoom must occupy a single vertically centered toolbar line. Extended Tasks likewise keeps its title, Search, Show Deleted and Add Task on a single vertically centered line. Follow the other pages' existing toolbar styling; retain centered Search and all actions. Adapt control/search widths as necessary at narrow desktop sizes instead of wrapping these two toolbars. Other standalone page toolbars remain unchanged. This supersedes the earlier second-search-row fallback for Gantt/embedded Tasks only.
+
+## Approved Baselines mockup alignment — 26 October 2026
+
+The owner approved the Baselines proposal for implementation, with later enhancement deferred. Replace responsive comparison cards with a continuous nine-column table and single-line, vertically aligned rows. Preserve the existing centered toolbar, sidebar/header, baseline selector/list and Create/Rename/Delete behavior, filtering/sorting, historical/current stream names, immutable snapshots and PMP persistence. Compact the management list and align its actions. Retain actual application labels/tokens and DD/MM/YYYY dates over incidental generated-image differences; long names remain accessible through full-text titles while fitting the viewport. No new trend/scheduling features or release actions are authorized.

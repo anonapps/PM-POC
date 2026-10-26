@@ -40,8 +40,19 @@ Gantt title/Search/mode/Expand/Collapse/Zoom now share one vertical centerline. 
 
 All 46 selected browser cases pass, including five new toolbar geometry/click cases in both modes/sidebar states. Build, typecheck and lint pass. Machine-readable follow-up evidence is appended in validation.json; prior full-suite evidence is labeled historical.
 
-## Baselines proposal — not implemented
+## Baselines proposal — approved reference
 
 [Open the Baselines mockup PNG](baselines-proposed-mockup.png).
 
-This generated proposal illustrates a continuous comparison table and aligned single-line rows. It is conceptual design evidence, not an application screenshot or approval to implement. Existing UI details and actual date-format requirements remain authoritative over incidental generated-image differences.
+This generated proposal illustrates a continuous comparison table and aligned single-line rows. It is conceptual design evidence, not an application screenshot. The owner subsequently approved implementation; actual application screenshots are listed below. Existing UI details and actual date-format requirements remain authoritative over incidental generated-image differences.
+
+
+## Implemented Baselines alignment
+
+- [Before: comparison cards](baselines-before.png)
+- [Actual implementation at 1440px](1440-baselines-aligned.png)
+- [Actual implementation at 1920px](1920-baselines-aligned.png)
+- [Actual implementation at 1024px](1024-baselines-aligned.png)
+- [Actual implementation at 900px](900-baselines-aligned.png)
+
+The approved proposal is implemented with existing application styles/labels: continuous nine-column comparison table, single-line aligned rows, compact baseline list with aligned actions, centered single-line toolbar, existing DD/MM/YYYY schedule dates and signed variance. Long entity/stream values remain in the DOM and in full-text titles; search retains full-name matching. Existing baseline selection/CRUD/Undo/save/reopen and historical stream behavior remain. All 44 targeted unit cases and 7 browser cases passed, plus build/typecheck/lint. See validation.json for scope/counts/timings.

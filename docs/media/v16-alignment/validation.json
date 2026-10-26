@@ -167,5 +167,50 @@
     "resolvedDuringValidation": "900px geometry/click checks caught Search/filter overlapping Simple. Reduced action spacing and reserved adequate width; final assertions pass without forced clicks.",
     "searchWidthPolicy": "340px at ordinary wide desktop widths; Gantt/embedded search may shrink at narrower widths to preserve one line and centering. Other standalone pages retain original widths/layout.",
     "scope": "Earlier unit/lifecycle evidence predates these CSS changes; no domain or persistence changes."
+  },
+  "approvedBaselinesImplementation": {
+    "scope": "Approved continuous Baselines comparison table, compact management list, one-line centered toolbar and aligned columns; same canonical commands and data",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targetedUnit": [
+      {
+        "name": "targeted-unit",
+        "seconds": 0.85,
+        "code": 0,
+        "counts": [
+          "Test Files  3 passed (3)",
+          "Tests  44 passed (44)"
+        ],
+        "log": "targeted-unit.log"
+      }
+    ],
+    "targetedBrowser": [
+      {
+        "name": "targeted-layout",
+        "seconds": 14.57,
+        "code": 0,
+        "counts": [
+          "7 passed (14.2s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "widths": [
+      900,
+      1024,
+      1440,
+      1920
+    ],
+    "checks": [
+      "all nine columns fit without horizontal overflow",
+      "continuous header and aligned single-line rows",
+      "long entity and historical/current stream text preserved with full titles",
+      "management actions aligned even without description",
+      "positive variance and search preserved",
+      "existing CRUD selection Undo save/reopen and historical-name cases retained"
+    ],
+    "resolvedDuringValidation": "900px heading overflow corrected without weakening checks.",
+    "notes": "Mockup approved by owner; actual app date formats, labels and shell retained. No domain or persistence implementation change; broader earlier evidence remains historical."
   }
 }
