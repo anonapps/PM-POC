@@ -39,3 +39,9 @@ Gantt title/Search/mode/Expand/Collapse/Zoom now share one vertical centerline. 
 - [After: collapsed sidebar](collapsed-single-line-toolbars.png)
 
 All 46 selected browser cases pass, including five new toolbar geometry/click cases in both modes/sidebar states. Build, typecheck and lint pass. Machine-readable follow-up evidence is appended in validation.json; prior full-suite evidence is labeled historical.
+
+## Baselines proposal — not implemented
+
+[Open the Baselines mockup PNG](baselines-proposed-mockup.png).
+
+This generated proposal illustrates a continuous comparison table and aligned single-line rows. It is conceptual design evidence, not an application screenshot or approval to implement. Existing UI details and actual date-format requirements remain authoritative over incidental generated-image differences.
