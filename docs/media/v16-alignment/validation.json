@@ -394,5 +394,85 @@
     "nativeScope": "Chromium on Linux at Mac laptop/short-window sizes; owner must pull/restart and confirm actual Mac rendering. Native file-picker/physical disk acceptance remains manual.",
     "historicalEvidence": "Earlier successful 83-case full verification remains historical; this full 94-case run supersedes it for current application code.",
     "releaseActions": "No merge/deploy/tag/release."
+  },
+  "compactRhythmWarningNavigationAndSearch": {
+    "applicationCommit": "d4ca7abadcf3aab043f9fe709d34120ac82ee2e0",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.56,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.44,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.57,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.48,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.32,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 162.19,
+        "code": 0,
+        "counts": [
+          "104 passed (2.7m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "targeted": "21 focused browser cases passed before final warning-count nowrap refinement; final full gate includes all strengthened assertions.",
+    "requirements": [
+      "58px minimum desktop record rows, 52px embedded rows, 4px lower padding, preserved ID band",
+      "36px heading bands and aligned control/text centers; scope pills may wrap",
+      "milestone warnings share predecessor band with complete keyboard-dismissible popup",
+      "warning content navigates via keyboard or description click to highlighted owning record; no Open button",
+      "Dependencies shared font tokens, compact columns, full native titles and working editor",
+      "Gantt Search matches People exact rectangle at seven desktop widths in both modes/sidebar states",
+      "previous desktop table, non-scrolling sidebar, PMP compatibility/save-reopen and baseline behavior retained"
+    ],
+    "exploratoryFindings": [
+      "Full initial gate: 103/104 browser cases; narrow Risk level badge overflow corrected.",
+      "Subsequent run compiled before last nowrap change: 103/104; strengthened warning-count text-line assertion caught wrapping. Final committed full gate: all 104 passed."
+    ],
+    "screenshots": [
+      "compact-tasks.png",
+      "compact-streams.png",
+      "compact-milestones.png",
+      "compact-dependencies.png",
+      "clickable-warnings.png",
+      "standard-gantt-search.png",
+      "standard-gantt-search-narrow.png"
+    ],
+    "nativeLimit": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering/native picker consent/disk acceptance remain manual.",
+    "releaseActions": "No merge, deployment, tag or release."
   }
 }

@@ -72,3 +72,19 @@ The owner's Mac screenshots exposed the generic 1350px card breakpoint and indep
 - [Risk Log at 1366×768](mac-desktop-risk-log.png)
 
 Each screenshot includes all sidebar modules without a scrollbar. Eleven new regression cases assert desktop header/body/control alignment across six modules/five viewport sizes, plus complete fixed navigation at six heights in both sidebar states. Full `validate:pr` passed on application commit `e6d35a2`: **477 unit tests, 245 lifecycle checkpoints, all 94 browser cases**, typecheck/lint/build. This supersedes the earlier 83-case result for current application code. These are Linux Chromium screenshots at Mac-like dimensions; physical Mac confirmation requires pulling the branch/restarting the local server.
+
+## Compact rhythm and consistent search correction
+
+Actual application captures from the final regression run:
+
+- [Tasks: compact control band and header](compact-tasks.png)
+- [Streams: compact control band and header](compact-streams.png)
+- [Milestones: wrapping scope pills and aligned controls](compact-milestones.png)
+- [Dependencies: shared typography and compact rows](compact-dependencies.png)
+- [Warnings: clickable content with no Open button](clickable-warnings.png)
+- [Gantt: ordinary full-size centered Search](standard-gantt-search.png)
+- [Gantt: ordinary narrow-window search-row fallback](standard-gantt-search-narrow.png)
+
+The latest request supersedes the prior narrow Gantt reduced-width search: both modes now use exactly the ordinary 340px Search size and location, including the shared second-row fallback at narrow widths. Record lower padding is 4px, header bands 36px; multiline scope pills may grow their row. Warning titles/entities/descriptions route directly to the owning record using mouse or keyboard. Full Dependencies text remains available through titles/inspection. All screenshots are implementation evidence, not conceptual mockups. See the compact-rhythm entry in validation.json for final application SHA, complete validation and exploratory findings.
+
+Final complete gate on `d4ca7ab`: **477 unit tests / 245 lifecycle checkpoints / all 104 browser cases passed**, plus typecheck, lint and production build. This supersedes the preceding 94-case evidence for current application code.
