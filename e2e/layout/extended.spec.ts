@@ -145,19 +145,19 @@ for(const width of [900,1024,1440,1920])test(`Extended Tasks continuous single-r
 
 });
 
-for(const width of [900,1024,1280,1440,1920])test(`Gantt and embedded Tasks toolbars stay on one centered line at ${width}`,async({page},testInfo)=>{
+for(const width of [900,1024,1280,1440,1920])test(`Gantt and embedded Tasks toolbars preserve standard centered Search at ${width}`,async({page},testInfo)=>{
  await page.setViewportSize({width,height:1000});await openProject(page);await navigate(page,'Gantt');
  const check=async(selector:string)=>{
   const toolbar=page.locator(selector);
   const geometry=await toolbar.evaluate(e=>{
    const r=e.getBoundingClientRect(),search=e.querySelector('.shared-search-filter')!.getBoundingClientRect();
-   const controls=[...e.querySelectorAll('h1,input[type=search],button,select,.toggle')].map(control=>{const b=control.getBoundingClientRect();return {label:control.getAttribute('aria-label')??control.textContent,action:Boolean(control.closest('.actions,.header-actions')),center:b.y+b.height/2,left:b.left,right:b.right};});
+   const controls=[...e.querySelectorAll('h1,input[type=search],button,select,.toggle')].map(control=>{const b=control.getBoundingClientRect();return {label:control.getAttribute('aria-label')??control.textContent,action:Boolean(control.closest('.actions,.header-actions')),search:Boolean(control.closest('.shared-search-filter')),center:b.y+b.height/2,left:b.left,right:b.right};});
    const regions=[...e.children].map(child=>{const b=child.getBoundingClientRect();return {left:b.left,right:b.right};});
-   return {rect:r.toJSON(),searchCenter:search.x+search.width/2,searchRight:search.right,controls,regions,overflow:e.scrollWidth-e.clientWidth};
+   return {rect:r.toJSON(),searchCenter:search.x+search.width/2,searchRight:search.right,searchWidth:search.width,searchTop:search.top,controls,regions,overflow:e.scrollWidth-e.clientWidth};
   });
-  expect(Math.max(...geometry.controls.map(c=>c.center))-Math.min(...geometry.controls.map(c=>c.center))).toBeLessThan(2);
-  for(const control of geometry.controls){expect(control.left).toBeGreaterThanOrEqual(geometry.rect.left-1);expect(control.right).toBeLessThanOrEqual(geometry.rect.right+1);if(control.action)expect(control.left).toBeGreaterThanOrEqual(geometry.searchRight+1);}
-  expect(geometry.regions[0].right).toBeLessThanOrEqual(geometry.regions[1].left);expect(geometry.regions[1].right).toBeLessThanOrEqual(geometry.regions[2].left);
+  const band=geometry.controls.filter(c=>!c.search);expect(Math.max(...band.map(c=>c.center))-Math.min(...band.map(c=>c.center))).toBeLessThan(2);expect(geometry.searchWidth).toBe(340);
+  for(const control of geometry.controls){expect(control.left).toBeGreaterThanOrEqual(geometry.rect.left-1);expect(control.right).toBeLessThanOrEqual(geometry.rect.right+1);if(control.action&&Math.abs(control.center-(geometry.searchTop+17))<2)expect(control.left).toBeGreaterThanOrEqual(geometry.searchRight+1);}
+  if(Math.abs(band[0].center-(geometry.searchTop+17))<2){expect(geometry.regions[0].right).toBeLessThanOrEqual(geometry.regions[1].left);expect(geometry.regions[1].right).toBeLessThanOrEqual(geometry.regions[2].left);}else expect(geometry.searchTop).toBeGreaterThan(band[0].center);
   expect(geometry.searchCenter).toBeCloseTo(geometry.rect.x+geometry.rect.width/2,0);expect(geometry.overflow).toBeLessThanOrEqual(1);
  };
  for(const collapsed of [false,true]){

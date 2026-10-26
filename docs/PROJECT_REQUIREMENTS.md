@@ -2067,3 +2067,9 @@ The owner approved the Baselines proposal for implementation, with later enhance
 ## Native desktop acceptance correction — 26 October 2026
 
 Owner Mac screenshots reject fragmented column headings and card-style rows on ordinary desktop record pages (including People, Streams and Risk Log). Restore continuous table headers aligned to body columns and vertically aligned field controls on desktop-width workspaces; reserve card fallback for genuinely narrow content only. Preserve fields/actions, existing sorting/filtering and no horizontal overflow. The left sidebar must never scroll: retain every page name/order/icon and collapse behavior, adapting navigation row spacing to viewport height so File Information remains visible. Do not hide overflowed navigation entries or remove pages to suppress a scrollbar.
+
+## Approved compact rhythm, warnings and Dependencies correction — 26 October 2026
+
+Reduce excess lower whitespace in record rows while retaining room above ID/name controls. Align text, fields and buttons to a common control band; allow scope-pill fields to grow naturally when pills wrap. Reduce table heading-band height. Use existing font/spacing tokens on Dependencies and compact its content without changing canonical dependency behavior or warning calculations. Replace the separate Warnings Open button with keyboard-accessible clickable warning content that navigates to the same owning module and targeted entity for correction; preserve separately confirmed corrective actions. Gantt Search must match other pages' search size and horizontal position, preserving all actions and the fixed non-scrolling sidebar.
+
+The latest Gantt Search size/position correction uses the standard shared 340px Search and the same narrow-window second-row fallback as other pages. Ordinary desktop widths keep the single-line toolbar. This resolves the previous narrow compact Search-width exception in favor of the explicitly requested consistency.
