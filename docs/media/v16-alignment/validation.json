@@ -285,5 +285,114 @@
       "CI evidence is for the application commit above; documentation-only evidence commit follows without rerunning successful local checks."
     ],
     "releaseActions": "No merge, deploy, tag, publication or release."
+  },
+  "macDesktopAcceptanceCorrection": {
+    "applicationCommit": "e6d35a2a1f1f20039da1805cdeb42546a92649c3",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "result": "passed",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.55,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.36,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.52,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 10.69,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 106.83,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 159.91,
+        "code": 0,
+        "counts": [
+          "94 passed (2.7m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "recordPageViewports": [
+      [
+        1366,
+        768
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1152,
+        720
+      ],
+      [
+        1024,
+        640
+      ],
+      [
+        900,
+        600
+      ]
+    ],
+    "modules": [
+      "People",
+      "Streams",
+      "Tasks",
+      "Milestones",
+      "Risk Log",
+      "Decision Log"
+    ],
+    "sidebarHeights": [
+      400,
+      480,
+      600,
+      720,
+      768,
+      900
+    ],
+    "checks": [
+      "desktop headers are native table cells with continuous backgrounds",
+      "header/body column boundaries and field vertical centers match",
+      "column headings and controls fit without horizontal overflow",
+      "all 14 sidebar entries stay visible/in order with no scrolling",
+      "sidebar cannot scroll even programmatically",
+      "collapse/expand retains row positions",
+      "File Information remains reachable",
+      "main workspace scrolling does not move sidebar"
+    ],
+    "coverageGap": "Earlier assertions allowed responsive grid cards, so they missed desktop header/body mismatch. New checks require actual column continuity at Mac-like CSS viewport sizes.",
+    "implementation": "Generic cards limited to <=600px content; responsive native desktop column widths; minimum milestone picker/name widths fit cells; sidebar rows/gaps derive from viewport height and actual module count with overflow:clip.",
+    "nativeScope": "Chromium on Linux at Mac laptop/short-window sizes; owner must pull/restart and confirm actual Mac rendering. Native file-picker/physical disk acceptance remains manual.",
+    "historicalEvidence": "Earlier successful 83-case full verification remains historical; this full 94-case run supersedes it for current application code.",
+    "releaseActions": "No merge/deploy/tag/release."
   }
 }

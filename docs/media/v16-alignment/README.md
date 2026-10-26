@@ -61,3 +61,14 @@ The approved proposal is implemented with existing application styles/labels: co
 ## Final combined verification
 
 All approved UI changes together passed `npm run validate:pr` on application commit `7e49771`: **477 unit/integration tests, 245 lifecycle checkpoints and all 83 Playwright cases**, plus typecheck, lint and production build. GitHub validation and the mandatory lifecycle gate also passed for that SHA; dependency audit steps succeeded and no review threads were present. Earlier targeted/initial failure records remain historical. Final counts/timings/CI link and native-OS limitations are recorded in validation.json and the reconciliation report. No merge or release action was performed.
+
+
+## Mac desktop acceptance correction — latest verification
+
+The owner's Mac screenshots exposed the generic 1350px card breakpoint and independently scrolling sidebar. Ordinary desktop record tables now have continuous headers matching their body columns; card fallback is reserved for <=600px content. Sidebar spacing fits every existing navigation item to window height with no sidebar scrolling.
+
+- [People at 1366×768](mac-desktop-people.png)
+- [Streams at 1366×768](mac-desktop-streams.png)
+- [Risk Log at 1366×768](mac-desktop-risk-log.png)
+
+Each screenshot includes all sidebar modules without a scrollbar. Eleven new regression cases assert desktop header/body/control alignment across six modules/five viewport sizes, plus complete fixed navigation at six heights in both sidebar states. Full `validate:pr` passed on application commit `e6d35a2`: **477 unit tests, 245 lifecycle checkpoints, all 94 browser cases**, typecheck/lint/build. This supersedes the earlier 83-case result for current application code. These are Linux Chromium screenshots at Mac-like dimensions; physical Mac confirmation requires pulling the branch/restarting the local server.
