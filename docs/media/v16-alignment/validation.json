@@ -474,5 +474,28 @@
     ],
     "nativeLimit": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering/native picker consent/disk acceptance remain manual.",
     "releaseActions": "No merge, deployment, tag or release."
+  },
+  "sharedFieldTextAlignment": {
+    "applicationCommit": "0956f17a27b1bbd950a6432bff0ca085a0e26e4b",
+    "changes": "Shared 20px text line, 8px inset, symmetric height-derived padding, Arial normal weight; consistent native select painting/chevron and column fit; multiline/pills retained.",
+    "command": "CHROME_PATH=/usr/bin/chromium LAYOUT_OUTPUT_DIR=work/shared-text-final npm run test:targeted -- layout e2e/layout/compact-rhythm.spec.ts e2e/layout/desktop-records.spec.ts e2e/layout/creation-panels.spec.ts e2e/layout/extended.spec.ts",
+    "result": "60 passed (1.5m)",
+    "seconds": 90.25,
+    "build": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "checks": [
+      "actual rendered summary glyph centers within 1.5px of field centers",
+      "shared line-height/inset/padding/font metrics across six record pages, Extended Tasks and Create Task",
+      "selected labels fit beside chevron at 1366px",
+      "existing viewport/creation/inline editing/PMP reopen/Undo behavior in selected specs preserved"
+    ],
+    "exploratory": "First strengthened test caught native Chromium selects reporting normal line height; shared select styling corrected that. Screenshot review then identified indicator crowding; table selects now fill their existing columns and selected-text clearance is asserted.",
+    "priorFullGate": "477 unit tests, 245 lifecycle checkpoints and 104 browser cases passed on d4ca7ab before this presentation-only correction. These historical results were not rerun for CSS; current affected 60-case suite/build/typecheck/lint passed. No persistence/domain/command changes.",
+    "screenshots": [
+      "shared-field-text-streams.png",
+      "shared-field-text-create-task.png"
+    ],
+    "nativeLimit": "Linux Chromium evidence; owner should pull/restart/hard-refresh for physical Mac confirmation."
   }
 }

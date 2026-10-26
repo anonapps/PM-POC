@@ -88,3 +88,12 @@ Actual application captures from the final regression run:
 The latest request supersedes the prior narrow Gantt reduced-width search: both modes now use exactly the ordinary 340px Search size and location, including the shared second-row fallback at narrow widths. Record lower padding is 4px, header bands 36px; multiline scope pills may grow their row. Warning titles/entities/descriptions route directly to the owning record using mouse or keyboard. Full Dependencies text remains available through titles/inspection. All screenshots are implementation evidence, not conceptual mockups. See the compact-rhythm entry in validation.json for final application SHA, complete validation and exploratory findings.
 
 Final complete gate on `d4ca7ab`: **477 unit tests / 245 lifecycle checkpoints / all 104 browser cases passed**, plus typecheck, lint and production build. This supersedes the preceding 94-case evidence for current application code.
+
+## Shared internal field text alignment
+
+- [Streams: Name, Owner and Status text share a fixed internal band](shared-field-text-streams.png)
+- [Create Task: the same metrics at the existing creation-field height](shared-field-text-create-task.png)
+
+One shared 20px line and 8px inset now determine text placement in boxed native inputs/selects, dates, textareas and predictive/relationship summaries. Existing ordinary/creation/embedded heights derive their symmetric padding from the same variables. Scope-pill wrapping remains unchanged. The new browser assertion measures actual summary glyph rectangles, shared computed field metrics, and available selected-label space; earlier checks only tested outer boxes and missed the discrepancy.
+
+Final affected verification on `0956f17a27b1bbd950a6432bff0ca085a0e26e4b`: **all 60 browser cases passed** (90.25s), build/typecheck/lint passed. Earlier complete gates remain historical evidence for unchanged persistence/domain behavior; no merge/deploy/release.
