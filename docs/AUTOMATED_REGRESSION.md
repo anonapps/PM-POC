@@ -138,3 +138,6 @@ Baseline/application tests cover multiple names, immutable detached schedules, m
 
 
 `e2e/layout/extended.spec.ts` verifies both modes at 1024/1440/1920px: exact existing Task-creation panel rectangles/fields/controls/fonts/spacing, full-page modal bounds, dirty dismissal and focus, identical Search centers, mode/filter retention, original status colors, pointer/keyboard resizing and independent vertical scrolling. The shared-store flow covers task edits, creation, Gantt quick edits, deletion, Undo/Redo/audit, baseline immutability/overlays and actual saved PMP bytes/reopen. The original standalone/creation/layout/lifecycle gates remain in force.
+
+
+Pre-merge review regressions cover accumulated multi-byte UTF-8 baseline history exceeding the PMP entry limit, ZIP/DEFLATE overhead crossing the archive limit, and preservation of authoritative file bytes/metadata with no writable handle opened after rejection. Stream comparison tests preserve historical versus current names after rename/soft deletion, including Removed entities and multi-stream milestone search in the browser.

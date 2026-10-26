@@ -22,3 +22,15 @@ describe("BrowserProjectFileService", () => {
 });
 
 it("reuses the active identity when the picker returns the same native handle",async()=>{const access=new MemoryAccess();const service=new BrowserProjectFileService(access);const created=await service.create(makeProjectState(),"test",{runtimeVersion:"0.1.0"});expect(created.ok).toBe(true);const opened=await service.open();expect(opened.ok).toBe(true);if(created.ok&&opened.ok)expect(opened.value.handle.id).toBe(created.value.handle.id)});
+
+it('keeps the authoritative file and successful-save metadata intact when baseline history is too large',async()=>{
+ const {oversizedBaselineFixture}=await import('../../testing/oversized-baseline-fixture');
+ const access=new MemoryAccess(),service=new BrowserProjectFileService(access);
+ const original=makeProjectState();const created=await service.create(original,'test',{runtimeVersion:'1.6.0'});expect(created.ok).toBe(true);if(!created.ok)return;
+ const before=access.handle.data.slice(),modified=access.handle.modified;let openedWriter=false;
+ const writer=access.handle.createWritable.bind(access.handle);access.handle.createWritable=async()=>{openedWriter=true;return writer();};
+ const saved=await service.save(created.value.handle,oversizedBaselineFixture(),{runtimeVersion:'1.6.0'});
+ expect(saved.ok).toBe(false);if(!saved.ok)expect(saved.error.message).toContain('16 MiB');
+ expect(openedWriter).toBe(false);expect(access.handle.data).toEqual(before);expect(access.handle.modified).toBe(modified);
+ const reopened=await service.reload(created.value.handle);expect(reopened.ok).toBe(true);if(reopened.ok)expect(reopened.value.state).toEqual(created.value.state);
+});

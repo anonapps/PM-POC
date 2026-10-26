@@ -5,9 +5,9 @@ import {captureSchedule} from '../../src/domain/baselines';
 const loaded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
 if(!loaded.ok)throw new Error('Invalid fixture');
 const source=loaded.value;
-async function open(page:Page){
+async function open(page:Page,stateOverride?:typeof source.projectState){
  const baseline={id:'baseline-original',name:'Original plan',description:'Approved schedule',createdAt:'2026-10-26T12:00:00Z',snapshot:captureSchedule(source.projectState)};
- const state={...source.projectState,baselines:[baseline]};
+ const state=stateOverride??{...source.projectState,baselines:[baseline]};
  const saved=serializeProject(state,{createdAt:source.manifest.createdAt,lastSavedAt:source.manifest.lastSavedAt,runtimeVersion:'1.6.0'});if(!saved.ok)throw new Error(JSON.stringify(saved.errors));
  await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes),modified=Date.now();const handle={name:'v16-disposable.pmp',async getFile(){return{name:this.name,size:data.length,lastModified:modified,arrayBuffer:async()=>data.slice().buffer};},async createWritable(){return{write:async(value:Uint8Array)=>{data=new Uint8Array(value);},close:async()=>{modified=Date.now();}};}};Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle,__v16Saved:()=>[...data]});},{bytes:[...saved.value]});
  await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();
@@ -43,4 +43,16 @@ test('dependency filters, editor, invalid self reference, warning recalculation 
  await pickSuccessor(predecessor!);await expect(dialog.getByRole('alert')).toContainText('Self-references');await expect(dialog.getByRole('button',{name:'Save dependency',exact:true})).toBeDisabled();await pickSuccessor(successor!);
  await page.getByLabel('Dependency type',{exact:true}).selectOption('Start-to-Start');await page.getByRole('button',{name:'Save dependency',exact:true}).click();await expect(rows.first()).toContainText('Start-to-Start');
  await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(rows.first()).not.toContainText('Start-to-Start');await page.screenshot({path:testInfo.outputPath('cross-stream-dependencies.png')});
+});
+
+test('comparison preserves and searches historical stream names after rename and soft deletion',async({page})=>{
+ const original=source.projectState,task=original.tasks.find(t=>t.scope.kind==='stream')!;
+ if(task.scope.kind!=='stream')throw new Error('Fixture requires a stream task');
+ const streamId=task.scope.streamId,originalName=original.streams.find(s=>s.id===streamId)!.name;
+ const state={...original,streams:original.streams.map(s=>s.id===streamId?{...s,name:'Renamed delivery stream',deletion:{isDeleted:true,deletedAt:'2026-10-26T12:00:00Z'}}:s),tasks:original.tasks.map(t=>t.id===task.id?{...t,deletion:{isDeleted:true,deletedAt:'2026-10-26T12:00:00Z'}}:t),baselines:[{id:'before-rename',name:'Original plan',createdAt:'2026-10-26T12:00:00Z',snapshot:captureSchedule(original)}]};
+ await page.setViewportSize({width:1440,height:1000});await open(page,state);await nav(page,'Baselines');
+ const search=page.locator('.baselines-panel .shared-search-filter input');await search.fill(originalName);
+ const removed=page.locator('.comparison-table tbody tr').filter({hasText:task.humanId});await expect(removed).toHaveCount(1);await expect(removed).toContainText('Removed');await expect(removed.locator('td').nth(2)).toHaveText(originalName);
+ await search.fill('Renamed delivery stream');await expect(removed).toHaveCount(0);expect(await page.locator('.comparison-table tbody tr').count()).toBeGreaterThan(0);
+ const streams=page.locator('.comparison-table tbody tr').first().locator('td').nth(2);await expect(streams.locator('span').nth(0)).toContainText(originalName);await expect(streams.locator('span').nth(0)).not.toContainText('Renamed delivery stream');await expect(streams.locator('span').nth(1)).toContainText('Renamed delivery stream');
 });

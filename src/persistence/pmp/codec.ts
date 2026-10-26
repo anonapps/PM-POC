@@ -1,3 +1,4 @@
+import {MAX_ARCHIVE,MAX_ENTRY,pmpEncodedSizeError} from "./limits";
 import type { ProjectState } from "../../application/state";
 import { canonicalJson } from "./canonical";
 import { validateProjectContainer } from "./validation";
@@ -5,8 +6,6 @@ import { CURRENT_PMP_FORMAT_VERSION, CURRENT_PROJECT_SCHEMA_VERSION, DEFAULT_PRO
 
 const enc = new TextEncoder();
 const dec = new TextDecoder("utf-8", { fatal: true });
-const MAX_ARCHIVE = 32 * 1024 * 1024;
-const MAX_ENTRY = 16 * 1024 * 1024;
 const MAX_ENTRIES = 3;
 const fail = (code: PmpError["code"], message: string): PmpResult<never> => ({ ok: false, errors: [{ code, message }] });
 
@@ -39,7 +38,12 @@ export function serializeProject(state: ProjectState, metadata: SerializeProject
   const manifest = { formatIdentifier: PMP_FORMAT_IDENTIFIER, formatVersion: CURRENT_PMP_FORMAT_VERSION, schemaVersion: CURRENT_PROJECT_SCHEMA_VERSION, projectId: state.project.id, createdAt: metadata.createdAt, lastSavedAt: metadata.lastSavedAt, ...(metadata.savedTimeZone ? { savedTimeZone: metadata.savedTimeZone } : {}), compatibility: { minimumRuntimeVersion:baselineMinimum, createdByRuntimeVersion: metadata.runtimeVersion }, entries: { project: "project.json" as const, config: "config.json" as const } };
   const configuration = metadata.configuration ?? DEFAULT_PROJECT_CONFIGURATION;
   const validated = validateProjectContainer({ manifest, project: state, configuration }); if (!validated.ok) return validated;
-  return { ok: true, value: zip({ "manifest.json": enc.encode(canonicalJson(manifest)), "project.json": enc.encode(canonicalJson(state)), "config.json": enc.encode(canonicalJson(configuration)) }) };
+  const entries={ "manifest.json": enc.encode(canonicalJson(manifest)), "project.json": enc.encode(canonicalJson(state)), "config.json": enc.encode(canonicalJson(configuration)) };
+  const sizeError=pmpEncodedSizeError({"manifest.json":entries["manifest.json"].byteLength,"project.json":entries["project.json"].byteLength,"config.json":entries["config.json"].byteLength});
+  if(sizeError)return fail("INVALID_CONTAINER",sizeError);
+  const archive=zip(entries);
+  if(archive.byteLength>MAX_ARCHIVE)return fail("INVALID_CONTAINER","Project exceeds the 32 MiB PMP archive limit. Saving was stopped before writing.");
+  return { ok: true, value: archive };
 }
 
 export function deserializeProject(bytes: Uint8Array): PmpResult<ValidatedProjectContainer> {
