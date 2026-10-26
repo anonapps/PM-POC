@@ -70,3 +70,35 @@
 @container (max-width:1350px) {
   .workspace .panel table.fit-table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:auto; min-height:76px; }
 }
+/* Approved Extended Gantt: compact module surfaces only. Dialogs live at page level. */
+.gantt-workspace>.gantt-pane { display:contents; }
+.gantt-workspace>.gantt-tasks-pane[hidden] { display:none!important; }
+.gantt-mode-switch { display:inline-flex; gap:0; padding:2px; border:1px solid #acb8c7; border-radius:5px; }
+.workspace .gantt-mode-switch button { padding:3px 7px; border:0; border-radius:3px; }
+.gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
+.workspace .gantt-extended { display:grid; height:calc(100dvh - 120px); min-width:0; }
+.gantt-extended>.gantt-pane { display:block; min-height:0; min-width:0; }
+.workspace .gantt-extended .gantt-panel { height:100%; min-height:0; }
+.gantt-extended .gantt-tasks-pane { overflow-y:auto; overflow-x:clip; min-height:0; min-width:0; overscroll-behavior:contain; }
+.gantt-extended .gantt-splitter { display:flex; align-items:center; justify-content:center; height:12px; background:#e1e8f0; border-block:1px solid #b1bece; cursor:ns-resize; touch-action:none; color:#68778a; line-height:8px; }
+.gantt-splitter:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
+.workspace .gantt-extended .gantt-row>div { min-height:32px; padding-top:3px; padding-bottom:3px; }
+.workspace .gantt-extended .gantt-row .sort-heading { font-size:12px; }
+.workspace .gantt-extended .gantt-row small { font-size:10px; }
+.workspace .gantt-extended .gantt-with-variance .gantt-row>div { min-height:44px; }
+.workspace .gantt-extended .gantt-row .gantt-bar { top:8px; height:16px; }
+.workspace .gantt-extended .gantt-row .gantt-bar.milestone { top:10px; height:12px; }
+.workspace .gantt-extended .gantt-row .gantt-baseline { top:26px; height:4px; }
+.workspace .gantt-extended .gantt-with-variance .gantt-baseline { top:34px; }
+.workspace .gantt-extended .gantt-panel>.baseline-controls { padding-block:6px; gap:8px; }
+.workspace .gantt-extended .gantt-panel footer.timeline-navigation { gap:5px; padding-block:5px; }
+.workspace .gantt-extended .gantt-panel .timeline-status-legend { gap:8px; font-size:10px; }
+.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table { font-size:12px; }
+.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table td { padding:3px 4px; }
+.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr:has(.task-name-cell)>td { min-height:62px; height:auto; }
+.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr { padding-block:6px; gap:6px 10px; }
+.workspace .gantt-extended .gantt-tasks-pane table.fit-table :is(input:not([type=checkbox]),select,summary) { font-size:12px; min-height:30px; height:30px; }
+.workspace .gantt-extended .gantt-tasks-pane table.fit-table td::before { font-size:10px; margin-bottom:3px; }
+.workspace .gantt-panel .gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
+.workspace .gantt-extended .gantt-row.section .gantt-open-stream { height:22px; min-height:22px; padding:0 3px; }
+.workspace .gantt-extended .gantt-row.section .sort-heading { min-height:0; padding:0; }
