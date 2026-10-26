@@ -1121,3 +1121,9 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
   content:none;
   height:0;
 }
+
+/* Task creation: align picker boxes with the adjacent labelled input rows. */
+.creation-fields--task>.creation-relationship { display:flex; flex-direction:column; justify-content:flex-end; gap:4px; min-width:0; }
+.creation-fields--task>.creation-selector>details>summary,
+.creation-fields--task>.creation-relationship>details>summary { box-sizing:border-box; height:34px; line-height:20px; }
+.creation-fields--task>.creation-selector>details:has(>summary .scope-pill)>summary { padding-block:5px; }

@@ -31,7 +31,7 @@ export function EntityCreationPanel({kind,store,onClose,onCreated}:{kind:Creatio
  const submit=()=>{const result=prepareCreation(kind,draft,store.getState());setErrors(result.errors);if(!result.command){const key=Object.keys(result.errors)[0];if(key==='actions'){const index=draft.actions.findIndex(a=>!a.description.trim()||(a.dueDate&&!isCalendarDate(a.dueDate)));document.getElementById(`${id('actions')}-${index}${draft.actions[index]?.description.trim()?'-date':''}`)?.focus();}else document.getElementById(id(key))?.focus();return;}if(store.execute(result.command)){onCreated();onClose();}else setErrors({_form:'Unable to create. Review the fields and relationships.'});};
  return <><Dialog title={`Create ${creationNames[kind]}`} variant="creation" initialFocusId={creationIds[kind]} onClose={dismiss}>
   <form data-create-draft="true" data-dirty={creationIsDirty(kind,draft)} noValidate onSubmit={e=>{e.preventDefault();submit();}} onKeyDown={e=>{if(e.key==='Enter'&&e.target instanceof HTMLInputElement&&!e.target.closest('.searchable-option-list')&&e.target.type!=='checkbox'&&e.target.type!=='radio'){e.preventDefault();e.currentTarget.requestSubmit();}}}>
-   <div className="creation-fields"><p className="muted wide-field">Fields marked * are required.</p>
+   <div className={`creation-fields${kind==='task'?' creation-fields--task':''}`}><p className="muted wide-field">Fields marked * are required.</p>
     {text('name',creationLabels[kind],{required:true})}
     {(kind==='milestone'||kind==='decision')&&text('date',kind==='decision'?'Decision date':'Date',{required:true,date:true})}
     {kind==='person'?<>{text('role','Role')}{text('notes','Notes',{multiline:true})}</>:<>

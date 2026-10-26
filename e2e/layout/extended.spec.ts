@@ -39,6 +39,10 @@ for(const width of [1024,1440,1920])test(`Extended Add Task exactly matches stan
  await mode.getByRole('button',{name:'Simple',exact:true}).click();await expect(page.locator('.gantt-tasks-pane')).toBeHidden();await extended(page);await expect(ganttSearch).toHaveValue('Regression');await expect(taskSearch).toHaveValue('TASK-001');await ganttSearch.fill('');await taskSearch.fill('');
  await page.locator('.gantt-tasks-pane').getByRole('button',{name:'Add Task',exact:true}).click();const panel=page.getByRole('dialog',{name:'Create Task',exact:true});await expect(panel).toBeVisible();
  const actual=await panelMetrics(page);expect(actual).toEqual(standalone);
+ const pairs=[['Owner','Status'],['Priority','Start date'],['End date','Scope'],['Parent task','Milestone'],['Progress','Predecessor tasks']] as const;
+ const box=async(label:string)=>panel.locator('input,select,summary').filter({visible:true}).evaluateAll((controls,name)=>{const control=controls.find(e=>e.getAttribute('aria-label')===name||e.textContent?.startsWith(`${name} ·`));if(!control)throw new Error(`Missing ${name}`);const r=control.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},label);
+ for(const [left,right] of pairs){const a=await box(left),b=await box(right);expect(b.y).toBeCloseTo(a.y,1);expect(b.height).toBe(a.height);expect(b.width).toBe(a.width);}
+
  expect(actual.panel).toMatchObject({x:width-560,y:0,width:560,height:1000});expect(actual.backdrop).toEqual({x:0,y:0,width,height:1000});
  await expect(panel.getByLabel('Task name',{exact:true})).toBeFocused();
  await page.screenshot({path:testInfo.outputPath(`${width}-extended-add-task.png`)});

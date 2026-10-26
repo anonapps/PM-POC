@@ -63,5 +63,34 @@
       ],
       "log": "targeted-layout.log"
     }
-  ]
+  ],
+  "taskAlignmentFollowup": {
+    "changes": "Task-only creation selector height and relationship row alignment; shared in standalone and Extended",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 59.09,
+        "code": 0,
+        "counts": [
+          "29 passed (58.8s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "scope": "No domain, persistence or editing behavior changed; initial full-suite evidence above predates this layout fix.",
+    "finalPairedControlChecks": [
+      {
+        "name": "targeted-layout",
+        "seconds": 7.18,
+        "code": 0,
+        "counts": [
+          "3 passed (6.9s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ]
+  }
 }
