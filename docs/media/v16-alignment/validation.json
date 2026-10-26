@@ -497,5 +497,108 @@
       "shared-field-text-create-task.png"
     ],
     "nativeLimit": "Linux Chromium evidence; owner should pull/restart/hard-refresh for physical Mac confirmation."
+  },
+  "ganttStandardSurfaceAndFullViewport": {
+    "applicationCommit": "a8dc681983670244771e8c22cdd5d295d0f62111",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.18,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  480 passed (480)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.62,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.88,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.6,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.43,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 170.71,
+        "code": 0,
+        "counts": [
+          "111 passed (2.8m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "targetedEvidence": [
+      "53 tests in two selected Vitest files passed (0.85s)",
+      "34 focused/shared-field/Extended browser cases passed (46.5s)",
+      "Final measured splitter minimum: all 23 Gantt/Extended browser cases passed (33.5s)"
+    ],
+    "requirements": [
+      "shared standard Gantt action font/height; extra action row when needed, exact ordinary Search rectangle retained",
+      "compact shared comparison row, centered selector text and label/checkbox alignment across Gantt/Tube Map/Baselines",
+      "14px grey dashed baseline bands visibly below current bars; red delayed-finish days strictly after approved finish; independent variance labels",
+      "shared dropdown inputs visibly editable before focus, Type to filter placeholder, existing keyboard/filter semantics",
+      "Simple footer at viewport bottom and Extended footer at upper pane bottom",
+      "Tasks fills remainder through viewport bottom; measured heading/row minimum plus a lower 1fr track prevents leftover grid space",
+      "Add Task/focus outline completely shown and actionable; task title/control and header selection alignment",
+      "prior sidebar/standalone editing/creation/baseline/dependency/PMP contracts preserved"
+    ],
+    "viewportCases": [
+      [
+        900,
+        700
+      ],
+      [
+        1280,
+        900
+      ],
+      [
+        1440,
+        900
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "exploratoryFindings": [
+      "Old cascade kept standard actions over Search and shifted Search 4.5px; corrected without relaxing geometry assertions.",
+      "Current bars initially obscured grey bands; offset and row separation now asserted.",
+      "Measured upper minimum exposed 40px unused space from fractional grid tracks at 900px; explicit measured upper plus remaining 1fr fixed it.",
+      "Earlier full browser run was stopped because an overlapping rebuild invalidated its assets; it is not passing evidence. Final serial full run on the committed application passed every stage."
+    ],
+    "screenshots": [
+      "gantt-standard-simple.png",
+      "gantt-standard-extended.png",
+      "gantt-standard-extended-900.png",
+      "gantt-visible-baseline-comparison.png",
+      "dropdown-editable-search.png"
+    ],
+    "nativeScope": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering, picker consent and disk acceptance remain manual.",
+    "releaseActions": "Draft PR25 only; no merge, deployment, tag, publication or release."
   }
 }

@@ -97,3 +97,15 @@ Final complete gate on `d4ca7ab`: **477 unit tests / 245 lifecycle checkpoints /
 One shared 20px line and 8px inset now determine text placement in boxed native inputs/selects, dates, textareas and predictive/relationship summaries. Existing ordinary/creation/embedded heights derive their symmetric padding from the same variables. Scope-pill wrapping remains unchanged. The new browser assertion measures actual summary glyph rectangles, shared computed field metrics, and available selected-label space; earlier checks only tested outer boxes and missed the discrepancy.
 
 Final affected verification on `0956f17a27b1bbd950a6432bff0ca085a0e26e4b`: **all 60 browser cases passed** (90.25s), build/typecheck/lint passed. Earlier complete gates remain historical evidence for unchanged persistence/domain behavior; no merge/deploy/release.
+
+## Standard Gantt surface and full viewport
+
+- [Simple: shared action sizes and docked footer](gantt-standard-simple.png)
+- [Extended: Tasks fills the remaining viewport](gantt-standard-extended.png)
+- [Extended at 900px](gantt-standard-extended-900.png)
+- [Grey baseline band and red delayed finish](gantt-visible-baseline-comparison.png)
+- [Shared clearly editable dropdown search](dropdown-editable-search.png)
+
+These are actual application screenshots. Standard Gantt actions use another toolbar row when the centered Search leaves insufficient room; they retain the same font/height as ordinary page actions. Comparison fields share compact spacing/text alignment across Gantt/Tube Map/Baselines. The grey baseline band remains visible below current bars; red marks only finishes after the selected approved date. The measured workspace reaches the viewport bottom; Extended retains its splitter, independent scrolling and fully displayed Add Task. The focused and complete-gate results are recorded in validation.json.
+
+Complete serial verification on `a8dc681983670244771e8c22cdd5d295d0f62111`: **480 unit tests, 245 lifecycle checkpoints, all 111 browser cases passed**, plus typecheck/lint/build. Screenshots above come from that final run; minimum splitter assertions retain a complete first task and no Tasks bottom gap in the tested fixtures. Exploratory interrupted/failed runs are superseded and recorded in validation.json.
