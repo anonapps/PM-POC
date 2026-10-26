@@ -1,7 +1,7 @@
 name: PM-POC full lifecycle regression
 on:
   push:
-    branches: [main, feature/v1.5-approved-enhancements, feature/v1.5-demo-recapture]
+    branches: [main, feature/v1.6-consolidated-enhancements, feature/v1.5-approved-enhancements, feature/v1.5-demo-recapture]
     paths:
       - "e2e/**"
       - "src/**"

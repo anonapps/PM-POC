@@ -574,3 +574,7 @@ Branch `experiment/heroui-ui` is explicitly approved for a presentation-only com
 ## Completed v1.3.1 promotion
 
 The user approved HeroUI promotion after testing the compact sidebar rail and live Stream selections. The release includes direct entity-store subscriptions, chevron collapse/expand controls, package-derived v1.3.1 metadata and the HeroUI v2 / Tailwind 4 toolchain. The production audit remains blocking and reports zero vulnerabilities. No hosted runtime or project persistence change is introduced.
+
+## v1.6 consolidated development
+
+See V1.6_IMPLEMENTATION.md for approved phases, V1.6_PROGRESS.md for actual validation, and V1.6_EXTENDED_MODE_MOCKUP.md for the mandatory gate. Continue on feature/v1.6-consolidated-enhancements. The original viewport-fitting requirements and consolidated baseline/dependency scope were reconciled on 26 October 2026. Implement no Extended Mode code before explicit mockup approval, and do not merge, tag, release or deploy without separate approval.

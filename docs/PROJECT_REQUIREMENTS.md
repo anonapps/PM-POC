@@ -1,6 +1,6 @@
 # ARGOS PM — Authoritative Requirements
 
-**Document status:** v1.5.0 requirements frozen; implementation pending  
+**Document status:** v1.6 approved scope; stable v1.5 requirements retained
 **Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
