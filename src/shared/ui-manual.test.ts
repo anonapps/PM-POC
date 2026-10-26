@@ -24,3 +24,9 @@ it("ships the linked stable PDF rather than a missing release asset",()=>{
  const bytes=readFileSync(new URL("../../public"+manual.manual.pdf,import.meta.url));
  expect(bytes.subarray(0,5).toString()).toBe("%PDF-");
 });
+
+it("labels the bundled v1.6 manual as a candidate and ships its PDF",()=>{
+ const result=resolveUiManual('1.6.0')!;
+ expect(result.manual.status).toBe('candidate');expect(result.label).toContain('not published');
+ expect(readFileSync(new URL('../../public'+result.manual.pdf,import.meta.url)).subarray(0,5).toString()).toBe('%PDF-');
+});

@@ -1,3 +1,4 @@
+import { freezeSnapshot, type ProjectBaseline } from "../domain/baselines";
 import type { Decision, Dependency, GenericRelationship, IdentifierSequences, Milestone, Person, Project, Risk, Stream, Task } from "../domain";
 import { EMPTY_IDENTIFIER_SEQUENCES, sequencesFromHumanIds } from "../domain";
 
@@ -5,6 +6,7 @@ export interface AuditEvent { readonly timestamp: string; readonly command: stri
 export interface AuditHistory { readonly enabled: boolean; readonly events: readonly AuditEvent[] }
 
 export interface ProjectState {
+  readonly baselines?: readonly ProjectBaseline[];
   readonly auditHistory?: AuditHistory;
   readonly project: Project;
   readonly streams: readonly Stream[];
@@ -27,6 +29,7 @@ export function hydrateProjectState(input: HydratableProjectState): ProjectState
   const identifierSequences = Object.fromEntries(
     Object.keys(EMPTY_IDENTIFIER_SEQUENCES).map((kind) => [kind, Math.max(reconstructed[kind as keyof IdentifierSequences], supplied[kind as keyof IdentifierSequences] ?? 0)]),
   ) as unknown as IdentifierSequences;
+  for (const baseline of input.baselines ?? []) freezeSnapshot(baseline.snapshot);
   return { ...input, identifierSequences };
 }
 

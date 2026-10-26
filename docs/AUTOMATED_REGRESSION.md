@@ -129,3 +129,15 @@ The tag-only v1.5.0 publication workflow verifies stable metadata and exact-main
 ## Atlas recapture coverage
 
 `demo-lifecycle.spec.ts` creates Atlas from an empty project through real UI commands and verifies 4/5/8/9/2/2 records, 2/2/5/0 milestone scope, all Task statuses/owners/dependencies, full Risk/Decision context, genuine warning navigation/correction, Tube quick edit/navigation/filtering, audit, save/close and PMP equality. `acceptance.mjs` invokes it in both regression/lifecycle commands through an isolated browser on the existing server; all original assertions remain. The full layout suite has 54 tests. Media checks bind actual MP4 and PMP checksums, duration ≤80, exact frame rate/count, codec and cue/data evidence. Static-site/native-player checks ensure only video files are published and require advancing frames. Pages preflight and live playback are mandatory publication checks; missing configuration must not be treated as success.
+
+## v1.6 additions
+
+Baseline/application tests cover multiple names, immutable detached schedules, metadata rename, confirmed UI deletion and Undo/Redo, audit independence, calendar-day variance, removed/added/undated items, legacy rich files, multi-stream milestones and 20-baseline populated PMP round trips. Dependency tests cover disjoint scopes, all supported relationship types, missing/deleted references, duplicate/self/cycle rejection, in-place editing, warning recalculation and date preservation.
+
+`e2e/layout/v16.spec.ts` exercises baseline creation/selection/rename/delete/cancel/Undo, actual saved bytes and reopen, chart visibility controls, comparison and dependency editing. `timeline-toolbar.spec.ts` verifies all original module widths at 900/1024/1280/1440/1920 and vertical chart scrolling with persistent footers. Existing horizontal-scroll assertions and same-row alignment assumptions are superseded by the explicitly approved REQ-001 wrapping layout; field containment and accessibility remain asserted. Existing v1.5 regression/lifecycle/layout gates remain in force. Extended Mode was subsequently approved and its coverage is described below.
+
+
+`e2e/layout/extended.spec.ts` verifies both modes at 1024/1440/1920px: exact existing Task-creation panel rectangles/fields/controls/fonts/spacing, full-page modal bounds, dirty dismissal and focus, identical Search centers, mode/filter retention, original status colors, pointer/keyboard resizing and independent vertical scrolling. The shared-store flow covers task edits, creation, Gantt quick edits, deletion, Undo/Redo/audit, baseline immutability/overlays and actual saved PMP bytes/reopen. The original standalone/creation/layout/lifecycle gates remain in force.
+
+
+Pre-merge review regressions cover accumulated multi-byte UTF-8 baseline history exceeding the PMP entry limit, ZIP/DEFLATE overhead crossing the archive limit, and preservation of authoritative file bytes/metadata with no writable handle opened after rejection. Stream comparison tests preserve historical versus current names after rename/soft deletion, including Removed entities and multi-stream milestone search in the browser.

@@ -1,6 +1,12 @@
 # ARGOS PM
 
-A local-first ARGOS PM v1.5.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first ARGOS PM v1.6.0 development candidate built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+
+## v1.6 development (unreleased)
+
+Viewport-fitting record layouts, multiple named immutable schedule baselines, shared date comparison, Gantt historical overlays, Tube Map historical milestone indicators and a cross-stream dependency inspection/editing workspace. Data stays in the local `.pmp` file; warnings never schedule automatically.
+
+Extended Gantt adds a resizable compact chart/Tasks split using the existing modules. Its Add Task panel exactly matches standalone Tasks. The owner approved the [design](docs/V1.6_EXTENDED_MODE_MOCKUP.md) with that condition; implementation and regression evidence are in the phase report. See the [candidate user guide](docs/V1.6_UI_REFERENCE.md), [implementation specification](docs/V1.6_IMPLEMENTATION.md) and [phase/test report](docs/V1.6_PROGRESS.md). No v1.6 release, merge or deployment is authorized.
 
 ## Product demo — ARGOS PM v1.5.0
 
