@@ -118,3 +118,29 @@ test('approved alignment preserves navigation, project header and standalone Tas
  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
  await page.screenshot({path:testInfo.outputPath('alignment-standalone-tasks.png')});
 });
+
+for(const width of [900,1024,1440,1920])test(`Extended Tasks continuous single-row table at ${width}`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:1000});await openProject(page);await navigate(page,'Tasks');
+ const headerStyle=await page.locator('.tasks-table th').first().evaluate(e=>({background:getComputedStyle(e).backgroundColor,color:getComputedStyle(e).color}));
+ await navigate(page,'Gantt');await extended(page);
+ const pane=page.locator('.gantt-tasks-pane'),table=pane.locator('.tasks-table');
+ await expect(table).toHaveCSS('display','table');
+ const headings=await table.locator('th').evaluateAll(cells=>cells.map(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {x:r.x,right:r.right,y:r.y,height:r.height,background:s.backgroundColor,color:s.color};}));
+ for(const [index,heading] of headings.entries()){
+  expect({background:heading.background,color:heading.color}).toEqual(headerStyle);
+  expect(heading.y).toBeCloseTo(headings[0].y,0);expect(heading.height).toBe(headings[0].height);
+  if(index)expect(heading.x).toBeCloseTo(headings[index-1].right,0);
+ }
+ const row=table.locator('tbody tr').first();
+ const cells=await row.locator('td').evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,height:r.height,label:getComputedStyle(e,'::before').content};}));
+ for(const [index,cell] of cells.entries()){expect(cell.y).toBeCloseTo(cells[0].y,0);expect(cell.height).toBe(cells[0].height);expect(['none','normal']).toContain(cell.label);expect(cell.x).toBeCloseTo(headings[index].x,0);expect(cell.right).toBeCloseTo(headings[index].right,0);}
+ const controls=await row.locator(':scope>td>input,:scope>td>select,:scope>td>details>summary,:scope>td>.task-progress-field>input,:scope>td.table-actions>button').evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect(),cell=e.closest('td')!.getBoundingClientRect();return {label:e.getAttribute('aria-label')??e.textContent,rect:r.toJSON(),cell:cell.toJSON(),center:r.y+r.height/2,inside:r.left>=cell.left-1&&r.right<=cell.right+1&&r.top>=cell.top-1&&r.bottom<=cell.bottom+1};}));
+ expect(controls.length).toBeGreaterThanOrEqual(10);expect(controls.filter(c=>!c.inside)).toEqual([]);expect(Math.max(...controls.map(c=>c.center))-Math.min(...controls.map(c=>c.center))).toBeLessThan(2);
+ expect(await pane.evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ await page.screenshot({path:testInfo.outputPath(`${width}-extended-tasks-aligned.png`)});
+ const date=row.getByLabel('Start Date for TASK-001',{exact:true}),before=await date.boundingBox();
+ await date.fill('2030-01-02');await row.getByLabel('End Date for TASK-001',{exact:true}).fill('2030-01-01');
+ await expect(row.getByRole('alert')).toContainText('End Date must be on or after Start Date.');
+ expect(await date.boundingBox()).toEqual(before);
+
+});

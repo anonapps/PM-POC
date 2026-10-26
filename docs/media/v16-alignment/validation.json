@@ -92,5 +92,39 @@
         "log": "targeted-layout.log"
       }
     ]
+  },
+  "extendedTableFollowup": {
+    "changes": "Extended Tasks only: continuous native table header/rows, aligned control band, all columns fit without horizontal scrolling; standalone Tasks unchanged",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 25.46,
+        "code": 0,
+        "counts": [
+          "12 passed (25.1s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "widths": [
+      900,
+      1024,
+      1440,
+      1920
+    ],
+    "checks": [
+      "header colors match standalone",
+      "continuous header cells align with body columns",
+      "one table row per task",
+      "all controls contained and vertically centered",
+      "no horizontal overflow",
+      "date-validation error leaves input geometry unchanged",
+      "existing Extended creation-panel equivalence, resizing, shared edits/history and PMP reopen"
+    ],
+    "resolvedDuringValidation": "Narrow-width checks caught fixed-width Owner selectors and action wrapping/2px overflow. Corrected without relaxing assertions.",
+    "scope": "Prior unit/lifecycle evidence predates these CSS corrections; no domain or persistence change."
   }
 }

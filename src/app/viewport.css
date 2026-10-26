@@ -93,12 +93,46 @@
 .workspace .gantt-extended .gantt-panel>.baseline-controls { padding-block:6px; gap:8px; }
 .workspace .gantt-extended .gantt-panel footer.timeline-navigation { gap:5px; padding-block:5px; }
 .workspace .gantt-extended .gantt-panel .timeline-status-legend { gap:8px; font-size:10px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table { font-size:12px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table td { padding:3px 4px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr:has(.task-name-cell)>td { min-height:62px; height:auto; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr { padding-block:6px; gap:6px 10px; }
-.workspace .gantt-extended .gantt-tasks-pane table.fit-table :is(input:not([type=checkbox]),select,summary) { font-size:12px; min-height:30px; height:30px; }
-.workspace .gantt-extended .gantt-tasks-pane table.fit-table td::before { font-size:10px; margin-bottom:3px; }
+/* Keep Extended Tasks as the same continuous table, rather than responsive cards. */
+.workspace .gantt-extended .gantt-tasks-pane .panel table.tasks-table { display:table; width:100%; table-layout:fixed; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table thead { display:table-header-group; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table tbody { display:table-row-group; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table tr { display:table-row; padding:0; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table :is(th,td) { display:table-cell; width:auto; min-width:0; padding:8px 4px; white-space:nowrap; vertical-align:middle; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table thead th { position:sticky; top:var(--module-toolbar-height); background:#edf1f5; color:#445268; height:40px; font-size:var(--type-control); }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th { width:10%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th:first-child { width:3%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th:nth-child(2) { width:16%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th[data-task-column="progress"] { width:6%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th:is([data-task-column="startDate"],[data-task-column="endDate"]) { width:11%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table th:last-child { width:13%; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table tbody tr:has(.task-name-cell)>td { height:64px; min-height:0; border-bottom:1px solid #e2e7ed; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table td::before { content:none; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table .task-name-cell { position:relative; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table .task-name-cell>.task-row-id { position:absolute; top:calc(50% - 31px); left:4px; margin:0; line-height:16px; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table :is(input:not([type=checkbox]),select,summary) { font-size:12px; min-height:30px; height:30px; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table summary { box-sizing:border-box; min-width:0; max-width:100%; width:100%; line-height:18px; padding-block:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table summary:has(.scope-pill) { padding-block:3px; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table td:first-child input[type=checkbox] { margin:0 auto; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table td.table-actions { white-space:nowrap; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table .table-actions button { padding-inline:6px; }
 .workspace .gantt-panel .gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
 .workspace .gantt-extended .gantt-row.section .gantt-open-stream { height:22px; min-height:22px; padding:0 3px; }
 .workspace .gantt-extended .gantt-row.section .sort-heading { min-height:0; padding:0; }
+/* Owner correction: fit every Extended task column even in narrower panes. */
+@container (max-width:1050px) {
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table :is(th,td) { padding-inline:2px; font-size:10px; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table thead th { font-size:9px; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table th:nth-child(2) { width:15%; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table th:nth-child(3) { width:7%; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table th[data-task-column="status"] { width:11%; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table th:is([data-task-column="startDate"],[data-task-column="endDate"]) { width:12.5%; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table :is(input:not([type=checkbox]),select,summary,.sort-heading) { font-size:10px; padding-inline:2px; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table :is(select,summary,.sort-heading) { font-size:9px; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table .task-progress-field input { min-width:0; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table .table-actions button { font-size:9px; padding-inline:1px; margin-inline:1px; }
+ .workspace .gantt-extended .gantt-tasks-pane .tasks-table .scope-pill { max-width:100%; font-size:10px; padding-inline:3px; }
+}
+/* Keep date validation below the control band, as in the standalone table. */
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table td:has(input[type=date]) { position:relative; }
+.workspace .gantt-extended .gantt-tasks-pane .tasks-table td>.field-error { position:absolute; left:2px; right:2px; bottom:1px; height:14px; line-height:14px; font-size:10px; white-space:nowrap; overflow:auto; }

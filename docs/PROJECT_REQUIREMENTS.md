@@ -2049,3 +2049,9 @@ New Project Status starts blank and must be explicitly selected; Choose File & C
 ## Approved Create Task alignment correction — 26 October 2026
 
 Align adjacent fields and control boxes in the Create Task panel, including predictive selectors, Scope and Predecessor tasks beside Progress. Apply the correction to the shared task creation panel in standalone Tasks and Extended Gantt equally. Preserve panel size/location, field order, existing Scope pill styling, validation/error space and editing behavior. This targeted correction supersedes exact preservation of the prior misaligned creation-control geometry.
+
+## Approved Extended Tasks table correction — 26 October 2026
+
+Extended Tasks must use the existing standalone Tasks header colors with continuous header backgrounds/spacing. Each task occupies one horizontal table row rather than wrapping its fields into labelled cards; all boxes/text align vertically. Retain every field/action and the approved creation panel. This supersedes the earlier multi-line Extended task-card layout; standalone Tasks remains unchanged.
+
+Owner clarification: keep all Extended task columns visible without horizontal scrolling at narrow desktop widths; adapt column/control spacing rather than wrapping fields into multiple rows.
