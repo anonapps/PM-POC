@@ -1,6 +1,6 @@
 # Testing optimisation
 
-Branch: `chore/testing-optimisation`, based on `main` at `3c6ef7036d7a5ac7c66dcd7966a15324df212a5b` (26 October 2026). Application functionality, product requirements, persistence implementation and the `.pmp` contract are outside this change.
+Branch: `chore/testing-optimisation`, based on `main` at `3c6ef7036d7a5ac7c66dcd7966a15324df212a5b` (26 October 2026). Application functionality, product requirements, persistence implementation and the `.pmp` contract are outside this change. During validation, main advanced to `af119ff` through the independent v1.6 PR #23. That main commit was integrated unchanged into this branch; the original v1.5 measurements below remain historical, and final v1.6 verification is recorded separately.
 
 ## Validation levels
 
@@ -29,7 +29,7 @@ REGRESSION_PMP_PATH=src/testing/fixtures/regression-180.pmp npm test -- src/test
 
 All original assertions and viewport matrices remain. Full mode still creates 30 additional records through each of six UI forms and verifies all 60 per module after reopen. Atlas still creates every entity through the UI; it is not replaced with seeded data. Its final Save step now tolerates autosave having already completed: trigger Save only while enabled, then require Saved status and validate the complete saved bytes, relationships, warnings and audit history. The original click could wait forever on an already disabled Save button.
 
-Optional successful layout screenshots are enabled with `CAPTURE_LAYOUT=1`; automatic failure screenshots remain enabled. Those PNGs were artifacts without image-comparison assertions, so this removes filesystem/browser capture work without reducing regression assertions. Capture-only pacing and media outputs are retained; no videos are regenerated.
+Existing v1.5 successful layout evidence screenshots are enabled with `CAPTURE_LAYOUT=1`; newly merged v1.6 screenshot hooks remain unchanged; automatic failure screenshots remain enabled. Those PNGs were artifacts without image-comparison assertions, so this removes filesystem/browser capture work without reducing regression assertions. Capture-only pacing and media outputs are retained; no videos are regenerated.
 
 ## Coverage map
 
@@ -38,7 +38,7 @@ Optional successful layout screenshots are enabled with `CAPTURE_LAYOUT=1`; auto
 | Functional commands, hierarchy/progress, statuses, filters, selection, creation validation | All domain/application/feature Vitest cases; core CDP; shared controls/batch/candidate; six entity creation panel tests at all original widths |
 | Persistence, file validation, legacy compatibility, metadata, save failure recovery | Codec/browser-service/runtime Vitest; byte-checked volume fixture; v1.4 open/edit/save/reopen; core and volume save/reopen; Aurora and Atlas saved bytes |
 | Dependencies and derived warnings | Task/milestone dependency, Gantt/Tube Map model and warnings unit cases; core warning navigation; Atlas warning open/correct/clear and saved dependency relationships |
-| Layout and accessibility | All 54 Playwright cases across original widths plus CDP geometry, keyboard/focus, navigation semantics and mobile overflow assertions |
+| Layout and accessibility | All collected Playwright cases across original widths plus CDP geometry, keyboard/focus, navigation semantics and mobile overflow assertions |
 | Full lifecycle and release | All original CDP checkpoints, including 180 additional UI creations; Atlas and Aurora; main/PR lifecycle gate; nightly/manual full lifecycle workflow |
 | Native consent and physical-machine compatibility | Existing manual acceptance boundary; Linux in-memory picker mocks do not establish native OS behavior |
 
@@ -46,9 +46,9 @@ Coverage here means scenario and assertion coverage. No new coverage dependency 
 
 ## Workflow consolidation
 
-- `validate.yml` retains its job identifiers, PR/main triggers, unit/static/build/audit checks and mandatory full lifecycle gate. Remove the non-full custom regression from its other job because the full gate executes its complete superset. That job runs the 53 non-Atlas Playwright cases; the gate runs Atlas once. Branches/manual dispatches without the full gate retain a non-full regression/Atlas fallback.
+- `validate.yml` retains its job identifiers, PR/main triggers, unit/static/build/audit checks and mandatory full lifecycle gate. Remove the non-full custom regression from its other job because the full gate executes its complete superset. That job runs all non-Atlas Playwright cases; the gate runs Atlas once. Branches/manual dispatches without the full gate retain a non-full regression/Atlas fallback.
 - `v14-validation.yml` keeps its triggers and job identifier. Its job skips PRs targeting `main`, where `validate.yml` owns the same checks, avoiding a duplicate install/unit/typecheck/lint/build. Manual runs and PRs targeting other branches retain their original checks, preserving ongoing development. No branch-protection settings are changed; GitHub reports conditionally skipped jobs as successful checks.
-- `regression-lifecycle.yml` retains nightly and manual execution; remove push execution already covered by the mandatory main gate. Scope its concurrency by ref so a manual branch run does not cancel a scheduled main run.
+- `regression-lifecycle.yml` retains nightly and manual execution; remove main/v1.5 push execution already covered by the mandatory gate. Preserve the independently added v1.6 feature-branch push trigger to avoid interfering with its ongoing development. Scope its concurrency by ref so a manual branch run does not cancel a scheduled main run.
 - Keep independent scheduled security audits, video playback checks and all release/publication workflows unchanged. Their distinct service/asset boundaries are not replaced by application validation.
 
 No tests are deleted. Duplicate *executions* are consolidated, and the previously broken `test:e2e` setup is replaced by the tested shared fixture wrapper. Unit/browser checks that overlap behavior at different boundaries remain; they are not interchangeable.
@@ -80,7 +80,7 @@ Fixture inventory: `src/domain/test-fixtures.ts` factories, `src/testing/regress
 
 The most expensive retained work is the 180 UI form creations and the complete Atlas journey. Other avoidable costs are repeated unit setup, repeated Atlas/custom journeys, and successful screenshots across the viewport matrix. Capture-only pacing is already gated in the recorder; it was not globally replaced with sleeps or arbitrary shorter timeouts.
 
-## After verification and comparison
+## Original v1.5 after verification and comparison
 
 `CHROME_PATH=/usr/bin/chromium E2E_VERBOSE=1 npm run validate:release` passed the complete shared PR/release path. The verbose flag was used once to compare checkpoint identities; routine validation uses concise output. [testing-after.json](testing-after.json) contains stage results and assertion-retention counts.
 
@@ -106,10 +106,36 @@ The reproducible savings are execution ownership and scope selection, independen
 | Non-full browser regression alongside mandatory full regression | Full lifecycle gate on main/PRs | Full mode executes every non-full checkpoint plus six creation-volume checkpoints. Non-gated branch/manual fallback retained. |
 | Atlas in both custom wrappers and all-layout | One Atlas execution per validation path | Exact Playwright test retained; full local validation owns it in layout, CI owns it in lifecycle. |
 | Historical main-targeting PR static/unit/build batch | Existing main validation workflow | Preserve its triggers/job and all non-main/manual checks, protecting ongoing development. |
-| Standalone lifecycle push duplicate | Existing main gate | Nightly/manual full regression remains. |
+| Standalone main/v1.5 lifecycle push duplicate | Existing main gate | Nightly/manual full regression and the existing v1.6 feature push remain. |
 | Unconditional successful layout PNGs | Opt-in `CAPTURE_LAYOUT=1`; automatic failure PNGs unchanged | All 298 source `expect(...)` calls across the six specs remain, along with all parameterized tests. No image-comparison assertion existed. |
 | Broken unseeded `test:e2e` entry point | Shared fixture-backed regression wrapper | Missing TASK-005 setup is repaired; every later assertion can now execute. |
 
-No tests or assertions were removed. No application source, dependency version, engine declaration, lockfile, product requirement or `.pmp` implementation/contract changed. No merge, release or deployment was performed.
+No tests or assertions were removed. No application source, dependency version, engine declaration, lockfile, product requirement or `.pmp` implementation/contract changed. No PR was merged, release created or deployment performed.
 
 Remaining limitations: timings are single samples with differing contention/server modes and cannot establish a CI speedup percentage; local verification used Node 24 while CI uses Node 22; native Windows/macOS consent and physical disk evidence remain manual; demo recording and opt-in successful screenshot capture were not regenerated. Scheduled security/asset checks still have their distinct coverage responsibilities. PR CI is separate evidence from local success and must retain its mandatory lifecycle gate.
+
+
+## Integration with the independently advanced v1.6 main
+
+After original validation, `main` advanced from `3c6ef70` to `af119ff29d1d0f1ea2befec87840adbd546f0f34` via the independent v1.6 PR #23. The optimisation branch integrated that commit without changing any application implementation, product requirement, file-format specification, dependency version or lockfile relative to that main. All updated upstream harness assertions were preserved when resolving overlapping lines. The newly added `extended.spec.ts` and `v16.spec.ts` are unchanged.
+
+The current main inventory is **55 Vitest files / 477 cases** and **69 Playwright cases in 8 specs**. The increase from the original 453/54 counts is upstream product coverage, not tests added or removed to change timing. In addition to the original release/lifecycle protections, the current selection includes named schedule-baseline CRUD/comparison/persistence, cross-stream dependencies, historical stream names, Extended Gantt panels/edits/resize/reopen and expanded footer viewport coverage.
+
+The v1.6 feature push remains enabled in the standalone lifecycle workflow, and non-main PRs still run their historical validation. Existing v1.6 evidence screenshots/JSON hooks are retained; only the original v1.5 successful screenshot hooks become opt-in. These intentional remaining costs avoid interfering with ongoing v1.6 development.
+
+For current main-targeting source PRs, the workflow-derived unit execution comparison is `477 + 477 + 18 + 18 = 990` before versus **477** after. Unique unit cases and all 69 browser cases remain selected. This is an execution-count comparison, not a controlled v1.6 timing benchmark. The original v1.5 before/after timings above are not relabeled as v1.6 results.
+
+
+Final integration validation passed with `CHROME_PATH=/usr/bin/chromium E2E_VERBOSE=1 npm run validate:release`. [testing-integration.json](testing-integration.json) records the current results:
+
+| Current v1.6 stage | Time | Result |
+| --- | ---: | --- |
+| Unit | 38.09 s | 55 files / 477 passed |
+| Typecheck | 11.50 s | Passed |
+| Lint | 12.37 s | Passed |
+| Production build | 43.77 s | Passed |
+| Full custom lifecycle | 218.69 s | 245 checkpoints passed, including every additional UI form creation |
+| Playwright | 376.91 s | All 69 cases passed, including Atlas |
+| Production / full dependency audit | 0.96 s / 1.07 s | Both passed; 0 vulnerabilities |
+
+Summed stage time: **703.36 s**. All **378** source `expect(...)` calls across the current eight Playwright specs match main, alongside the full parameterized matrix. The original mobile-Gantt checkpoint name/assertion changed in upstream v1.6 to require viewport fitting; its updated main assertion was retained exactly. The optimisation introduces no application change or file-contract change. Native OS boundaries and controlled performance benchmarking remain the limitations described above. Final results supersede the older 453/54 counts for this PR's validation; the older data remains intact as the original before/after evidence.

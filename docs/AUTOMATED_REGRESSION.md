@@ -16,7 +16,7 @@ Run commands from the repository root after `npm ci`. The app supports Node.js 2
 | `npm test` | All Vitest domain, application, persistence and regression tests | Normal validation |
 | `npm run test:e2e` | Alias of fixture-backed regression; core smoke is independently selectable with `--scenario=core` | Do not run again after a successful superset |
 | `npm run test:regression` | Smoke flow, 180-record browser regression and Atlas | Manual; fallback on branches without full lifecycle gate |
-| `npm run test:lifecycle` | Extended regression plus 180 additional form-created records | Mandatory main/PR gate; nightly at 03:00 UTC; manual dispatch |
+| `npm run test:lifecycle` | Extended regression plus 180 additional form-created records | Mandatory main/PR gate; nightly at 03:00 UTC; manual dispatch; existing v1.6 feature pushes |
 
 Normal validation also checks TypeScript, lint, production build and production dependency audit. The full dependency audit is informational. The lifecycle workflow has a 30-minute timeout; normal validation has a 20-minute timeout.
 

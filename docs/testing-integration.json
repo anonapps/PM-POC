@@ -1,0 +1,121 @@
+{
+  "main_commit": "af119ff29d1d0f1ea2befec87840adbd546f0f34",
+  "version": "1.6.0",
+  "full_pipeline": [
+    {
+      "name": "unit",
+      "seconds": 38.09,
+      "code": 0,
+      "counts": [
+        "Test Files  55 passed (55)",
+        "Tests  477 passed (477)"
+      ]
+    },
+    {
+      "name": "typecheck",
+      "seconds": 11.5,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "lint",
+      "seconds": 12.37,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "build",
+      "seconds": 43.77,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "lifecycle",
+      "seconds": 218.69,
+      "code": 0,
+      "counts": [
+        "Acceptance: 245 passed, 0 failed (all)"
+      ]
+    },
+    {
+      "name": "layout",
+      "seconds": 376.91,
+      "code": 0,
+      "counts": [
+        "69 passed (6.3m)"
+      ]
+    },
+    {
+      "name": "production-audit",
+      "seconds": 0.96,
+      "code": 0,
+      "counts": []
+    },
+    {
+      "name": "development-audit",
+      "seconds": 1.07,
+      "code": 0,
+      "counts": []
+    }
+  ],
+  "stage_seconds_total": 703.36,
+  "preserved_main_assertions": [
+    {
+      "spec": "e2e/layout/creation-panels.spec.ts",
+      "main_expect_calls": 67,
+      "optimised_expect_calls": 67
+    },
+    {
+      "spec": "e2e/layout/demo-lifecycle.spec.ts",
+      "main_expect_calls": 66,
+      "optimised_expect_calls": 66
+    },
+    {
+      "spec": "e2e/layout/release-smoke.spec.ts",
+      "main_expect_calls": 37,
+      "optimised_expect_calls": 37
+    },
+    {
+      "spec": "e2e/layout/search-filter.spec.ts",
+      "main_expect_calls": 37,
+      "optimised_expect_calls": 37
+    },
+    {
+      "spec": "e2e/layout/status-batch.spec.ts",
+      "main_expect_calls": 47,
+      "optimised_expect_calls": 47
+    },
+    {
+      "spec": "e2e/layout/timeline-toolbar.spec.ts",
+      "main_expect_calls": 47,
+      "optimised_expect_calls": 47
+    },
+    {
+      "spec": "e2e/layout/extended.spec.ts",
+      "main_expect_calls": 47,
+      "optimised_expect_calls": 47
+    },
+    {
+      "spec": "e2e/layout/v16.spec.ts",
+      "main_expect_calls": 30,
+      "optimised_expect_calls": 30
+    }
+  ],
+  "upstream_checkpoint_name_change": {
+    "old": [
+      "Gantt chart scrolls horizontally independently of its footer on mobile"
+    ],
+    "new": [
+      "Gantt chart fits its viewport and retains independent vertical scrolling"
+    ]
+  },
+  "unit_execution_count_from_workflow": {
+    "before": 990,
+    "after": 477
+  },
+  "atlas_executions_per_main_pr": {
+    "before": 3,
+    "after": 1
+  },
+  "production_and_development_audit_vulnerabilities": 0
+}
