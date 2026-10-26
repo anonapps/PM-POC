@@ -28,13 +28,13 @@ jobs:
           PASSED=$(gh api "repos/$GH_REPO/actions/runs?head_sha=$RELEASE_SHA&event=push&per_page=100" --jq '[.workflow_runs[] | select(.path == ".github/workflows/validate.yml" and .head_branch == "main" and .conclusion == "success")] | length')
           test "$PASSED" -ge 1
           test -s public/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf
-          test -s docs/media/argos-pm-60s-demo-v1.5.0.mp4
+          test -s docs/media/argos-pm-demo-v1.5.0.mp4
       - name: Publish versioned assets as latest stable release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           cp public/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf ARGOS_PM_UI_REFERENCE.pdf
-          cp docs/media/argos-pm-60s-demo-v1.5.0.mp4 argos-pm-60s-demo-v1.5.0.mp4
-          sha256sum ARGOS_PM_UI_REFERENCE.pdf argos-pm-60s-demo-v1.5.0.mp4 > ARGOS_PM_v1.5.0_SHA256SUMS.txt
-          gh release create v1.5.0 --verify-tag --latest --title 'ARGOS PM v1.5.0' --notes-file docs/releases/v1.5.0.md ARGOS_PM_UI_REFERENCE.pdf argos-pm-60s-demo-v1.5.0.mp4 ARGOS_PM_v1.5.0_SHA256SUMS.txt
+          cp docs/media/argos-pm-demo-v1.5.0.mp4 argos-pm-demo-v1.5.0.mp4
+          sha256sum ARGOS_PM_UI_REFERENCE.pdf argos-pm-demo-v1.5.0.mp4 > ARGOS_PM_v1.5.0_SHA256SUMS.txt
+          gh release create v1.5.0 --verify-tag --latest --title 'ARGOS PM v1.5.0' --notes-file docs/releases/v1.5.0.md ARGOS_PM_UI_REFERENCE.pdf argos-pm-demo-v1.5.0.mp4 ARGOS_PM_v1.5.0_SHA256SUMS.txt

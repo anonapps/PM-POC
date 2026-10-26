@@ -1,0 +1,95 @@
+name: Versioned video pages
+on:
+  push:
+    branches: [feature/v1.5-demo-recapture, main]
+    paths: [README.md, docs/V1.5_DEMO_PLAYER.md, docs/media/**, scripts/build-demo-site.mjs, e2e/verify-demo-site.mjs, .github/workflows/demo-playback.yml]
+  pull_request:
+    paths: [README.md, docs/V1.5_DEMO_PLAYER.md, docs/media/**, scripts/build-demo-site.mjs, e2e/verify-demo-site.mjs, .github/workflows/demo-playback.yml]
+permissions:
+  contents: read
+concurrency:
+  group: video-pages-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-player:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test -- src/shared/release-assets.test.ts src/shared/demo-site.test.ts
+      - run: node scripts/build-demo-site.mjs /tmp/argos-video-site
+      - name: Verify native player, advancing frames and matching media
+        run: |
+          CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium)
+          CHROME_PATH="$CHROME_PATH" node e2e/verify-demo-site.mjs /tmp/argos-video-site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/argos-video-site
+  pages-configuration:
+    needs: build-player
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - name: Check existing Pages configuration; never attempt administrative enablement
+        uses: actions/configure-pages@v5
+        with:
+          enablement: false
+      - name: Require GitHub Actions as the configured publishing source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: test "$(gh api "repos/$GH_REPO/pages" --jq .build_type)" = workflow
+  publish-videos:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build-player, pages-configuration]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Wait for successful validation on this exact main SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          for attempt in $(seq 1 100); do
+            RESULT=$(gh api "repos/$GH_REPO/actions/runs?head_sha=$RELEASE_SHA&event=push&per_page=100" --jq '[.workflow_runs[] | select(.path == ".github/workflows/validate.yml" and .head_branch == "main")][0] | if .status == "completed" then .conclusion else "pending" end')
+            if [ "$RESULT" = success ]; then exit 0; fi
+            if [ "$RESULT" != pending ]; then echo "Main validation did not pass: $RESULT"; exit 1; fi
+            sleep 10
+          done
+          echo 'Timed out awaiting exact-main validation'; exit 1
+      - uses: actions/deploy-pages@v4
+        id: deployment
+  verify-published:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: publish-videos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify real published GitHub Pages video playback
+        env:
+          VIDEO_BASE_URL: ${{ needs.publish-videos.outputs.url }}
+        run: |
+          CHROME_PATH=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium)
+          CHROME_PATH="$CHROME_PATH" node e2e/verify-demo-site.mjs

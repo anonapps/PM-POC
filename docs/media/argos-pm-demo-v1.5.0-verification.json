@@ -1,0 +1,188 @@
+{
+  "counts": {
+    "streams": 4,
+    "people": 5,
+    "tasks": 8,
+    "milestones": 9,
+    "risks": 2,
+    "decisions": 2
+  },
+  "taskDistribution": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "milestoneDistribution": [
+    2,
+    2,
+    5,
+    0
+  ],
+  "auditEvents": 39,
+  "dependencies": 7,
+  "cues": {
+    "moves": 1577,
+    "clicks": 404,
+    "focuses": 524
+  },
+  "duration": 78,
+  "closed": true,
+  "warningsAfter": [],
+  "video": "argos-pm-demo-v1.5.0.mp4",
+  "sha256": "3855c9f2f60ef8ad86ea37948ae6756fa43c81a36dc28d082a641293655df8a5",
+  "pmpSha256": "58ce3b991d4690db4dfa60df9bba2c2d7d919d6ff044275498a4ebaf9c2ae59c",
+  "codec": "h264",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 2340,
+  "audioStreams": 0,
+  "capturedFrames": 1411,
+  "chapters": [
+    {
+      "title": "01  Atlas Software Delivery | Start a new project",
+      "duration": 8,
+      "cues": {
+        "moves": 37,
+        "clicks": 10,
+        "focuses": 13
+      }
+    },
+    {
+      "title": "02  Four delivery streams | First creation",
+      "duration": 3,
+      "cues": {
+        "moves": 74,
+        "clicks": 20,
+        "focuses": 26
+      }
+    },
+    {
+      "title": "02  Four delivery streams | Complete plan",
+      "duration": 1,
+      "cues": {
+        "moves": 158,
+        "clicks": 41,
+        "focuses": 53
+      }
+    },
+    {
+      "title": "02  Five people | First creation",
+      "duration": 3,
+      "cues": {
+        "moves": 182,
+        "clicks": 47,
+        "focuses": 60
+      }
+    },
+    {
+      "title": "02  Five people | Named responsibilities",
+      "duration": 1,
+      "cues": {
+        "moves": 262,
+        "clicks": 67,
+        "focuses": 80
+      }
+    },
+    {
+      "title": "03  Eight tasks | Owners, dates and status",
+      "duration": 8,
+      "cues": {
+        "moves": 318,
+        "clicks": 81,
+        "focuses": 99
+      }
+    },
+    {
+      "title": "03  Two tasks per stream | Real dependencies",
+      "duration": 4,
+      "cues": {
+        "moves": 738,
+        "clicks": 186,
+        "focuses": 239
+      }
+    },
+    {
+      "title": "04  Milestones | First review checkpoint",
+      "duration": 5,
+      "cues": {
+        "moves": 795,
+        "clicks": 201,
+        "focuses": 259
+      }
+    },
+    {
+      "title": "04  Nine milestones | 2 / 2 / 5 / 0",
+      "duration": 3,
+      "cues": {
+        "moves": 1219,
+        "clicks": 313,
+        "focuses": 403
+      }
+    },
+    {
+      "title": "05  Tube Map | Edit, navigate and filter",
+      "duration": 10,
+      "cues": {
+        "moves": 1255,
+        "clicks": 322,
+        "focuses": 414
+      }
+    },
+    {
+      "title": "06  Risk Log | Assess and mitigate",
+      "duration": 6,
+      "cues": {
+        "moves": 1340,
+        "clicks": 344,
+        "focuses": 443
+      }
+    },
+    {
+      "title": "06  Low / Medium and High / High | Action owners",
+      "duration": 2,
+      "cues": {
+        "moves": 1421,
+        "clicks": 365,
+        "focuses": 470
+      }
+    },
+    {
+      "title": "07  Decision Log | Capture the whole context",
+      "duration": 5,
+      "cues": {
+        "moves": 1485,
+        "clicks": 381,
+        "focuses": 493
+      }
+    },
+    {
+      "title": "07  Two decisions | Owners and connected evidence",
+      "duration": 2,
+      "cues": {
+        "moves": 1545,
+        "clicks": 396,
+        "focuses": 514
+      }
+    },
+    {
+      "title": "08  Warnings | Find, open, correct, verify",
+      "duration": 9,
+      "cues": {
+        "moves": 1561,
+        "clicks": 400,
+        "focuses": 520
+      }
+    },
+    {
+      "title": "09  Audit Log | Save the evidence and close",
+      "duration": 8,
+      "cues": {
+        "moves": 1577,
+        "clicks": 404,
+        "focuses": 524
+      }
+    }
+  ]
+}
