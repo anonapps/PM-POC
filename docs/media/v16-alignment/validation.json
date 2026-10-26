@@ -600,5 +600,39 @@
     ],
     "nativeScope": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering, picker consent and disk acceptance remain manual.",
     "releaseActions": "Draft PR25 only; no merge, deployment, tag, publication or release."
+  },
+  "footerZoomShortPlaceholderAndTasksSelection": {
+    "applicationCommit": "357c2dda415d2798cb0acff7e754416db6030e1f",
+    "scope": [
+      "Zoom relocated to docked Gantt date-navigation row in both modes; same selection/date-offset handler and shared field geometry",
+      "Header wrap breakpoint reclaims former Zoom width; Search geometry remains exact",
+      "Dropdown placeholders exactly Type to filter; descriptive accessible labels retained",
+      "Standalone and Extended Tasks share centered header/body checkbox geometry; actual selection/indeterminate behavior preserved"
+    ],
+    "validation": {
+      "affectedMatrix": "71 passed / 3 new selection cases failed solely on comparing the header border-box center instead of its inner content center; production geometry was already correct horizontally. Corrected the measurement to exclude borders without relaxing center precision.",
+      "selectionRerun": "All 3 selection cases passed (9.0s), each testing both modes, both sidebar states, exact header/row centers and keyboard/select-all/indeterminate behavior.",
+      "matrixSeconds": 101.89,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed",
+      "earlierZoomMatrix": "60 cases passed before adding shared Tasks selection geometry and restoring footer select border. The final 71-case success includes all these relevant regressions.",
+      "testFiles": [
+        "compact-rhythm.spec.ts",
+        "gantt-surface.spec.ts",
+        "extended.spec.ts",
+        "timeline-toolbar.spec.ts",
+        "desktop-records.spec.ts"
+      ]
+    },
+    "historicalCompleteGate": "480 unit tests / 245 lifecycle checkpoints / all 111 browser cases passed on a8dc681 before this small presentation follow-up. No schema, codec, commands or file-service changes; affected Extended tests retain PMP reopen coverage.",
+    "screenshots": [
+      "gantt-footer-zoom-simple.png",
+      "gantt-footer-zoom-extended.png",
+      "dropdown-short-placeholder.png",
+      "tasks-selection-aligned.png"
+    ],
+    "nativeScope": "Linux Chromium; owner must pull/restart/hard-refresh to confirm physical Mac rendering.",
+    "releaseActions": "PR25 remains draft; no merge/deploy/tag/release."
   }
 }

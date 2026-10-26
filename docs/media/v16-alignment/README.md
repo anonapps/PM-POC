@@ -109,3 +109,12 @@ Final affected verification on `0956f17a27b1bbd950a6432bff0ca085a0e26e4b`: **all
 These are actual application screenshots. Standard Gantt actions use another toolbar row when the centered Search leaves insufficient room; they retain the same font/height as ordinary page actions. Comparison fields share compact spacing/text alignment across Gantt/Tube Map/Baselines. The grey baseline band remains visible below current bars; red marks only finishes after the selected approved date. The measured workspace reaches the viewport bottom; Extended retains its splitter, independent scrolling and fully displayed Add Task. The focused and complete-gate results are recorded in validation.json.
 
 Complete serial verification on `a8dc681983670244771e8c22cdd5d295d0f62111`: **480 unit tests, 245 lifecycle checkpoints, all 111 browser cases passed**, plus typecheck/lint/build. Screenshots above come from that final run; minimum splitter assertions retain a complete first task and no Tasks bottom gap in the tested fixtures. Exploratory interrupted/failed runs are superseded and recorded in validation.json.
+
+## Footer Zoom, short dropdown placeholder and shared Tasks selection
+
+- [Simple: Zoom beside date navigation](gantt-footer-zoom-simple.png)
+- [Extended: Zoom in upper pane footer](gantt-footer-zoom-extended.png)
+- [Dropdown placeholder: Type to filter](dropdown-short-placeholder.png)
+- [Standalone Tasks: aligned selection column](tasks-selection-aligned.png)
+
+Latest presentation-only follow-up: 71 affected browser cases passed, then all three corrected content-band selection tests passed (9.0s); build/typecheck/lint passed. The selection cases cover both views and sidebar states at three widths, including keyboard select-all and indeterminate states. Exact scope and preceding full-gate evidence remain in validation.json.
