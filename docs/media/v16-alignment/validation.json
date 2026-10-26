@@ -1,0 +1,67 @@
+{
+  "base": "1e9a35e71eaa4f0e6cb4014fc6e0a21de9f2c2f2",
+  "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+  "stages": [
+    {
+      "name": "unit",
+      "seconds": 13.95,
+      "code": 0,
+      "counts": [
+        "Test Files  55 passed (55)",
+        "Tests  477 passed (477)"
+      ],
+      "log": "unit.log"
+    },
+    {
+      "name": "typecheck",
+      "seconds": 3.66,
+      "code": 0,
+      "counts": [],
+      "log": "typecheck.log"
+    },
+    {
+      "name": "lint",
+      "seconds": 4.48,
+      "code": 0,
+      "counts": [],
+      "log": "lint.log"
+    },
+    {
+      "name": "build",
+      "seconds": 18.03,
+      "code": 0,
+      "counts": [],
+      "log": "build.log"
+    },
+    {
+      "name": "lifecycle",
+      "seconds": 86.42,
+      "code": 0,
+      "counts": [
+        "Acceptance: 245 passed, 0 failed (all)"
+      ],
+      "log": "lifecycle.log"
+    },
+    {
+      "name": "layout",
+      "seconds": 124.44,
+      "code": 1,
+      "counts": [
+        "69 passed (2.1m)"
+      ],
+      "log": "layout.log"
+    }
+  ],
+  "note": "Initial full run: all 69 existing browser cases passed; new case failed because of its center measurement. First targeted rerun exposed unstable generated radio-group names. Final targeted rerun compares visible semantics/geometry and passes. Application source unchanged. No full pipeline success is claimed.",
+  "finalTargeted": [
+    {
+      "name": "targeted-layout",
+      "seconds": 3.23,
+      "code": 0,
+      "counts": [
+        "1 passed (2.9s)"
+      ],
+      "log": "targeted-layout.log"
+    }
+  ]
+}
