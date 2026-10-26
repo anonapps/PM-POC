@@ -6,7 +6,7 @@ These are actual Chromium screenshots from the final `e2e/layout/extended.spec.t
 - [Full-page Add Task](extended-add-task.png): the unchanged standalone Tasks creation panel, over both panes and the project header.
 - [Shared edits and baselines](extended-baselines.png): live edits, optional historical overlays and variance in Extended Mode.
 
-The browser tests assert exact equality of panel/field/control rectangles, font properties, padding, margin, gap and display between standalone Tasks and Extended Mode at 1024, 1440 and 1920px. Local checks also compared the captured pre-implementation standalone reference. Complete equality records:
+The browser tests assert exact equality of panel/field/control rectangles, font properties, padding, margin, gap and display between standalone Tasks and Extended Mode at 1024, 1440 and 1920px. Local checks also compared the captured pre-implementation standalone reference. Equality summaries (common metrics are recorded once; hidden control duplicates are omitted from the published summaries):
 
 - [1024px](panel-equivalence-1024.json)
 - [1440px](panel-equivalence-1440.json)
