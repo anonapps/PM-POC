@@ -1,3 +1,4 @@
+import { dependencyScheduleDates } from "../../domain/dependency-analysis";
 import type { ProjectCommand, ProjectState } from "../../application";
 import { wouldCreateDependencyCycle, type DependencyEndpoint } from "../../domain";
 
@@ -9,11 +10,11 @@ export function milestoneDependencyIssues(state: ProjectState, milestoneId: stri
       ? state.tasks.find(item => item.id === dependency.predecessor.id)
       : state.milestones.find(item => item.id === dependency.predecessor.id);
     if (!predecessor || predecessor.deletion.isDeleted) return ["Dependency references a deleted item"];
-    const date = "plannedDate" in predecessor ? predecessor.plannedDate : predecessor.endDate;
+    const date = dependencyScheduleDates(state,dependency).before;
     const label = predecessor.humanId;
     const issues: string[] = [];
     if (!date) issues.push(`Dependency not scheduled: ${label}`);
-    else if (milestone.plannedDate && milestone.plannedDate < date) issues.push(`Scheduling conflict: ${label} finishes ${date}`);
+    else if (milestone.plannedDate && milestone.plannedDate < date) issues.push(`Scheduling conflict: ${label} ${dependency.type.startsWith("Finish")?"finishes":"starts"} ${date}`);
     const complete = "status" in predecessor && (predecessor.status === "Complete" || predecessor.status === "Completed");
     if (!complete && milestone.status === "Complete") issues.push(`Incomplete predecessor: ${label}`);
     return issues;

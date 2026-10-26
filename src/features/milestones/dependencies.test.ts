@@ -31,3 +31,9 @@ describe("v1.2 Milestone dependencies",()=>{
   expect(milestoneDependencyIssues(store.getState(),"m1")).toEqual([]);
  });
 });
+
+it('uses the selected relationship type for Gantt milestone warning dates',()=>{
+ const state=makeProjectState({tasks:[taskFixture({startDate:'2026-10-01',endDate:'2026-10-10'})],milestones:[milestone('m','2026-10-05')],dependencies:[{id:'ss',projectId:'project-1',predecessor:{kind:'task',id:'task-1'},successor:{kind:'milestone',id:'m'},type:'Start-to-Start'}]});
+ expect(milestoneDependencyIssues(state,'m')).toEqual([]);
+ expect(milestoneDependencyIssues({...state,dependencies:state.dependencies.map(d=>({...d,type:'Finish-to-Start'}))},'m')[0]).toContain('Scheduling conflict');
+});

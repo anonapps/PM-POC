@@ -1,3 +1,4 @@
+import { validBaselines } from "./baseline-validation";
 import { hydrateProjectState, type ProjectState } from "../../application/state";
 import { wouldCreateDependencyCycle } from "../../domain";
 import { validatePersistedState } from "./structural-validation";
@@ -42,6 +43,7 @@ function validateState(v: unknown): PmpResult<ProjectState> {
   try {
     if (arrays.some((key) => (v[key] as unknown[]).length > 100_000)) return err("SCHEMA_VALIDATION_FAILURE", "Project collections exceed the safety limit.");
     const sequenceKeys = ["stream", "task", "milestone", "person", "risk", "decision"]; const rawSequences = v.identifierSequences; if (!obj(rawSequences) || Object.keys(rawSequences).sort().join() !== [...sequenceKeys].sort().join() || sequenceKeys.some((key) => !Number.isSafeInteger(rawSequences[key]) || (rawSequences[key] as number) < 0)) return err("SCHEMA_VALIDATION_FAILURE", "Identifier sequences are invalid.");
+    if (!validBaselines(v.baselines, v.project.id)) return err("SCHEMA_VALIDATION_FAILURE", "Baseline data is invalid.", "baselines");
     const state = hydrateProjectState(v as unknown as Parameters<typeof hydrateProjectState>[0]);
     const structuralError = validatePersistedState(state); if (structuralError) return err("SCHEMA_VALIDATION_FAILURE", structuralError);
     const entities = [...state.streams, ...state.tasks, ...state.milestones, ...state.people, ...state.risks, ...state.decisions];
