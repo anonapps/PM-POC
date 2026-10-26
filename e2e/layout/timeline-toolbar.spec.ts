@@ -15,7 +15,7 @@ async function openProject(page:Page,range?:[string,string]){
 async function centred(page:Page){
  const panel=await page.locator('.panel').boundingBox(),input=await page.locator('.shared-search-filter').boundingBox();
  expect(Math.abs(input!.x+input!.width/2-panel!.x-panel!.width/2)).toBeLessThan(1);
- expect(input!.width).toBe(340);expect(input!.height).toBe(34);
+ if((await page.locator('.gantt-panel').count())&&page.viewportSize()!.width<1440){expect(input!.width).toBeGreaterThanOrEqual(80);expect(input!.width).toBeLessThanOrEqual(340);}else expect(input!.width).toBe(340);expect(input!.height).toBe(34);
  const overlaps=await page.locator('.page-toolbar').evaluate(toolbar=>{const search=toolbar.querySelector('.shared-search-filter')!.getBoundingClientRect();return [...toolbar.children].filter(e=>!e.matches('.shared-search-filter')).some(e=>{const r=e.getBoundingClientRect();return Math.min(r.right,search.right)-Math.max(r.left,search.left)>1&&Math.min(r.bottom,search.bottom)-Math.max(r.top,search.top)>1;});});
  expect(overlaps).toBe(false);
  return input!.x+input!.width/2;

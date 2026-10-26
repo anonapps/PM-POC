@@ -144,3 +144,26 @@ for(const width of [900,1024,1440,1920])test(`Extended Tasks continuous single-r
  expect(await date.boundingBox()).toEqual(before);
 
 });
+
+for(const width of [900,1024,1280,1440,1920])test(`Gantt and embedded Tasks toolbars stay on one centered line at ${width}`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:1000});await openProject(page);await navigate(page,'Gantt');
+ const check=async(selector:string)=>{
+  const toolbar=page.locator(selector);
+  const geometry=await toolbar.evaluate(e=>{
+   const r=e.getBoundingClientRect(),search=e.querySelector('.shared-search-filter')!.getBoundingClientRect();
+   const controls=[...e.querySelectorAll('h1,input[type=search],button,select,.toggle')].map(control=>{const b=control.getBoundingClientRect();return {label:control.getAttribute('aria-label')??control.textContent,action:Boolean(control.closest('.actions,.header-actions')),center:b.y+b.height/2,left:b.left,right:b.right};});
+   const regions=[...e.children].map(child=>{const b=child.getBoundingClientRect();return {left:b.left,right:b.right};});
+   return {rect:r.toJSON(),searchCenter:search.x+search.width/2,searchRight:search.right,controls,regions,overflow:e.scrollWidth-e.clientWidth};
+  });
+  expect(Math.max(...geometry.controls.map(c=>c.center))-Math.min(...geometry.controls.map(c=>c.center))).toBeLessThan(2);
+  for(const control of geometry.controls){expect(control.left).toBeGreaterThanOrEqual(geometry.rect.left-1);expect(control.right).toBeLessThanOrEqual(geometry.rect.right+1);if(control.action)expect(control.left).toBeGreaterThanOrEqual(geometry.searchRight+1);}
+  expect(geometry.regions[0].right).toBeLessThanOrEqual(geometry.regions[1].left);expect(geometry.regions[1].right).toBeLessThanOrEqual(geometry.regions[2].left);
+  expect(geometry.searchCenter).toBeCloseTo(geometry.rect.x+geometry.rect.width/2,0);expect(geometry.overflow).toBeLessThanOrEqual(1);
+ };
+ for(const collapsed of [false,true]){
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  await check('.gantt-panel>.page-toolbar');await extended(page);await check('.gantt-panel>.page-toolbar');await check('.gantt-tasks-pane .page-toolbar');
+  await page.screenshot({path:testInfo.outputPath(`${width}-${collapsed?'collapsed':'expanded'}-single-line-toolbars.png`)});
+  await page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true}).click();
+ }
+});

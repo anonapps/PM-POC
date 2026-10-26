@@ -25,3 +25,17 @@ The owner requested one horizontal task row, continuous header styling matching 
 - [After: 900px](900-extended-tasks-aligned.png)
 
 All 12 Extended cases pass on the final layout, including the original preservation, creation-panel and save/reopen cases. Narrow widths use compact controls to retain every column without horizontal scrolling, as explicitly requested.
+
+
+## Single-line toolbar correction
+
+Gantt title/Search/mode/Expand/Collapse/Zoom now share one vertical centerline. Embedded Tasks title/Search/Show Deleted/Add Task likewise stay on one line. Search stays centered; its width and action spacing adapt at narrower desktop widths. Other standalone pages retain their existing toolbars.
+
+- [Before: wrapping Gantt actions](toolbar-before.png)
+- [After: 1440px](1440-single-line-toolbars.png)
+- [After: 1920px](1920-single-line-toolbars.png)
+- [After: 1024px](1024-single-line-toolbars.png)
+- [After: 900px](900-single-line-toolbars.png)
+- [After: collapsed sidebar](collapsed-single-line-toolbars.png)
+
+All 46 selected browser cases pass, including five new toolbar geometry/click cases in both modes/sidebar states. Build, typecheck and lint pass. Machine-readable follow-up evidence is appended in validation.json; prior full-suite evidence is labeled historical.

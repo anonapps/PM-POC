@@ -126,5 +126,46 @@
     ],
     "resolvedDuringValidation": "Narrow-width checks caught fixed-width Owner selectors and action wrapping/2px overflow. Corrected without relaxing assertions.",
     "scope": "Prior unit/lifecycle evidence predates these CSS corrections; no domain or persistence change."
+  },
+  "singleLineToolbarFollowup": {
+    "changes": "Gantt and embedded Tasks toolbars only: one row, centered search and vertical alignment; no action removed",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 87.33,
+        "code": 0,
+        "counts": [
+          "46 passed (1.5m)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "newToolbarWidthChecks": [
+      900,
+      1024,
+      1280,
+      1440,
+      1920
+    ],
+    "states": [
+      "Simple",
+      "Extended",
+      "expanded sidebar",
+      "collapsed sidebar"
+    ],
+    "checks": [
+      "every control shares a vertical centerline",
+      "title/search/action regions do not overlap",
+      "actions do not overlap Search or intercept mode-toggle clicks",
+      "search remains at full content center",
+      "no horizontal overflow",
+      "all relevant timeline navigation/filter/panel/table regressions retained"
+    ],
+    "resolvedDuringValidation": "900px geometry/click checks caught Search/filter overlapping Simple. Reduced action spacing and reserved adequate width; final assertions pass without forced clicks.",
+    "searchWidthPolicy": "340px at ordinary wide desktop widths; Gantt/embedded search may shrink at narrower widths to preserve one line and centering. Other standalone pages retain original widths/layout.",
+    "scope": "Earlier unit/lifecycle evidence predates these CSS changes; no domain or persistence changes."
   }
 }
