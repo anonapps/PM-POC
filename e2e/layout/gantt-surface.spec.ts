@@ -26,6 +26,7 @@ for(const [width,height] of [[900,700],[1280,900],[1440,900],[1920,1080]])test(`
    await add.click();await expect(page.getByRole('dialog',{name:'Create Task',exact:true})).toBeVisible();await page.getByRole('dialog',{name:'Create Task',exact:true}).getByRole('button',{name:'Cancel',exact:true}).click();
   }else expect(footer.y+footer.height).toBeCloseTo(height,0);
   expect((await page.locator('.baseline-controls').boundingBox())!.height).toBeLessThanOrEqual(width>1100?40:80);
+  if(extended){const splitter=page.getByRole('separator',{name:'Resize Gantt and Tasks panes',exact:true});await splitter.focus();for(let step=0;step<30;step++)await splitter.press('ArrowUp');const task=(await page.locator('.gantt-row.task>div').first().boundingBox())!,heading=(await page.locator('.gantt-item-heading').boundingBox())!,footer=(await page.getByRole('navigation',{name:'Gantt date navigation'}).boundingBox())!;expect(task.y).toBeGreaterThanOrEqual(heading.y+heading.height-1);expect(task.y+task.height).toBeLessThanOrEqual(footer.y+1);}
   await page.screenshot({path:info.outputPath(`${width}-${extended?'extended':'simple'}-surface.png`)});
  }
 });

@@ -21,13 +21,16 @@ export function GanttWorkspace({store,navigate}:{store:ProjectStore;navigate:(mo
     const root=workspace.current,lower=tasks.current;if(!root||!extended)return;
     const controls=[...root.querySelectorAll<HTMLElement>('.gantt-panel>.page-toolbar,.gantt-panel>.baseline-controls,.gantt-panel>footer')];
     const taskToolbar=lower?.querySelector<HTMLElement>('.page-toolbar');
+    const chartHeading=root.querySelector<HTMLElement>('.gantt-item-heading');
+    const firstRows=[...root.querySelectorAll<HTMLElement>('.gantt-row')].slice(0,2).flatMap(row=>row.firstElementChild instanceof HTMLElement?[row.firstElementChild]:[]);
     const measure=()=>{
-      const nextMinimum=Math.ceil(controls.reduce((height,control)=>height+control.getBoundingClientRect().height,0))+100;
+      const visibleChart=Math.max(100,(chartHeading?.getBoundingClientRect().height??0)+firstRows.reduce((height,row)=>height+row.getBoundingClientRect().height,0)+2);
+      const nextMinimum=Math.ceil(controls.reduce((height,control)=>height+control.getBoundingClientRect().height,0)+visibleChart);
       setMinimumUpper(Math.max(200,nextMinimum));
       setAvailable(Math.max(1,root.getBoundingClientRect().height-12));
       if(taskToolbar)lower?.style.setProperty('--module-toolbar-height',`${taskToolbar.getBoundingClientRect().height}px`);
     };
-    const observer=new ResizeObserver(measure);observer.observe(root);controls.forEach(control=>observer.observe(control));if(taskToolbar)observer.observe(taskToolbar);measure();
+    const observer=new ResizeObserver(measure);observer.observe(root);controls.forEach(control=>observer.observe(control));if(chartHeading)observer.observe(chartHeading);firstRows.forEach(row=>observer.observe(row));if(taskToolbar)observer.observe(taskToolbar);measure();
     return()=>observer.disconnect();
   },[extended,tasksMounted]);
   const changeMode=(next:boolean)=>{if(next)setTasksMounted(true);setExtended(next);};
@@ -36,7 +39,7 @@ export function GanttWorkspace({store,navigate}:{store:ProjectStore;navigate:(mo
     setFraction(Math.max(minimumUpper,Math.min(total-200,height))/total);
   };
   const upper=Math.max(minimumUpper,Math.min(available-200,fraction*available));
-  return <div ref={workspace} className={`gantt-workspace${extended?' gantt-extended':''}`} style={extended?{gridTemplateRows:`minmax(${minimumUpper}px,${fraction}fr) 12px minmax(200px,${1-fraction}fr)`,minHeight:minimumUpper+212}:undefined}>
+  return <div ref={workspace} className={`gantt-workspace${extended?' gantt-extended':''}`} style={extended?{gridTemplateRows:`${upper}px 12px minmax(200px,1fr)`,minHeight:minimumUpper+212}:undefined}>
     <div className="gantt-pane"><GanttView store={store} navigate={navigate} extended={extended} onModeChange={changeMode}/></div>
     {extended&&<div className="gantt-splitter" role="separator" tabIndex={0} aria-label="Resize Gantt and Tasks panes" aria-orientation="horizontal" aria-valuemin={Math.round(minimumUpper/available*100)} aria-valuemax={Math.round((available-200)/available*100)} aria-valuenow={Math.round(upper/available*100)} aria-valuetext={`Gantt ${Math.round(upper/available*100)}%, Tasks ${100-Math.round(upper/available*100)}%`} onKeyDown={event=>{
       if(event.key!=='ArrowUp'&&event.key!=='ArrowDown')return;event.preventDefault();resize(upper+(event.key==='ArrowUp'?-1:1)*(event.shiftKey?64:16));
