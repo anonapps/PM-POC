@@ -14,7 +14,7 @@
 .workspace .panel table.fit-table { width:100%; min-width:0; table-layout:fixed; }
 .workspace .panel table.fit-table th,.workspace .panel table.fit-table td { min-width:0; overflow-wrap:anywhere; }
 .workspace .panel table.fit-table :is(input:not([type=checkbox]),select,textarea,.multi-select,.predictive-select) { min-width:0; max-width:100%; box-sizing:border-box; }
-@container (max-width:1350px) {
+@container (max-width:600px) {
   .workspace .panel table.fit-table { display:block; }
   .workspace .panel table.fit-table :is(thead,tbody) { display:block; }
   .workspace .panel table.fit-table tr { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr)); gap:8px 12px; padding:12px 0; border-bottom:1px solid var(--border); }
@@ -67,7 +67,7 @@
 .workspace .gantt-panel .gantt-head { top:0; }
 .tube-baseline-indicator:is(:hover,:focus-visible)::after { content:attr(aria-label); position:absolute; z-index:50; bottom:100%; left:0; width:210px; max-width:45vw; padding:6px 8px; border:1px solid #acb8c7; border-radius:4px; background:white; color:#26364d; font:12px/1.4 Arial,sans-serif; box-shadow:0 3px 10px #17243a20; }
 .tube-baseline-indicator.label-left:is(:hover,:focus-visible)::after { left:auto; right:0; }
-@container (max-width:1350px) {
+@container (max-width:600px) {
   .workspace .panel table.fit-table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:auto; min-height:76px; }
 }
 /* Approved Extended Gantt: compact module surfaces only. Dialogs live at page level. */
@@ -206,4 +206,66 @@
 .workspace .panel.baselines-panel>.page-toolbar>:last-child { grid-column:3; grid-row:1; white-space:nowrap; }
 @container (max-width:750px) {
  .workspace .panel.baselines-panel .comparison-table th { padding-inline:2px; font-size:8.5px; }
+}
+
+/* Desktop records retain real table columns; cards are only for <=600px content. */
+@container (min-width:601px) and (max-width:1350px) {
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table th { width:auto; min-width:0; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table :is(th,td) { padding-inline:4px; font-size:12px; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table :is(input:not([type=checkbox]),select,summary) { min-width:0; max-width:100%; font-size:12px; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table .table-actions button { padding-inline:5px; font-size:11px; }
+ .workspace.module-people>.panel>table.fit-table th:first-child { width:24%; }
+ .workspace.module-people>.panel>table.fit-table th:nth-child(3) { width:12%; }
+ .workspace.module-people>.panel>table.fit-table th:nth-child(4) { width:30%; }
+ .workspace.module-people>.panel>table.fit-table th:last-child { width:12%; }
+ .workspace.module-streams>.panel>table.fit-table th:first-child { width:25%; }
+ .workspace.module-streams>.panel>table.fit-table th:last-child { width:23%; }
+ .workspace.module-risk-log>.panel>table.fit-table th:first-child { width:25%; }
+ .workspace.module-risk-log>.panel>table.fit-table th:last-child { width:24%; }
+ .workspace.module-decision-log>.panel>table.fit-table th:first-child { width:30%; }
+ .workspace.module-decision-log>.panel>table.fit-table th:last-child { width:26%; }
+ .workspace.module-tasks>.panel>table.tasks-table th { width:10%; }
+ .workspace.module-tasks>.panel>table.tasks-table th:first-child { width:3%; }
+ .workspace.module-tasks>.panel>table.tasks-table th:nth-child(2) { width:16%; }
+ .workspace.module-tasks>.panel>table.tasks-table th[data-task-column="progress"] { width:6%; }
+ .workspace.module-tasks>.panel>table.tasks-table th:is([data-task-column="startDate"],[data-task-column="endDate"]) { width:11%; }
+ .workspace.module-tasks>.panel>table.tasks-table th:last-child { width:13%; }
+ .workspace.module-tasks>.panel>table.tasks-table .task-progress-field input { min-width:0; }
+ .workspace.module-tasks>.panel>table.tasks-table th { font-size:11px; }
+ .workspace.module-milestones>.panel>table.fit-table th:first-child { width:23%; }
+ .workspace.module-milestones>.panel>table.fit-table th:last-child { width:20%; }
+}
+/* A fixed sidebar fits all modules; only the main workspace scrolls. */
+.app-shell #project-sidebar {
+ --sidebar-nav-gap:clamp(1px,calc((100dvh - 530px)/48),5px);
+ --sidebar-row-height:clamp(16px,calc((100dvh - 127.6px - (var(--sidebar-module-count) - 1) * var(--sidebar-nav-gap))/var(--sidebar-module-count)),40px);
+ height:100dvh; max-height:100dvh; overflow:clip;
+}
+.app-shell #project-sidebar #project-modules { gap:var(--sidebar-nav-gap); grid-auto-rows:var(--sidebar-row-height); align-content:start; }
+.app-shell #project-sidebar #project-modules .hero-nav { height:var(--sidebar-row-height); min-height:var(--sidebar-row-height); padding-block:0; }
+@media (max-height:420px) {
+ .app-shell #project-sidebar { padding-block:8px; --sidebar-row-height:clamp(14px,calc((100dvh - 89px)/var(--sidebar-module-count)),24px); }
+ .app-shell #project-sidebar .sidebar-heading { height:32px; min-height:32px; }
+ .app-shell #project-sidebar .brand { height:32px; min-height:32px; padding-block:0; }
+ .app-shell #project-sidebar .sidebar-toggle { height:24px; min-height:24px; }
+ .app-shell #project-sidebar #project-modules { margin-top:4px; gap:1px; }
+ .app-shell #project-sidebar #project-modules .hero-nav { font-size:11px; line-height:14px; }
+ .app-shell #project-sidebar #project-modules svg { height:14px; }
+}
+@container (min-width:601px) and (max-width:1350px) {
+ .workspace.module-milestones>.panel>table.fit-table details.multi-select:has(>summary.scope-summary) { width:100%; min-width:0; max-width:100%; }
+}
+@container (min-width:601px) and (max-width:1050px) {
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table th { font-size:10px; }
+ .workspace.module-tasks>.panel>table.tasks-table th:nth-child(2) { width:15%; }
+ .workspace.module-tasks>.panel>table.tasks-table th[data-task-column="progress"] { width:7%; }
+}
+@container (min-width:601px) and (max-width:750px) {
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table :is(th,td) { padding-inline:2px; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table th { font-size:9px; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table :is(input:not([type=checkbox]),select,summary) { padding-inline:2px; font-size:10px; }
+ .workspace:is(.module-people,.module-streams,.module-tasks,.module-milestones,.module-risk-log,.module-decision-log)>.panel>table.fit-table .table-actions button { font-size:10px; padding-inline:3px; }
+}
+@container (min-width:601px) and (max-width:1350px) {
+ .workspace.module-milestones>.panel>table.fit-table .milestone-name-cell { min-width:0; width:100%; }
 }
