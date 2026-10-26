@@ -77,3 +77,21 @@ test('boxed fields reuse a centered internal text band across pages and sizes',a
  }
  await page.screenshot({path:info.outputPath('shared-field-text-create-task.png')});
 });
+
+for(const width of [900,1280,1440])test(`Tasks selection column aligns and preserves select-all in both views at ${width}`,async({page},info)=>{
+ await page.setViewportSize({width,height:1000});await open(page);
+ for(const collapsed of [false,true]){
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  for(const extended of [false,true]){
+   await nav(page,extended?'Gantt':'Tasks');if(extended)await page.getByRole('button',{name:'Extended',exact:true}).click();
+   const table=page.locator(extended?'.gantt-tasks-pane table.tasks-table':'.workspace>.panel>table.tasks-table');
+   const header=table.getByRole('checkbox',{name:'Select all visible tasks',exact:true}),rows=table.locator('tbody>tr>td:first-child>input[type=checkbox]');
+   const h=(await header.boundingBox())!;
+   for(const row of (await rows.all()).slice(0,5)){const r=(await row.boundingBox())!;expect(r.x+r.width/2).toBeCloseTo(h.x+h.width/2,0);}
+   const band=await table.locator('thead th').first().evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {center:(r.top+parseFloat(s.borderTopWidth)+parseFloat(s.paddingTop)+r.bottom-parseFloat(s.borderBottomWidth)-parseFloat(s.paddingBottom))/2};});expect(h.y+h.height/2).toBeCloseTo(band.center,0);
+   await header.focus();await header.press('Space');await expect(rows.first()).toBeChecked();await expect(header).toBeChecked();
+   await header.press('Space');await expect(rows.first()).not.toBeChecked();await rows.first().check();expect(await header.evaluate(e=>(e as HTMLInputElement).indeterminate)).toBe(true);await rows.first().uncheck();await expect(header).not.toBeChecked();
+   if(width===1440&&!collapsed&&!extended)await page.screenshot({path:info.outputPath('standalone-tasks-selection-aligned.png')});
+  }
+ }
+});

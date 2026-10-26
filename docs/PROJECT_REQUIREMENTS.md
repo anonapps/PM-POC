@@ -2083,3 +2083,13 @@ All boxed editable fields must reuse shared internal text metrics across pages: 
 Gantt mode/expand/collapse/zoom controls must use ordinary page action font/height tokens rather than special tiny desktop fonts. Keep Search centered at its shared width; if standard controls cannot fit, use additional toolbar space instead of reducing typography or clipping actions. Comparison controls use the compact shared secondary-control rhythm, vertically centered field text and aligned labels/checkboxes. Dropdown search inputs throughout the app must visibly look editable even when unfocused.
 
 Render baseline schedules as noticeable grey comparison bars with dashed outlines, with red delayed-finish segments following the approved mockup reference, retaining status-colored current bars, variance labels, immutable snapshot calculations and toggle semantics. Maximize the chart's available viewport space and dock its legend/date footer to the bottom of the Simple workspace or upper Extended pane. Extended Tasks must occupy all remaining space to the viewport bottom, preserve scrolling/resizing and standalone behavior, fully show Add Task/focus outline, and align its heading/selection controls and table header checkbox. Preserve all prior shell/file boundaries; no merge/deploy/release.
+
+## Approved Gantt Zoom location — 26 October 2026
+
+Move the existing Gantt Zoom label/dropdown out of the top-right toolbar into the docked date-navigation footer, on the same vertically centered row as Previous/Next/Jump to today. Apply in Simple and Extended modes, preserving zoom/date-reset behavior, standard field sizing, centered Search and all footer/pane sizing. Reclaim the freed header space rather than reserving the former Zoom width. Tube Map behavior remains unchanged.
+
+Dropdown search placeholders show only “Type to filter” throughout the app; keep the specific accessible search label separately.
+
+## Approved standalone Tasks selection alignment — 26 October 2026
+
+Use the same centered selection-column checkbox geometry on standalone Tasks and Extended Tasks. Header and row checkbox horizontal centers must match; retain header vertical centering, select-all/individual/indeterminate states and bulk behavior. No other standalone Tasks change.

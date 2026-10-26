@@ -51,7 +51,7 @@ export function SearchableOptionList<T>({items,label,renderOption,emptyMessage="
     }
   };
   return <div ref={rootRef} className="searchable-option-list" onKeyDown={handleKeyDown}>
-    <input type="search" aria-label={label} placeholder={`Type to filter · ${label}`} value={query} onChange={event=>setQuery(event.target.value)}/>
+    <input type="search" aria-label={label} placeholder="Type to filter" value={query} onChange={event=>setQuery(event.target.value)}/>
     {searching&&<small role="status" aria-live="polite">{matching.length} {matching.length===1?"matching option":"matching options"}</small>}
     {noMatches?<small>{emptyMessage}</small>:matching.map(renderOption)}
   </div>;

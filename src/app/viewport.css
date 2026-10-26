@@ -463,3 +463,15 @@
 .workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-baseline.milestone { top:24px; height:12px; }
 .searchable-option-list { --field-height:34px; }
 .workspace .gantt-workspace .gantt-panel>.page-toolbar .filter-trigger { height:32px; min-height:0; padding:6px; }
+/* Gantt Zoom belongs with the docked date navigation, not the header actions. */
+.workspace .gantt-panel>footer .gantt-zoom-control { display:flex; align-items:center; gap:6px; margin-left:auto; font-size:var(--type-control); white-space:nowrap; }
+.workspace .gantt-panel>footer .gantt-zoom-control select { width:80px; min-width:80px; max-width:80px; font-size:var(--type-control); }
+@container (min-width:1041px) {
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar { grid-template-rows:none; }
+ .workspace .gantt-workspace .panel.gantt-panel>.page-toolbar>.actions:last-child { grid-column:3; grid-row:1; }
+}
+.workspace .gantt-panel>footer .gantt-zoom-control select { border:1px solid var(--control-border); border-radius:4px; background-color:var(--surface); color:var(--text); }
+/* One selection column geometry for standalone and Extended Tasks. */
+.app-main .workspace .panel table.tasks-table>thead th:first-child { text-align:center; vertical-align:middle; }
+.app-main .workspace .panel table.tasks-table>thead input[type=checkbox],
+.app-main .workspace .panel table.tasks-table>tbody>tr>td:first-child>input[type=checkbox] { display:block; margin:0 auto; }
