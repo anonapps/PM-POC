@@ -70,7 +70,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
   const scrolledFooter=await footer.boundingBox();expect(Math.abs(initialFooter!.y-scrolledFooter!.y)).toBeLessThan(1);expect(Math.abs(initialFooter!.x-scrolledFooter!.x)).toBeLessThan(1);expect(scrolledFooter!.y+scrolledFooter!.height).toBeLessThanOrEqual(900);
   const lastRow=await page.locator('.gantt-row').last().locator(':scope>div').first().boundingBox(),dependencies=await page.locator('.gantt-dependencies').boundingBox();
   expect(lastRow!.y+lastRow!.height).toBeLessThanOrEqual(scrolledFooter!.y+1);expect(dependencies!.y+dependencies!.height).toBeLessThanOrEqual(scrolledFooter!.y+1);
-  if(width===900)expect(await chart.evaluate(e=>e.scrollWidth>e.clientWidth&&e.scrollLeft>0)).toBe(true);
+  expect(await chart.evaluate(e=>e.scrollWidth<=e.clientWidth+1&&e.scrollLeft===0)).toBe(true);
   await page.getByRole('button',{name:'Collapse All',exact:true}).click();await expect(range).toHaveAttribute('data-start',start!);
   await page.getByRole('button',{name:'Expand All',exact:true}).click();
   await chart.evaluate(e=>{e.scrollTop=0;e.scrollLeft=0;});
@@ -99,4 +99,15 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  expect(last.y+last.height).toBeLessThanOrEqual(footer.y+1);
  await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+});
+
+for(const width of [900,1024,1280,1440,1920])test(`v1.6 all modules fit viewport at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});await openProject(page);
+ for(const name of ["Overview",...pages,"Baselines","Dependencies","File Information"]){
+  await page.locator('nav').getByRole('button',{name,exact:true}).click();
+  await expect.poll(()=>page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth),{message:`${name} workspace must fit`}).toBeLessThanOrEqual(1);
+  expect(await page.locator('.panel').first().evaluate(e=>e.scrollWidth-e.clientWidth),`${name} panel`).toBeLessThanOrEqual(1);
+  const outside=await page.locator('.panel input:visible,.panel select:visible,.panel button:visible,.panel summary:visible').evaluateAll(nodes=>nodes.filter(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.left<0||r.right>window.innerWidth+1);}).map(n=>n.getAttribute('aria-label')??n.textContent));
+  expect(outside,`${name} controls must remain accessible`).toEqual([]);
+ }
 });

@@ -68,3 +68,14 @@ describe("Gantt connector validation", () => {
     expect(ganttConnectorPaths({ ...base, rows: base.rows.slice(0, 1) })).toEqual([]);
   });
 });
+
+it('keeps connector anchors aligned when variance rows are taller',()=>{
+ const paths=ganttConnectorPaths(base,52);
+ expect(paths).toHaveLength(1);
+ expect(paths[0].path).toContain('V 70');
+});
+
+it('uses measured bar centers for rows that grow to different heights',()=>{
+ const paths=ganttConnectorPaths(base,52,[24,85]);
+ expect(paths[0].path).toContain(' 24 H ');expect(paths[0].path).toContain('V 85');
+});

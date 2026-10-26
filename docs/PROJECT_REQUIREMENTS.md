@@ -7,6 +7,21 @@
 
 ---
 
+## v1.6.0 approved scope — 26 October 2026
+
+The user supplied the original planning conversation requirements and consolidated implementation instructions. These additions supersede conflicting earlier exclusions only within this scope. Full acceptance and phase gates: [V1.6_IMPLEMENTATION.md](V1.6_IMPLEMENTATION.md).
+
+- **REQ-001:** Fit all content and controls inside the desktop viewport with no horizontal scrolling or hidden offscreen content. Adapt tables, columns, toolbars and filters; permit vertical scrolling. Preserve sidebar behavior. Gantt and Tube Map navigate time using Previous, Next and Jump to today.
+- Verify existing persistent Gantt footer, shared Search/Filter toolbars, measured dropdown positioning/alignment, sticky controls, compact visual consistency, quick edits, sorting, filters and both charts' navigation. Do not invent additional behavior.
+- Multiple named baselines: unique stable IDs, names/descriptions, timestamps, immutable versioned schedule snapshots with stable task/milestone IDs and historical stream references. Create/list/select/rename/delete with confirmation; shared comparison calculations for start/finish variance, additions/removals and undated items. Store in .pmp independently of audit recording; preserve legacy files.
+- Reuse existing dependency records and supported relationship types; enhance cross-stream identification/filtering/sorting/inspection/editing, self/cycle/missing-reference validation and informational schedule warnings. Never schedule automatically or duplicate links.
+- Optional Gantt baseline overlays/variance, Tube Map baseline milestone indicators/dependency visibility and a sortable/filterable comparison table must share calculations and preserve existing interactions and station layout.
+- **REQ-002 / mandatory approval gate:** Before implementing Extended Mode, produce a detailed populated mockup of Simple/Extended Gantt, compact upper chart and lower Tasks panel, toggle immediately before Expand All, split resizing/scroll behavior, baseline/dependency controls. Stop for explicit mockup approval. Only Extended Mode receives compact spacing; standalone Tasks and Simple Gantt retain their behavior/layout except approved viewport fitting and new controls.
+- One consolidated v1.6 release; feature branch only. Preserve local/offline architecture, .pmp compatibility, Audit History and Undo/Redo. Exclude critical path, float, what-if, milestone trend visualizations, financial/resource management, attachments, cloud collaboration and automatic scheduling.
+- Extend seeded unit/integration/browser regression tests and document actual results, compatibility, screenshots and limitations. Prepare a draft PR; never merge, release or deploy without explicit approval.
+
+---
+
 ## v1.5.0 approved requirements (supersedes earlier behaviour where inconsistent)
 
 **Status:** Requirements frozen following 19 clarification batches (57 decisions). This section is authoritative for v1.5; the detailed acceptance checklist is in [V1.5_APPROVED_ENHANCEMENTS.md](V1.5_APPROVED_ENHANCEMENTS.md).

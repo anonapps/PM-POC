@@ -5,7 +5,7 @@ import type { ProjectStore } from "@/application";
 import type { RuntimeSaveStatus } from "@/runtime/project-runtime";
 import { deriveProjectWarnings } from "../warnings/warnings";
 
-export const MODULES = ["Overview", "Search", "Streams", "People", "Tasks", "Gantt", "Milestones", "Tube Map", "Risk Log", "Decision Log", "Warnings", "File Information"] as const;
+export const MODULES = ["Overview", "Search", "Streams", "People", "Tasks", "Gantt", "Milestones", "Tube Map", "Risk Log", "Decision Log", "Baselines", "Dependencies", "Warnings", "File Information"] as const;
 export type ModuleName = (typeof MODULES)[number];
 export interface NavigationTarget { readonly module: ModuleName; readonly entityId?: string; readonly requestId: number }
 let nextNavigationRequestId = 0;
