@@ -21,7 +21,7 @@ import { DependencyConnectors, dependencyCurve } from "../shared/dependency-conn
 import type { ProjectStore } from "../../application";
 import { baselineDelayPosition, barPosition, buildGanttModel, type GanttModel, type GanttZoom, positionForDate, todayPosition } from "./model";
 
-export interface GanttConnectorPath { key: string; path: string; label: string }
+export interface GanttConnectorPath { key: string; path: string; label: string; fromX:number; fromY:number; toX:number; toY:number }
 export function ganttConnectorPaths(model: GanttModel, rowHeight=36, rowCenters?:readonly number[]): GanttConnectorPath[] {
   return model.dependencies.flatMap((dependency) => {
     const fromIndex = model.rows.findIndex((row) => row.kind === "task" && row.id === dependency.from);
@@ -35,11 +35,11 @@ export function ganttConnectorPaths(model: GanttModel, rowHeight=36, rowCenters?
     if (!fromBar || !toBar) return [];
     if ((from.end < model.start && to.start < model.start) || (from.end > model.end && to.start > model.end)) return [];
     if (dependency.from === dependency.to) return [];
-    const fromX = Math.max(0, Math.min(100, positionForDate(from.end, model.start, model.end)));
+    const fromX = Math.max(0, Math.min(100, from.end < model.start ? 0 : from.end > model.end ? 100 : fromBar.left + fromBar.width));
     const toX = Math.max(0, Math.min(100, positionForDate(to.start, model.start, model.end)));
     const fromY = rowCenters?.[fromIndex]??fromIndex * rowHeight + 18;
     const toY = rowCenters?.[toIndex]??toIndex * rowHeight + 18;
-    return [{ key: `${dependency.from}:${dependency.to}`, path: dependencyCurve(fromX,fromY,toX,toY), label: `${from.label} → ${to.label} · Finish-to-Start` }];
+    return [{ key: `${dependency.from}:${dependency.to}`, path: dependencyCurve(fromX,fromY,toX,toY), label: `${from.label} → ${to.label} · Finish-to-Start`, fromX,fromY,toX,toY }];
   });
 }
 

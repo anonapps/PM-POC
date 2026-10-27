@@ -128,6 +128,7 @@ for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are tra
  await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
  const links=page.locator('.dependency-connection');expect(await links.count()).toBeGreaterThan(1);
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${moduleName}-dependency-overview.png`)});
+ expect(await page.locator('.dependency-connectors').evaluate(e=>{const matrix=(e as SVGSVGElement).getScreenCTM()!;return Math.abs(matrix.a-matrix.d);})).toBeLessThan(.01);
  const first=links.first();await expect(first).toHaveAttribute('aria-label',/ → .*Finish-to-Start/);
  await expect(first.locator('.dependency-line')).toHaveAttribute('d',/ C /);
  await expect(first.locator('.dependency-line')).toHaveAttribute('marker-end',/url/);
