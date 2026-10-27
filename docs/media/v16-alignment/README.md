@@ -138,3 +138,14 @@ Actual screenshots from the final complete gate on `fcb9d7844615127d8feda18c9873
 - [Context label on Risk](readonly-context-label.png)
 
 Actual final-run screenshots on `face0f09873a498043b10ba35e7d47f8cf51ebce`. **483 unit tests / 245 lifecycle checkpoints / all 126 browser cases passed**, plus typecheck/lint/build. Six new browser cases cover shared filters/fonts, all nine two-way sorts, footer boundaries/last-row reachability after scroll/navigation/resize, and Context opening/editing. Three unit cases cover chronological/null/numeric/historical-label sorting. No schema/file-service changes or release actions.
+
+## Shared timeline dependencies and compact footers
+
+- [dependency-gantt-overview.png](dependency-gantt-overview.png)
+- [dependency-gantt-focus.png](dependency-gantt-focus.png)
+- [dependency-tube-overview.png](dependency-tube-overview.png)
+- [dependency-tube-focus.png](dependency-tube-focus.png)
+- [footer-gantt-900.png](footer-gantt-900.png)
+- [footer-tube-900.png](footer-tube-900.png)
+- [footer-gantt-1440.png](footer-gantt-1440.png)
+- [footer-tube-1440.png](footer-tube-1440.png)

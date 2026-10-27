@@ -816,5 +816,53 @@
     ],
     "nativeScope": "Linux Chromium; physical Mac/picker/disk confirmation remains manual.",
     "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
+  },
+  "timelineDependenciesAndCompactFooters": {
+    "applicationCommit": "15f6fa0a53aeaf8979dd65a881851433bb55caa7",
+    "fullConnectorGate": {
+      "commit": "081fbe4",
+      "logs": "work/validation-2026-10-27T13-36-43.925Z",
+      "unitTests": 483,
+      "lifecycleCheckpoints": 245,
+      "browserTests": 128,
+      "typecheck": "passed",
+      "lint": "passed",
+      "build": "passed"
+    },
+    "footerFollowup": {
+      "logs": "work/validation-2026-10-27T13-48-10.264Z",
+      "browserTests": 61,
+      "seconds": 81.33,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed"
+    },
+    "finalArrowProportionsAndAnchors": {
+      "logs": "work/validation-2026-10-27T13-51-50.563Z",
+      "browserTests": 37,
+      "seconds": 55.94,
+      "unitLogs": "work/validation-2026-10-27T13-50-58.092Z",
+      "affectedUnitTests": 17,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed"
+    },
+    "coverage": "Full 128-case suite preceded footer changes; footer follow-up added three geometry comparisons. Intermediate 131-case run had 126 passes and five failures (measured-header inheritance and legacy icon-size check). The final 61-case affected suite passed with a fixed standard height and readable 12px diamond icons; final 37-case suite passed after pixel-space arrow/finish-edge refinement. Unaffected successful suites were retained.",
+    "exploratoryIssues": [
+      "Initial browser launch omitted CHROME_PATH; corrected to installed Chromium.",
+      "Deterministic screenshot fixture humanId type annotation corrected before the successful full connector gate."
+    ],
+    "screenshots": [
+      "dependency-gantt-overview.png",
+      "dependency-gantt-focus.png",
+      "dependency-tube-overview.png",
+      "dependency-tube-focus.png",
+      "footer-gantt-900.png",
+      "footer-tube-900.png",
+      "footer-gantt-1440.png",
+      "footer-tube-1440.png"
+    ],
+    "nativeScope": "Linux Chromium only; Mac acceptance remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/release."
   }
 }
