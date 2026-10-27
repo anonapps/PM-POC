@@ -564,9 +564,6 @@
 .workspace .dependency-connectors .dependency-halo { stroke:white; stroke-width:5px; pointer-events:none; }
 .workspace .dependency-connectors .dependency-line { stroke:#456488; stroke-width:1.6px; pointer-events:none; }
 .workspace .dependency-connectors .dependency-hit { stroke:transparent; stroke-width:12px; pointer-events:stroke; }
-.workspace .dependency-connectors:has(.dependency-connection:is(:hover,:focus)) .dependency-connection { opacity:.18; }
-.workspace .dependency-connectors .dependency-connection:is(:hover,:focus) { opacity:1!important; }
-.workspace .dependency-connectors .dependency-connection:is(:hover,:focus) .dependency-line { stroke:#155bc1; stroke-width:3px; }
 .workspace .dependency-connectors marker path { fill:#456488; stroke:none; }
 
 /* One compact footer rhythm for both charts and both Gantt modes. */
@@ -596,3 +593,17 @@
  .workspace .timeline-navigation-legend-row { height:auto; flex-wrap:wrap; }
  .workspace .panel footer.timeline-navigation .timeline-navigation-context { margin-left:auto; }
 }
+
+/* Dotted, muted relationships with exactly one explicit preview/selection. */
+.workspace .dependency-connectors .dependency-connection { opacity:1; }
+.workspace .dependency-connectors .dependency-line { stroke:#a7aeb8; stroke-width:1.6px; stroke-dasharray:1 5; }
+.workspace .dependency-connectors[data-has-active=true] .dependency-connection:not([data-active=true]) { opacity:.18; }
+.workspace .dependency-connectors .dependency-connection[data-active=true] .dependency-line { stroke:#155bc1; stroke-width:2.5px; }
+.workspace .dependency-connectors marker .dependency-arrow-muted { fill:#a7aeb8; }
+.workspace .dependency-connectors marker .dependency-arrow-active { fill:#155bc1; }
+.workspace .gantt-row.dependency-muted>div,
+.workspace .tube-station.dependency-muted { filter:grayscale(1); opacity:.35; }
+/* Tube Map's workspace bottom padding looked like additional footer height. */
+.workspace.module-tube-map { padding-bottom:0; }
+.workspace .dependency-connectors .dependency-connection .dependency-line { stroke-dasharray:1 5; }
+.workspace.module-tube-map .tube-map { border-bottom:0; }
