@@ -530,3 +530,29 @@
 .app-main .risk-context-editor textarea { --field-height:50px; --field-padding-block:4px; }
 .app-main .workspace .panel .tube-axis,
 .app-main .workspace .panel .tube-axis>:is(button,span) { font:var(--column-heading-weight) var(--column-heading-font)/20px Arial,Helvetica,sans-serif!important; background:var(--column-heading-background)!important; color:#445268; }
+/* Shared readable read-only record values; page-specific tiny fonts are superseded. */
+.app-main .workspace .panel table.record-data-table>tbody>tr>td { height:40px; padding:4px 6px; font:400 var(--type-body)/20px Arial,Helvetica,sans-serif; background:var(--surface); color:var(--text); vertical-align:middle; }
+.app-main .workspace .panel table.record-data-table .comparison-kind,
+.app-main .workspace .panel table.record-data-table td small { font-size:var(--type-caption); color:var(--text-muted); }
+.app-main .workspace .panel table.comparison-table td[data-variance=later] { color:#805b00; }
+.app-main .workspace .panel table.comparison-table td[data-variance=earlier] { color:#237244; }
+.app-main .workspace .panel table.record-data-table .table-actions button { font-size:var(--action-font); padding:2px 10px; height:var(--action-height); }
+/* Results own scrolling; no table content can render behind or below the footer. */
+.workspace.module-dependencies { padding-bottom:0; }
+.workspace .panel.dependencies-panel { height:var(--data-panel-height,calc(100dvh - 56px)); min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+.workspace .panel.dependencies-panel>.page-toolbar { flex:0 0 auto; position:relative; top:auto; }
+.workspace .panel.dependencies-panel>.data-table-scroll { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; }
+.workspace .panel.dependencies-panel .data-table-scroll thead th { position:sticky; top:0; }
+.workspace .panel.dependencies-panel>footer.dependency-description { flex:0 0 auto; position:static; margin:0; padding:6px 0; background:var(--canvas); border-top:1px solid var(--border); }
+.app-main .workspace .panel table.dependency-table th { width:calc((100% - 120px) * .2); }
+.app-main .workspace .panel table.dependency-table th:nth-child(3) { width:calc((100% - 120px) * .15); }
+.app-main .workspace .panel table.dependency-table th:nth-child(5) { width:calc((100% - 120px) * .25); }
+.app-main .workspace .panel table.dependency-table th:last-child { width:120px; }
+.app-main .workspace .panel table.record-data-table .table-actions button { white-space:nowrap; }
+
+@container (max-width:1350px) {
+ .app-main .workspace .panel table.record-data-table>tbody>tr>td { font-size:12px; }
+}
+@container (min-width:636px) {
+ .workspace .panel.baselines-panel>.page-toolbar { --baseline-search-width:340px; }
+}

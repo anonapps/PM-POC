@@ -36,9 +36,8 @@ test('warning content navigates by keyboard and description click without an Ope
  await nav(page,'Warnings');await page.screenshot({path:info.outputPath('warnings-clickable.png')});await content.locator('.warning-description').click();await expect(page.locator('tr.navigation-target').first()).toContainText(warning.humanId);
 });
 test('Dependencies follows compact font tokens and preserves complete warning text and inspection',async({page},info)=>{
- await page.setViewportSize({width:1366,height:768});await open(page);await nav(page,'Dependencies');
+ await page.setViewportSize({width:1366,height:768});await open(page);await nav(page,'Tasks');const expected=await page.locator('tbody tr td').first().evaluate(e=>getComputedStyle(e).fontSize);await nav(page,'Dependencies');
  const table=page.locator('.dependency-table');await expect(table).toHaveCSS('display','table');
- const expected=await page.locator('.dependencies-panel .dependency-count').evaluate(e=>getComputedStyle(e).fontSize);
  for(const cell of await table.locator('tbody tr').first().locator('td').all())await expect(cell).toHaveCSS('font-size',expected);
  expect((await table.locator('thead').boundingBox())!.height).toBeLessThanOrEqual(38);expect((await table.locator('tbody tr').first().boundingBox())!.height).toBeLessThanOrEqual(42);
  const warning=table.locator('tbody tr').first().locator('td').nth(4);expect(await warning.getAttribute('title')).toBe(await warning.textContent());

@@ -13,7 +13,7 @@ test('Risk context/actions are compressed and Matrix toggle belongs between Sear
  const matrix=page.getByRole('button',{name:'Risk Matrix',exact:true}),search=(await page.locator('.shared-search-filter').boundingBox())!,toggle=(await matrix.boundingBox())!,deleted=(await page.getByText('Show Deleted',{exact:true}).boundingBox())!;
  expect(toggle.x).toBeGreaterThan(search.x+search.width);expect(toggle.x+toggle.width).toBeLessThan(deleted.x);expect(toggle.y+toggle.height/2).toBeCloseTo(search.y+search.height/2,0);
  await matrix.click();await expect(matrix).toHaveAttribute('aria-expanded','false');await nav(page,'People');await nav(page,'Risk Log');await expect(matrix).toHaveAttribute('aria-expanded','false');
- await page.getByRole('button',{name:'Edit context',exact:true}).first().click();const context=page.locator('.risk-context-editor');
+ await page.getByRole('button',{name:'Context',exact:true}).first().click();const context=page.locator('.risk-context-editor');
  const owner=(await context.locator('.predictive-select>summary').boundingBox())!,wide=(await context.locator('.context-project-wide').boundingBox())!;expect(owner.height).toBe(30);expect(wide.y+wide.height/2).toBeCloseTo(owner.y+owner.height/2,0);
  for(const control of await context.locator('summary,button').all())expect((await control.boundingBox())!.height).toBe(30);
  expect((await context.locator('textarea').boundingBox())!.height).toBeGreaterThanOrEqual(48);expect(await context.evaluate(e=>parseFloat(getComputedStyle(e).paddingTop))).toBeLessThanOrEqual(8);
