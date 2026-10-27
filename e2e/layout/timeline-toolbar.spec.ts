@@ -83,6 +83,10 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  await page.setViewportSize({width,height:900});await openProject(page);
  await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
  if(length==='short')await page.locator('.shared-search-filter input').fill(fixture.projectState.streams[0].name);
+ await page.getByRole('combobox').selectOption('date');
+ for(const label of await page.locator('.tube-axis>span').allTextContents())expect(label).toMatch(/^\d{2}\/\d{2}$/);
+ expect(await page.locator('.tube-axis>span').evaluateAll(nodes=>nodes.every(node=>getComputedStyle(node).textAlign==='center'))).toBe(true);
+ await page.getByRole('combobox').selectOption('week');
  const laneCount=await page.locator('.tube-line').count();expect(length==='short'?laneCount<5:laneCount>=31).toBe(true);
  const workspace=page.locator('.workspace');
  // Include the axis/footer in the bound; no decorative paint should add a viewport of scrolling.

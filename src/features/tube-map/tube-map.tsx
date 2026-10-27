@@ -16,7 +16,7 @@ import type { ProjectStore } from "../../application";
 import { buildTubeMap, countTubeMilestones } from "./model";
 import { inclusiveTubeMapEnd, tubeMapAnchorDate, tubeMapDisplayDate } from "./local-date";
 import type { ModuleName } from "../shell/shell";
-const dateLabel = (date: string) => new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`)).replace(" ", "/");
+const dateLabel = (date: string) => tubeMapDisplayDate(date).slice(0, 5);
 export function TubeMapView({ store, navigate }: { store: ProjectStore; navigate: (module: ModuleName, entityId?: string) => void }) {
   const {baseline}=useBaselineSelection();
   const [showBaseline,setShowBaseline]=useState(false),[showDependencies,setShowDependencies]=useState(true);

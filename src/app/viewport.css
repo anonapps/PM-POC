@@ -5,7 +5,7 @@
 .workspace .gantt-panel .gantt { grid-template-columns:clamp(175px,23%,275px) minmax(0,1fr); overflow-x:clip; }
 .workspace section.panel.tube-map,.workspace .tube-map>.tube-map { min-width:0; width:100%; box-sizing:border-box; }
 .workspace .tube-axis { min-width:0; grid-template-columns:160px repeat(12,minmax(0,1fr)); }
-.workspace .tube-axis span { min-width:0; overflow-wrap:anywhere; }
+.workspace .tube-axis span { min-width:0; overflow-wrap:anywhere; text-align:center; }
 .workspace .timeline-status-legend { height:auto; min-height:24px; flex-wrap:wrap; overflow:visible; white-space:normal; }
 .workspace footer.timeline-navigation { flex-wrap:wrap; height:auto; gap:8px; }
 .workspace .timeline-navigation>span { overflow-wrap:anywhere; }
