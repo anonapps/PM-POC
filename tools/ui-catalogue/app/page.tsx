@@ -1,5 +1,8 @@
 'use client';
 import { useState } from 'react';
+import { ReferenceExamples } from './reference-examples';
+import { RecordExamples } from './record-examples';
+import { CreationExamples } from './creation-examples';
 import { buildGanttModel, type GanttZoom } from '../../../src/features/gantt/model';
 import { buildTubeMap } from '../../../src/features/tube-map/model';
 import { createProjectStore } from '../../../src/application';
@@ -21,9 +24,9 @@ import { useDependencyFocus } from '../../../src/features/shared/use-dependency-
 const people=[{id:'one',name:'Marta',humanId:'PERSON-001'},{id:'two',name:'Long owner name for overflow review',humanId:'PERSON-002'},{id:'deleted',name:'Previous owner',deleted:true}];
 const related=[{id:'task-one',humanId:'TASK-001',name:'First task',deletion:{isDeleted:false}},{id:'task-two',humanId:'TASK-002',name:'A long task name for full-value access',deletion:{isDeleted:false}},{id:'removed',humanId:'TASK-003',name:'Previous task',deletion:{isDeleted:true}}];
 const paths=[{key:'a-b',fromX:10,fromY:30,toX:70,toY:85,label:'First task → Second task · Finish-to-Start'},{key:'b-c',fromX:70,fromY:85,toX:35,toY:135,label:'Second task → Third task · Finish-to-Start'}];
-const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Footers','Tokens'];
+const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Creation','Records','Footers','References','Tokens'];
 export default function Catalogue() {
-  const [store]=useState(()=>{let sequence=0;return createProjectStore(makeProjectState({streams:[streamFixture()],tasks:[taskFixture()]}),{createId:()=>`catalogue-${++sequence}`,now:()=> '2026-10-27T12:00:00Z'});});
+  const [store]=useState(()=>{let sequence=0;return createProjectStore(makeProjectState({streams:[streamFixture()],tasks:[taskFixture()],identifierSequences:{stream:1,task:1,milestone:0,person:0,risk:0,decision:0}}),{createId:()=>`catalogue-${++sequence}`,now:()=> '2026-10-27T12:00:00Z'});});
   const [panel,setPanel]=useState<'standalone'|'extended'|null>(null);
   const [dialog,setDialog]=useState(false);
   const [notice,setNotice]=useState('No records created');
@@ -38,7 +41,7 @@ export default function Catalogue() {
   const tube=buildTubeMap(store.getState(),new Date(Date.parse('2026-10-26T00:00:00Z')+offsets.milestone*28*86400000).toISOString().slice(0,10));
   const focus=useDependencyFocus();
   return <main className="app-main catalogue">
-    <header className="catalogue-intro"><h1>ARGOS PM UI catalogue</h1><p>Compatibility reference · local examples only · no project files or persistence</p><nav aria-label="Catalogue sections">{sections.map(name=><a key={name} href={`#${name.toLowerCase()}`}>{name}</a>)}</nav></header>
+    <header className="catalogue-intro"><h1>ARGOS PM UI catalogue</h1><p>Compatibility reference · local examples only · no project files or project persistence</p><nav aria-label="Catalogue sections">{sections.map(name=><a key={name} href={`#${name.toLowerCase()}`}>{name}</a>)}</nav></header>
     <div className="workspace"><div className="panel">
       <section id="actions" className="catalogue-section"><h2>Actions</h2><p className="catalogue-note">Generic action classes (36–38px context); compact page actions appear in Search and Footers. Tab to inspect focus; hover and press to inspect states.</p><div className="catalogue-row"><button type="button">Primary</button><button type="button" className="secondary">Secondary</button><button type="button" className="danger">Delete</button><button type="button" disabled>Disabled</button><button type="button" className="secondary" aria-label="More actions">⋯</button></div></section>
       <section id="fields" className="catalogue-section"><h2>Fields and density</h2><p className="catalogue-note">Actual context classes retain responsive styles. Human text capitalizes on blur; search, date and number values stay native.</p><div className="catalogue-grid">
@@ -53,6 +56,9 @@ export default function Catalogue() {
       <section id="relationships" className="catalogue-section"><h2>Relationships</h2><p className="catalogue-note">Synthetic endpoint nodes with real shared connectors. Hover/focus previews; click/Enter/Space pins one relationship; Escape clears. Hide dependencies in Search removes connectors.</p><div className="catalogue-chart">{['a','b','c'].map((name,index)=>{const active=focus.activeKey?.split('-');return <span key={name} className="catalogue-node" data-muted={Boolean(active&&!active.includes(name))} style={{left:`${[10,70,35][index]}%`,top:[20,75,125][index],backgroundColor:TASK_STATUS_COLOURS['In Progress']}}>{['First','Second','Third'][index]}</span>;})}{!hide&&<DependencyConnectors className="catalogue-connectors" height={160} paths={paths} label="Example dependencies" activeKey={focus.activeKey} selectedKey={focus.selectedKey} onPreview={focus.preview} onSelect={focus.select} onClear={focus.clear}/>}</div></section>
       <section id="containers" className="catalogue-section"><h2>Dialogs and creation panels</h2><p className="catalogue-note">Both Task entry points use the same real panel and disposable memory store. Refresh resets all examples. Other page migrations remain pending.</p><div className="catalogue-row"><button type="button" className="secondary" onClick={()=>setDialog(true)}>Open dialog</button><button type="button" onClick={()=>setPanel('standalone')}>Standalone Add Task</button><button type="button" onClick={()=>setPanel('extended')}>Extended Add Task</button></div><p role="status">{notice}</p>{dialog&&<Dialog title="Example dialog" onClose={()=>setDialog(false)}><p>Existing focus trap, Escape dismissal and focus restoration.</p><button type="button" className="secondary" onClick={()=>setDialog(false)}>Close example</button></Dialog>}{panel&&<div className={panel==='extended'?'gantt-extended':''}><EntityCreationPanel kind="task" store={store} onClose={()=>setPanel(null)} onCreated={()=>setNotice(`${store.getState().tasks.length-1} example task(s) created in memory`)}/></div>}</section>
       <section id="footers" className="catalogue-section"><h2>Timeline footers</h2><p className="catalogue-note">Shared existing footer; desktop 56px. Labels and navigation are local demo state.</p>{(['task','milestone'] as const).map(kind=><div key={kind} className="catalogue-sample"><h3>{kind==='task'?'Gantt':'Tube Map'}</h3><TimelineNavigation label={`${kind} example navigation`} start={(kind==='task'?gantt:tube).start} end={(kind==='task'?gantt:tube).end} onPrevious={()=>setOffsets(value=>({...value,[kind]:value[kind]-1}))} onNext={()=>setOffsets(value=>({...value,[kind]:value[kind]+1}))} onToday={()=>setOffsets(value=>({...value,[kind]:0}))} todayDisabled={offsets[kind]===0} legend={<TimelineStatusLegend kind={kind}/>} controls={kind==='task'?<label className="gantt-zoom-control">Zoom <select aria-label="Example zoom" value={zoom} onChange={event=>{setZoom(event.target.value as GanttZoom);setOffsets(value=>({...value,task:0}));}}><option>Week</option><option>Month</option><option>Quarter</option></select></label>:undefined}/></div>)}</section>
+      <CreationExamples/>
+      <RecordExamples/>
+      <ReferenceExamples/>
       <section id="tokens" className="catalogue-section"><h2>Token reference</h2><p className="catalogue-note">Compatibility aliases are catalogue-only until component migration. Status colors use existing TypeScript exports.</p><div className="catalogue-tokens">{Object.entries({...TASK_STATUS_COLOURS,...Object.fromEntries(Object.entries(MILESTONE_STATUS_COLOURS).map(([key,value])=>[`Milestone ${key}`,value]))}).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:color}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div></section>
     </div></div>
   </main>;

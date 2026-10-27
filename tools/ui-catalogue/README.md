@@ -8,7 +8,7 @@ npm run ui:catalogue
 
 Open http://127.0.0.1:3100. This is a **separate local Next application**, outside production `src/app` and `public`. It reuses installed dependencies, production CSS in its existing order, Providers and real component exports. No new package, production route, navigation entry, project-file service or autosave runtime is added. The command binds to loopback. Stop it with Ctrl+C.
 
-Examples hold local React state or a disposable deterministic application store. Refresh resets all values. Creating an example task affects memory only. Do not import `ProjectManager`, browser file services or runtime/autosave into this app. Browser storage and native file access must stay unused.
+Examples hold local React state or a disposable deterministic application store. Refresh resets example records and local React state. Creating an example task affects memory only. Do not import `ProjectManager`, browser file services or runtime/autosave into this app. Native file access and project persistence stay unused. The real Risk Matrix disclosure uses session storage on this isolated catalogue origin; Reset restores example records/history and leaves that existing session preference intact.
 
 ## Current coverage
 
@@ -20,12 +20,13 @@ Examples hold local React state or a disposable deterministic application store.
 | Search | ModuleSearch portalled filter surface, clear/reset, local query and hide-dependency state |
 | Indicators | ScopePill and complete task/milestone TimelineStatusLegend palettes |
 | Relationships | DependencyConnectors + useDependencyFocus, single pin/preview/Escape and endpoint-only color example |
-| Containers | Actual Dialog and EntityCreationPanel, identical Task entry points, real validation/dirty dismissal in a memory store |
-| Tables | FitTable direct header/cell structure; full header-title wrapper retained |
+| Containers and creation | Actual Dialog and all six EntityCreationPanel kinds, identical Task entry points, real validation/dirty dismissal and successful creation in disposable stores |
+| References | Actual Status, EmptyState, TodayMarker and anchored warning disclosure; native full-value title tooltip |
+| Tables and editors | Real Tasks, Risk Log, Decision Log and Baselines modules; selection/indeterminate/sort, deleted values, context/actions, nine comparison columns and baseline manager/menu |
 | Footers | Actual TimelineNavigation for both legends, real chart model ranges/increments, disabled Today, Gantt Zoom |
 | Tokens | Existing status color exports and catalogue-only semantic compatibility aliases |
 
-This is the Stage2 foundation, **not completion of every catalogue state or a page migration**. Remaining examples: full record table sort/bulk/indeterminate recipes, populated Risk/Decision editors, Baselines action menu, every creation kind, native tooltip/error slot variants and full page context comparisons. Existing production acceptance suites remain the reference for those behaviors. No candidate font rounding, density reduction, palette merging or CSS cleanup has been applied.
+This Stage2 catalogue now includes representative table/editor/menu compositions and every record creation kind. It is **not a production page migration or exhaustive verification of every possible state**. The real page examples expose inline validation/error slots, empty search results, deleted/restore behavior and populated menus for manual inspection. Remaining review includes complete chart-page context comparisons, native physical-platform appearance and any proposed visual normalization. Existing production acceptance suites remain the reference for those behaviors. No candidate font rounding, density reduction, palette merging or CSS cleanup has been applied.
 
 The aliases in `app/catalogue.css` are an isolated naming prototype. Production CSS remains the authority for current rendered values; component migration will move aliases into a shared source only after every consumer and value is mapped. The catalogue stylesheet owns sample layout only; do not use it to make a production asset look correct.
 
@@ -38,8 +39,14 @@ npm run lint
 npm run build
 ```
 
-Catalogue Playwright uses a separate local server/profile and one worker. Geometry checks cover900/1440/1920, three field heights, equal footer heights and no document overflow. Interaction checks cover filtering/no-results, keyboard dismissal/focus return, human-text blur, exclusive relationship pin/hide/reset, creation validation/dirty dismissal and modal focus return. File picker calls are trapped and counted; local/session storage stays empty in the selector scenario. These checks do not establish native physical Mac/Windows rendering or full application lifecycle coverage.
+Catalogue Playwright uses a separate local server/profile and one worker. Geometry checks cover900/1440/1920, three field heights, equal footer heights and no document overflow. Interaction checks cover filtering/no-results, keyboard dismissal/focus return, human-text blur, exclusive relationship pin/hide/reset, creation validation/dirty dismissal and modal focus return. Added checks cover successful creation/reset for all six kinds, real table selection/indeterminate/sorting/edit reset, Risk/Decision contexts, Baselines management/all nine sortable headers, and warning disclosure/native-title attributes. File picker calls are trapped and counted; local/session storage stays empty in the selector scenario. These checks do not establish native physical Mac/Windows rendering or full application lifecycle coverage.
 
 After the root production build, inspect `.next/server/app-paths-manifest.json`: there must be no catalogue route. Root source must not import `tools/ui-catalogue`. Existing successful application behavior suites do not need repeating solely for catalogue/docs changes; run relevant suites when production consumers migrate. Full `validate:pr` remains mandatory before making the draft PR ready.
 
 See [component contracts](../../docs/UI_COMPONENT_CONTRACTS.md), [proposal](../../docs/UI_STANDARD_PROPOSAL.md) and [migration plan](../../docs/UI_STANDARD_MIGRATION_PLAN.md).
+
+## Review before migration
+
+Compare Fields, Creation, Records and Footers at supported desktop widths. In Records, switch among Tasks, Risk Log, Decision Log and Baselines; open Context/Actions and baseline management. Reset restores deterministic records, identifier sequences and memory history. These are existing assets, so observed differences are evidence for the standard, not silently corrected variants.
+
+The compatibility-preserving path needs no new visual decisions. Reducing36/34/30 to two sizes, rounding fonts or merging palettes still requires an explicit choice after visual comparison. Native OS tooltip/calendar styling and physical Mac/Windows acceptance remain manual.

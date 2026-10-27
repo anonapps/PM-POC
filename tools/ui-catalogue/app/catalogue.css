@@ -36,3 +36,4 @@
 .catalogue-swatch { width:24px; height:24px; border:1px solid var(--border); display:inline-block; }
 /* An Extended specimen is not a full-height production workspace. */
 .catalogue-sample.gantt-extended { display:block; min-height:0; height:auto; }
+.catalogue-today-sample { position:relative; height:96px; background:var(--surface); }
