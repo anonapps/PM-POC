@@ -116,3 +116,7 @@ The `.pmp` project file is the sole source of truth for project data. Persistenc
 ## UI standardization proposal
 
 The documentation-only [Stage 1 proposal](docs/UI_STANDARD_PROPOSAL.md) captures the [current UI audit](docs/UI_STANDARD_AUDIT.md), reusable component contracts and a [sequenced migration/acceptance plan](docs/UI_STANDARD_MIGRATION_PLAN.md). Proposed token normalization is not yet approved; current requirements and accepted UI remain the reference.
+
+### Internal UI catalogue
+
+Run `npm run ui:catalogue` for the separate local component review app. See the [catalogue guide](tools/ui-catalogue/README.md) and [component contracts](docs/UI_COMPONENT_CONTRACTS.md). Production pages and approved visual values remain unchanged.

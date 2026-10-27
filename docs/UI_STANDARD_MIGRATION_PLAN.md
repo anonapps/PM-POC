@@ -1,6 +1,6 @@
 # UI standardization — migration and acceptance plan
 
-**Status:** Planning only. Stage 1 is documentation; later implementation is not started.  
+**Status:** Stage 1 documentation complete; Stage 2 catalogue foundation implemented after owner direction to proceed. Production migration is not started.
 **Inputs:** [Audit](UI_STANDARD_AUDIT.md) · [Proposal and D01–D10 decisions](UI_STANDARD_PROPOSAL.md) · [Authoritative requirements](PROJECT_REQUIREMENTS.md).
 
 ## 1. Delivery boundaries
@@ -18,7 +18,7 @@ Stages 2–4 follow review of Stage 1. A request to simplify tokens does not its
 
 | Wave / task IDs | Work | Dependencies | Parallel ownership |
 | --- | --- | --- | --- |
-| W0 / S01–S03 | Audit capture; token/exception proposal; component contracts/acceptance plan | Current approved implementation | Independent read-only reviews can run in parallel; one author consolidates the documents. This is the current delivery. |
+| W0 / S01–S03 | Audit capture; token/exception proposal; component contracts/acceptance plan | Current approved implementation | Independent read-only reviews can run in parallel; one author consolidates the documents. Completed in Stage 1. |
 | W1 / F01–F03 | Choose token source/export mechanism; introduce equivalent aliases; prepare catalogue harness and disposable fixtures | Reviewed D01–D10; current computed-style baseline | One integrator owns shared styles/token source. Another task can prepare catalogue examples/fixtures after interfaces are fixed. |
 | W2 / P01–P03 | Action controls; field framing/composition; choice rows/selection/overlay surfaces | Stable aliases and component interfaces | Separate component-owned files: A actions, B fields, C selectors. Shared CSS changes go through the integrator. |
 | W3 / C01–C03 | Inline editors/forms/dialogs; table-cell/toolbar recipes; badge/icon/legend maps | W2 contracts and examples accepted | A compositions, B table recipes, C semantic assets. Do not concurrently change the same creation/table/shared component. |
@@ -101,3 +101,11 @@ Use deterministic existing fixtures for layout; retain full UI creation where cr
 ## 8. Stage 1 documentation verification
 
 On 27 October 2026, the three new documents passed a local-reference check (14 references) and decision completeness check (D01–D10). `git diff --check` passed. Independent token and component-contract reviews found no blocking requirement or scope conflicts; their ancestry/header-traversal cautions were incorporated above. Only Markdown documentation and documentation index links changed. No runtime tests were rerun for this documentation-only delivery, and no UI/catalogue/runtime implementation is claimed.
+
+## 9. Stage 2 foundation — 27 October 2026
+
+The owner directed proceeding and parallel work after the Stage1 delivery. Implementation follows the compatibility-preserving direction: no typography rounding, density reduction, palette merging or production page migration. Parallel source review and component-contract documentation accompanied one integration owner for the isolated harness.
+
+The [internal catalogue](../tools/ui-catalogue/README.md) is a separate loopback-only Next app outside production routing. It imports existing assets and styles, uses local state/disposable memory commands, and prototypes compatibility aliases only within the catalogue. [Component contracts](UI_COMPONENT_CONTRACTS.md) map source ownership, intentional variants and reuse rules. The catalogue README lists implemented examples and remaining coverage explicitly. W1 is a foundation delivery; the production token export/alias migration and all W2–W5 consumer changes remain pending.
+
+Stage2 scoped verification: five unique catalogue Playwright scenarios passed (four in the final broad run, 12.2s; the additional navigation case in a focused run, 2.1s), covering geometry at 900/1440/1920, selectors, relationships, modal/creation behavior and model navigation increments/zoom reset. Typecheck, lint and the root production build passed. The root app-path manifest contains only `/page`, `/_not-found/page` and `/_global-error/page`; no catalogue route is shipped. A 1440px visual inspection caught and corrected full-height workspace inheritance in a specimen; the final screenshot reported no page errors and a 34px Search field. Seventy-two local Markdown references and whitespace checks passed. Logs and the review screenshot are retained under ignored `work/ui-catalogue-*`. Application lifecycle suites were not rerun for this isolated harness; their earlier evidence remains scoped to the recorded application commit. The navigation test initially read state before the React update; it was corrected to wait for exact expected start/end attributes and passed without changing application behavior. The draft PR remains draft.
