@@ -1,5 +1,7 @@
 # v1.3.0 — UI design system
 
+> **Current standardization work:** This document records the historical v1.3/v1.4 design-system baseline. Later approved requirements take precedence. The documentation-only [Stage 1 proposal](UI_STANDARD_PROPOSAL.md), [current-state audit](UI_STANDARD_AUDIT.md) and [migration plan](UI_STANDARD_MIGRATION_PLAN.md) distinguish preserved behavior from unapproved normalization candidates. They do not change the running UI.
+
 ## ARGOS PM v1.4.0 design-system update
 
 The v1.3 design-system baseline is retained below as historical context. v1.4 standardises compact page headings, buttons, control alignment, row heights and muted Scope pills, and updates sidebar icons and ordering. The People page control/pill height is the reference for other pages. Risk severity pills match the 3×3 matrix; deleted People use a distinct light-orange state. Gantt and Tube Map preserve their horizontal navigation, sticky headers and quick-edit interactions. See `V1.4_APPROVED_ENHANCEMENTS.md` for the approved v1.4 scope.
