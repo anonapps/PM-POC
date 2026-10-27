@@ -149,3 +149,16 @@ Actual final-run screenshots on `face0f09873a498043b10ba35e7d47f8cf51ebce`. **48
 - [footer-tube-900.png](footer-tube-900.png)
 - [footer-gantt-1440.png](footer-gantt-1440.png)
 - [footer-tube-1440.png](footer-tube-1440.png)
+
+## Dotted single-relationship focus, hide filters and complete footer bounds
+
+- [dotted-gantt-default.png](dotted-gantt-default.png)
+- [dotted-gantt-selected.png](dotted-gantt-selected.png)
+- [dotted-tube-default.png](dotted-tube-default.png)
+- [dotted-tube-selected.png](dotted-tube-selected.png)
+- [hide-dependencies-gantt.png](hide-dependencies-gantt.png)
+- [hide-dependencies-tube.png](hide-dependencies-tube.png)
+- [matched-footer-gantt-900.png](matched-footer-gantt-900.png)
+- [matched-footer-tube-900.png](matched-footer-tube-900.png)
+- [matched-footer-gantt-1440.png](matched-footer-gantt-1440.png)
+- [matched-footer-tube-1440.png](matched-footer-tube-1440.png)

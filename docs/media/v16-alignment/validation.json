@@ -864,5 +864,47 @@
     ],
     "nativeScope": "Linux Chromium only; Mac acceptance remains manual.",
     "releaseActions": "Draft PR25 only; no merge/deploy/tag/release."
+  },
+  "dottedDependencySelectionAndFooterBounds": {
+    "applicationCommit": "54b80d6f9ed3c3e6aae7c9c198407ae4e6005c4b",
+    "focusedBrowserChecks": {
+      "logs": "work/validation-2026-10-27T14-20-46.255Z",
+      "passed": 5,
+      "seconds": 10.25,
+      "scope": "Real pointer click/hover, exclusive pin replacement, Enter/Escape, endpoint-only status colors, hide/reset controls, and complete 56px footer/bottom-edge comparisons at 900/1280/1440."
+    },
+    "remainingBrowserChecks": {
+      "logs": "work/validation-2026-10-27T14-24-00.354Z",
+      "passed": 126,
+      "seconds": 193.38,
+      "scope": "Every remaining Playwright case including Atlas; excludes only the five already successful focused cases."
+    },
+    "lifecycle": {
+      "command": "CHROME_PATH=/usr/bin/chromium npm run test:lifecycle -- --skip-atlas",
+      "logs": "work/dependency-focus-lifecycle.log",
+      "checkpoints": 245,
+      "server": "Harness-owned Next development server; final browser regression uses the unchanged production build.",
+      "elapsed": "Not separately measured."
+    },
+    "build": "passed; work/dependency-focus-build2.log",
+    "typecheck": "passed during production build",
+    "lint": "passed; work/dependency-focus-lint.log",
+    "exploratoryCorrections": [
+      "Higher-specificity legacy path CSS suppressed the dotted pattern; explicit shared line selector now applies the dots.",
+      "Viewport-bottom assertion exposed two enclosing Tube Map borders in addition to workspace padding; both extra bottom regions removed."
+    ],
+    "screenshots": [
+      "dotted-gantt-default.png",
+      "dotted-gantt-selected.png",
+      "dotted-tube-default.png",
+      "dotted-tube-selected.png",
+      "hide-dependencies-gantt.png",
+      "hide-dependencies-tube.png",
+      "matched-footer-gantt-900.png",
+      "matched-footer-tube-900.png",
+      "matched-footer-gantt-1440.png",
+      "matched-footer-tube-1440.png"
+    ],
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/release."
   }
 }
