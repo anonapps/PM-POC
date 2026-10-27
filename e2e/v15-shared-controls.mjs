@@ -24,7 +24,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     await waitFor(`!document.querySelector('.module-search-controls')`);
     record(`${module}: outside click collapses Search and retains query`, await evaluate(`document.querySelector('.module-search-toolbar button').textContent.includes('Active')`));
     await click(add);
-    record(`${module}: creation keeps Search disabled and Show Deleted before Add`, await evaluate(`(()=>{const search=document.querySelector('.module-search-toolbar button'),header=document.querySelector('.panel .header-actions');return search.disabled&&!document.querySelector('.module-search-controls')&&header.firstElementChild.matches('label.toggle')&&Boolean(search.compareDocumentPosition(document.querySelector('form[data-create-draft]'))&Node.DOCUMENT_POSITION_FOLLOWING)})()`));
+    record(`${module}: creation keeps Search disabled and Show Deleted before Add`, await evaluate(`(()=>{const search=document.querySelector('.module-search-toolbar button'),header=document.querySelector('.panel .header-actions'),toggle=header.querySelector('label.toggle');return search.disabled&&!document.querySelector('.module-search-controls')&&toggle?.nextElementSibling?.textContent===${JSON.stringify(add)}&&(${JSON.stringify(module)}!=='Risk Log'||header.querySelector('.risk-matrix-toggle')?.nextElementSibling===toggle)&&Boolean(search.compareDocumentPosition(document.querySelector('form[data-create-draft]'))&Node.DOCUMENT_POSITION_FOLLOWING)})()`));
     await evaluate(`document.querySelector('form[data-create-draft]').requestSubmit()`);
     await waitFor(`document.querySelector('#${id}')?.getAttribute('aria-invalid')==='true'`);
     record(`${module}: blank panel creation reports error beneath name`, await evaluate(`document.getElementById(document.querySelector('#${id}').getAttribute('aria-describedby'))?.textContent.includes('required.')&&document.activeElement.id==='${id}'`));
@@ -41,7 +41,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
   for (const [module, add] of [['Tasks','Add Task'],['Milestones','Add Milestone'],['Risk Log','Add Risk'],['Decision Log','Add Decision']]) {
     await nav(module);
     await click(add);
-    record(`${module}: creation preserves disabled Search and toolbar order`, await evaluate(`document.querySelector('.module-search-toolbar button')?.disabled&&document.querySelector('.panel .header-actions')?.firstElementChild.matches('label.toggle')`));
+    record(`${module}: creation preserves disabled Search and toolbar order`, await evaluate(`document.querySelector('.module-search-toolbar button')?.disabled&&document.querySelector('.panel .header-actions label.toggle')?.nextElementSibling?.textContent===${JSON.stringify(add)}&&(${JSON.stringify(module)}!=='Risk Log'||document.querySelector('.risk-matrix-toggle')?.nextElementSibling===document.querySelector('.panel .header-actions label.toggle'))`));
     await evaluate(`document.querySelector('form[data-create-draft] .creation-footer button.secondary').click()`);
   }
   await nav('Tasks');
