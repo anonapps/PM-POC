@@ -139,3 +139,22 @@ for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are tra
  await page.getByRole('checkbox',{name:'Dependencies',exact:true}).check();expect(await links.count()).toBeGreaterThan(1);
  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
+
+for(const width of [900,1280,1440])test(`timeline footers share compact geometry at ${width}`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:900});await openProject(page);
+ const inspect=async(name:string)=>{
+  const footer=page.getByRole('navigation',{name:`${name} date navigation`});
+  return footer.evaluate(element=>{const style=getComputedStyle(element),button=element.querySelector('button')!,b=getComputedStyle(button);return{height:element.getBoundingClientRect().height,padding:style.padding,gap:style.gap,font:style.fontFamily,size:style.fontSize,button:{height:button.getBoundingClientRect().height,font:b.fontFamily,size:b.fontSize,weight:b.fontWeight,padding:b.padding,radius:b.borderRadius,border:b.borderColor},legend:element.querySelector('.timeline-navigation-legend-row')!.getBoundingClientRect().height};});
+ };
+ await page.locator('nav').getByRole('button',{name:'People',exact:true}).click();const titleHeight=(await page.locator('.page-toolbar').boundingBox())!.height;
+ await page.locator('nav').getByRole('button',{name:'Gantt',exact:true}).click();const standard=await inspect('Gantt');expect(standard.height).toBe(56);expect(standard.height).toBeLessThanOrEqual(titleHeight);expect(standard.button.height).toBe(30);
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-compact-footer.png`)});
+ await page.getByRole('button',{name:'Extended',exact:true}).click();expect(await inspect('Gantt')).toEqual(standard);
+ await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();expect(await inspect('Tube Map')).toEqual(standard);
+ await expect(page.getByRole('button',{name:'Previous 4 weeks',exact:true})).toHaveText('← Previous');
+ await expect(page.getByRole('button',{name:'Next 4 weeks',exact:true})).toHaveText('Next →');
+ await expect(page.locator('.timeline-navigation-context')).toContainText(/before.*connections.*after/);
+ await page.locator('.workspace').evaluate(e=>{e.scrollTop=e.scrollHeight;});
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-compact-footer.png`)});
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+});

@@ -568,3 +568,31 @@
 .workspace .dependency-connectors .dependency-connection:is(:hover,:focus) { opacity:1!important; }
 .workspace .dependency-connectors .dependency-connection:is(:hover,:focus) .dependency-line { stroke:#155bc1; stroke-width:3px; }
 .workspace .dependency-connectors marker path { fill:#456488; stroke:none; }
+
+/* One compact footer rhythm for both charts and both Gantt modes. */
+.workspace .panel footer.timeline-navigation,
+.workspace .gantt-extended .gantt-panel footer.timeline-navigation {
+ display:flex; flex-direction:column; align-items:stretch; gap:2px;
+ min-height:56px; height:auto; padding:2px 8px;
+ font:400 var(--type-control)/18px Arial,Helvetica,sans-serif;
+}
+.workspace .timeline-navigation-legend-row { display:flex; align-items:center; gap:8px; min-width:0; height:18px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend {
+ flex:1; height:18px; min-height:18px; min-width:0; flex-wrap:nowrap;
+ gap:12px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; font-size:var(--type-control);
+}
+.workspace .panel footer.timeline-navigation .timeline-status-legend>span { font:400 var(--type-control)/18px Arial,Helvetica,sans-serif; gap:5px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend i { width:18px; height:8px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend.milestone i { width:12px; height:12px; margin-inline:2px; }
+.workspace .panel footer.timeline-navigation .timeline-navigation-context { flex:0 0 auto; font:400 var(--type-caption)/18px Arial,Helvetica,sans-serif; color:var(--text-muted); white-space:nowrap; }
+.workspace .timeline-navigation-controls { display:flex; align-items:center; flex-wrap:wrap; gap:4px 8px; min-width:0; min-height:var(--action-height); }
+.workspace .panel footer.timeline-navigation .timeline-navigation-controls>span { font:400 var(--type-control)/20px Arial,Helvetica,sans-serif; color:var(--text-muted); white-space:nowrap; }
+.workspace .panel footer.timeline-navigation button {
+ box-sizing:border-box; height:var(--action-height); min-height:var(--action-height);
+ padding:2px 10px; border:1px solid var(--primary); border-radius:var(--action-radius);
+ font:600 var(--action-font)/20px Arial,Helvetica,sans-serif;
+}
+@container workspace (max-width:500px) {
+ .workspace .timeline-navigation-legend-row { height:auto; flex-wrap:wrap; }
+ .workspace .panel footer.timeline-navigation .timeline-navigation-context { margin-left:auto; }
+}

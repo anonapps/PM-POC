@@ -2111,3 +2111,5 @@ Every Baselines column supports keyboard/click ascending and descending sorting,
 #### Timeline dependency readability correction — 27 October 2026
 
 Gantt and Tube Map use a shared readable dependency presentation: smooth directional connectors, successor arrows, crossing separation from grid lines, and pointer/keyboard emphasis of a named relationship. Unrelated connections fade while one is emphasized. Preserve existing relationship semantics, visible-window filtering and Dependencies toggles; visual emphasis does not modify the project.
+
+Timeline footer correction: Gantt and Tube Map share the smaller compact footer geometry, typography, button appearance and spacing. Reduce excess vertical padding to the page-title toolbar rhythm. Retain legends, date navigation increments, outside-window counts, connection information and footer Zoom.
