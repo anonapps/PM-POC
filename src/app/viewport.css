@@ -477,7 +477,7 @@
 .app-main .workspace .panel table.tasks-table>tbody>tr>td:first-child>input[type=checkbox] { display:block; margin:0 auto; }
 
 /* Compressed inline editors reuse Extended Tasks' 30px/20px control metrics. */
-.risk-context-editor,.risk-actions-editor,.decision-context-editor { --field-height:30px; }
+.risk-context-editor,.risk-actions-editor { --field-height:30px; }
 .app-main .workspace .panel .risk-context-editor { padding:6px 8px; gap:4px 8px; align-items:center; font-size:var(--type-control); }
 .app-main .workspace .panel .risk-context-editor>.context-project-wide { display:flex; align-items:center; gap:6px; min-height:30px; margin:0; }
 .app-main .workspace .panel .context-project-wide input { margin:0; }
@@ -528,3 +528,5 @@
 .app-main .workspace .panel .column-heading-label:has(>input[type=checkbox]) { display:flex; align-items:center; justify-content:center; }
 /* Multiline descriptions retain two compact lines instead of the single-line band. */
 .app-main .risk-context-editor textarea { height:48px!important; min-height:48px!important; padding:4px 8px!important; }
+.app-main .workspace .panel .tube-axis,
+.app-main .workspace .panel .tube-axis>:is(button,span) { font:var(--column-heading-weight) var(--column-heading-font)/20px Arial,Helvetica,sans-serif!important; background:var(--column-heading-background)!important; color:#445268; }
