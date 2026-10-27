@@ -732,5 +732,89 @@
     ],
     "nativeScope": "Linux Chromium at Mac-like CSS viewports; physical Mac/picker/disk acceptance remains manual.",
     "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
+  },
+  "readOnlyPageConsistencyAndSorting": {
+    "applicationCommit": "face0f09873a498043b10ba35e7d47f8cf51ebce",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.34,
+        "code": 0,
+        "counts": [
+          "Test Files  56 passed (56)",
+          "Tests  483 passed (483)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 2.41,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.68,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.31,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 70.52,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 194.75,
+        "code": 0,
+        "counts": [
+          "126 passed (3.2m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "requirements": [
+      "Shared record-page filter categories/popups, preserved Clear all and filter semantics",
+      "No secondary Schedule comparison heading row",
+      "Baseline/Dependency values use ordinary record-body fonts/breakpoints, shared colors/spacing and complete tooltips",
+      "All nine columns sort both ways with aria-sort, ISO dates, numeric variance, stable ordering and missing-last behavior",
+      "Dependencies results scroll strictly above footer; final row reachable; no leaked content after scroll/navigation/resize",
+      "Context opening label on both Risk/Decision retains behavior",
+      "Original sidebar, Gantt/Tasks, baseline immutability, history, creation and PMP compatibility preserved"
+    ],
+    "focusedEvidence": [
+      "Three new sorting unit cases passed (0.35s)",
+      "33 focused read-only/shared/compact/Baselines cases passed (44.28s)",
+      "Seven final focused checks passed (8.61s), including Tasks body-font reference and resize separation"
+    ],
+    "newCoverage": "Six read-only page cases at 900/1440 plus three sort-unit cases; every previous test retained.",
+    "exploratoryNotes": [
+      "People fixture has no filter categories; reference comparison now uses populated Tasks categories.",
+      "Value-font parity uses actual Tasks cells rather than toolbar count typography.",
+      "Action column reserved for standard-sized Inspect / Edit; full type/value titles retained."
+    ],
+    "screenshots": [
+      "readonly-baselines-filters.png",
+      "readonly-dependencies-filters.png",
+      "readonly-dependencies-footer.png",
+      "readonly-dependencies-footer-900.png",
+      "readonly-context-label.png"
+    ],
+    "nativeScope": "Linux Chromium; physical Mac/picker/disk confirmation remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
   }
 }

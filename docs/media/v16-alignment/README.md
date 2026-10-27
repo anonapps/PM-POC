@@ -128,3 +128,13 @@ Latest presentation-only follow-up: 71 affected browser cases passed, then all t
 - [Dependencies: docked information footer](shared-dependencies-footer.png)
 
 Actual screenshots from the final complete gate on `fcb9d7844615127d8feda18c98734e89efc70cc1`: **480 unit tests / 245 lifecycle checkpoints / all 120 browser cases passed**, plus typecheck/lint/build. Native description drag resizing, Matrix session behavior, Baselines focus/Unicode Enter normalization/immutable save-reopen, and identical record/timeline heading tokens are covered. Long headings retain full text/native titles while keeping the same font at narrow widths. Legacy stored names/snapshots are not migrated. Earlier failed/stopped runs are historical; no merge/deploy/release.
+
+## Read-only page consistency and bounded Dependencies results
+
+- [Baselines standard filters and no redundant heading](readonly-baselines-filters.png)
+- [Dependencies standard filter categories](readonly-dependencies-filters.png)
+- [Results separated from the footer](readonly-dependencies-footer.png)
+- [900px footer and complete action buttons](readonly-dependencies-footer-900.png)
+- [Context label on Risk](readonly-context-label.png)
+
+Actual final-run screenshots on `face0f09873a498043b10ba35e7d47f8cf51ebce`. **483 unit tests / 245 lifecycle checkpoints / all 126 browser cases passed**, plus typecheck/lint/build. Six new browser cases cover shared filters/fonts, all nine two-way sorts, footer boundaries/last-row reachability after scroll/navigation/resize, and Context opening/editing. Three unit cases cover chronological/null/numeric/historical-label sorting. No schema/file-service changes or release actions.
