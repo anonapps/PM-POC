@@ -556,3 +556,15 @@
 @container (min-width:636px) {
  .workspace .panel.baselines-panel>.page-toolbar { --baseline-search-width:340px; }
 }
+
+/* Shared relationship treatment: white crossing separation, directional curves,
+   and a generous pointer target without increasing visual weight. */
+.workspace .dependency-connectors .dependency-connection { outline:none; }
+.workspace .dependency-connectors .dependency-connection path { fill:none; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:none; }
+.workspace .dependency-connectors .dependency-halo { stroke:white; stroke-width:5px; pointer-events:none; }
+.workspace .dependency-connectors .dependency-line { stroke:#456488; stroke-width:1.6px; pointer-events:none; }
+.workspace .dependency-connectors .dependency-hit { stroke:transparent; stroke-width:12px; pointer-events:stroke; }
+.workspace .dependency-connectors:has(.dependency-connection:is(:hover,:focus)) .dependency-connection { opacity:.18; }
+.workspace .dependency-connectors .dependency-connection:is(:hover,:focus) { opacity:1!important; }
+.workspace .dependency-connectors .dependency-connection:is(:hover,:focus) .dependency-line { stroke:#155bc1; stroke-width:3px; }
+.workspace .dependency-connectors marker path { fill:#456488; stroke:none; }

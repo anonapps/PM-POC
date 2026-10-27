@@ -72,10 +72,10 @@ describe("Gantt connector validation", () => {
 it('keeps connector anchors aligned when variance rows are taller',()=>{
  const paths=ganttConnectorPaths(base,52);
  expect(paths).toHaveLength(1);
- expect(paths[0].path).toContain('V 70');
+ expect(paths[0].path).toMatch(/, [\d.]+ 70$/);
 });
 
 it('uses measured bar centers for rows that grow to different heights',()=>{
  const paths=ganttConnectorPaths(base,52,[24,85]);
- expect(paths[0].path).toContain(' 24 H ');expect(paths[0].path).toContain('V 85');
+ expect(paths[0].path).toContain(' 24 C ');expect(paths[0].path).toMatch(/, [\d.]+ 85$/);
 });

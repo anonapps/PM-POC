@@ -1,12 +1,13 @@
 import {test,expect,type Page} from '@playwright/test';
+import {makeProjectState,streamFixture,taskFixture} from '../../src/domain/test-fixtures';
 import {readFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
 const decoded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
 if(!decoded.ok)throw new Error('Invalid legacy fixture');
 const fixture=decoded.value;
 const pages=['Search','Streams','People','Tasks','Gantt','Milestones','Risk Log','Tube Map','Decision Log','Warnings'];
-async function openProject(page:Page,range?:[string,string]){
- const state=range?{...fixture.projectState,project:{...fixture.projectState.project,startDate:range[0],endDate:range[1]}}:fixture.projectState;
+async function openProject(page:Page,range?:[string,string],source=fixture.projectState){
+ const state=range?{...source,project:{...source.project,startDate:range[0],endDate:range[1]}}:source;
  const encoded=serializeProject(state,{createdAt:fixture.manifest.createdAt,lastSavedAt:fixture.manifest.lastSavedAt,runtimeVersion:'1.4.0',minimumRuntimeVersion:fixture.manifest.compatibility.minimumRuntimeVersion,configuration:fixture.configuration});
  if(!encoded.ok)throw new Error(JSON.stringify(encoded.errors));
  await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const modified=Date.now(),handle={name:'disposable-toolbar.pmp',async getFile(){return{name:this.name,size:data.length,lastModified:modified,arrayBuffer:async()=>data.slice().buffer};},async createWritable(){return{write:async(value:Uint8Array)=>{data=new Uint8Array(value);},close:async()=>{}};}};Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle});},{bytes:[...encoded.value]});
@@ -114,4 +115,27 @@ for(const width of [900,1024,1280,1440,1920])test(`v1.6 all modules fit viewport
   const outside=await page.locator('.panel input:visible,.panel select:visible,.panel button:visible,.panel summary:visible').evaluateAll(nodes=>nodes.filter(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.left<0||r.right>window.innerWidth+1);}).map(n=>n.getAttribute('aria-label')??n.textContent));
   expect(outside,`${name} controls must remain accessible`).toEqual([]);
  }
+});
+
+for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are traceable in ${moduleName}`,async({page},testInfo)=>{
+ await page.setViewportSize({width:1440,height:900});await page.clock.setFixedTime(new Date('2026-10-27T12:00:00Z'));
+ const names=['Design','Build','Review','Test','Approve','Launch'];
+ const streams=[0,1,2].map(i=>streamFixture({id:`stream-${i}`,humanId:`STREAM-00${i+1}`,name:['Planning','Delivery','Launch'][i]}));
+ const tasks=names.map((name,i)=>taskFixture({id:`task-${i}`,humanId:`TASK-00${i+1}`,name,scope:{kind:'project'},startDate:`2026-10-${25+i}`,endDate:`2026-10-${26+i}`}));
+ const milestones=names.map((name,i)=>({...fixture.projectState.milestones[0],id:`milestone-${i}`,humanId:`MILESTONE-00${i+1}` as const,name:`${name} gate`,scope:{kind:'streams' as const,streamIds:[streams[Math.floor(i/2)].id]},plannedDate:`2026-11-${String(2+i*3).padStart(2,'0')}`,relatedTaskIds:[]}));
+ const dependencies=(['task','milestone'] as const).flatMap(kind=>[[0,1],[0,3],[1,4],[2,3],[3,5]].map(([from,to],i)=>({id:`${kind}-link-${i}`,projectId:'project-1',predecessor:{kind,id:`${kind}-${from}`},successor:{kind,id:`${kind}-${to}`},type:'Finish-to-Start' as const})));
+ await openProject(page,undefined,makeProjectState({streams,tasks,milestones,dependencies,identifierSequences:fixture.projectState.identifierSequences}));
+ await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
+ const links=page.locator('.dependency-connection');expect(await links.count()).toBeGreaterThan(1);
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${moduleName}-dependency-overview.png`)});
+ const first=links.first();await expect(first).toHaveAttribute('aria-label',/ → .*Finish-to-Start/);
+ await expect(first.locator('.dependency-line')).toHaveAttribute('d',/ C /);
+ await expect(first.locator('.dependency-line')).toHaveAttribute('marker-end',/url/);
+ await first.focus();await expect(first).toBeFocused();
+ expect(await first.locator('.dependency-line').evaluate(e=>getComputedStyle(e).strokeWidth)).toBe('3px');
+ expect(await links.nth(1).evaluate(e=>getComputedStyle(e).opacity)).toBe('0.18');
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${moduleName}-dependency-focus.png`)});
+ await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(links).toHaveCount(0);
+ await page.getByRole('checkbox',{name:'Dependencies',exact:true}).check();expect(await links.count()).toBeGreaterThan(1);
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });

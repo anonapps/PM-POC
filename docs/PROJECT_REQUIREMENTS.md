@@ -2107,3 +2107,7 @@ Move Dependencies informational disclaimer to a docked bottom footer. Establish 
 Use shared record-page filter categories/controls in Baselines and Dependencies search popups, preserving filter semantics and Clear all. Remove the entire secondary Schedule comparison heading row on Baselines. Apply shared readable value typography/spacing/backgrounds to both read-only tables; retain full text/titles, existing columns, variance meaning and no horizontal overflow.
 
 Every Baselines column supports keyboard/click ascending and descending sorting, with visible/accessible direction and standard missing-value handling; sort actual dates chronologically and variances numerically. Dependencies results must scroll inside the available viewport above its docked footer; no rows/content may appear below or behind the footer and the last row remains reachable. Risk Log and Decision Log context-opening buttons read Context. Preserve commands, selection, history and PMP behavior; no merge/deploy/release.
+
+#### Timeline dependency readability correction — 27 October 2026
+
+Gantt and Tube Map use a shared readable dependency presentation: smooth directional connectors, successor arrows, crossing separation from grid lines, and pointer/keyboard emphasis of a named relationship. Unrelated connections fade while one is emphasized. Preserve existing relationship semantics, visible-window filtering and Dependencies toggles; visual emphasis does not modify the project.
