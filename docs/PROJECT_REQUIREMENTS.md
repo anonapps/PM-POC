@@ -2093,3 +2093,11 @@ Dropdown search placeholders show only “Type to filter” throughout the app; 
 ## Approved standalone Tasks selection alignment — 26 October 2026
 
 Use the same centered selection-column checkbox geometry on standalone Tasks and Extended Tasks. Header and row checkbox horizontal centers must match; retain header vertical centering, select-all/individual/indeterminate states and bulk behavior. No other standalone Tasks change.
+
+## Approved compact editors and shared headings — 27 October 2026
+
+Align Risk Project-wide checkbox/label with the Owner selector. Risk Edit context and Actions expanded editors use the same compressed 30px field/20px text-band rhythm as Extended Tasks, with compact gaps/padding while retaining multiline descriptions, errors and all commands. Place Risk Matrix toggle in the toolbar between Search and Show Deleted, retaining session disclosure/filter behavior.
+
+On Baselines, selected-baseline control and a compact actions menu share the title/Search toolbar. Offer Create/Rename/Delete and a Manage baselines dialog for the complete dated/described list; avoid consuming comparison space with a permanently expanded management list. Preserve all CRUD/selection/history/filter/sort/PMP behavior. Baseline create/rename follows the shared first-letter capitalization rule, including Enter submit; display legacy lowercase names consistently without rewriting loaded snapshots or files.
+
+Move Dependencies informational disclaimer to a docked bottom footer. Establish one reusable column-heading font family, size, weight and background across pages, including sorted headings and Extended Tasks; responsive widths may truncate heading display with full titles retained, rather than change font size. Preserve every column, alignment, sidebar and file behavior. No merge/deploy/release.
