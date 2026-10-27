@@ -118,3 +118,13 @@ Complete serial verification on `a8dc681983670244771e8c22cdd5d295d0f62111`: **48
 - [Standalone Tasks: aligned selection column](tasks-selection-aligned.png)
 
 Latest presentation-only follow-up: 71 affected browser cases passed, then all three corrected content-band selection tests passed (9.0s); build/typecheck/lint passed. The selection cases cover both views and sidebar states at three widths, including keyboard select-all and indeterminate states. Exact scope and preceding full-gate evidence remain in validation.json.
+
+## Compact Risk surfaces, Baselines management and shared column standard
+
+- [Risk context: compressed controls and aligned Project-wide/Owner](shared-compact-risk-context.png)
+- [Risk actions: compact rows/add form](shared-compact-risk-actions.png)
+- [Baselines: selected value and actions on the toolbar](shared-baselines-toolbar.png)
+- [Baselines at 900px](shared-baselines-toolbar-900.png)
+- [Dependencies: docked information footer](shared-dependencies-footer.png)
+
+Actual screenshots from the final complete gate on `fcb9d7844615127d8feda18c98734e89efc70cc1`: **480 unit tests / 245 lifecycle checkpoints / all 120 browser cases passed**, plus typecheck/lint/build. Native description drag resizing, Matrix session behavior, Baselines focus/Unicode Enter normalization/immutable save-reopen, and identical record/timeline heading tokens are covered. Long headings retain full text/native titles while keeping the same font at narrow widths. Legacy stored names/snapshots are not migrated. Earlier failed/stopped runs are historical; no merge/deploy/release.

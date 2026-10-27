@@ -634,5 +634,103 @@
     ],
     "nativeScope": "Linux Chromium; owner must pull/restart/hard-refresh to confirm physical Mac rendering.",
     "releaseActions": "PR25 remains draft; no merge/deploy/tag/release."
+  },
+  "compactRiskBaselineToolbarAndSharedHeadings": {
+    "applicationCommit": "fcb9d7844615127d8feda18c98734e89efc70cc1",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.08,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  480 passed (480)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.38,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.5,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.09,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.87,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 186.74,
+        "code": 0,
+        "counts": [
+          "120 passed (3.1m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "requirements": [
+      "Risk Project-wide checkbox shares Owner selector centerline",
+      "Risk context/actions compressed 30px fields, 20px text band and compact gaps; multiline description still natively resizes",
+      "Matrix toggle precedes Show Deleted in the toolbar; session state/filtering/keyboard preserved",
+      "Baselines selected value and accessible actions menu share title/Search toolbar; full dated/described management list in dialog",
+      "New/renamed names capitalize first letter on blur and Enter, including Unicode; legacy display normalizes without persisted migration",
+      "Dependencies information docked at bottom",
+      "One heading font/family/weight/background across all record tables, sorted/Extended headings and both timeline axes; full text/titles retained",
+      "Existing commands/history/creation/selection/filters/PMP compatibility/save-reopen/snapshots preserved"
+    ],
+    "targetedEvidence": [
+      "53 selected regressions passed (76.37s)",
+      "12 shared-surface/Baselines cases passed (16.15s)",
+      "13 final focused shared-surface/status cases passed (16.36s), including actual native textarea drag-resize"
+    ],
+    "viewportCoverage": {
+      "baselineToolbar": [
+        900,
+        1280,
+        1440
+      ],
+      "uniformHeadings": [
+        900,
+        1440
+      ],
+      "existingFullMatrices": "All existing desktop/sidebar/creation/Gantt/Tube Map viewport cases retained."
+    },
+    "exploratoryFindings": [
+      "Initial full gate caught stale header-first-child assumption; retained disabled-search/creation assertions and now verify requested relative Matrix/Show Deleted/Add order.",
+      "Broader run passed 117/120; old single-line tests counted wrapper box plus text. They now measure actual label contents with unchanged one-line limit.",
+      "New menu focus check exposed lost focus after auto-focused dialog; component restores trigger focus after modal close.",
+      "Isolated native resize check confirmed important height declaration blocked resizing; variable-based normal height/padding and real drag assertion preserve it.",
+      "Stopped/intermediate runs are superseded by the final serial all-pass gate."
+    ],
+    "screenshots": [
+      "shared-compact-risk-context.png",
+      "shared-compact-risk-actions.png",
+      "shared-baselines-toolbar.png",
+      "shared-baselines-toolbar-900.png",
+      "shared-dependencies-footer.png"
+    ],
+    "nativeScope": "Linux Chromium at Mac-like CSS viewports; physical Mac/picker/disk acceptance remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
   }
 }
