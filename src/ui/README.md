@@ -23,3 +23,11 @@ Do not edit generated CSS, redeclare canonical token names in a page, or use a s
 Not every matching literal elsewhere in legacy CSS has migrated. Remove or replace those declarations only after mapping their consumers and proving compatibility. Component ownership/selector cleanup is a later wave, not an invitation to change accepted rendering in this one.
 
 [Contracts](../../docs/UI_COMPONENT_CONTRACTS.md) · [Catalogue](../../tools/ui-catalogue/README.md) · [Migration plan](../../docs/UI_STANDARD_MIGRATION_PLAN.md).
+
+## First shared composition adopters
+
+Use [ActionButton](../features/shared/action-button.tsx) for new native primary/secondary/danger action controls. Pass native attributes, accessible labels, handlers and refs normally. Set `type="button"` for non-submit actions; the facade intentionally preserves native default-submit behavior when type is omitted. Current adoption covers shared module Search and both timeline footers. It preserves existing contextual sizes and is not a blanket replacement for HeroUI, sort/disclosure or icon controls.
+
+Use [FormField and FieldMessage](../features/shared/form-field.tsx) for the existing label/required-marker/reserved-error composition. Pass the child native/human-text control with its current ID, describedby, invalid state and callbacks. Project forms and all record creation panels now use this composition. Preserve `announceError={false}` / `announce={false}` where the existing slot is not a live alert. Do not move validation, text normalization or command dispatch into the composition.
+
+These components add no wrapper DOM or CSS. Existing context rules and the compatibility tokens still set geometry. Wider control-style ownership and redundant-rule cleanup require consumer-by-consumer verification; no source rule has been deleted in this wave.

@@ -53,8 +53,9 @@ Sources: [typography and actions](../src/app/globals.css), [foundation tokens](.
 
 ### C02 — Icons and action controls
 
-Sources: [shell Button/Chip usage and inline icons](../src/features/shell/shell.tsx), [ModuleSearch filter icon](../src/features/shared/module-search.tsx), [Baselines action menu](../src/features/baselines/baselines.tsx), [timeline navigation](../src/features/shared/timeline-navigation.tsx).
+Sources: [native ActionButton facade](../src/features/shared/action-button.tsx), [shell Button/Chip usage and inline icons](../src/features/shell/shell.tsx), [ModuleSearch filter icon](../src/features/shared/module-search.tsx), [Baselines action menu](../src/features/baselines/baselines.tsx), [timeline navigation](../src/features/shared/timeline-navigation.tsx).
 
+- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search and timeline navigation. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
 - Catalogue filled, outline, destructive, quiet/link, icon-only and segmented/disclosure actions as distinct roles. Sort and navigation actions must retain their semantics and accessible names.
 - Preserve current main actions at 30px. Filter Clear all (28px), creation actions (32px), general controls (36px minimum with content-dependent measured height), warning summaries and icon controls remain explicit compatibility examples. Record responsive/contextual typography exceptions from the audit; catalogue preparation does not silently normalize them.
 - Icon-only controls require an accessible name independent of the glyph. Decorative SVG/shapes are hidden from assistive technology where appropriate.
@@ -65,7 +66,7 @@ Sources: [shell Button/Chip usage and inline icons](../src/features/shell/shell.
 
 ### C03 — FormField and input frame
 
-Sources: [CreationField](../src/features/shared/creation-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
+Sources: [FormField / FieldMessage](../src/features/shared/form-field.tsx), [CreationField](../src/features/shared/creation-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
 
 - The field recipe owns label, required marker, input/selector slot, hint/error association, reserved error area and density.
 - Preserve real native text/date/number/select/textarea elements and existing onChange/onBlur/submit boundaries. A catalogue callback may update isolated state, never a real project.
@@ -73,6 +74,8 @@ Sources: [CreationField](../src/features/shared/creation-field.tsx), [ProjectFor
 - Multiline examples record their actual initial size and resize behavior. They must not be forced into a single-line field contract during catalogue preparation.
 - Show empty/value/long-content, focus, supported disabled/unavailable and real invalid-message examples. Required/error associations must be inspectable without submitting an actual project form.
 - Error slots retain existing 24px creation/project, compact/editor and table variants until individually reviewed. Do not add validation rules to unify appearances.
+
+`FormField` now composes the existing label, required marker, child control and reserved error slot in project forms and record creation. `FieldMessage` is also used for creation selectors/relationships/footer messages. It does not own business validation, control normalization, selector behavior or a new field-height policy. Callers retain explicit IDs/describedby and the existing alert policy.
 
 ### C04 — SingleSelect and Owner/Baseline adapters
 
