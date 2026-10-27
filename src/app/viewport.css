@@ -374,7 +374,7 @@
  box-sizing:border-box;
  height:var(--field-height);
  min-height:var(--field-height);
- padding-block:calc((var(--field-height) - var(--field-text-line) - 2px)/2);
+ padding-block:var(--field-padding-block,calc((var(--field-height) - var(--field-text-line) - 2px)/2));
  padding-inline:var(--field-text-inset);
  line-height:var(--field-text-line);
  font-family:Arial,Helvetica,sans-serif;
@@ -483,7 +483,7 @@
 .app-main .workspace .panel .context-project-wide input { margin:0; }
 .app-main .workspace .panel .risk-context-editor .context-picker { --field-height:30px; gap:2px; }
 .app-main .workspace .panel .risk-context-editor .context-relationship-grid { gap:8px; }
-.app-main .workspace .panel .risk-context-editor textarea { min-height:48px; height:48px; padding:4px 8px; font-size:var(--type-control); line-height:20px; }
+.app-main .workspace .panel .risk-context-editor textarea { font-size:var(--type-control); line-height:20px; }
 .app-main .workspace .panel .risk-context-editor>.form-field-error { height:16px; min-height:16px; line-height:16px; }
 .app-main .workspace .panel .risk-context-editor>.actions { gap:6px; }
 .app-main .workspace .panel .risk-actions-editor { padding:6px 8px; font-size:var(--type-control); }
@@ -527,6 +527,6 @@
 .app-main .workspace .panel .column-heading-label>button { max-width:100%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .app-main .workspace .panel .column-heading-label:has(>input[type=checkbox]) { display:flex; align-items:center; justify-content:center; }
 /* Multiline descriptions retain two compact lines instead of the single-line band. */
-.app-main .risk-context-editor textarea { height:48px!important; min-height:48px!important; padding:4px 8px!important; }
+.app-main .risk-context-editor textarea { --field-height:50px; --field-padding-block:4px; }
 .app-main .workspace .panel .tube-axis,
 .app-main .workspace .panel .tube-axis>:is(button,span) { font:var(--column-heading-weight) var(--column-heading-font)/20px Arial,Helvetica,sans-serif!important; background:var(--column-heading-background)!important; color:#445268; }
