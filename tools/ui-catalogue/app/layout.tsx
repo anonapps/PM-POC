@@ -1,3 +1,4 @@
+import '../../../src/app/ui-tokens.generated.css';
 import '../../../src/app/globals.css';
 import '../../../src/app/design-system.css';
 import '../../../src/app/heroui-experiment.css';

@@ -102,3 +102,7 @@ CSS cleanup follows extraction: identify all consumers, move ownership with equi
 Review the D01–D10 choices with catalogue preparation. The recommended first implementation direction is compatibility-preserving ownership and aliases, three existing context densities, and unchanged semantic palettes. Typography rounding, density reduction, border/radius normalization and copy changes remain candidates, not implicit approval.
 
 After review, record accepted choices explicitly in the authoritative requirements, replacing only conflicts actually accepted by the owner. Then proceed to the catalogue, review its examples, and migrate in small waves using the linked plan. No merge, release or deployment authorization is created by this document.
+
+## Implementation progress — 28 October 2026
+
+The owner directed incremental implementation after this proposal. A separate internal catalogue and the first compatibility-preserving field/footer/status token source are now implemented; see [current migration evidence](UI_STANDARD_MIGRATION_PLAN.md) and [token maintenance](../src/ui/README.md). Candidate rounding/density/palette changes in D01–D10 remain proposals. The original Stage1 scope text above describes that documentation delivery, not the current implementation status.

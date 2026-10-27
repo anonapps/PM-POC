@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ReferenceExamples } from './reference-examples';
+import { TimelineExamples } from './timeline-examples';
 import { RecordExamples } from './record-examples';
 import { CreationExamples } from './creation-examples';
 import { buildGanttModel, type GanttZoom } from '../../../src/features/gantt/model';
@@ -24,7 +25,7 @@ import { useDependencyFocus } from '../../../src/features/shared/use-dependency-
 const people=[{id:'one',name:'Marta',humanId:'PERSON-001'},{id:'two',name:'Long owner name for overflow review',humanId:'PERSON-002'},{id:'deleted',name:'Previous owner',deleted:true}];
 const related=[{id:'task-one',humanId:'TASK-001',name:'First task',deletion:{isDeleted:false}},{id:'task-two',humanId:'TASK-002',name:'A long task name for full-value access',deletion:{isDeleted:false}},{id:'removed',humanId:'TASK-003',name:'Previous task',deletion:{isDeleted:true}}];
 const paths=[{key:'a-b',fromX:10,fromY:30,toX:70,toY:85,label:'First task → Second task · Finish-to-Start'},{key:'b-c',fromX:70,fromY:85,toX:35,toY:135,label:'Second task → Third task · Finish-to-Start'}];
-const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Creation','Records','Footers','References','Tokens'];
+const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Creation','Records','Timelines','Footers','References','Tokens'];
 export default function Catalogue() {
   const [store]=useState(()=>{let sequence=0;return createProjectStore(makeProjectState({streams:[streamFixture()],tasks:[taskFixture()],identifierSequences:{stream:1,task:1,milestone:0,person:0,risk:0,decision:0}}),{createId:()=>`catalogue-${++sequence}`,now:()=> '2026-10-27T12:00:00Z'});});
   const [panel,setPanel]=useState<'standalone'|'extended'|null>(null);
@@ -58,6 +59,7 @@ export default function Catalogue() {
       <section id="footers" className="catalogue-section"><h2>Timeline footers</h2><p className="catalogue-note">Shared existing footer; desktop 56px. Labels and navigation are local demo state.</p>{(['task','milestone'] as const).map(kind=><div key={kind} className="catalogue-sample"><h3>{kind==='task'?'Gantt':'Tube Map'}</h3><TimelineNavigation label={`${kind} example navigation`} start={(kind==='task'?gantt:tube).start} end={(kind==='task'?gantt:tube).end} onPrevious={()=>setOffsets(value=>({...value,[kind]:value[kind]-1}))} onNext={()=>setOffsets(value=>({...value,[kind]:value[kind]+1}))} onToday={()=>setOffsets(value=>({...value,[kind]:0}))} todayDisabled={offsets[kind]===0} legend={<TimelineStatusLegend kind={kind}/>} controls={kind==='task'?<label className="gantt-zoom-control">Zoom <select aria-label="Example zoom" value={zoom} onChange={event=>{setZoom(event.target.value as GanttZoom);setOffsets(value=>({...value,task:0}));}}><option>Week</option><option>Month</option><option>Quarter</option></select></label>:undefined}/></div>)}</section>
       <CreationExamples/>
       <RecordExamples/>
+      <TimelineExamples/>
       <ReferenceExamples/>
       <section id="tokens" className="catalogue-section"><h2>Token reference</h2><p className="catalogue-note">Compatibility aliases are catalogue-only until component migration. Status colors use existing TypeScript exports.</p><div className="catalogue-tokens">{Object.entries({...TASK_STATUS_COLOURS,...Object.fromEntries(Object.entries(MILESTONE_STATUS_COLOURS).map(([key,value])=>[`Milestone ${key}`,value]))}).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:color}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div></section>
     </div></div>

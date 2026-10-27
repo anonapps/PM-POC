@@ -1,0 +1,19 @@
+/* Generated from src/ui/tokens.json. Run npm run ui:tokens; do not edit. */
+:root {
+  --ui-field-regular-height: 36px;
+  --ui-field-creation-height: 34px;
+  --ui-field-embedded-height: 30px;
+  --ui-field-text-line: 20px;
+  --ui-field-text-inset: 8px;
+  --ui-timeline-footer-min-height: 56px;
+  --ui-status-task-tentative: #9d8ab8;
+  --ui-status-task-not-started: #a0adbd;
+  --ui-status-task-in-progress: #6b97c4;
+  --ui-status-task-on-hold: #c4a36c;
+  --ui-status-task-completed: #7ca58a;
+  --ui-status-task-cancelled: #bb8585;
+  --ui-status-milestone-tentative: #93c5fd;
+  --ui-status-milestone-planned: #7c3aed;
+  --ui-status-milestone-delayed: #fca5a5;
+  --ui-status-milestone-complete: #16a34a;
+}

@@ -8,7 +8,7 @@ test('compatibility geometry at supported review widths',async({page})=>{
     for(const [label,height] of [['Regular name',36],['Creation name',34],['Embedded name',30]] as const){
       await expect(page.getByRole('textbox',{name:label,exact:true})).toHaveCSS('height',`${height}px`);
     }
-    const footers=page.locator('footer.timeline-navigation');
+    const footers=page.locator('#footers footer.timeline-navigation');
     await expect(footers).toHaveCount(2);
     const heights=await footers.evaluateAll(elements=>elements.map(element=>element.getBoundingClientRect().height));
     expect(heights[0]).toBe(heights[1]);
@@ -39,17 +39,17 @@ test('real selector filtering, keyboard dismissal and local-only text editing',a
 
 test('single dependency pin, hide and clear use the actual shared assets',async({page})=>{
   await page.goto('/');
-  const lines=page.locator('.dependency-connection');
+  const lines=page.locator('#relationships .dependency-connection');
   await lines.nth(0).focus();
   await lines.nth(0).press('Enter');
-  await expect(page.locator('.dependency-connection[aria-pressed=true]')).toHaveCount(1);
+  await expect(page.locator('#relationships .dependency-connection[aria-pressed=true]')).toHaveCount(1);
   await expect(page.locator('.catalogue-node[data-muted=true]')).toHaveCount(1);
   await lines.nth(1).focus();
   await lines.nth(1).press('Space');
   await expect(lines.nth(0)).toHaveAttribute('aria-pressed','false');
   await expect(lines.nth(1)).toHaveAttribute('aria-pressed','true');
   await lines.nth(1).press('Escape');
-  await expect(page.locator('.dependency-connection[data-active=true]')).toHaveCount(0);
+  await expect(page.locator('#relationships .dependency-connection[data-active=true]')).toHaveCount(0);
   await page.getByRole('button',{name:'Search and filter catalogue',exact:true}).click();
   await page.getByRole('checkbox',{name:'Hide dependencies',exact:true}).check();
   await expect(lines).toHaveCount(0);

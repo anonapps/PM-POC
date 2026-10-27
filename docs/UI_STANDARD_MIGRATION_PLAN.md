@@ -1,6 +1,6 @@
 # UI standardization — migration and acceptance plan
 
-**Status:** Stage 1 documentation complete; Stage 2 catalogue foundation implemented after owner direction to proceed. Production migration is not started.
+**Status:** Stage 1 documentation and representative Stage 2 catalogue are implemented. The first compatibility-token migration preserves existing values; component ownership migration remains incremental.
 **Inputs:** [Audit](UI_STANDARD_AUDIT.md) · [Proposal and D01–D10 decisions](UI_STANDARD_PROPOSAL.md) · [Authoritative requirements](PROJECT_REQUIREMENTS.md).
 
 ## 1. Delivery boundaries
@@ -121,3 +121,13 @@ Scoped validation: ten unique catalogue browser cases passed across the integrat
 The root production build passed; its route manifest has no catalogue entry. Nine local documentation references and whitespace checks passed.
 
 This provides representative compositions for catalogue review, not exhaustive native-platform acceptance or a completed token/component migration. Full chart-page comparisons, final visual decisions and W2–W5 production extraction remain ahead. Compatibility-first extraction can preserve current values; typography rounding, density reduction and palette consolidation require separately recorded acceptance. No merge, release or deployment is authorized by this work.
+
+## 11. First compatibility-token wave and full chart examples — 28 October 2026
+
+Owner direction continued implementation where possible, with parallel tasks. Independent work supplied actual full Gantt/Tube Map catalogue examples and reviewed token/cascade boundaries; integration retained one source/style owner. The catalogue now includes real Gantt Simple/Extended, splitter, Task creation, baselines/dependencies/filters/quick edits, and Tube Map, all on disposable schedule data. Charts retain their real clock in manual use; browser checks freeze the clock for reproducible fixture visibility. Navigation requests stay local.
+
+The first production reuse step introduces [canonical JSON tokens](../src/ui/tokens.json), [maintenance guidance](../src/ui/README.md), generated CSS and a dependency-free generator. Existing field aliases and palette exports consume the same approved 36/34/30px heights, 20px line/8px inset, 56px footer minimum and ten distinct status colors. Selectors, cascade positions, behavior, font sizes, multiline exceptions and unrelated matching literals stay unchanged. Build now rejects stale generated CSS. This resolves source ownership for this wave, without adopting optional D01–D10 visual normalization or claiming every legacy literal/component has migrated.
+
+Validation: before/after computed-style captures match exactly at 900/1440/1920 for sampled field font/height/line/padding/border/radius, both specimen footers/buttons and all ten palette swatches (`work/ui-tokens-before.json`, `work/ui-tokens-after.json`). Ten targeted unit cases passed in 1.62s, including exact approved token values/domain keys, generated freshness/import order and existing status compatibility. All 11 catalogue browser cases passed in 21.1s. Eight affected production layout cases passed in 13.0s: shared internal field alignment, Risk compact editors, four Gantt viewport widths, baseline overlays and unfocused editable dropdown search. Typecheck, lint and the freshness-gated production build passed. Full-chart visual inspection recorded 56px for each footer, no page errors and no document overflow. Evidence is retained under ignored `work/ui-token-*`; no full lifecycle rerun is claimed for this scoped extraction.
+
+Compatibility-first source ownership is implemented; broad action/field/choice component extraction and override cleanup remain future waves. Review any proposed value change separately. The PR stays draft and release actions remain excluded.

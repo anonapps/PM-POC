@@ -24,11 +24,12 @@ Examples hold local React state or a disposable deterministic application store.
 | References | Actual Status, EmptyState, TodayMarker and anchored warning disclosure; native full-value title tooltip |
 | Tables and editors | Real Tasks, Risk Log, Decision Log and Baselines modules; selection/indeterminate/sort, deleted values, context/actions, nine comparison columns and baseline manager/menu |
 | Footers | Actual TimelineNavigation for both legends, real chart model ranges/increments, disabled Today, Gantt Zoom |
-| Tokens | Existing status color exports and catalogue-only semantic compatibility aliases |
+| Tokens | Canonical field/footer/status JSON, generated CSS and existing palette exports; other catalogue-only semantic alias prototypes |
+| Full timelines | Actual Gantt Simple/Extended workspace and Tube Map with baselines, dependencies, filters, quick editors and disposable Reset |
 
-This Stage2 catalogue now includes representative table/editor/menu compositions and every record creation kind. It is **not a production page migration or exhaustive verification of every possible state**. The real page examples expose inline validation/error slots, empty search results, deleted/restore behavior and populated menus for manual inspection. Remaining review includes complete chart-page context comparisons, native physical-platform appearance and any proposed visual normalization. Existing production acceptance suites remain the reference for those behaviors. No candidate font rounding, density reduction, palette merging or CSS cleanup has been applied.
+This Stage2 catalogue now includes representative table/editor/menu compositions and every record creation kind. It is **not a production page migration or exhaustive verification of every possible state**. The real page examples expose inline validation/error slots, empty search results, deleted/restore behavior and populated menus for manual inspection. Full chart examples now provide context comparisons; native physical-platform appearance and any proposed visual normalization remain for review. Existing production acceptance suites remain the reference for those behaviors. No candidate font rounding, density reduction, palette merging or CSS cleanup has been applied.
 
-The aliases in `app/catalogue.css` are an isolated naming prototype. Production CSS remains the authority for current rendered values; component migration will move aliases into a shared source only after every consumer and value is mapped. The catalogue stylesheet owns sample layout only; do not use it to make a production asset look correct.
+The first field/footer/status token wave now uses [one shared source](../../src/ui/README.md), with generated CSS and unchanged TypeScript palette exports. Other aliases in `app/catalogue.css` remain an isolated naming prototype. Production compatibility styles still own unmigrated values; later extraction maps each consumer before changing ownership. The catalogue stylesheet owns sample layout only; do not use it to make a production asset look correct.
 
 ## Verification
 
@@ -50,3 +51,5 @@ See [component contracts](../../docs/UI_COMPONENT_CONTRACTS.md), [proposal](../.
 Compare Fields, Creation, Records and Footers at supported desktop widths. In Records, switch among Tasks, Risk Log, Decision Log and Baselines; open Context/Actions and baseline management. Reset restores deterministic records, identifier sequences and memory history. These are existing assets, so observed differences are evidence for the standard, not silently corrected variants.
 
 The compatibility-preserving path needs no new visual decisions. Reducing36/34/30 to two sizes, rounding fonts or merging palettes still requires an explicit choice after visual comparison. Native OS tooltip/calendar styling and physical Mac/Windows acceptance remain manual.
+
+Timeline fixtures cover late October/early November2026. Full charts retain the real browser clock; automated cases fix the browser clock for reproducible visible relationships. Cross-page navigation requests are shown locally rather than opening production routes.

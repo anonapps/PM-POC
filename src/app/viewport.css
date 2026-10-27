@@ -367,9 +367,9 @@
 .app-main .workspace.module-risk-log>.panel>table.fit-table .risk-level-chip { min-width:0; max-width:100%; }
 
 /* One internal text band for editable boxes; sizes vary, text placement does not. */
-:root { --field-height:36px; --field-text-line:20px; --field-text-inset:8px; }
-.creation-fields,.context-picker,.decision-context-column { --field-height:34px; }
-.workspace .gantt-extended .gantt-tasks-pane { --field-height:30px; }
+:root { --field-height:var(--ui-field-regular-height); --field-text-line:var(--ui-field-text-line); --field-text-inset:var(--ui-field-text-inset); }
+.creation-fields,.context-picker,.decision-context-column { --field-height:var(--ui-field-creation-height); }
+.workspace .gantt-extended .gantt-tasks-pane { --field-height:var(--ui-field-embedded-height); }
 :is(.app-main,.dialog-backdrop) :is(.workspace .panel table.fit-table,.creation-fields,.form-grid,.context-picker,.decision-context-column,.baseline-controls,.gantt-zoom-control) :is(input:not([type=checkbox]):not([type=radio]),select,textarea,details.multi-select>summary:not(:has(.scope-pill)):not(.scope-summary),.relationship-picker>summary) {
  box-sizing:border-box;
  height:var(--field-height);
@@ -461,7 +461,7 @@
 .workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-bar.milestone { top:8px; height:14px; }
 .workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-baseline { top:24px; height:14px; }
 .workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-baseline.milestone { top:24px; height:12px; }
-.searchable-option-list { --field-height:34px; }
+.searchable-option-list { --field-height:var(--ui-field-creation-height); }
 .workspace .gantt-workspace .gantt-panel>.page-toolbar .filter-trigger { height:32px; min-height:0; padding:6px; }
 /* Gantt Zoom belongs with the docked date navigation, not the header actions. */
 .workspace .gantt-panel>footer .gantt-zoom-control { display:flex; align-items:center; gap:6px; margin-left:auto; font-size:var(--type-control); white-space:nowrap; }
@@ -477,11 +477,11 @@
 .app-main .workspace .panel table.tasks-table>tbody>tr>td:first-child>input[type=checkbox] { display:block; margin:0 auto; }
 
 /* Compressed inline editors reuse Extended Tasks' 30px/20px control metrics. */
-.risk-context-editor,.risk-actions-editor { --field-height:30px; }
+.risk-context-editor,.risk-actions-editor { --field-height:var(--ui-field-embedded-height); }
 .app-main .workspace .panel .risk-context-editor { padding:6px 8px; gap:4px 8px; align-items:center; font-size:var(--type-control); }
 .app-main .workspace .panel .risk-context-editor>.context-project-wide { display:flex; align-items:center; gap:6px; min-height:30px; margin:0; }
 .app-main .workspace .panel .context-project-wide input { margin:0; }
-.app-main .workspace .panel .risk-context-editor .context-picker { --field-height:30px; gap:2px; }
+.app-main .workspace .panel .risk-context-editor .context-picker { --field-height:var(--ui-field-embedded-height); gap:2px; }
 .app-main .workspace .panel .risk-context-editor .context-relationship-grid { gap:8px; }
 .app-main .workspace .panel .risk-context-editor textarea { font-size:var(--type-control); line-height:20px; }
 .app-main .workspace .panel .risk-context-editor>.form-field-error { height:16px; min-height:16px; line-height:16px; }
@@ -570,7 +570,7 @@
 .workspace .panel footer.timeline-navigation,
 .workspace .gantt-extended .gantt-panel footer.timeline-navigation {
  display:flex; flex-direction:column; align-items:stretch; gap:2px;
- min-height:56px; height:auto; padding:2px 8px;
+ min-height:var(--ui-timeline-footer-min-height); height:auto; padding:2px 8px;
  font:400 var(--type-control)/18px Arial,Helvetica,sans-serif;
 }
 .workspace .timeline-navigation-legend-row { display:flex; align-items:center; gap:8px; min-width:0; height:18px; }
