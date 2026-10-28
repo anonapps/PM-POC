@@ -56,29 +56,8 @@
 .app-main .workspace .panel table.tasks-table>thead input[type=checkbox],
 .app-main .workspace .panel table.tasks-table>tbody>tr>td:first-child>input[type=checkbox] { display:block; margin:0 auto; }
 
-/* Compressed inline editors reuse Extended Tasks' 30px/20px control metrics. */
-.risk-context-editor,.risk-actions-editor { --field-height:var(--ui-field-embedded-height); }
-.app-main .workspace .panel .risk-context-editor { padding:6px 8px; gap:4px 8px; align-items:center; font-size:var(--type-control); }
-.app-main .workspace .panel .risk-context-editor>.context-project-wide { display:flex; align-items:center; gap:6px; min-height:30px; margin:0; }
-.app-main .workspace .panel .context-project-wide input { margin:0; }
-.app-main .workspace .panel .risk-context-editor .context-picker { --field-height:var(--ui-field-embedded-height); gap:2px; }
-.app-main .workspace .panel .risk-context-editor .context-relationship-grid { gap:8px; }
-.app-main .workspace .panel .risk-context-editor textarea { font-size:var(--type-control); line-height:20px; }
-.app-main .workspace .panel .risk-context-editor>.form-field-error { height:16px; min-height:16px; line-height:16px; }
-.app-main .workspace .panel .risk-context-editor>.actions { gap:6px; }
-.app-main .workspace .panel .risk-actions-editor { padding:6px 8px; font-size:var(--type-control); }
-.app-main .workspace .panel .risk-actions-editor h3 { margin:0 0 4px; font-size:var(--type-control); }
-.app-main .workspace .panel .risk-action-row { margin:4px 0; gap:8px; }
-.app-main .workspace .panel .risk-action-row span { min-width:54px; }
-.app-main .workspace .panel .risk-actions-editor .inline-form { margin:4px 0 0; padding:4px 0 0; border:0; box-shadow:none; background:transparent; gap:6px; }
-.app-main .workspace .panel .risk-actions-editor .inline-form label { flex:1; gap:2px; }
-.app-main .workspace .panel .risk-actions-editor button,.app-main .workspace .panel .risk-context-editor button { height:30px; min-height:30px; padding:2px 10px; font-size:var(--type-control); line-height:20px; }
-/* The matrix toggle is an ordinary toolbar action before Show Deleted. */
-.workspace.module-risk-log .page-toolbar .risk-matrix-toggle { margin:0; }
 /* Informational copy is a docked footer, never above Dependencies results. */
 .workspace .panel.dependencies-panel>.dependency-description { bottom:0; z-index:16; }
-/* Multiline descriptions retain two compact lines instead of the single-line band. */
-.app-main .risk-context-editor textarea { --field-height:50px; --field-padding-block:4px; }
 /* Shared readable read-only record values; page-specific tiny fonts are superseded. */
 .app-main .workspace .panel table.record-data-table>tbody>tr>td { height:40px; padding:4px 6px; font:400 var(--type-body)/20px Arial,Helvetica,sans-serif; background:var(--surface); color:var(--text); vertical-align:middle; }
 .app-main .workspace .panel table.record-data-table .comparison-kind,

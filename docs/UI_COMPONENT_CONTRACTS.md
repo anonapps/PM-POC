@@ -222,3 +222,5 @@ Task and Milestone ordinary actions also reuse ActionButton. Task bulk selection
 Tasks/Milestones also reuse ChoiceRow for Show Deleted and native dependency/scope options. Keys remain on each mapped row; label titles, radio omissions and cycle/deletion guards remain caller-owned. Table select-all/indeterminate and row-selection inputs are intentionally separate.
 
 Overview header/quick actions and Project Details Cancel/Done use ActionButton; its KPI navigation cards and sort headings remain distinct. Catalogue navigation reports requests without mounting a runtime, and its pre-completed readiness metadata prevents an incidental mount command.
+
+Compact Risk context/actions and their multiline exception are owned by [Risk editor surfaces](../src/features/risks/risk-editor-surfaces.css), imported after late panels. This is a Risk-specific compatibility asset; Decision keeps its existing sizing. Resources/Risk/Decision Show Deleted labels now reuse ChoiceRow while table selection stays separate.
