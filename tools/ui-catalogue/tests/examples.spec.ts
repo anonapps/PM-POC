@@ -134,3 +134,37 @@ test('log actions retain context hotkeys, native submission and action undo',asy
   await content.getByRole('button',{name:'Context',exact:true}).first().click();
   await expect(decision.getByRole('textbox',{name:'Additional information',exact:true})).toHaveValue('Updated decision context');
 });
+
+test('Dependencies examples preserve filter labels, editor actions and footer paint values',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  await examples.getByRole('button',{name:'Dependencies',exact:true}).click();
+  await examples.evaluate(element=>element.scrollIntoView({block:'start'}));
+  await expect.poll(()=>content.locator('.dependencies-panel').evaluate(element=>element.getBoundingClientRect().height)).toBeGreaterThan(200);
+  const footer=content.getByRole('contentinfo',{name:'Dependency information',exact:true});
+  await expect(footer).toHaveCSS('position','static');
+  await expect(footer).toHaveCSS('bottom','0px');
+  await expect(footer).toHaveCSS('z-index','16');
+  await content.getByRole('button',{name:'Search and filter dependencies',exact:true}).click();
+  const filters=page.getByRole('region',{name:'Search and filter controls for dependencies',exact:true});
+  await filters.getByText('Cross-stream only',{exact:true}).click();
+  await expect(filters.getByRole('checkbox',{name:'Cross-stream only',exact:true})).toBeChecked();
+  await filters.getByText('Warnings only',{exact:true}).click();
+  await expect(filters.getByRole('checkbox',{name:'Warnings only',exact:true})).toBeChecked();
+  await filters.getByRole('button',{name:'Clear all',exact:true}).click();
+  await expect(filters.getByRole('checkbox',{name:'Cross-stream only',exact:true})).not.toBeChecked();
+  await expect(filters.getByRole('checkbox',{name:'Warnings only',exact:true})).not.toBeChecked();
+  await page.keyboard.press('Escape');
+  await content.getByRole('button',{name:'Edit dependency dependency-1',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'Edit dependency',exact:true});
+  await expect(dialog.getByRole('button',{name:'Save dependency',exact:true})).toBeEnabled();
+  await dialog.getByLabel('Dependency successor',{exact:true}).click();
+  await page.getByRole('radio',{name:'TASK-001 · Prepare launch',exact:true}).click();
+  await expect(dialog.getByRole('alert')).toBeVisible();
+  await expect(dialog.getByRole('button',{name:'Save dependency',exact:true})).toBeDisabled();
+  await dialog.getByRole('button',{name:'Cancel',exact:true}).click();
+  await expect(dialog).toBeHidden();
+  await content.getByRole('button',{name:'Edit dependency dependency-1',exact:true}).click();
+  await dialog.getByRole('button',{name:'Save dependency',exact:true}).click();
+  await expect(dialog).toBeHidden();
+});

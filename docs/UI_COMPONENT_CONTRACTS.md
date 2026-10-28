@@ -55,7 +55,7 @@ Sources: [typography and actions](../src/app/globals.css), [foundation tokens](.
 
 Sources: [native ActionButton facade](../src/features/shared/action-button.tsx), [shell Button/Chip usage and inline icons](../src/features/shell/shell.tsx), [ModuleSearch filter icon](../src/features/shared/module-search.tsx), [Baselines action menu](../src/features/baselines/baselines.tsx), [timeline navigation](../src/features/shared/timeline-navigation.tsx).
 
-- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search, timeline navigation, record creation, Risk/Decision log actions and Baselines management. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
+- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search, timeline navigation, record creation, Risk/Decision log actions, Baselines management and Dependencies inspection/editing. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
 - Catalogue filled, outline, destructive, quiet/link, icon-only and segmented/disclosure actions as distinct roles. Sort and navigation actions must retain their semantics and accessible names.
 - Preserve current main actions at 30px. Filter Clear all (28px), creation actions (32px), general controls (36px minimum with content-dependent measured height), warning summaries and icon controls remain explicit compatibility examples. Record responsive/contextual typography exceptions from the audit; catalogue preparation does not silently normalize them.
 - Icon-only controls require an accessible name independent of the glyph. Decorative SVG/shapes are hidden from assistive technology where appropriate.
@@ -121,6 +121,8 @@ Source: [SearchableOptionList](../src/features/shared/searchable-option-list.tsx
 
 ### C08 — PopoverSurface, disclosure, filter and menu
 
+The existing Baselines action popover and manager styles are owned by [baseline surfaces](../src/features/baselines/baseline-surfaces.css); geometry and disclosure/dialog semantics remain unchanged.
+
 Sources: [PredictiveDisclosure](../src/features/shared/predictive-disclosure.tsx), [positioning helper](../src/features/shared/filter-panel-position.ts), [ModuleSearch](../src/features/shared/module-search.tsx), [FilterChoices](../src/features/shared/record-filters.tsx), [Baselines actions](../src/features/baselines/baselines.tsx).
 
 - Share positioning behavior and eventual surface ownership while preserving different semantics: action menu, radio single selection, checkbox multiple selection and filter form are separate recipes.
@@ -149,7 +151,7 @@ Sources: [Overview](../src/features/overview/overview.tsx), [Risk context](../sr
 
 ### C11 — DataTable and cells
 
-Sources: [FitTable](../src/features/shared/fit-table.tsx), [sorting](../src/features/shared/sorting.ts), [Tasks](../src/features/tasks/tasks.tsx), [resources](../src/features/resources/resources.tsx), [Baselines](../src/features/baselines/baselines.tsx), [Dependencies](../src/features/dependencies/dependencies.tsx).
+Sources: [shared table heading styles](../src/features/shared/table-headings.css), [FitTable](../src/features/shared/fit-table.tsx), [sorting](../src/features/shared/sorting.ts), [Tasks](../src/features/tasks/tasks.tsx), [resources](../src/features/resources/resources.tsx), [Baselines](../src/features/baselines/baselines.tsx), [Dependencies](../src/features/dependencies/dependencies.tsx).
 
 - Retain native table relationships, continuous desktop heading backgrounds, column alignment, all fields/actions, full-value titles and existing editable/read-only row recipes.
 - Selection headers and row checkboxes share horizontal centers; preserve select-all/individual/indeterminate/bulk semantics. Entity-name cells preserve the ID band and shared control centerline.

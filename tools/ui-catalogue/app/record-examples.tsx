@@ -5,13 +5,14 @@ import { createProjectStore } from '../../../src/application';
 import { captureSchedule } from '../../../src/domain/baselines';
 import { makeProjectState, streamFixture, taskFixture } from '../../../src/domain/test-fixtures';
 import { ACTIVE_DELETION_STATE } from '../../../src/domain/types';
+import { DependenciesModule } from '../../../src/features/dependencies/dependencies';
 import { TasksModule } from '../../../src/features/tasks/tasks';
 import { RiskLog } from '../../../src/features/risks/risks';
 import { DecisionLog } from '../../../src/features/decisions/decisions';
 import { BaselinesModule } from '../../../src/features/baselines/baselines';
 import { BaselineProvider } from '../../../src/features/baselines/selection';
 
-const modules = ['Tasks', 'Risk Log', 'Decision Log', 'Baselines'] as const;
+const modules = ['Tasks', 'Risk Log', 'Decision Log', 'Baselines', 'Dependencies'] as const;
 type RecordModule = typeof modules[number];
 
 /** Rebuilt on reset; no runtime, file service or project handle is constructed. */
@@ -70,6 +71,7 @@ export function RecordExamples() {
         {module === 'Risk Log' && <RiskLog store={instance.store} />}
         {module === 'Decision Log' && <DecisionLog store={instance.store} />}
         {module === 'Baselines' && <BaselinesModule store={instance.store} />}
+        {module === 'Dependencies' && <DependenciesModule store={instance.store} />}
       </BaselineProvider>
     </div>
   </section>;

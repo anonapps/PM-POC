@@ -22,7 +22,7 @@ Examples hold local React state or a disposable deterministic application store.
 | Relationships | DependencyConnectors + useDependencyFocus, single pin/preview/Escape and endpoint-only color example |
 | Containers and creation | Actual Dialog and all six EntityCreationPanel kinds, identical Task entry points, real validation/dirty dismissal and successful creation in disposable stores |
 | References | Actual Status, EmptyState, TodayMarker and anchored warning disclosure; native full-value title tooltip |
-| Tables and editors | Real Tasks, Risk Log, Decision Log and Baselines modules; selection/indeterminate/sort, deleted values, context/actions, nine comparison columns and baseline manager/menu |
+| Tables and editors | Real Tasks, Risk Log, Decision Log, Baselines and Dependencies modules; selection/indeterminate/sort, deleted values, context/actions, nine comparison columns and baseline manager/menu |
 | Footers | Actual TimelineNavigation for both legends, real chart model ranges/increments, disabled Today, Gantt Zoom |
 | Tokens | Canonical field/footer/status JSON, generated CSS and existing palette exports; other catalogue-only semantic alias prototypes |
 | Full timelines | Actual Gantt Simple/Extended workspace and Tube Map with baselines, dependencies, filters, quick editors and disposable Reset |
@@ -61,3 +61,5 @@ Full timeline previews mount on the client to keep browser measurements and fixe
 The catalogue consumes the same ordered viewport/style entry as production. See [style ownership](../../docs/UI_STYLE_OWNERSHIP.md) for the timeline surface owner and remaining legacy boundaries; harness layout must not replace component styling.
 
 The log-action case verifies context Ctrl+Enter, native Enter submission, delete and Undo against disposable data. Shared fields, planning controls and option-list search presentation now have owned CSS files in the same ordered production/catalogue entry; obsolete toolbar Zoom rules are removed while footer Zoom remains.
+
+Dependencies is available in Records with actual filter labels, inspection/editing and footer behavior. The dedicated case checks label toggles/reset, invalid self-reference Save gating, Cancel, Save and preserved footer paint values. Universal headings and Baselines menu/manager now use owned style assets behind the same import entry.

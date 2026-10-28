@@ -1,0 +1,16 @@
+/* Compact baseline selection plus an explicit actions menu; management is secondary. */
+.workspace .baselines-panel>.page-toolbar .baseline-toolbar-controls { display:flex; align-items:center; gap:8px; }
+.workspace .baselines-panel .baseline-selector--compact>.multi-select { min-width:0; width:clamp(100px,12cqw,150px); max-width:150px; }
+.workspace .baselines-panel .baseline-selector--compact { min-width:0; }
+.workspace .baselines-panel>.page-toolbar .baseline-selector summary { height:30px; min-height:30px; padding:4px 8px; font:400 var(--type-control)/20px Arial,Helvetica,sans-serif; }
+.baseline-actions>summary { display:flex; align-items:center; justify-content:center; list-style:none; cursor:pointer; box-sizing:border-box; width:30px; height:30px; border:1px solid var(--control-border); border-radius:4px; color:var(--primary); background:var(--surface); font-size:20px; line-height:20px; }
+.baseline-actions>summary::-webkit-details-marker { display:none; }
+.baseline-action-options:popover-open { padding:6px!important; display:flex; flex-direction:column; gap:4px; }
+.baseline-action-options button { text-align:left; min-height:30px; font-size:var(--type-control); }
+.baseline-manager .baseline-list { padding:0; display:grid; gap:6px; list-style:none; }
+.baseline-manager .baseline-list li { display:grid; grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:4px 8px; border:1px solid var(--border); padding:6px; border-radius:4px; }
+.baseline-manager .baseline-list li>button:first-child { grid-column:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.baseline-manager .baseline-list li>time,.baseline-manager .baseline-list li>span { grid-column:1; font-size:var(--type-caption); color:var(--text-muted); }
+.baseline-manager .baseline-list li>button[aria-label^=Rename] { grid-column:2; grid-row:1; }
+.baseline-manager .baseline-list li>button[aria-label^=Delete] { grid-column:3; grid-row:1; }
+.baseline-help { font-size:var(--type-caption); color:var(--text-muted); margin:8px 0 0; }

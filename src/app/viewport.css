@@ -4,4 +4,6 @@
 @import "../features/shared/planning-controls.css";
 @import "../features/shared/search-input.css";
 @import "./viewport-panels.css";
+@import "../features/baselines/baseline-surfaces.css";
+@import "../features/shared/table-headings.css";
 @import "../features/shared/timeline-surfaces.css";
