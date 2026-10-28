@@ -55,7 +55,7 @@ Sources: [typography and actions](../src/app/globals.css), [foundation tokens](.
 
 Sources: [native ActionButton facade](../src/features/shared/action-button.tsx), [shell Button/Chip usage and inline icons](../src/features/shell/shell.tsx), [ModuleSearch filter icon](../src/features/shared/module-search.tsx), [Baselines action menu](../src/features/baselines/baselines.tsx), [timeline navigation](../src/features/shared/timeline-navigation.tsx).
 
-- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search, timeline navigation, record creation, Risk context and Baselines management. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
+- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search, timeline navigation, record creation, Risk/Decision log actions and Baselines management. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
 - Catalogue filled, outline, destructive, quiet/link, icon-only and segmented/disclosure actions as distinct roles. Sort and navigation actions must retain their semantics and accessible names.
 - Preserve current main actions at 30px. Filter Clear all (28px), creation actions (32px), general controls (36px minimum with content-dependent measured height), warning summaries and icon controls remain explicit compatibility examples. Record responsive/contextual typography exceptions from the audit; catalogue preparation does not silently normalize them.
 - Icon-only controls require an accessible name independent of the glyph. Decorative SVG/shapes are hidden from assistive technology where appropriate.
@@ -66,7 +66,7 @@ Sources: [native ActionButton facade](../src/features/shared/action-button.tsx),
 
 ### C03 — FormField and input frame
 
-Sources: [FormField / FieldMessage](../src/features/shared/form-field.tsx), [CreationField](../src/features/shared/creation-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
+Sources: [shared field surfaces](../src/features/shared/field-surfaces.css), [FormField / FieldMessage](../src/features/shared/form-field.tsx), [CreationField](../src/features/shared/creation-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
 
 - The field recipe owns label, required marker, input/selector slot, hint/error association, reserved error area and density.
 - Preserve real native text/date/number/select/textarea elements and existing onChange/onBlur/submit boundaries. A catalogue callback may update isolated state, never a real project.
@@ -106,6 +106,8 @@ Sources: [ChoiceRow](../src/features/shared/choice-row.tsx), [SearchableOptionLi
 `ChoiceRow` now supplies the exact native label/input composition for PredictiveSelect, RelationshipPicker and FilterChoices. Callers keep their controlled state, radio grouping, IDs/ARIA, click/change handlers, disabled behavior and close/refocus policy. It adds no class, wrapper or size rule; table selection checkboxes remain their separate native recipe.
 
 ### C07 — SearchableOptionList behavior kernel
+
+The editable search-field presentation is owned by [dropdown search input CSS](../src/features/shared/search-input.css); filtering and keyboard behavior remain in the existing component.
 
 Source: [SearchableOptionList](../src/features/shared/searchable-option-list.tsx).
 

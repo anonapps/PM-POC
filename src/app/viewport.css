@@ -1,3 +1,7 @@
-/* Ordered compatibility entry: keep layout rules before shared timeline surfaces. */
+/* Ordered compatibility entry: preserve unlayered declaration order. */
 @import "./viewport-layout.css";
+@import "../features/shared/field-surfaces.css";
+@import "../features/shared/planning-controls.css";
+@import "../features/shared/search-input.css";
+@import "./viewport-panels.css";
 @import "../features/shared/timeline-surfaces.css";

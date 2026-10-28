@@ -26,7 +26,7 @@ Not every matching literal elsewhere in legacy CSS has migrated. Remove or repla
 
 ## First shared composition adopters
 
-Use [ActionButton](../features/shared/action-button.tsx) for new native primary/secondary/danger action controls. Pass native attributes, accessible labels, handlers and refs normally. Set `type="button"` for non-submit actions; the facade intentionally preserves native default-submit behavior when type is omitted. Current adoption covers shared module Search, both timeline footers, record creation, Risk context and Baselines management. It preserves existing contextual sizes and is not a blanket replacement for HeroUI, sort/disclosure or icon controls.
+Use [ActionButton](../features/shared/action-button.tsx) for new native primary/secondary/danger action controls. Pass native attributes, accessible labels, handlers and refs normally. Set `type="button"` for non-submit actions; the facade intentionally preserves native default-submit behavior when type is omitted. Current adoption covers shared module Search, both timeline footers, record creation, Risk/Decision log actions and Baselines management. It preserves existing contextual sizes and is not a blanket replacement for HeroUI, sort/disclosure or icon controls.
 
 Use [FormField and FieldMessage](../features/shared/form-field.tsx) for the existing label/required-marker/reserved-error composition. Pass the child native/human-text control with its current ID, describedby, invalid state and callbacks. Project forms and all record creation panels now use this composition. Preserve `announceError={false}` / `announce={false}` where the existing slot is not a live alert. Do not move validation, text normalization or command dispatch into the composition.
 
@@ -40,6 +40,6 @@ This composition adds no default class, size, input state or keyboard model. It 
 
 ## Style ownership and cascade
 
-See the [style ownership map](../../docs/UI_STYLE_OWNERSHIP.md) before editing component styles. `src/app/viewport.css` is an ordered import entry: viewport layout rules load first, then the [shared timeline surfaces](../features/shared/timeline-surfaces.css) owned by DependencyConnectors/TimelineNavigation and their legends. Keep imports unlayered and in order. Both the app and catalogue use this entry, avoiding separate style recipes.
+See the [style ownership map](../../docs/UI_STYLE_OWNERSHIP.md) before editing component styles. `src/app/viewport.css` is an ordered import entry for viewport layout, [field surfaces](../features/shared/field-surfaces.css), planning controls, [dropdown search input](../features/shared/search-input.css), late panel overrides and finally [shared timeline surfaces](../features/shared/timeline-surfaces.css). Keep imports unlayered and in order. Both the app and catalogue use this entry, avoiding separate style recipes.
 
 Only proven superseded declarations have been removed. Earlier layout/theme rules still participate in the cascade; do not delete them by name or move matching colors across semantic roles. The final more-specific dotted-line selector is required to override the generic path reset.

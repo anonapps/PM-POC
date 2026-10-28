@@ -103,3 +103,34 @@ test('reference assets retain native titles and keyboard warning dismissal',asyn
   await expect(references.getByLabel('Example dependency warnings',{exact:true})).toBeFocused();
   await expect(references.getByLabel('Today',{exact:true})).toHaveCount(1);
 });
+
+test('log actions retain context hotkeys, native submission and action undo',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  await examples.getByRole('button',{name:'Risk Log',exact:true}).click();
+  await content.getByRole('button',{name:'Context',exact:true}).first().click();
+  const risk=content.locator('.risk-context-editor');
+  await risk.getByRole('textbox',{name:'Description',exact:true}).fill('Updated risk context');
+  await risk.getByRole('textbox',{name:'Description',exact:true}).press('Control+Enter');
+  await expect(risk).toBeHidden();
+  await content.getByRole('button',{name:'Context',exact:true}).first().click();
+  await expect(risk.getByRole('textbox',{name:'Description',exact:true})).toHaveValue('Updated risk context');
+  await risk.getByRole('button',{name:'Cancel',exact:true}).click();
+  await content.getByRole('button',{name:/^Actions \(/}).first().click();
+  const actions=content.locator('.risk-actions-editor');
+  await actions.getByLabel('New action description',{exact:true}).fill('Added with native Enter');
+  await actions.getByLabel('New action description',{exact:true}).press('Enter');
+  await expect(actions.locator('.risk-action-row')).toHaveCount(3);
+  await actions.locator('.risk-action-row').last().getByRole('button',{name:'Delete',exact:true}).click();
+  await expect(actions.locator('.risk-action-row')).toHaveCount(2);
+  await actions.getByRole('button',{name:'Undo',exact:true}).click();
+  await expect(actions.locator('.risk-action-row')).toHaveCount(3);
+  await examples.getByRole('button',{name:'Decision Log',exact:true}).click();
+  await content.getByRole('button',{name:'Context',exact:true}).first().click();
+  const decision=content.locator('.decision-context-editor');
+  await decision.getByRole('textbox',{name:'Additional information',exact:true}).fill('Updated decision context');
+  await decision.getByRole('textbox',{name:'Additional information',exact:true}).press('Control+Enter');
+  await expect(decision).toBeHidden();
+  await content.getByRole('button',{name:'Context',exact:true}).first().click();
+  await expect(decision.getByRole('textbox',{name:'Additional information',exact:true})).toHaveValue('Updated decision context');
+});

@@ -59,3 +59,5 @@ The first shared composition adopters are now real production consumers: `Action
 Full timeline previews mount on the client to keep browser measurements and fixed test clocks independent of the server date. Production chart rendering is unchanged. The timeline case asserts that no browser page errors occurred, including hydration errors.
 
 The catalogue consumes the same ordered viewport/style entry as production. See [style ownership](../../docs/UI_STYLE_OWNERSHIP.md) for the timeline surface owner and remaining legacy boundaries; harness layout must not replace component styling.
+
+The log-action case verifies context Ctrl+Enter, native Enter submission, delete and Undo against disposable data. Shared fields, planning controls and option-list search presentation now have owned CSS files in the same ordered production/catalogue entry; obsolete toolbar Zoom rules are removed while footer Zoom remains.
