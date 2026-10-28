@@ -1,5 +1,17 @@
 /* Generated from src/ui/tokens.json. Run npm run ui:tokens; do not edit. */
 :root {
+  --ui-color-canvas: #f4f6f8;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-subtle: #edf1f5;
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #526174;
+  --ui-color-border: #dce2e9;
+  --ui-color-control-border: #8293a8;
+  --ui-color-primary: #164a91;
+  --ui-color-primary-hover: #123e7a;
+  --ui-color-primary-active: #0e3263;
+  --ui-color-sidebar: #17243a;
+  --ui-color-focus: #1b65c9;
   --ui-field-regular-height: 36px;
   --ui-field-creation-height: 34px;
   --ui-field-embedded-height: 30px;

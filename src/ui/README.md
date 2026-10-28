@@ -1,7 +1,8 @@
 # Compatibility UI tokens
 
-`tokens.json` is the canonical source for this first migration wave:
+`tokens.json` is the canonical source for the migrated compatibility roles:
 
+- twelve existing core color roles (canvas/surfaces, text/borders, primary states, sidebar and focus), preserving the original design-system aliases;
 - regular/creation/embedded field heights36/34/30px;
 - shared text band20px and horizontal inset8px;
 - timeline footer minimum56px (defensive narrow layouts may grow);
@@ -43,3 +44,5 @@ This composition adds no default class, size, input state or keyboard model. It 
 See the [style ownership map](../../docs/UI_STYLE_OWNERSHIP.md) before editing component styles. `src/app/viewport.css` is an ordered import entry for viewport layout, [field surfaces](../features/shared/field-surfaces.css), planning controls, [dropdown search input](../features/shared/search-input.css), late panel overrides, [Risk editor surfaces](../features/risks/risk-editor-surfaces.css), [baseline surfaces](../features/baselines/baseline-surfaces.css), [table headings](../features/shared/table-headings.css) and finally [shared timeline surfaces](../features/shared/timeline-surfaces.css). Keep imports unlayered and in order. Both the app and catalogue use this entry, avoiding separate style recipes.
 
 Only proven superseded declarations have been removed. Earlier layout/theme rules still participate in the cascade; do not delete them by name or move matching colors across semantic roles. The final more-specific dotted-line selector is required to override the generic path reset.
+
+Core colors live under `coreColor`; the generator emits `--ui-color-*`. Keep the existing `--canvas`, `--primary`, `--focus` and other compatibility aliases at their original design-system cascade positions. This exports existing values: it does not merge status/scope/severity/dependency palettes or replace matching local color literals.

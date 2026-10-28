@@ -6,6 +6,22 @@ import { TASK_STATUSES, MILESTONE_STATUSES } from '../domain';
 import { TASK_STATUS_COLOURS, MILESTONE_STATUS_COLOURS } from '../features/shared/timeline-status';
 
 describe('approved UI compatibility tokens',()=>{
+  it('preserves core semantic colors through the existing compatibility aliases',()=>{
+    const expected = {
+      canvas:'#f4f6f8',surface:'#ffffff',surfaceSubtle:'#edf1f5',text:'#0f172a',textMuted:'#526174',
+      border:'#dce2e9',controlBorder:'#8293a8',primary:'#164a91',primaryHover:'#123e7a',
+      primaryActive:'#0e3263',sidebar:'#17243a',focus:'#1b65c9',
+    };
+    expect(tokens.coreColor).toEqual(expected);
+    const generated=readFileSync('src/app/ui-tokens.generated.css','utf8');
+    const compatibility=readFileSync('src/app/design-system.css','utf8').match(/:root\s*\{([^}]+)\}/)?.[1];
+    expect(compatibility).toBeDefined();
+    for(const [name,color] of Object.entries(expected)){
+      const alias=name.replace(/[A-Z]/g,letter=>`-${letter.toLowerCase()}`);
+      expect(generated).toContain(`--ui-color-${alias}: ${color};`);
+      expect(compatibility).toContain(`--${alias}: var(--ui-color-${alias});`);
+    }
+  });
   it('keeps approved density metrics and distinct domain palettes',()=>{
     expect(tokens.field).toEqual({regular:36,creation:34,embedded:30,textLine:20,textInset:8});
     expect(tokens.timelineFooterMinHeight).toBe(56);

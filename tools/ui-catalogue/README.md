@@ -71,3 +71,5 @@ The Milestones record tab uses the real module and disposable fixture. Task/Mile
 Task/Milestone option-row verification covers circular-dependency blocking and its label title, Escape/focus restoration, Show Deleted, Project-wide/stream scope switching and predecessor check/uncheck at three desktop widths. Table selection remains its separate native recipe.
 
 Overview is a real disposable record example. Quick/KPI/warning navigation requests are displayed below it rather than opening application runtime pages. The fixture starts with Getting Started complete to avoid a readiness-only mount command. Project Details validates and edits in memory; Reset restores data and the navigation output.
+
+The token reference now displays the twelve production core-color roles through generated CSS swatches alongside the distinct status palettes. Its browser check verifies that existing CSS aliases resolve to the original colors.

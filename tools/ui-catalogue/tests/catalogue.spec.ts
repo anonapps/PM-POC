@@ -105,3 +105,16 @@ test('footer examples retain model navigation increments and zoom reset',async({
   await nav.getByRole('button',{name:'Next',exact:true}).click();
   await expect(nav.locator('[data-start]')).toHaveAttribute('data-start',new Date(Date.parse(start!)+7*86400000).toISOString().slice(0,10));
 });
+
+test('core color reference resolves production aliases and generated swatches',async({page})=>{
+  await page.goto('/');
+  const values={canvas:'#f4f6f8',surface:'#ffffff','surface-subtle':'#edf1f5',text:'#0f172a','text-muted':'#526174',border:'#dce2e9','control-border':'#8293a8',primary:'#164a91','primary-hover':'#123e7a','primary-active':'#0e3263',sidebar:'#17243a',focus:'#1b65c9'};
+  expect(await page.evaluate(names=>{
+    const style=getComputedStyle(document.documentElement);
+    return Object.fromEntries(names.map(name=>[name,style.getPropertyValue(`--${name}`).trim()]));
+  },Object.keys(values))).toEqual(values);
+  const swatches=page.getByTestId('core-color-tokens').locator('.catalogue-swatch');
+  await expect(swatches).toHaveCount(12);
+  const colors=Object.values(values).map(hex=>`rgb(${parseInt(hex.slice(1,3),16)}, ${parseInt(hex.slice(3,5),16)}, ${parseInt(hex.slice(5,7),16)})`);
+  expect(await swatches.evaluateAll(elements=>elements.map(el=>getComputedStyle(el).backgroundColor))).toEqual(colors);
+});

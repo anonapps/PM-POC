@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import uiTokens from '../../../src/ui/tokens.json';
 import { ActionButton } from '../../../src/features/shared/action-button';
 import { ChoiceRow } from '../../../src/features/shared/choice-row';
 import { ReferenceExamples } from './reference-examples';
@@ -63,7 +64,7 @@ export default function Catalogue() {
       <RecordExamples/>
       <TimelineExamples/>
       <ReferenceExamples/>
-      <section id="tokens" className="catalogue-section"><h2>Token reference</h2><p className="catalogue-note">Compatibility aliases are catalogue-only until component migration. Status colors use existing TypeScript exports.</p><div className="catalogue-tokens">{Object.entries({...TASK_STATUS_COLOURS,...Object.fromEntries(Object.entries(MILESTONE_STATUS_COLOURS).map(([key,value])=>[`Milestone ${key}`,value]))}).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:color}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div></section>
+      <section id="tokens" className="catalogue-section"><h2>Token reference</h2><p className="catalogue-note">Core colors and field/footer metrics use the production token source. Task and milestone status palettes retain their separate domain meanings.</p><div className="catalogue-tokens" data-testid="core-color-tokens">{Object.entries(uiTokens.coreColor).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:`var(--ui-color-${name.replace(/[A-Z]/g,letter=>`-${letter.toLowerCase()}`)})`}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div><div className="catalogue-tokens">{Object.entries({...TASK_STATUS_COLOURS,...Object.fromEntries(Object.entries(MILESTONE_STATUS_COLOURS).map(([key,value])=>[`Milestone ${key}`,value]))}).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:color}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div></section>
     </div></div>
   </main>;
 }

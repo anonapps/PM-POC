@@ -1,17 +1,17 @@
 /* Shared visual baseline. Planning geometry remains in globals.css. */
 :root {
-  --canvas: #f4f6f8;
-  --surface: #ffffff;
-  --surface-subtle: #edf1f5;
-  --text: #0f172a;
-  --text-muted: #526174;
-  --border: #dce2e9;
-  --control-border: #8293a8;
-  --primary: #164a91;
-  --primary-hover: #123e7a;
-  --primary-active: #0e3263;
-  --sidebar: #17243a;
-  --focus: #1b65c9;
+  --canvas: var(--ui-color-canvas);
+  --surface: var(--ui-color-surface);
+  --surface-subtle: var(--ui-color-surface-subtle);
+  --text: var(--ui-color-text);
+  --text-muted: var(--ui-color-text-muted);
+  --border: var(--ui-color-border);
+  --control-border: var(--ui-color-control-border);
+  --primary: var(--ui-color-primary);
+  --primary-hover: var(--ui-color-primary-hover);
+  --primary-active: var(--ui-color-primary-active);
+  --sidebar: var(--ui-color-sidebar);
+  --focus: var(--ui-color-focus);
   --text-xs: .75rem;
   --text-sm: .8125rem;
   --text-base: .875rem;

@@ -5,6 +5,16 @@ const source = new URL('../src/ui/tokens.json', import.meta.url);
 const destination = new URL('../src/app/ui-tokens.generated.css', import.meta.url);
 const tokens = JSON.parse(await readFile(source, 'utf8'));
 const lines = ['/* Generated from src/ui/tokens.json. Run npm run ui:tokens; do not edit. */', ':root {'];
+const coreColorNames = ['canvas', 'surface', 'surfaceSubtle', 'text', 'textMuted', 'border', 'controlBorder', 'primary', 'primaryHover', 'primaryActive', 'sidebar', 'focus'];
+if (Object.keys(tokens.coreColor).length !== coreColorNames.length || coreColorNames.some(name => !Object.hasOwn(tokens.coreColor, name))) {
+  throw new Error('Core color roles must match the compatibility contract.');
+}
+for (const name of coreColorNames) {
+  const color = tokens.coreColor[name];
+  if (typeof color !== 'string' || !/^#[\da-f]{6}$/i.test(color)) throw new Error(`Invalid core color: ${name}`);
+  const kebabName = name.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+  lines.push(`  --ui-color-${kebabName}: ${color};`);
+}
 const dimension = (name, value) => {
   if (!Number.isFinite(value) || value <= 0) throw new Error(`Invalid dimension: ${name}`);
   lines.push(`  --ui-${name}: ${value}px;`);
