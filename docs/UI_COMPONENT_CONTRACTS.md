@@ -218,3 +218,5 @@ No new component library, runtime package, service, domain enum, persisted prefe
 People/Streams ordinary record actions adopt `ActionButton` without changing omitted native button types or Stream deletion confirmation. Risk/Decision Project-wide choices reuse `ChoiceRow`; Risk context retains its reserved, conditionally announced `FieldMessage`. Their distinct editor densities and validation ownership remain unchanged.
 
 Task and Milestone ordinary actions also reuse ActionButton. Task bulk selection/confirmation and row Restore/Duplicate/Delete remain caller-owned; Milestone linked-record confirmation is unchanged. Native sort headings, selection refs and dependency/scope disclosures retain their own contracts.
+
+Tasks/Milestones also reuse ChoiceRow for Show Deleted and native dependency/scope options. Keys remain on each mapped row; label titles, radio omissions and cycle/deletion guards remain caller-owned. Table select-all/indeterminate and row-selection inputs are intentionally separate.

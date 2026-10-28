@@ -229,3 +229,44 @@ test('Task and Milestone native actions duplicate, delete, restore and reset',as
     await expect(rows).toHaveCount(originalCount);
   }
 });
+
+test('Task and Milestone choice rows preserve cycle guards and scope selection',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  for(const width of [900,1440,1920]){
+    await page.setViewportSize({width,height:1000});
+    await examples.getByRole('button',{name:'Tasks',exact:true}).click();
+    const task=content.locator('tbody tr').filter({has:page.locator('small').filter({hasText:/^TASK-001$/})});
+    const predecessor=task.locator('td').nth(-2).locator('summary');
+    await predecessor.click();
+    let options=page.locator('.multi-select-options:popover-open');
+    const blocked=options.getByRole('checkbox',{name:/TASK-002/});
+    await expect(blocked).toBeDisabled();
+    await expect(blocked.locator('..')).toHaveAttribute('title','Would create circular dependency');
+    await page.keyboard.press('Escape');
+    await expect(predecessor).toBeFocused();
+    await content.getByRole('checkbox',{name:'Show Deleted',exact:true}).check();
+    await expect(content.getByRole('checkbox',{name:'Select TASK-003',exact:true})).toBeVisible();
+    await examples.getByRole('button',{name:'Milestones',exact:true}).click();
+    const milestone=content.locator('tbody tr').first();
+    const scope=milestone.locator('.scope-summary');
+    await scope.click();
+    options=page.locator('.multi-select-options:popover-open');
+    await options.getByRole('radio',{name:'Project-wide',exact:true}).check();
+    await expect(options.getByRole('checkbox',{name:'Delivery',exact:true})).not.toBeChecked();
+    await options.getByRole('checkbox',{name:'Operations',exact:true}).check();
+    await expect(options.getByRole('radio',{name:'Project-wide',exact:true})).not.toBeChecked();
+    await page.keyboard.press('Escape');
+    await expect(scope).toContainText('Operations');
+    const dependencies=milestone.locator('td').nth(-2).locator('details.multi-select>summary');
+    await dependencies.click();
+    options=page.locator('.multi-select-options:popover-open');
+    const choice=options.getByRole('checkbox',{name:/TASK-001/});
+    await choice.check();
+    await expect(choice).toBeChecked();
+    await choice.uncheck();
+    await expect(choice).not.toBeChecked();
+    await page.keyboard.press('Escape');
+    await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
+  }
+});

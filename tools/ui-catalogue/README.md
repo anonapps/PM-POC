@@ -67,3 +67,5 @@ Dependencies is available in Records with actual filter labels, inspection/editi
 People and Streams also expose their real record modules in the disposable record tabs. Their native Add, Delete, Restore and Stream Duplicate actions use the shared action facade; Reset restores the fixture.
 
 The Milestones record tab uses the real module and disposable fixture. Task/Milestone action coverage retains Add at three widths, Duplicate, confirmed Delete, Restore and Reset, alongside the existing Task selection/sorting example.
+
+Task/Milestone option-row verification covers circular-dependency blocking and its label title, Escape/focus restoration, Show Deleted, Project-wide/stream scope switching and predecessor check/uncheck at three desktop widths. Table selection remains its separate native recipe.
