@@ -120,3 +120,5 @@ The documentation-only [Stage 1 proposal](docs/UI_STANDARD_PROPOSAL.md) captures
 ### Internal UI catalogue
 
 Run `npm run ui:catalogue` for the separate local component review app. See the [catalogue guide](tools/ui-catalogue/README.md) and [component contracts](docs/UI_COMPONENT_CONTRACTS.md). Production pages and approved visual values remain unchanged.
+
+For UI changes, use the [style ownership map](docs/UI_STYLE_OWNERSHIP.md) to locate existing assets and rules before adding a new override.

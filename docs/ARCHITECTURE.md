@@ -491,3 +491,5 @@ Shared Dialog renders through a body portal, keeping all modal panels above both
 ## Compatibility UI token source — 28 October 2026
 
 The initial presentation-token migration uses [src/ui/tokens.json](../src/ui/tokens.json) for existing field metrics, timeline footer minimum and separate task/milestone palettes. A dependency-free development script generates committed CSS; the production build checks freshness. Existing CSS variable names and TypeScript palette exports remain compatibility interfaces. See [ownership and maintenance](../src/ui/README.md). Tokens stay outside domain/PMP data; this introduces no service, persistence or runtime dependency. Remaining visual roles and component ownership migrate incrementally with equivalent computed-style evidence.
+
+Shared timeline styles now live beside the rendering assets in `src/features/shared/timeline-surfaces.css`. The existing viewport stylesheet is an ordered, unlayered import entry with its original layout prefix first. Both app and catalogue consume the same cascade. The [ownership map](UI_STYLE_OWNERSHIP.md) documents remaining legacy boundaries; extraction does not approve changing visual values.

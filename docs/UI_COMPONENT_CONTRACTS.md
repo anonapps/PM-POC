@@ -3,7 +3,7 @@
 **Status:** Stage 2 compatibility contracts; this document does not approve visual normalization.
 **Date:** 27 October 2026 (Europe/Madrid).
 **Authority:** [PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md).
-**Related:** [Current audit](UI_STANDARD_AUDIT.md) · [Standard proposal](UI_STANDARD_PROPOSAL.md) · [Migration plan](UI_STANDARD_MIGRATION_PLAN.md).
+**Related:** [Style ownership map](UI_STYLE_OWNERSHIP.md) · [Current audit](UI_STANDARD_AUDIT.md) · [Standard proposal](UI_STANDARD_PROPOSAL.md) · [Migration plan](UI_STANDARD_MIGRATION_PLAN.md).
 
 ## 1. Purpose and ownership
 
@@ -157,7 +157,7 @@ Sources: [FitTable](../src/features/shared/fit-table.tsx), [sorting](../src/feat
 
 ### C12 — PageToolbar and timeline footer
 
-Sources: [PageToolbar](../src/features/shared/page-toolbar.tsx), [ModuleSearch](../src/features/shared/module-search.tsx), [TimelineNavigation](../src/features/shared/timeline-navigation.tsx), [viewport rules](../src/app/viewport.css).
+Sources: [shared timeline surface styles](../src/features/shared/timeline-surfaces.css), [PageToolbar](../src/features/shared/page-toolbar.tsx), [ModuleSearch](../src/features/shared/module-search.tsx), [TimelineNavigation](../src/features/shared/timeline-navigation.tsx), [viewport rules](../src/app/viewport.css).
 
 - Module Search is independently centered against content at its standard width. Preserve title/actions and the current narrow second-row fallback; wrapped toolbar height is measured for sticky offsets.
 - Footer height must not inherit a wrapped toolbar height. Both timelines share the compact 56px desktop minimum, matching typography/action geometry and the full visible bottom boundary. Narrow defensive layouts may wrap rather than clip controls.

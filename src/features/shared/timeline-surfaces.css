@@ -1,0 +1,51 @@
+
+/* Shared relationship treatment: white crossing separation, directional curves,
+   and a generous pointer target without increasing visual weight. */
+.workspace .dependency-connectors .dependency-connection { outline:none; }
+.workspace .dependency-connectors .dependency-connection path { fill:none; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:none; }
+.workspace .dependency-connectors .dependency-halo { stroke:white; stroke-width:5px; pointer-events:none; }
+.workspace .dependency-connectors .dependency-line { pointer-events:none; }
+.workspace .dependency-connectors .dependency-hit { stroke:transparent; stroke-width:12px; pointer-events:stroke; }
+.workspace .dependency-connectors marker path { fill:#456488; stroke:none; }
+
+/* One compact footer rhythm for both charts and both Gantt modes. */
+.workspace .panel footer.timeline-navigation,
+.workspace .gantt-extended .gantt-panel footer.timeline-navigation {
+ display:flex; flex-direction:column; align-items:stretch; gap:2px;
+ min-height:var(--ui-timeline-footer-min-height); height:auto; padding:2px 8px;
+ font:400 var(--type-control)/18px Arial,Helvetica,sans-serif;
+}
+.workspace .timeline-navigation-legend-row { display:flex; align-items:center; gap:8px; min-width:0; height:18px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend {
+ flex:1; height:18px; min-height:18px; min-width:0; flex-wrap:nowrap;
+ gap:12px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; font-size:var(--type-control);
+}
+.workspace .panel footer.timeline-navigation .timeline-status-legend>span { font:400 var(--type-control)/18px Arial,Helvetica,sans-serif; gap:5px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend i { width:18px; height:8px; }
+.workspace .panel footer.timeline-navigation .timeline-status-legend.milestone i { width:12px; height:12px; margin-inline:2px; }
+.workspace .panel footer.timeline-navigation .timeline-navigation-context { flex:0 0 auto; font:400 var(--type-caption)/18px Arial,Helvetica,sans-serif; color:var(--text-muted); white-space:nowrap; }
+.workspace .timeline-navigation-controls { display:flex; align-items:center; flex-wrap:wrap; gap:4px 8px; min-width:0; min-height:var(--action-height); }
+.workspace .panel footer.timeline-navigation .timeline-navigation-controls>span { font:400 var(--type-control)/20px Arial,Helvetica,sans-serif; color:var(--text-muted); white-space:nowrap; }
+.workspace .panel footer.timeline-navigation button {
+ box-sizing:border-box; height:var(--action-height); min-height:var(--action-height);
+ padding:2px 10px; border:1px solid var(--primary); border-radius:var(--action-radius);
+ font:600 var(--action-font)/20px Arial,Helvetica,sans-serif;
+}
+@container workspace (max-width:500px) {
+ .workspace .timeline-navigation-legend-row { height:auto; flex-wrap:wrap; }
+ .workspace .panel footer.timeline-navigation .timeline-navigation-context { margin-left:auto; }
+}
+
+/* Dotted, muted relationships with exactly one explicit preview/selection. */
+.workspace .dependency-connectors .dependency-connection { opacity:1; }
+.workspace .dependency-connectors .dependency-line { stroke:#a7aeb8; stroke-width:1.6px; stroke-dasharray:1 5; }
+.workspace .dependency-connectors[data-has-active=true] .dependency-connection:not([data-active=true]) { opacity:.18; }
+.workspace .dependency-connectors .dependency-connection[data-active=true] .dependency-line { stroke:#155bc1; stroke-width:2.5px; }
+.workspace .dependency-connectors marker .dependency-arrow-muted { fill:#a7aeb8; }
+.workspace .dependency-connectors marker .dependency-arrow-active { fill:#155bc1; }
+.workspace .gantt-row.dependency-muted>div,
+.workspace .tube-station.dependency-muted { filter:grayscale(1); opacity:.35; }
+/* Tube Map's workspace bottom padding looked like additional footer height. */
+.workspace.module-tube-map { padding-bottom:0; }
+.workspace .dependency-connectors .dependency-connection .dependency-line { stroke-dasharray:1 5; }
+.workspace.module-tube-map .tube-map { border-bottom:0; }

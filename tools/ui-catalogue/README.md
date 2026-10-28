@@ -57,3 +57,5 @@ Timeline fixtures cover late October/early November2026. Full charts retain the 
 The first shared composition adopters are now real production consumers: `ActionButton` in Search/timeline controls and `FormField`/`FieldMessage` in project/record forms. Catalogue action examples use the facade; creation specimens use the shared field composition. See [usage guidance](../../src/ui/README.md).
 
 Full timeline previews mount on the client to keep browser measurements and fixed test clocks independent of the server date. Production chart rendering is unchanged. The timeline case asserts that no browser page errors occurred, including hydration errors.
+
+The catalogue consumes the same ordered viewport/style entry as production. See [style ownership](../../docs/UI_STYLE_OWNERSHIP.md) for the timeline surface owner and remaining legacy boundaries; harness layout must not replace component styling.

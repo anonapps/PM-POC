@@ -37,3 +37,9 @@ These components add no wrapper DOM or CSS. Existing context rules and the compa
 Use [ChoiceRow](../features/shared/choice-row.tsx) for a native checkbox/radio wrapped by its clickable label. Pass native input props through `input`, label attributes through `labelProps` and the visible content as children. Keep state, grouping, selection commands and close/refocus policy in the consuming selector. Current consumers are PredictiveSelect (single radio choice), RelationshipPicker (multiple checkboxes) and FilterChoices.
 
 This composition adds no default class, size, input state or keyboard model. It preserves existing context styles and native semantics. It is not a replacement for table select-all/indeterminate cells or disclosure triggers. Reuse it without converting multi-selection to single-selection or assigning a status color to a choice state.
+
+## Style ownership and cascade
+
+See the [style ownership map](../../docs/UI_STYLE_OWNERSHIP.md) before editing component styles. `src/app/viewport.css` is an ordered import entry: viewport layout rules load first, then the [shared timeline surfaces](../features/shared/timeline-surfaces.css) owned by DependencyConnectors/TimelineNavigation and their legends. Keep imports unlayered and in order. Both the app and catalogue use this entry, avoiding separate style recipes.
+
+Only proven superseded declarations have been removed. Earlier layout/theme rules still participate in the cascade; do not delete them by name or move matching colors across semantic roles. The final more-specific dotted-line selector is required to override the generic path reset.
