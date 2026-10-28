@@ -7,13 +7,14 @@ import { makeProjectState, streamFixture, taskFixture } from '../../../src/domai
 import { ACTIVE_DELETION_STATE } from '../../../src/domain/types';
 import { DependenciesModule } from '../../../src/features/dependencies/dependencies';
 import { PeopleModule, StreamsModule } from '../../../src/features/resources/resources';
+import { MilestonesModule } from '../../../src/features/milestones/milestones';
 import { TasksModule } from '../../../src/features/tasks/tasks';
 import { RiskLog } from '../../../src/features/risks/risks';
 import { DecisionLog } from '../../../src/features/decisions/decisions';
 import { BaselinesModule } from '../../../src/features/baselines/baselines';
 import { BaselineProvider } from '../../../src/features/baselines/selection';
 
-const modules = ['Tasks', 'People', 'Streams', 'Risk Log', 'Decision Log', 'Baselines', 'Dependencies'] as const;
+const modules = ['Tasks', 'Milestones', 'People', 'Streams', 'Risk Log', 'Decision Log', 'Baselines', 'Dependencies'] as const;
 type RecordModule = typeof modules[number];
 
 /** Rebuilt on reset; no runtime, file service or project handle is constructed. */
@@ -70,6 +71,7 @@ export function RecordExamples() {
       <BaselineProvider store={instance.store}>
         {module === 'People' && <PeopleModule store={instance.store} />}
         {module === 'Streams' && <StreamsModule store={instance.store} />}
+        {module === 'Milestones' && <MilestonesModule store={instance.store} />}
         {module === 'Tasks' && <TasksModule store={instance.store} />}
         {module === 'Risk Log' && <RiskLog store={instance.store} />}
         {module === 'Decision Log' && <DecisionLog store={instance.store} />}

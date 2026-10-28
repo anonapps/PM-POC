@@ -201,3 +201,31 @@ test('People and Streams reuse native actions and reset disposable records',asyn
   await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
   await expect(content.locator('tbody tr')).toHaveCount(count);
 });
+
+test('Task and Milestone native actions duplicate, delete, restore and reset',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  for(const [moduleName,kind,identifier] of [['Tasks','Task','TASK-001'],['Milestones','Milestone','MILESTONE-001']]){
+    await examples.getByRole('button',{name:moduleName,exact:true}).click();
+    for(const width of [900,1440,1920]){
+      await page.setViewportSize({width,height:1000});
+      await content.getByRole('button',{name:`Add ${kind}`,exact:true}).click();
+      const dialog=page.getByRole('dialog',{name:`Create ${kind}`,exact:true});
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole('button',{name:'Cancel',exact:true}).click();
+    }
+    const rows=content.locator('tbody tr');
+    const originalCount=await rows.count();
+    const row=rows.filter({has:page.locator('small').filter({hasText:new RegExp(`^${identifier}$`)})});
+    await row.getByRole('button',{name:'Duplicate',exact:true}).click();
+    await expect(rows).toHaveCount(originalCount+1);
+    page.once('dialog',dialog=>dialog.accept());
+    await row.getByRole('button',{name:'Delete',exact:true}).click();
+    await content.getByRole('checkbox',{name:'Show Deleted',exact:true}).check();
+    await row.getByRole('button',{name:'Restore',exact:true}).click();
+    await expect(row.getByRole('button',{name:'Delete',exact:true})).toBeVisible();
+    await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
+    await expect(content.getByRole('checkbox',{name:'Show Deleted',exact:true})).not.toBeChecked();
+    await expect(rows).toHaveCount(originalCount);
+  }
+});

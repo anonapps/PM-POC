@@ -216,3 +216,5 @@ Native date calendars, checkbox/radio painting, file pickers and browser title t
 No new component library, runtime package, service, domain enum, persisted preference or PMP schema is required by these contracts. A catalogue demonstrates current reusable pieces; it does not approve typography rounding, two-density reduction, border/radius normalization, copy changes or a redesigned accepted creation panel.
 
 People/Streams ordinary record actions adopt `ActionButton` without changing omitted native button types or Stream deletion confirmation. Risk/Decision Project-wide choices reuse `ChoiceRow`; Risk context retains its reserved, conditionally announced `FieldMessage`. Their distinct editor densities and validation ownership remain unchanged.
+
+Task and Milestone ordinary actions also reuse ActionButton. Task bulk selection/confirmation and row Restore/Duplicate/Delete remain caller-owned; Milestone linked-record confirmation is unchanged. Native sort headings, selection refs and dependency/scope disclosures retain their own contracts.

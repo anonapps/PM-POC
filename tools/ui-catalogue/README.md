@@ -65,3 +65,5 @@ The log-action case verifies context Ctrl+Enter, native Enter submission, delete
 Dependencies is available in Records with actual filter labels, inspection/editing and footer behavior. The dedicated case checks label toggles/reset, invalid self-reference Save gating, Cancel, Save and preserved footer paint values. Universal headings and Baselines menu/manager now use owned style assets behind the same import entry.
 
 People and Streams also expose their real record modules in the disposable record tabs. Their native Add, Delete, Restore and Stream Duplicate actions use the shared action facade; Reset restores the fixture.
+
+The Milestones record tab uses the real module and disposable fixture. Task/Milestone action coverage retains Add at three widths, Duplicate, confirmed Delete, Restore and Reset, alongside the existing Task selection/sorting example.
