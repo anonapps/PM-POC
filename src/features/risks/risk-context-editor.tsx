@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "../shared/action-button";
 import { HumanTextArea } from "../shared/human-text";
 import { useState } from "react";
 import type { Risk } from "../../domain";
@@ -15,6 +16,6 @@ export function RiskContextEditor({risk,state,store,onClose}:{risk:Risk;state:Pr
 <div className="context-relationship-grid"><div className="context-picker"><strong>Streams</strong><RelationshipPicker compact label="Risk streams" items={state.streams} selected={draft.relatedStreamIds} onChange={ids=>setDraft(previous=>({...previous,relatedStreamIds:ids}))}/></div><div className="context-picker"><strong>Tasks</strong><RelationshipPicker compact label="Risk tasks" items={state.tasks} selected={draft.relatedTaskIds} onChange={ids=>setDraft(previous=>({...previous,relatedTaskIds:ids}))}/></div><div className="context-picker"><strong>Milestones</strong><RelationshipPicker compact label="Risk milestones" items={state.milestones} selected={draft.relatedMilestoneIds} onChange={ids=>setDraft(previous=>({...previous,relatedMilestoneIds:ids}))}/></div></div>
     <label>Description<HumanTextArea value={draft.description} onChange={event=>setDraft(previous=>({...previous,description:event.target.value}))}/></label>
     <small id={`risk-context-error-${risk.id}`} className="form-field-error" role={error?"alert":undefined}>{error||"\u00a0"}</small>
-    <div className="actions"><button type="submit">Save context</button><button type="button" className="secondary" onClick={onClose}>Cancel</button></div>
+    <div className="actions"><ActionButton type="submit">Save context</ActionButton><ActionButton type="button" variant="secondary" onClick={onClose}>Cancel</ActionButton></div>
   </form>;
 }

@@ -4,6 +4,7 @@ import { TASK_STATUSES } from "../../domain";
 import type { ProjectState } from "../../application";
 import { matchesFilters, toggleFilter } from "./filtering";
 import { SearchableOptionList } from "./searchable-option-list";
+import { ChoiceRow } from "./choice-row";
 
 type Collection = "streams" | "people" | "tasks" | "milestones" | "risks" | "decisions";
 type RecordEntity = ProjectState[Collection][number];
@@ -17,7 +18,7 @@ export function recordFilterValues(entity: RecordEntity): Record<string, readonl
   };
 }
 export function FilterChoices({label,options,selected,onChange,searchable=false}:{label:string;options:readonly {id:string;label:string}[];selected:readonly string[];onChange:(values:string[])=>void;searchable?:boolean}) {
-  const option=(item:{id:string;label:string})=><label key={item.id}><input type="checkbox" aria-label={`Filter ${label}: ${item.label}`} checked={selected.includes(item.id)} onChange={()=>onChange(toggleFilter(selected,item.id))}/>{item.label}</label>;
+  const option=(item:{id:string;label:string})=><ChoiceRow key={item.id} input={{type:"checkbox","aria-label":`Filter ${label}: ${item.label}`,checked:selected.includes(item.id),onChange:()=>onChange(toggleFilter(selected,item.id))}}>{item.label}</ChoiceRow>;
   return <fieldset className="filter-category"><legend>{label}</legend>{searchable?<SearchableOptionList items={options} label={`Search ${label} filters`} renderOption={option}/>:options.map(option)}</fieldset>;
 }
 export function useRecordFilters(state: ProjectState, collection: Collection) {

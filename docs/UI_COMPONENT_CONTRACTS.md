@@ -55,7 +55,7 @@ Sources: [typography and actions](../src/app/globals.css), [foundation tokens](.
 
 Sources: [native ActionButton facade](../src/features/shared/action-button.tsx), [shell Button/Chip usage and inline icons](../src/features/shell/shell.tsx), [ModuleSearch filter icon](../src/features/shared/module-search.tsx), [Baselines action menu](../src/features/baselines/baselines.tsx), [timeline navigation](../src/features/shared/timeline-navigation.tsx).
 
-- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search and timeline navigation. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
+- `ActionButton` now supplies the native primary/secondary/danger facade in shared Search, timeline navigation, record creation, Risk context and Baselines management. It forwards native props/ref, adds no wrapper or default button type, and retains context sizing. Other button families/consumers remain incremental.
 - Catalogue filled, outline, destructive, quiet/link, icon-only and segmented/disclosure actions as distinct roles. Sort and navigation actions must retain their semantics and accessible names.
 - Preserve current main actions at 30px. Filter Clear all (28px), creation actions (32px), general controls (36px minimum with content-dependent measured height), warning summaries and icon controls remain explicit compatibility examples. Record responsive/contextual typography exceptions from the audit; catalogue preparation does not silently normalize them.
 - Icon-only controls require an accessible name independent of the glyph. Decorative SVG/shapes are hidden from assistive technology where appropriate.
@@ -97,11 +97,13 @@ Sources: [RelationshipPicker](../src/features/shared/relationship-picker.tsx), [
 
 ### C06 — ChoiceRow, checkbox and radio
 
-Sources: [SearchableOptionList](../src/features/shared/searchable-option-list.tsx), [FilterChoices](../src/features/shared/record-filters.tsx), [PredictiveSelect](../src/features/shared/predictive-select.tsx), [RelationshipPicker](../src/features/shared/relationship-picker.tsx).
+Sources: [ChoiceRow](../src/features/shared/choice-row.tsx), [SearchableOptionList](../src/features/shared/searchable-option-list.tsx), [FilterChoices](../src/features/shared/record-filters.tsx), [PredictiveSelect](../src/features/shared/predictive-select.tsx), [RelationshipPicker](../src/features/shared/relationship-picker.tsx).
 
 - Record visible glyph dimensions separately from the clickable label/hit area. Current sampled sizes are 13px table selection, 15px filter checkboxes and 16px table dropdown radio choices; 16px everywhere is only a review candidate.
 - Preserve native checked, disabled, indeterminate and keyboard behavior where applicable. Indeterminate belongs to table selection, not to every checkbox example.
 - Render wrapped and single-line labels, checked/unchecked, focus and supported disabled choices. Native appearance remains platform-dependent.
+
+`ChoiceRow` now supplies the exact native label/input composition for PredictiveSelect, RelationshipPicker and FilterChoices. Callers keep their controlled state, radio grouping, IDs/ARIA, click/change handlers, disabled behavior and close/refocus policy. It adds no class, wrapper or size rule; table selection checkboxes remain their separate native recipe.
 
 ### C07 — SearchableOptionList behavior kernel
 

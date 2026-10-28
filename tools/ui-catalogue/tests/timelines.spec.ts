@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('full chart examples retain baselines, exclusive focus, hide/reset and Extended mode',async({page})=>{
+  const errors:string[]=[];
+  page.on('pageerror',error=>errors.push(error.message));
   await page.clock.install({time:new Date('2026-10-27T12:00:00Z')});
   await page.goto('/');
   const examples=page.getByRole('region',{name:'Timeline page examples',exact:true});
@@ -37,4 +39,5 @@ test('full chart examples retain baselines, exclusive focus, hide/reset and Exte
   await page.keyboard.press('Escape');
   await examples.getByRole('button',{name:'Reset timeline examples',exact:true}).click();
   await expect(content.locator('.dependency-connection')).toHaveCount(2);
+  expect(errors).toEqual([]);
 });

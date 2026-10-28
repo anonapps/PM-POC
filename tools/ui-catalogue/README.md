@@ -16,7 +16,7 @@ Examples hold local React state or a disposable deterministic application store.
 | --- | --- |
 | Actions | Real ActionButton primary/secondary/destructive/disabled facade in generic36–38px context; compact30px Search/footer contexts separately; inspect real hover/focus/press |
 | Fields | HumanTextInput/Area; native text/date/number/select; regular36/creation34/embedded30 contexts; invalid/disabled/multiline |
-| Choices | Owner single-select, unavailable/deleted owner, relationship multi-select with a selected deleted option, native checkbox/radio |
+| Choices | Real ChoiceRow native checkbox/radio composition; owner single-select, unavailable/deleted owner, relationship multi-select with selected deleted option and filter rows |
 | Search | ModuleSearch portalled filter surface, clear/reset, local query and hide-dependency state |
 | Indicators | ScopePill and complete task/milestone TimelineStatusLegend palettes |
 | Relationships | DependencyConnectors + useDependencyFocus, single pin/preview/Escape and endpoint-only color example |
@@ -55,3 +55,5 @@ The compatibility-preserving path needs no new visual decisions. Reducing36/34/3
 Timeline fixtures cover late October/early November2026. Full charts retain the real browser clock; automated cases fix the browser clock for reproducible visible relationships. Cross-page navigation requests are shown locally rather than opening production routes.
 
 The first shared composition adopters are now real production consumers: `ActionButton` in Search/timeline controls and `FormField`/`FieldMessage` in project/record forms. Catalogue action examples use the facade; creation specimens use the shared field composition. See [usage guidance](../../src/ui/README.md).
+
+Full timeline previews mount on the client to keep browser measurements and fixed test clocks independent of the server date. Production chart rendering is unchanged. The timeline case asserts that no browser page errors occurred, including hydration errors.

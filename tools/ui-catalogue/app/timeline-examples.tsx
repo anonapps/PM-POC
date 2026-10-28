@@ -1,14 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { createProjectStore } from '../../../src/application';
 import { captureSchedule } from '../../../src/domain/baselines';
 import { ACTIVE_DELETION_STATE } from '../../../src/domain/types';
 import { makeProjectState, streamFixture, taskFixture } from '../../../src/domain/test-fixtures';
 import { BaselineProvider } from '../../../src/features/baselines/selection';
-import { GanttWorkspace } from '../../../src/features/gantt/workspace';
-import { TubeMapView } from '../../../src/features/tube-map/tube-map';
 import type { ModuleName } from '../../../src/features/shell/shell';
+
+// Browser-measured previews must not SSR a different date from a fixed test clock.
+const GanttWorkspace = dynamic(() => import('../../../src/features/gantt/workspace').then(module => module.GanttWorkspace), { ssr: false });
+const TubeMapView = dynamic(() => import('../../../src/features/tube-map/tube-map').then(module => module.TubeMapView), { ssr: false });
 
 /** Fixed schedule data; the production charts deliberately retain their real clock. */
 function createTimelineStore() {
