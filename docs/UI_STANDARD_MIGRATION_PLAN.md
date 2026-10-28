@@ -216,3 +216,25 @@ Parallel role mapping moved the twelve existing design-system root colors into c
 All 537 elements in 26 complete before/after samples match exactly at 900/1440/1920. One pre-change Baselines popover sample was empty from capture timing and is explicitly excluded, not presented as a match; production Baselines menu tests cover that surface. Three token contract/freshness tests passed in 0.41s, three catalogue cases passed in 6.6s (resolved aliases/swatches, dependency focus/hide, creation parity/validation), and eleven production browser cases passed in 17.6s (shared surfaces/menus/headings plus all-module viewport fitting). Typecheck, lint, build and diff checks passed. Evidence is under ignored work/ui-core-colors-* and the token unit log work/validation-2026-10-28T14-02-05.110Z.
 
 The style ownership map defines a finite remaining root-token scope: both intentional typography scales, spacing/radius aliases and distinct action metrics, followed by a frozen first inventory with explicit exceptions/deferred owners. This is compatibility extraction, not authorization to round typography, reduce density, unify local palettes or mechanically replace literals. Full current validate:pr and native physical-machine acceptance remain pending; the PR remains draft.
+
+## 23. Queued inventory completion and full integration gate — 28 October 2026
+
+The owner authorized queueing and triggering the remaining activities without per-task confirmation. Typography/action extraction and baseline-scale/spacing/radius extraction ran with disjoint ownership in parallel, followed by one integration owner for JSON/generation/catalogue. Both existing typography scales retain exact rem strings; page title still references caption. Eight spacing and three radius aliases stay in place. Seven action roles retain 30px/6px, 2px/10px, weight600, line-height1.1 and the type-control font reference. Independent dereferencing reproduces both prior stylesheets byte-for-byte. No field/status/color value changed. The initial inventory now has 58 generated variables, with explicit exceptions and deferred component owners; it does not claim every literal is tokenized.
+
+The catalogue displays both typography scales and geometry references; its browser contract checks fractional sizes and unchanged action geometry. All 19 catalogue cases passed in 43.9s. Twenty-seven complete before/after samples (552 elements) match exactly at 900/1440/1920, using a visibility wait for the Baselines menu. Documentation links checked:107, all resolve. Independent review found no blockers.
+
+Full `CHROME_PATH=/usr/bin/chromium npm run validate:pr` passed: 489 unit cases in 14.88s; typecheck2.1s; lint4.83s; build13.5s; full lifecycle245/245 checkpoints in73.15s; all131 production browser cases in202.14s. Full logs/timings: work/validation-2026-10-28T14-43-25.036Z and work/ui-inventory-full-pr-final.log. The first full run exposed one stale footer unit expectation concatenating Tube Map context with dates. The accepted component already renders context in the legend row; the test now separately asserts complete dates, the context node and its order before controls. No product workaround or assertion removal was used. No code changes followed the green gate; documentation-only evidence updates do not require repeating it.
+
+| Queued activity | Result |
+| --- | --- |
+| Parallel typography, spacing/radius and action source migration | Complete, exact compatibility retained |
+| Generator, compatibility aliases and contract tests | Complete, fresh output and full unit pass |
+| Real catalogue examples and browser coverage | Complete,19cases pass |
+| Before/after style comparison and peer review | Complete,552elements match; no blockers |
+| Full PR/lifecycle/browser validation | Complete,489unit/245checkpoints/131browser pass |
+| Inventory, reuse/exception documentation and draft PR update | Complete for this wave |
+| Target Windows/macOS native visual acceptance | Manual owner step, pending |
+| Visual normalization proposals | Separate decisions; no defaults changed |
+| Merge/release/deployment | Not authorized by validation or this queue |
+
+The compatibility root-token work stops at the documented inventory boundary. Optional further composition adoption and legacy-selector extraction remain in the [follow-up queue](UI_TOKEN_INVENTORY.md#follow-up-queue), to be driven by concrete consumers rather than mechanical coverage. No repeated task-start approval is required for the authorized automatic queue. The PR remains draft pending native visual acceptance; no merge, release or deployment occurred.

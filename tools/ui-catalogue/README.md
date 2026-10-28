@@ -73,3 +73,5 @@ Task/Milestone option-row verification covers circular-dependency blocking and i
 Overview is a real disposable record example. Quick/KPI/warning navigation requests are displayed below it rather than opening application runtime pages. The fixture starts with Getting Started complete to avoid a readiness-only mount command. Project Details validates and edits in memory; Reset restores data and the navigation output.
 
 The token reference now displays the twelve production core-color roles through generated CSS swatches alongside the distinct status palettes. Its browser check verifies that existing CSS aliases resolve to the original colors.
+
+The token reference also shows both typography scales, spacing/radius values and action metrics. Browser checks retain fractional font sizes and existing action geometry; the root-token inventory documents intentional exceptions rather than treating every matching literal as the same role.

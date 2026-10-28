@@ -343,18 +343,18 @@ table td.table-actions button { margin:.12rem; }
 /* Typography design tokens. Adjust these values to rescale the app consistently.
    Responsive chart labels use fluid clamp() rules intentionally. */
 :root {
-  --type-display:2rem;
-  --type-kpi:1.65rem;
-  --type-section:1rem;
-  --type-body:.9rem;
-  --type-control:.8rem;
-  --type-caption:.72rem;
+  --type-display:var(--ui-type-display);
+  --type-kpi:var(--ui-type-kpi);
+  --type-section:var(--ui-type-section);
+  --type-body:var(--ui-type-body);
+  --type-control:var(--ui-type-control);
+  --type-caption:var(--ui-type-caption);
   --type-page-title:var(--type-caption);
 }
 
 /* Unified action-button system: one 30px geometry, with semantic colour variants.
    Excludes navigation, KPI cards, timeline cells and icon-only canvas controls. */
-:root { --action-height:30px; --action-radius:6px; --action-font:var(--type-control); }
+:root { --action-height:var(--ui-action-height); --action-radius:var(--ui-action-radius); --action-font:var(--ui-action-font); }
 .app-main > header .header-actions button,
 .workspace .panel > .title-row button:not(.sort-heading),
 .workspace .panel .quick-actions button,
@@ -368,8 +368,8 @@ table td.table-actions button { margin:.12rem; }
 .workspace .panel .tube-quick-edit .actions button {
   box-sizing:border-box;
   height:var(--action-height); min-height:var(--action-height);
-  padding:2px 10px; border-radius:var(--action-radius);
-  font-size:var(--action-font); font-weight:600; line-height:1.1;
+  padding:var(--ui-action-inset-block) var(--ui-action-inset-inline); border-radius:var(--action-radius);
+  font-size:var(--action-font); font-weight:var(--ui-action-weight); line-height:var(--ui-action-line-height);
   display:inline-flex; align-items:center; justify-content:center;
   white-space:nowrap;
 }

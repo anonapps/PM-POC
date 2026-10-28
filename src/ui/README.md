@@ -2,13 +2,14 @@
 
 `tokens.json` is the canonical source for the migrated compatibility roles:
 
+- both existing typography scales as separate rem-valued families, plus spacing/radius scales and distinct action metrics;
 - twelve existing core color roles (canvas/surfaces, text/borders, primary states, sidebar and focus), preserving the original design-system aliases;
 - regular/creation/embedded field heights36/34/30px;
 - shared text band20px and horizontal inset8px;
 - timeline footer minimum56px (defensive narrow layouts may grow);
 - the distinct existing task and milestone status palettes.
 
-These are existing approved values. This extraction does not round fonts, reduce densities, merge status meanings or introduce a user density setting. Other typography/surface/action/spacing tokens still belong to their current sources until subsequent scoped migrations.
+These are existing approved values. This extraction does not round fonts, reduce densities, merge status meanings or introduce a user density setting. This initial root-token inventory is complete. Remaining component literals and theme/native exceptions retain their current owners; see the [inventory](../../docs/UI_TOKEN_INVENTORY.md).
 
 ## Editing and generated assets
 
@@ -46,3 +47,5 @@ See the [style ownership map](../../docs/UI_STYLE_OWNERSHIP.md) before editing c
 Only proven superseded declarations have been removed. Earlier layout/theme rules still participate in the cascade; do not delete them by name or move matching colors across semantic roles. The final more-specific dotted-line selector is required to override the generic path reset.
 
 Core colors live under `coreColor`; the generator emits `--ui-color-*`. Keep the existing `--canvas`, `--primary`, `--focus` and other compatibility aliases at their original design-system cascade positions. This exports existing values: it does not merge status/scope/severity/dependency palettes or replace matching local color literals.
+
+Typography keeps `typography.app` (`--ui-type-*`) and `typography.baseline` (`--ui-text-*`) separate. Existing `--type-page-title` still references caption. Action font retains its `var(--type-control)` reference; action height/radius/insets/weight/line-height are distinct roles from fields and general spacing. Keep compatibility aliases at their original source positions and regenerate after source edits.

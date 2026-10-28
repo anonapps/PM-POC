@@ -6,7 +6,7 @@ This is a maintenance map, not approval to change appearance. [Project requireme
 
 | Concern | Current owner and reuse path | Boundary |
 | --- | --- | --- |
-| Migrated core colors, metrics and status palettes | [Token source](../src/ui/tokens.json), [maintenance instructions](../src/ui/README.md), [generator](../scripts/generate-ui-tokens.mjs), [generated CSS](../src/app/ui-tokens.generated.css) | Edit the source, regenerate and check freshness. Preserve compatibility aliases. Task and milestone palettes remain separate. |
+| Canonical root-token inventory and status palettes | [Token source](../src/ui/tokens.json), [maintenance instructions](../src/ui/README.md), [generator](../scripts/generate-ui-tokens.mjs), [generated CSS](../src/app/ui-tokens.generated.css) | Edit the source, regenerate and check freshness. Preserve compatibility aliases. Task and milestone palettes remain separate. |
 | Typography, surface roles and general actions | [Design-system CSS](../src/app/design-system.css), [global CSS](../src/app/globals.css), [HeroUI adapter CSS](../src/app/heroui-experiment.css), compatibility rules in [viewport layout CSS](../src/app/viewport-layout.css) and [late panel overrides](../src/app/viewport-panels.css) | These roles are only partially tokenized. Inspect the winning computed rule before changing a declaration; an earlier declaration may be intentionally superseded. |
 | Native action composition | [ActionButton](../src/features/shared/action-button.tsx) | Primary/secondary/danger preserve the native button, props/ref and default type. People/Streams/Tasks/Milestones and Overview ordinary actions now share this facade; their sorting controls remain native. Context still owns dimensions. Sort buttons, disclosure summaries and HeroUI controls are separate recipes. |
 | Labels, required markers and error slots | [FormField / FieldMessage](../src/features/shared/form-field.tsx), [project fields](../src/features/shared/project-form-fields.tsx), [record creation](../src/features/shared/entity-creation-panel.tsx) | Control IDs, describedby, invalid state, normalization and validation remain caller-owned. Error announcement opt-outs and reserved slots are intentional. |
@@ -69,12 +69,8 @@ The shared editable-field correction preserves distinct existing control heights
 The timeline footer/focus corrections retain the compact footer minimum with defensive narrow wrapping, complete bottom-region sizing, chart-specific legends/navigation, dotted grey relationships, one active relationship, endpoint focus and synchronized Hide dependencies controls. These requirements describe intentional differences as well as shared assets; this map creates no new approved values or normalization permission.
 
 
-## Finite next token scope
+## Initial token inventory boundary
 
-After core colors, the compatibility inventory has three bounded follow-ups:
+The [initial token inventory](UI_TOKEN_INVENTORY.md) now covers core colors, both existing typography scales, spacing/radius aliases and distinct action metrics, alongside field/footer metrics and separate status palettes. Compatibility aliases remain at their established cascade positions. This freezes the first inventory; it does not prohibit deliberate future additions with a clear semantic owner and evidence.
 
-1. Export both existing typography scales separately: `--type-*` in globals.css and `--text-*` in design-system.css. Preserve rem strings, aliases and their different values; do not round or merge them.
-2. Export the existing design-system spacing and radius scales through their original aliases. Matching component literals are not automatically consumers of those roles.
-3. Export existing action metrics as action roles. A 30px action is distinct from a 30px embedded field; header and footer minimums also retain separate meanings.
-
-Freeze the first token inventory after those root families are generated, freshness-tested and verified with unchanged computed values. Record remaining literals as intentional exceptions or deferred owners instead of continuing mechanical substitutions. Theme radii, compact/creation/multiline variants, chart label sizing, navigation/status/scope/severity/dependency colors and native OS controls retain their established differences. Visual normalization remains a separate decision.
+Remaining literals are documented as intentional exceptions or deferred component owners rather than mechanically substituted. Theme radii, compact/creation/multiline variants, chart label sizing, navigation/status/scope/severity/dependency colors and native OS controls retain their established differences. Visual normalization remains a separate decision. Continue adopting a shared composition only when a real consumer requires it and its native contract matches; complete adoption of every facade is not a prerequisite for this inventory.

@@ -118,3 +118,22 @@ test('core color reference resolves production aliases and generated swatches',a
   const colors=Object.values(values).map(hex=>`rgb(${parseInt(hex.slice(1,3),16)}, ${parseInt(hex.slice(3,5),16)}, ${parseInt(hex.slice(5,7),16)})`);
   expect(await swatches.evaluateAll(elements=>elements.map(el=>getComputedStyle(el).backgroundColor))).toEqual(colors);
 });
+
+test('typography and geometry aliases preserve both scales and action semantics',async({page})=>{
+  await page.goto('/');
+  const expected={'type-display':'2rem','type-kpi':'1.65rem','type-section':'1rem','type-body':'.9rem','type-control':'.8rem','type-caption':'.72rem','type-page-title':'.72rem','text-xs':'.75rem','text-sm':'.8125rem','text-base':'.875rem','text-section':'1rem','text-page':'1.25rem','text-display':'1.75rem','space-1':'4px','space-2':'8px','space-3':'12px','space-4':'16px','space-6':'24px','space-8':'32px','space-12':'48px','space-16':'64px','radius-control':'6px','radius-card':'8px','radius-dialog':'12px','action-height':'30px','action-radius':'6px','action-font':'.8rem'};
+  expect(await page.evaluate(names=>{
+    const style=getComputedStyle(document.documentElement);
+    return Object.fromEntries(names.map(name=>[name,style.getPropertyValue(`--${name}`).trim()]));
+  },Object.keys(expected))).toEqual(expected);
+  const specimen=page.getByTestId('typography-tokens');
+  await expect(specimen.locator('[data-token-font]')).toHaveCount(12);
+  for(const [name,size] of [['app-caption',11.52],['app-control',12.8],['app-kpi',26.4],['baseline-sm',13],['baseline-base',14]] as const){
+    expect(await specimen.locator(`[data-token-font="${name}"]`).evaluate(el=>parseFloat(getComputedStyle(el).fontSize))).toBeCloseTo(size,2);
+  }
+  await page.getByRole('region',{name:'Record page examples',exact:true}).getByRole('button',{name:'Overview',exact:true}).click();
+  const action=page.getByTestId('record-example-content').getByRole('button',{name:'Edit Project',exact:true});
+  await expect(action).toHaveCSS('height','30px');
+  await expect(action).toHaveCSS('padding','2px 10px');
+  await expect(action).toHaveCSS('font-weight','600');
+});

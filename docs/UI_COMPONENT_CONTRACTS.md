@@ -3,7 +3,7 @@
 **Status:** Stage 2 compatibility contracts; this document does not approve visual normalization.
 **Date:** 27 October 2026 (Europe/Madrid).
 **Authority:** [PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md).
-**Related:** [Style ownership map](UI_STYLE_OWNERSHIP.md) · [Current audit](UI_STANDARD_AUDIT.md) · [Standard proposal](UI_STANDARD_PROPOSAL.md) · [Migration plan](UI_STANDARD_MIGRATION_PLAN.md).
+**Related:** [Initial token inventory](UI_TOKEN_INVENTORY.md) · [Style ownership map](UI_STYLE_OWNERSHIP.md) · [Current audit](UI_STANDARD_AUDIT.md) · [Standard proposal](UI_STANDARD_PROPOSAL.md) · [Migration plan](UI_STANDARD_MIGRATION_PLAN.md).
 
 ## 1. Purpose and ownership
 
