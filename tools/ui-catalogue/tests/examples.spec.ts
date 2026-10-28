@@ -168,3 +168,36 @@ test('Dependencies examples preserve filter labels, editor actions and footer pa
   await dialog.getByRole('button',{name:'Save dependency',exact:true}).click();
   await expect(dialog).toBeHidden();
 });
+
+
+test('People and Streams reuse native actions and reset disposable records',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  for(const width of [900,1440,1920]){
+    await page.setViewportSize({width,height:1000});
+    for(const moduleName of ['People','Streams']){
+      await examples.getByRole('button',{name:moduleName,exact:true}).click();
+      const actions=content.locator('tbody tr').first().locator('.table-actions');
+      const button=actions.getByRole('button',{name:'Delete',exact:true});
+      await expect(button).toBeVisible();
+      expect(await button.evaluate(el=>el.tagName)).toBe('BUTTON');
+      await expect(button).toHaveAttribute('class','danger');
+      const kind=moduleName==='People'?'Person':'Stream';
+      await content.getByRole('button',{name:`Add ${kind}`,exact:true}).click();
+      const dialog=page.getByRole('dialog',{name:`Create ${kind}`,exact:true});
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole('button',{name:'Cancel',exact:true}).click();
+    }
+  }
+  await examples.getByRole('button',{name:'People',exact:true}).click();
+  await content.locator('tbody tr').first().getByRole('button',{name:'Delete',exact:true}).click();
+  await content.getByRole('checkbox',{name:'Show Deleted',exact:true}).check();
+  await content.locator('tbody tr').filter({hasText:'PERSON-001'}).getByRole('button',{name:'Restore',exact:true}).click();
+  await expect(content.locator('tbody tr').filter({hasText:'PERSON-001'}).getByRole('button',{name:'Delete',exact:true})).toBeVisible();
+  await examples.getByRole('button',{name:'Streams',exact:true}).click();
+  const count=await content.locator('tbody tr').count();
+  await content.locator('tbody tr').first().getByRole('button',{name:'Duplicate',exact:true}).click();
+  await expect(content.locator('tbody tr')).toHaveCount(count+1);
+  await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
+  await expect(content.locator('tbody tr')).toHaveCount(count);
+});

@@ -214,3 +214,5 @@ New consumers choose documented variants rather than a page-named selector that 
 Native date calendars, checkbox/radio painting, file pickers and browser title tooltips cannot be fully represented or themed by Linux Chromium screenshots. Preserve their real semantics and distinguish browser evidence from physical Mac/Windows acceptance. Screen captures alone do not establish focus behavior, contrast adequacy or accessibility conformance.
 
 No new component library, runtime package, service, domain enum, persisted preference or PMP schema is required by these contracts. A catalogue demonstrates current reusable pieces; it does not approve typography rounding, two-density reduction, border/radius normalization, copy changes or a redesigned accepted creation panel.
+
+People/Streams ordinary record actions adopt `ActionButton` without changing omitted native button types or Stream deletion confirmation. Risk/Decision Project-wide choices reuse `ChoiceRow`; Risk context retains its reserved, conditionally announced `FieldMessage`. Their distinct editor densities and validation ownership remain unchanged.

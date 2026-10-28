@@ -63,3 +63,5 @@ The catalogue consumes the same ordered viewport/style entry as production. See 
 The log-action case verifies context Ctrl+Enter, native Enter submission, delete and Undo against disposable data. Shared fields, planning controls and option-list search presentation now have owned CSS files in the same ordered production/catalogue entry; obsolete toolbar Zoom rules are removed while footer Zoom remains.
 
 Dependencies is available in Records with actual filter labels, inspection/editing and footer behavior. The dedicated case checks label toggles/reset, invalid self-reference Save gating, Cancel, Save and preserved footer paint values. Universal headings and Baselines menu/manager now use owned style assets behind the same import entry.
+
+People and Streams also expose their real record modules in the disposable record tabs. Their native Add, Delete, Restore and Stream Duplicate actions use the shared action facade; Reset restores the fixture.
