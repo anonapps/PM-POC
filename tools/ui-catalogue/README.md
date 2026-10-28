@@ -69,3 +69,5 @@ People and Streams also expose their real record modules in the disposable recor
 The Milestones record tab uses the real module and disposable fixture. Task/Milestone action coverage retains Add at three widths, Duplicate, confirmed Delete, Restore and Reset, alongside the existing Task selection/sorting example.
 
 Task/Milestone option-row verification covers circular-dependency blocking and its label title, Escape/focus restoration, Show Deleted, Project-wide/stream scope switching and predecessor check/uncheck at three desktop widths. Table selection remains its separate native recipe.
+
+Overview is a real disposable record example. Quick/KPI/warning navigation requests are displayed below it rather than opening application runtime pages. The fixture starts with Getting Started complete to avoid a readiness-only mount command. Project Details validates and edits in memory; Reset restores data and the navigation output.

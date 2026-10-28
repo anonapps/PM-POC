@@ -220,3 +220,5 @@ People/Streams ordinary record actions adopt `ActionButton` without changing omi
 Task and Milestone ordinary actions also reuse ActionButton. Task bulk selection/confirmation and row Restore/Duplicate/Delete remain caller-owned; Milestone linked-record confirmation is unchanged. Native sort headings, selection refs and dependency/scope disclosures retain their own contracts.
 
 Tasks/Milestones also reuse ChoiceRow for Show Deleted and native dependency/scope options. Keys remain on each mapped row; label titles, radio omissions and cycle/deletion guards remain caller-owned. Table select-all/indeterminate and row-selection inputs are intentionally separate.
+
+Overview header/quick actions and Project Details Cancel/Done use ActionButton; its KPI navigation cards and sort headings remain distinct. Catalogue navigation reports requests without mounting a runtime, and its pre-completed readiness metadata prevents an incidental mount command.

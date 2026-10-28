@@ -270,3 +270,38 @@ test('Task and Milestone choice rows preserve cycle guards and scope selection',
     await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
   }
 });
+
+test('Overview actions retain navigation and validated Project Details edits',async({page})=>{
+  const examples=page.getByRole('region',{name:'Record page examples',exact:true});
+  const content=page.getByTestId('record-example-content');
+  await examples.getByRole('button',{name:'Overview',exact:true}).click();
+  const navigation=content.getByRole('status',{name:'Example navigation',exact:true});
+  for(const [action,destination] of [['Add Stream','Streams'],['Add Person','People'],['Add Task','Tasks'],['Add Milestone','Milestones']]){
+    await content.getByRole('button',{name:action,exact:true}).click();
+    await expect(navigation).toHaveText(`Requested page: ${destination}`);
+  }
+  await content.getByRole('button',{name:/^\d+ Warnings?$/}).click();
+  await expect(navigation).toHaveText('Requested page: Warnings');
+  for(const width of [900,1440,1920]){
+    await page.setViewportSize({width,height:1000});
+    await content.getByRole('button',{name:'Edit Project',exact:true}).click();
+    const details=page.getByRole('dialog',{name:'Project Details',exact:true});
+    const name=details.getByRole('textbox',{name:'Project name',exact:true});
+    const original=await name.inputValue();
+    await name.fill('Discarded example');
+    await details.getByRole('button',{name:'Cancel',exact:true}).click();
+    await content.getByRole('button',{name:'Edit Project',exact:true}).click();
+    await expect(name).toHaveValue(original);
+    await name.fill('');
+    await details.getByRole('button',{name:'Done',exact:true}).click();
+    await expect(name).toHaveAttribute('aria-invalid','true');
+    await name.fill('Reusable overview example');
+    await details.getByRole('button',{name:'Done',exact:true}).click();
+    await expect(details).toBeHidden();
+    await content.getByRole('button',{name:'Edit Project',exact:true}).click();
+    await expect(name).toHaveValue('Reusable overview example');
+    await details.getByRole('button',{name:'Cancel',exact:true}).click();
+    await page.getByRole('button',{name:'Reset record examples',exact:true}).click();
+    await expect(navigation).toHaveText('Requested page: None');
+  }
+});

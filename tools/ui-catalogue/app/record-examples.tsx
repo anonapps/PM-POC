@@ -5,6 +5,7 @@ import { createProjectStore } from '../../../src/application';
 import { captureSchedule } from '../../../src/domain/baselines';
 import { makeProjectState, streamFixture, taskFixture } from '../../../src/domain/test-fixtures';
 import { ACTIVE_DELETION_STATE } from '../../../src/domain/types';
+import { Overview } from '../../../src/features/overview/overview';
 import { DependenciesModule } from '../../../src/features/dependencies/dependencies';
 import { PeopleModule, StreamsModule } from '../../../src/features/resources/resources';
 import { MilestonesModule } from '../../../src/features/milestones/milestones';
@@ -14,7 +15,7 @@ import { DecisionLog } from '../../../src/features/decisions/decisions';
 import { BaselinesModule } from '../../../src/features/baselines/baselines';
 import { BaselineProvider } from '../../../src/features/baselines/selection';
 
-const modules = ['Tasks', 'Milestones', 'People', 'Streams', 'Risk Log', 'Decision Log', 'Baselines', 'Dependencies'] as const;
+const modules = ['Tasks', 'Overview', 'Milestones', 'People', 'Streams', 'Risk Log', 'Decision Log', 'Baselines', 'Dependencies'] as const;
 type RecordModule = typeof modules[number];
 
 /** Rebuilt on reset; no runtime, file service or project handle is constructed. */
@@ -45,6 +46,7 @@ function createRecordStore() {
   });
   const current = {
     ...historical,
+    project: {...historical.project,metadata:{...historical.project.metadata,gettingStartedCompleted:true}},
     tasks: historical.tasks.map(task => task.id === 'task-1' ? { ...task, startDate: '2026-10-28', endDate: '2026-11-02' } : task.id === 'task-3' ? { ...task, deletion: { isDeleted: true, deletedAt: '2026-10-25T12:00:00Z' } } : task).concat(taskFixture({ id: 'task-4', humanId: 'TASK-004', name: 'New follow-up', scope: { kind: 'stream', streamId: 'stream-2' }, status: 'Tentative' })),
   };
   let sequence = 0;
@@ -55,6 +57,11 @@ function createRecordStore() {
       { id: 'baseline-2', name: 'Current plan', createdAt: '2026-10-27T12:00:00Z', snapshot: captureSchedule(current) },
     ],
   }, { createId: () => `catalogue-record-${++sequence}`, now: () => '2026-10-27T12:00:00Z' });
+}
+
+function OverviewExample({store}:{store:ReturnType<typeof createRecordStore>}) {
+  const [destination,setDestination]=useState('None');
+  return <><Overview store={store} navigate={setDestination}/><p role="status" aria-label="Example navigation">Requested page: {destination}</p></>;
 }
 
 export function RecordExamples() {
@@ -72,6 +79,7 @@ export function RecordExamples() {
         {module === 'People' && <PeopleModule store={instance.store} />}
         {module === 'Streams' && <StreamsModule store={instance.store} />}
         {module === 'Milestones' && <MilestonesModule store={instance.store} />}
+        {module === 'Overview' && <OverviewExample store={instance.store} />}
         {module === 'Tasks' && <TasksModule store={instance.store} />}
         {module === 'Risk Log' && <RiskLog store={instance.store} />}
         {module === 'Decision Log' && <DecisionLog store={instance.store} />}
