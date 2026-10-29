@@ -9,3 +9,5 @@ These are actual shared creation components in the isolated catalogue with dispo
 - [Risk at1366×768 with one action](risk-1366x768.png): compact two-column action details remain visible with the footer. Add action follows the list in visual/keyboard order.
 
 Production checks cover all six forms at560×600/900×600/1024×768/1366×768, blank/invalid stability, one Risk action, dropdown/focus, expanded-list/mobile scrolling and exact standalone/Extended Task parity. No field, validation or canonical command is removed to fit the drawer.
+
+Owner acceptance: on 29 October 2026 the owner confirmed the corrected layout is “fixed as expected” and “working ok now” after local testing. This is separate from the Linux captures above and does not establish a complete Mac/Windows widget or accessibility audit.
