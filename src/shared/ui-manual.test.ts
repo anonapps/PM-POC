@@ -25,8 +25,8 @@ it("ships the linked stable PDF rather than a missing release asset",()=>{
  expect(bytes.subarray(0,5).toString()).toBe("%PDF-");
 });
 
-it("labels the bundled v1.6 manual as a candidate and ships its PDF",()=>{
+it("links the versioned published v1.6 manual and ships its PDF",()=>{
  const result=resolveUiManual('1.6.0')!;
- expect(result.manual.status).toBe('candidate');expect(result.label).toContain('not published');
+ expect(result.manual.status).toBe('published');expect(result.label).not.toContain('not published');expect(result.manual.source).toContain('/blob/v1.6.0/');
  expect(readFileSync(new URL('../../public'+result.manual.pdf,import.meta.url)).subarray(0,5).toString()).toBe('%PDF-');
 });

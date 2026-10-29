@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Local candidate manual only. Does not publish a release or deploy an application.
+# Build the version-matched v1.6 manual locally. Publication and deployment are separate actions.
 cd "$(dirname "$0")/.."
 mkdir -p public/manuals/1.6
 pandoc docs/V1.6_UI_REFERENCE.md --pdf-engine=xelatex --toc --number-sections \
