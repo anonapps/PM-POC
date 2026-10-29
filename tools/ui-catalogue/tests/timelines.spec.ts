@@ -41,3 +41,35 @@ test('full chart examples retain baselines, exclusive focus, hide/reset and Exte
   await expect(content.locator('.dependency-connection')).toHaveCount(2);
   expect(errors).toEqual([]);
 });
+
+test('timeline quick actions preserve submit, cancel and record navigation',async({page})=>{
+  await page.clock.install({time:new Date('2026-10-27T12:00:00Z')});
+  await page.goto('/');
+  const examples=page.getByRole('region',{name:'Timeline page examples',exact:true});
+  const content=page.getByTestId('timeline-example-content');
+  await examples.scrollIntoViewIfNeeded();
+  for(const kind of ['task','milestone'] as const){
+    if(kind==='milestone')await examples.getByRole('button',{name:'Tube Map chart',exact:true}).click();
+    const original=kind==='task'?'Prepare launch':'Launch approval';
+    const trigger=(name:string)=>content.getByRole('button',{name:kind==='task'?name:`Edit milestone ${name}`,exact:true});
+    const form=content.getByRole('form',{name:`Quick edit ${kind}`,exact:true});
+    await trigger(original).click();
+    await expect(form.getByRole('button',{name:'Save',exact:true})).toHaveAttribute('type','submit');
+    for(const label of ['Cancel',kind==='task'?'Open Task':'Open Milestone']){
+      await expect(form.getByRole('button',{name:label,exact:true})).toHaveAttribute('type','button');
+      await expect(form.getByRole('button',{name:label,exact:true})).toHaveClass('secondary');
+    }
+    await form.getByLabel(kind==='task'?'Task name':'Milestone name',{exact:true}).fill('Discard this edit');
+    await form.getByRole('button',{name:'Cancel',exact:true}).click();
+    await expect(form).toHaveCount(0);
+    await trigger(original).click();
+    await expect(form.getByLabel(kind==='task'?'Task name':'Milestone name',{exact:true})).toHaveValue(original);
+    await form.getByLabel(kind==='task'?'Task name':'Milestone name',{exact:true}).fill(`${original} updated`);
+    await form.getByRole('button',{name:'Save',exact:true}).click();
+    await expect(form).toHaveCount(0);
+    await trigger(`${original} updated`).click();
+    await form.getByRole('button',{name:kind==='task'?'Open Task':'Open Milestone',exact:true}).click();
+    await expect(form).toHaveCount(0);
+    await expect(examples.getByRole('status')).toContainText(kind==='task'?'Tasks':'Milestones');
+  }
+});
