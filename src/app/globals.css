@@ -640,11 +640,8 @@ table td.table-actions button { margin:.12rem; }
   bottom:0;
   left:auto;
   right:auto;
-  z-index:24;
   width:100%;
-  background:var(--surface);
   border-top:1px solid var(--border);
-  box-shadow:0 -3px 10px #17243a12;
 }
 
 /* Tube Map: header dates and body grid share one fixed 160px label column
@@ -1037,7 +1034,6 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .timeline-status-legend>span { display:inline-flex; align-items:center; gap:6px; font-size:12px; line-height:20px; }
 .timeline-status-legend i { display:inline-block; flex:0 0 auto; width:20px; height:10px; border-radius:3px; }
 .timeline-status-legend.milestone i { width:16px; height:16px; border-radius:1px; transform:rotate(45deg); margin:0 3px; }
-.workspace .tube-map>footer.tube-navigation::after { content:none; height:0; }
 .workspace .gantt-panel .gantt { max-height:calc(100dvh - var(--module-toolbar-height,46px) - 172px); }
 .gantt-bar.task i { position:absolute; left:0; bottom:0; height:3px; background:#26364d; opacity:.65; }
 .risk-matrix-section { margin:4px 0 8px; }

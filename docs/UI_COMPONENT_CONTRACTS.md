@@ -66,7 +66,9 @@ Sources: [native ActionButton facade](../src/features/shared/action-button.tsx),
 
 ### C03 — FormField and input frame
 
-Sources: [shared field surfaces](../src/features/shared/field-surfaces.css), [FormField / FieldMessage](../src/features/shared/form-field.tsx), [CreationField](../src/features/shared/creation-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
+The unused legacy `CreationField` helper was retired after confirming it had no runtime imports; use FormField/FieldMessage and the shared creation composition below.
+
+Sources: [shared field surfaces](../src/features/shared/field-surfaces.css), [FormField / FieldMessage](../src/features/shared/form-field.tsx), [ProjectFormFields](../src/features/shared/project-form-fields.tsx), [record creation composition](../src/features/shared/entity-creation-panel.tsx), [human text adapters](../src/features/shared/human-text.tsx).
 
 - The field recipe owns label, required marker, input/selector slot, hint/error association, reserved error area and density.
 - Preserve real native text/date/number/select/textarea elements and existing onChange/onBlur/submit boundaries. A catalogue callback may update isolated state, never a real project.

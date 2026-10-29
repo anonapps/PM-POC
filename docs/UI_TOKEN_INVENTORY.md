@@ -51,7 +51,7 @@ This v1 stops at canonicalizing the listed root families and established field/f
 Keep the inventory frozen when generation is fresh, aliases retain their original positions, computed values remain compatible and the required validation gate succeeds. Record other values as intentional exceptions or deferred owners. A later change starts with a concrete consumer and contract, then compares rendering and behavior before expanding the source or removing an override. Run `npm run ui:tokens:check` and the smallest relevant checks for that change; retain the full PR gate before readiness.
 
 
-## Follow-up queue
+## Compatibility completion and future consumer work
 
 The automatic compatibility queue for this inventory comprises source generation, unchanged aliases, catalogue coverage, before/after comparison, full PR validation, documentation and a reviewable PR update. Those activities run without per-task owner confirmation. Their final evidence is recorded in the migration plan.
 
@@ -60,3 +60,5 @@ Optional consumer work remains recorded rather than implied complete: conditiona
 Decisions that change visible defaults—merging typography scales, font rounding, density reduction, changing theme radii, palette consolidation or whitespace normalization—require a concrete side-by-side proposal and owner acceptance. They are not inferred from compatibility work. Native physical-machine acceptance remains manual; automated Linux checks do not establish real Windows/macOS control appearance. Validation never authorizes merge, release or deployment.
 
 Warnings corrective actions and timeline quick-editor actions now reuse ActionButton; timeline checkbox rows reuse ChoiceRow. Navigation-content, sort/disclosure/segmented controls and table selection remain distinct. See the migration evidence for scoped validation.
+
+The remaining table/message/menu/overlay inventory is completed in the [reuse matrix](UI_REUSE_MATRIX.md). The [contributor guide](../src/ui/README.md) provides implementation examples and context selection. The final migration closeout records proof-backed cleanup and verification; explicit similar/distinct recipes are retained without forcing universal wrappers.

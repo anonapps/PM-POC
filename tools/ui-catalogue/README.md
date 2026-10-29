@@ -15,7 +15,7 @@ Examples hold local React state or a disposable deterministic application store.
 | Example | Existing asset / evidence |
 | --- | --- |
 | Actions | Real ActionButton primary/secondary/destructive/disabled facade in generic36–38px context; compact30px Search/footer contexts separately; inspect real hover/focus/press |
-| Fields | HumanTextInput/Area; native text/date/number/select; regular36/creation34/embedded30 contexts; invalid/disabled/multiline |
+| Fields | HumanTextInput/Area; native text/date/number/select; regular36/creation-base34/embedded30 contexts plus the accepted compact30 record drawer; invalid/disabled/multiline |
 | Choices | Real ChoiceRow native checkbox/radio composition; owner single-select, unavailable/deleted owner, relationship multi-select with selected deleted option and filter rows |
 | Search | ModuleSearch portalled filter surface, clear/reset, local query and hide-dependency state |
 | Indicators | ScopePill and complete task/milestone TimelineStatusLegend palettes |
@@ -81,3 +81,5 @@ Creation examples inherit the production viewport-fit recipe: the original560px/
 Timeline quick-editor coverage includes the real shared Save/Open/Cancel actions in both charts: native submit/button types, secondary classes, cancel/discard, save/reopen and record navigation. These reuse ActionButton without adding styles, wrappers or state.
 
 The Warnings example renders the real WarningsPanel on a separate resettable in-memory fixture. Its corrective-action journey covers confirmation dismiss/accept, native danger/button semantics, navigation and Reset; it never accesses a user project file. Gantt/Tube Map checkbox rows now share ChoiceRow while retaining controlled state, baseline-disabled states and dependency-focus clearing.
+
+For the completed compatibility scope and new-consumer decisions, use the [reuse matrix](../../docs/UI_REUSE_MATRIX.md) and [contributor guide](../../src/ui/README.md). Similar table/message/overlay recipes retain their documented semantics; the catalogue is not a mandate to normalize their appearance.
