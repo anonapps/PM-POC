@@ -49,3 +49,5 @@ Only proven superseded declarations have been removed. Earlier layout/theme rule
 Core colors live under `coreColor`; the generator emits `--ui-color-*`. Keep the existing `--canvas`, `--primary`, `--focus` and other compatibility aliases at their original design-system cascade positions. This exports existing values: it does not merge status/scope/severity/dependency palettes or replace matching local color literals.
 
 Typography keeps `typography.app` (`--ui-type-*`) and `typography.baseline` (`--ui-text-*`) separate. Existing `--type-page-title` still references caption. Action font retains its `var(--type-control)` reference; action height/radius/insets/weight/line-height are distinct roles from fields and general spacing. Keep compatibility aliases at their original source positions and regenerate after source edits.
+
+The owner-corrected creation drawer retains560px and uses the existing embedded30px density; the canonical creation34px base token remains available, but this compact variant overrides its alias. Fonts are unchanged. Creation messages use a12px minimum and expand for actual text.

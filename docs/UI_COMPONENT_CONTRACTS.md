@@ -31,7 +31,7 @@ Values below are existing contracts or audited compatibility variants, not a new
 | Module title | 11.52px, weight 700, uppercase, `.12em` tracking, `#2459a9`. |
 | Column title | 12.8px/20px, weight 700, text `#445268`, background `#edf1f5`; 36px heading band. |
 | Single-line internal band | 20px line height, 8px horizontal inset, weight 400. Vertical padding derives from outer height and borders. |
-| Regular / creation / compact field | 36 / 34 / 30px. Preserve creation separately; do not silently reduce three variants to two. |
+| Regular / creation / compact field | Base tokens36 /34 /30px remain distinct. The owner-corrected record creation drawer explicitly reuses compact30px; this does not remove the34px base role. |
 | Main action | 30px height, 12.8px text, weight 600, 6px radius, `2px 10px` padding. Existing secondary context sizes remain documented variants. |
 | Module Search | 340px preferred width, 34px height, 13px text; existing centered placement and narrow second-row fallback. |
 | Timeline footer | 56px desktop minimum, 30px actions, 18px legend row, `2px 8px` outer padding; complete bottom boundary without extra Tube Map padding/borders. |
@@ -225,4 +225,4 @@ Overview header/quick actions and Project Details Cancel/Done use ActionButton; 
 
 Compact Risk context/actions and their multiline exception are owned by [Risk editor surfaces](../src/features/risks/risk-editor-surfaces.css), imported after late panels. This is a Risk-specific compatibility asset; Decision keeps its existing sizing. Resources/Risk/Decision Show Deleted labels now reuse ChoiceRow while table selection stays separate.
 
-Creation viewport fit is owned by [creation-surfaces.css](../src/features/shared/creation-surfaces.css). Desktop drawers share an 880px maximum width and three-column field/context layout; Description spans two columns without changing DOM order. Compact shell/footer spacing uses existing spacing tokens. Fonts, 34px controls and 24px field error slots stay unchanged. Task standalone/Extended metrics must match exactly. Narrow screens or expanded content scroll inside fields while the header and actions remain visible.
+Creation viewport fit is owned by [creation-surfaces.css](../src/features/shared/creation-surfaces.css). Drawers retain the original560px maximum width and two-column main field layout, including full-width descriptions and original Task field pairs. Compact shell/footer spacing uses existing spacing tokens. Fonts stay unchanged; controls reuse the existing30px embedded recipe. Blank message slots have a12px minimum and grow naturally for real messages without clipping. Task standalone/Extended metrics must match exactly. Narrow screens or expanded content scroll inside fields while the header and actions remain visible.

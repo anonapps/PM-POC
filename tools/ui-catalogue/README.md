@@ -76,4 +76,4 @@ The token reference now displays the twelve production core-color roles through 
 
 The token reference also shows both typography scales, spacing/radius values and action metrics. Browser checks retain fractional font sizes and existing action geometry; the root-token inventory documents intentional exceptions rather than treating every matching literal as the same role.
 
-Creation examples inherit the production viewport-fit recipe: wider responsive columns, compact shell/footer spacing and unchanged typography/control/error metrics. The same real panel is used for standalone and Extended Tasks.
+Creation examples inherit the production viewport-fit recipe: the original560px/two-column footprint, compact shell/footer spacing, existing30px embedded controls and unchanged typography. Blank error slots start at12px and expand for real messages. The same real panel is used for standalone and Extended Tasks.

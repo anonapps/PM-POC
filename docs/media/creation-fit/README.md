@@ -1,8 +1,11 @@
-# Creation viewport-fit evidence — 29 October 2026
+# Compact creation evidence — 29 October 2026
 
-These Linux Chromium screenshots show the actual shared production creation component in the isolated catalogue with disposable fixture data. They are not physical macOS/Windows acceptance evidence.
+The owner rejected the wider880px version. These current screenshots restore the original560px maximum drawer and two main columns, using existing30px embedded controls and unchanged fonts. Blank message gaps start at12px; actual messages expand without clipping. Descriptions remain full-width and Task field pairs retain their original order.
 
-- [Task at900×600](task-900x600.png): all initial controls and Create/Cancel visible without scrolling.
-- [Risk at1366×768 with one action](risk-1366x768.png): relationship controls, action details and footer visible; Add action follows the existing action in visual/keyboard order.
+These are actual shared creation components in the isolated catalogue with disposable fixture data, captured in Linux Chromium. They are not physical macOS/Windows acceptance evidence.
 
-The new creation recipe changes structural padding, maximum width and grid arrangement only. Fonts, native control metrics, error slots, validation and canonical commands remain unchanged. Production browser checks additionally cover six forms at900×600/1024×768/1366×768, error stability, one Risk action and its popup/focus behavior, many-action/mobile overflow, and exact standalone/Extended Task parity.
+- [Task at1366×768](task-1366x768.png): the restored narrow footprint occupies the same screen width as the original drawer.
+- [Task at900×600](task-900x600.png): all initial controls and Create/Cancel fit without scrolling.
+- [Risk at1366×768 with one action](risk-1366x768.png): compact two-column action details remain visible with the footer. Add action follows the list in visual/keyboard order.
+
+Production checks cover all six forms at560×600/900×600/1024×768/1366×768, blank/invalid stability, one Risk action, dropdown/focus, expanded-list/mobile scrolling and exact standalone/Extended Task parity. No field, validation or canonical command is removed to fit the drawer.

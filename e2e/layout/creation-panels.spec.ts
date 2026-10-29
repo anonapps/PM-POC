@@ -62,7 +62,7 @@ test('conditional scope and initial Risk action validation stays associated and 
  await page.locator('nav').getByRole('button',{name:'Risk Log',exact:true}).click();await page.getByRole('button',{name:'Add Risk',exact:true}).click();const risk=page.getByRole('dialog',{name:'Create Risk',exact:true});await risk.getByLabel('Risk title',{exact:true}).fill('Risk');await risk.getByRole('button',{name:'Add action',exact:true}).click();const action=risk.getByLabel('Action description 1',{exact:true}),before=await action.boundingBox();await risk.getByRole('button',{name:'Create',exact:true}).click();await expect(action).toBeFocused();await expect(action).toHaveAttribute('aria-invalid','true');expect(await action.boundingBox()).toEqual(before);await risk.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
 
-for(const [width,height] of [[900,600],[1024,768],[1366,768]] as const)test(`all creation forms fit ${width} by ${height} without validation displacement`,async({page})=>{
+for(const [width,height] of [[560,600],[900,600],[1024,768],[1366,768]] as const)test(`all creation forms fit ${width} by ${height} without validation displacement`,async({page})=>{
  await page.setViewportSize({width,height});await setup(page);
  for(const [moduleName,entity,,label] of cases){
   await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
@@ -77,6 +77,10 @@ for(const [width,height] of [[900,600],[1024,768],[1366,768]] as const)test(`all
    });
    expect(geometry.scrollHeight,`${entity} fields fit vertically`).toBeLessThanOrEqual(geometry.clientHeight+1);
    expect(geometry.scrollWidth,`${entity} fields fit horizontally`).toBeLessThanOrEqual(geometry.clientWidth+1);
+   const columns=await fields.evaluate(element=>getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/));
+   expect(columns,`${entity} desktop creation retains two columns`).toHaveLength(2);
+   const singleLine=await fields.locator('input:not([type=checkbox]):not([type=radio]),select,summary').evaluateAll(elements=>elements.filter(element=>!element.closest('.multi-select-options,.relationship-options')&&element.getClientRects().length>0).map(element=>({name:element.getAttribute('aria-label')||element.textContent||element.tagName,height:element.getBoundingClientRect().height})));
+   for(const control of singleLine)expect(control.height,`${entity}: ${control.name} compact height`).toBe(30);
    for(const control of geometry.controls){
     expect(control.top,`${entity}: ${control.name} top`).toBeGreaterThanOrEqual(geometry.box.top-1);
     expect(control.bottom,`${entity}: ${control.name} bottom`).toBeLessThanOrEqual(geometry.box.bottom+1);

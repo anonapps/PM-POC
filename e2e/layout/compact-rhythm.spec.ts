@@ -72,7 +72,9 @@ test('boxed fields reuse a centered internal text band across pages and sizes',a
  await nav(page,'Tasks');await page.getByRole('button',{name:'Add Task',exact:true}).click();
  const panel=page.locator('.creation-fields--task');
  for(const field of await panel.locator('input:not([type=checkbox]):not([type=radio]),select,.predictive-select>summary:not(:has(.scope-pill)),.relationship-picker>summary').all()){
-  await expect(field).toHaveCSS('line-height','20px');await expect(field).toHaveCSS('padding-left','8px');await expect(field).toHaveCSS('height','34px');
+  const popupSearch=await field.evaluate(e=>Boolean(e.closest('.multi-select-options,.relationship-options')));
+  await expect(field).toHaveCSS('line-height','20px');await expect(field).toHaveCSS('padding-left','8px');await expect(field).toHaveCSS('height',popupSearch?'34px':'30px');
+  if(!popupSearch&&await field.evaluate(e=>e.tagName!=='SUMMARY'))await expect(field).toHaveCSS('font-size','13px');
  }
  await page.screenshot({path:info.outputPath('shared-field-text-create-task.png')});
 });

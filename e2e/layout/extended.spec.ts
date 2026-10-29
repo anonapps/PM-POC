@@ -25,7 +25,7 @@ for(const {width,height} of [{width:1024,height:1000},{width:1440,height:1000},{
  const originalCenter=await searchCenter(page,'.shared-search-filter');
  await page.getByRole('button',{name:'Add Task',exact:true}).click();await expect(page.getByRole('dialog',{name:'Create Task',exact:true})).toBeVisible();
  const standalone=await panelMetrics(page);
- // Legacy optional 560px/two-column work snapshots predate the approved reflow.
+ // Legacy optional snapshots predate the approved compact 30px creation recipe.
  // The complete live standalone metrics remain the exact Extended reference.
  const assertFits=async()=>{
   const fit=await page.getByRole('dialog',{name:'Create Task',exact:true}).evaluate(panel=>{
@@ -49,18 +49,16 @@ for(const {width,height} of [{width:1024,height:1000},{width:1440,height:1000},{
  await mode.getByRole('button',{name:'Simple',exact:true}).click();await expect(page.locator('.gantt-tasks-pane')).toBeHidden();await extended(page);await expect(ganttSearch).toHaveValue('Regression');await expect(taskSearch).toHaveValue('TASK-001');await ganttSearch.fill('');await taskSearch.fill('');
  await page.locator('.gantt-tasks-pane').getByRole('button',{name:'Add Task',exact:true}).click();const panel=page.getByRole('dialog',{name:'Create Task',exact:true});await expect(panel).toBeVisible();
  const actual=await panelMetrics(page);expect(actual).toEqual(standalone);
- const groups=[['Owner','Status','Priority'],['Start date','End date','Scope'],['Parent task','Milestone','Progress']] as const;
+ const pairs=[['Owner','Status'],['Priority','Start date'],['End date','Scope'],['Parent task','Milestone'],['Progress','Predecessor tasks']] as const;
  const box=async(label:string)=>panel.locator('input,select,summary').filter({visible:true}).evaluateAll((controls,name)=>{const control=controls.find(e=>e.getAttribute('aria-label')===name||e.textContent?.startsWith(`${name} ·`));if(!control)throw new Error(`Missing ${name}`);const r=control.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},label);
  let previousRow=-Infinity;
- for(const group of groups){
-  const row=await Promise.all(group.map(box));expect(row[0].y).toBeGreaterThan(previousRow);previousRow=row[0].y;
-  for(const [index,control] of row.entries()){expect(control.y).toBeCloseTo(row[0].y,1);expect(control.height).toBe(34);expect(control.width).toBeCloseTo(row[0].width,1);if(index)expect(control.x).toBeGreaterThan(row[index-1].x+row[index-1].width);}
+ for(const [left,right] of pairs){
+  const a=await box(left),b=await box(right);expect(a.y).toBeGreaterThan(previousRow);previousRow=a.y;
+  expect(b.y).toBeCloseTo(a.y,1);expect(a.height).toBe(30);expect(b.height).toBe(30);expect(b.width).toBeCloseTo(a.width,1);expect(b.x).toBeGreaterThan(a.x+a.width);
  }
- const predecessor=await box('Predecessor tasks'),owner=await box('Owner');
- expect(predecessor.y).toBeGreaterThan(previousRow);expect(predecessor.height).toBe(34);expect(predecessor.width).toBeCloseTo(owner.width,1);expect(predecessor.x).toBeCloseTo(owner.x,1);
  await assertFits();
 
- expect(actual.panel).toMatchObject({x:width-880,y:0,width:880,height});expect(actual.backdrop).toEqual({x:0,y:0,width,height});
+ expect(actual.panel).toMatchObject({x:width-560,y:0,width:560,height});expect(actual.backdrop).toEqual({x:0,y:0,width,height});
  await expect(panel.getByLabel('Task name',{exact:true})).toBeFocused();
  await page.screenshot({path:testInfo.outputPath(`${width}-extended-add-task.png`)});
  writeFileSync(testInfo.outputPath('panel-equivalence.json'),JSON.stringify({width,height,standalone,extended:actual},null,2));
