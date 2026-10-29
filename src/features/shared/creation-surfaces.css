@@ -1,0 +1,44 @@
+/* Creation uses the existing control/font/error recipes; only structural space changes. */
+.dialog-backdrop.creation-backdrop>section {
+ width:min(880px,100vw);
+ padding:var(--space-3);
+}
+.dialog-backdrop.creation-backdrop>section>header {
+ margin-bottom:var(--space-2);
+ gap:var(--space-2);
+}
+.dialog-backdrop.creation-backdrop .creation-fields {
+ min-height:0;
+ padding:2px 4px var(--space-1);
+}
+.dialog-backdrop.creation-backdrop .creation-footer {
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:center;
+ gap:var(--space-2);
+ padding-top:var(--space-2);
+}
+.dialog-backdrop.creation-backdrop .creation-footer>.actions { margin:0; }
+.dialog-backdrop.creation-backdrop .creation-actions {
+ grid-template-columns:minmax(0,1fr) auto;
+ gap:var(--space-1);
+ align-items:center;
+}
+.dialog-backdrop.creation-backdrop .creation-actions>strong { grid-column:1; grid-row:1; }
+.dialog-backdrop.creation-backdrop .creation-actions>button { grid-column:2; }
+.dialog-backdrop.creation-backdrop .creation-actions>.creation-action,
+.dialog-backdrop.creation-backdrop .creation-actions>.form-field-error { grid-column:1/-1; }
+@media(min-width:800px) {
+ .dialog-backdrop.creation-backdrop .creation-fields,
+ .dialog-backdrop.creation-backdrop .creation-relations { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ .dialog-backdrop.creation-backdrop .creation-field--description { grid-column:span 2; }
+ .dialog-backdrop.creation-backdrop .creation-action {
+  grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr)) auto;
+  align-items:end;
+  padding:var(--space-1) 0;
+ }
+ .dialog-backdrop.creation-backdrop .creation-action>label:first-child { grid-column:auto; }
+}
+@media(max-width:480px) {
+ .dialog-backdrop.creation-backdrop .creation-footer { grid-template-columns:minmax(0,1fr); gap:var(--space-1); }
+}

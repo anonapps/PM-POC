@@ -1,5 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
-import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {readFileSync,writeFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
 import {captureSchedule} from '../../src/domain/baselines';
 const decoded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
@@ -20,12 +20,22 @@ async function panelMetrics(page:Page){return page.getByRole('dialog',{name:'Cre
  });}
 async function extended(page:Page){await page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Extended',exact:true}).click();await expect(page.locator('.gantt-tasks-pane')).toBeVisible();}
 async function searchCenter(page:Page,selector:string){const r=await page.locator(selector).boundingBox();return r!.x+r!.width/2;}
-for(const width of [1024,1440,1920])test(`Extended Add Task exactly matches standalone Tasks at ${width}`,async({page},testInfo)=>{
- await page.setViewportSize({width,height:1000});await openProject(page);await navigate(page,'Tasks');
+for(const {width,height} of [{width:1024,height:1000},{width:1440,height:1000},{width:1920,height:1000},{width:1366,height:768}])test(`Extended Add Task exactly matches standalone Tasks at ${width}x${height}`,async({page},testInfo)=>{
+ await page.setViewportSize({width,height});await openProject(page);await navigate(page,'Tasks');
  const originalCenter=await searchCenter(page,'.shared-search-filter');
  await page.getByRole('button',{name:'Add Task',exact:true}).click();await expect(page.getByRole('dialog',{name:'Create Task',exact:true})).toBeVisible();
  const standalone=await panelMetrics(page);
- if(existsSync(`work/tasks-panel-reference-${width}.json`))expect(standalone).toEqual(JSON.parse(readFileSync(`work/tasks-panel-reference-${width}.json`,'utf8')));
+ // Legacy optional 560px/two-column work snapshots predate the approved reflow.
+ // The complete live standalone metrics remain the exact Extended reference.
+ const assertFits=async()=>{
+  const fit=await page.getByRole('dialog',{name:'Create Task',exact:true}).evaluate(panel=>{
+   const fields=panel.querySelector('.creation-fields')!,footer=panel.querySelector('.creation-footer')!.getBoundingClientRect();
+   return {verticalOverflow:fields.scrollHeight-fields.clientHeight,horizontalOverflow:fields.scrollWidth-fields.clientWidth,footerTop:footer.top,footerBottom:footer.bottom};
+  });
+  expect(fit.verticalOverflow).toBeLessThanOrEqual(1);expect(fit.horizontalOverflow).toBeLessThanOrEqual(1);
+  expect(fit.footerTop).toBeGreaterThanOrEqual(0);expect(fit.footerBottom).toBeLessThanOrEqual(height);
+ };
+ await assertFits();
  await page.getByRole('dialog').getByRole('button',{name:'Cancel',exact:true}).click();await navigate(page,'Gantt');
  const mode=page.getByRole('group',{name:'Gantt mode'});await expect(mode.getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');
  expect(await mode.evaluate(e=>e.nextElementSibling?.textContent)).toBe('Expand All');
@@ -39,14 +49,21 @@ for(const width of [1024,1440,1920])test(`Extended Add Task exactly matches stan
  await mode.getByRole('button',{name:'Simple',exact:true}).click();await expect(page.locator('.gantt-tasks-pane')).toBeHidden();await extended(page);await expect(ganttSearch).toHaveValue('Regression');await expect(taskSearch).toHaveValue('TASK-001');await ganttSearch.fill('');await taskSearch.fill('');
  await page.locator('.gantt-tasks-pane').getByRole('button',{name:'Add Task',exact:true}).click();const panel=page.getByRole('dialog',{name:'Create Task',exact:true});await expect(panel).toBeVisible();
  const actual=await panelMetrics(page);expect(actual).toEqual(standalone);
- const pairs=[['Owner','Status'],['Priority','Start date'],['End date','Scope'],['Parent task','Milestone'],['Progress','Predecessor tasks']] as const;
+ const groups=[['Owner','Status','Priority'],['Start date','End date','Scope'],['Parent task','Milestone','Progress']] as const;
  const box=async(label:string)=>panel.locator('input,select,summary').filter({visible:true}).evaluateAll((controls,name)=>{const control=controls.find(e=>e.getAttribute('aria-label')===name||e.textContent?.startsWith(`${name} ·`));if(!control)throw new Error(`Missing ${name}`);const r=control.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},label);
- for(const [left,right] of pairs){const a=await box(left),b=await box(right);expect(b.y).toBeCloseTo(a.y,1);expect(b.height).toBe(a.height);expect(b.width).toBe(a.width);}
+ let previousRow=-Infinity;
+ for(const group of groups){
+  const row=await Promise.all(group.map(box));expect(row[0].y).toBeGreaterThan(previousRow);previousRow=row[0].y;
+  for(const [index,control] of row.entries()){expect(control.y).toBeCloseTo(row[0].y,1);expect(control.height).toBe(34);expect(control.width).toBeCloseTo(row[0].width,1);if(index)expect(control.x).toBeGreaterThan(row[index-1].x+row[index-1].width);}
+ }
+ const predecessor=await box('Predecessor tasks'),owner=await box('Owner');
+ expect(predecessor.y).toBeGreaterThan(previousRow);expect(predecessor.height).toBe(34);expect(predecessor.width).toBeCloseTo(owner.width,1);expect(predecessor.x).toBeCloseTo(owner.x,1);
+ await assertFits();
 
- expect(actual.panel).toMatchObject({x:width-560,y:0,width:560,height:1000});expect(actual.backdrop).toEqual({x:0,y:0,width,height:1000});
+ expect(actual.panel).toMatchObject({x:width-880,y:0,width:880,height});expect(actual.backdrop).toEqual({x:0,y:0,width,height});
  await expect(panel.getByLabel('Task name',{exact:true})).toBeFocused();
  await page.screenshot({path:testInfo.outputPath(`${width}-extended-add-task.png`)});
- writeFileSync(testInfo.outputPath('panel-equivalence.json'),JSON.stringify({width,standalone,extended:actual},null,2));
+ writeFileSync(testInfo.outputPath('panel-equivalence.json'),JSON.stringify({width,height,standalone,extended:actual},null,2));
  await panel.getByLabel('Task name',{exact:true}).fill('Unsaved shared draft');await page.keyboard.press('Escape');await expect(page.getByRole('dialog',{name:'Discard unsaved changes?',exact:true})).toBeVisible();await page.getByRole('dialog',{name:'Discard unsaved changes?',exact:true}).getByRole('button',{name:'Stay',exact:true}).click();await expect(panel.getByLabel('Task name',{exact:true})).toHaveValue('Unsaved shared draft');await panel.getByRole('button',{name:'Cancel',exact:true}).click();
  await page.screenshot({path:testInfo.outputPath(`${width}-extended-layout.png`)});
 });

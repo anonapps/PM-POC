@@ -75,3 +75,5 @@ Overview is a real disposable record example. Quick/KPI/warning navigation reque
 The token reference now displays the twelve production core-color roles through generated CSS swatches alongside the distinct status palettes. Its browser check verifies that existing CSS aliases resolve to the original colors.
 
 The token reference also shows both typography scales, spacing/radius values and action metrics. Browser checks retain fractional font sizes and existing action geometry; the root-token inventory documents intentional exceptions rather than treating every matching literal as the same role.
+
+Creation examples inherit the production viewport-fit recipe: wider responsive columns, compact shell/footer spacing and unchanged typography/control/error metrics. The same real panel is used for standalone and Extended Tasks.

@@ -13,6 +13,7 @@ This is a maintenance map, not approval to change appearance. [Project requireme
 | Human-readable text behavior | [HumanTextInput / HumanTextArea](../src/features/shared/human-text.tsx), [normalization](../src/features/shared/text-normalisation.ts) | Reuse human-text handling for human content; preserve technical identifiers, dates, URLs and command boundaries. |
 | Field geometry | Token source plus [shared field surfaces](../src/features/shared/field-surfaces.css), with compact Risk variants in [Risk editor surfaces](../src/features/risks/risk-editor-surfaces.css) | Existing regular/creation/embedded variants and text metrics remain unchanged. Multiline, scope-pill and native-date exceptions are not single-line fields to normalize. |
 | Tables, heading cells and sort behavior | [FitTable](../src/features/shared/fit-table.tsx), [sorting](../src/features/shared/sorting.ts), [shared table headings](../src/features/shared/table-headings.css) and viewport layout/panel CSS | Preserve native table markup and direct heading traversal. Module renderers own column content, selection state and sort values; shared rules own the established heading presentation. |
+| Creation viewport layout | [Creation surfaces](../src/features/shared/creation-surfaces.css), [EntityCreationPanel](../src/features/shared/entity-creation-panel.tsx) | Wider responsive field/relationship grids and compact structural padding preserve fonts, 34px controls, error slots and field order. Initial desktop forms fit; narrow/expanded content scrolls only inside the field body, with header/footer visible. |
 | Page title/search composition | [PageToolbar](../src/features/shared/page-toolbar.tsx), [ModuleSearch](../src/features/shared/module-search.tsx), viewport layout/panel CSS and [dropdown search input](../src/features/shared/search-input.css) | Search centering is independent of action width. Modules supply filters/actions and control state; they do not create alternative search-panel geometry. |
 | Checkbox/radio option rows | [ChoiceRow](../src/features/shared/choice-row.tsx), [FilterChoices](../src/features/shared/record-filters.tsx) | Native semantics and existing context styles remain. Tasks/Milestones reuse this for toolbar toggles and scope/dependency options; caller-owned keys, label titles and cycle/deletion guards remain intact. This is not the table select-all/indeterminate recipe. |
 | Searchable selectors | [PredictiveSelect](../src/features/shared/predictive-select.tsx), [owner adapter](../src/features/shared/searchable-owner-select.tsx), [RelationshipPicker](../src/features/shared/relationship-picker.tsx), [SearchableOptionList](../src/features/shared/searchable-option-list.tsx) | Reuse the existing single/multiple selection behavior; keep option IDs, radio grouping, deleted choices, accessible labels and close/refocus policy with the adapter. |
@@ -28,13 +29,14 @@ This is a maintenance map, not approval to change appearance. [Project requireme
 
 1. [Viewport layout](../src/app/viewport-layout.css): earlier viewport, table and toolbar fitting rules.
 2. [Field surfaces](../src/features/shared/field-surfaces.css): approved control-height aliases, internal text band/inset, multiline/native-date exceptions and select painting.
-3. [Planning controls](../src/features/shared/planning-controls.css): standard Gantt actions and baseline/comparison controls.
-4. [Dropdown search input](../src/features/shared/search-input.css): visibly editable option-list search field.
-5. [Late panel overrides](../src/app/viewport-panels.css): Gantt panes, read-only records, table bounds and Dependencies layout.
-6. [Risk editor surfaces](../src/features/risks/risk-editor-surfaces.css): accepted compact Risk context/actions, Matrix margin and multiline exception; Decision retains its distinct existing recipe.
-7. [Baseline surfaces](../src/features/baselines/baseline-surfaces.css): compact baseline controls, action popover and manager.
-8. [Shared table headings](../src/features/shared/table-headings.css): the existing universal table/Gantt/Tube Map heading typography and background.
-9. [Timeline surfaces](../src/features/shared/timeline-surfaces.css): compact footers, legends and final dependency rendering/focus rules.
+3. [Creation surfaces](../src/features/shared/creation-surfaces.css): viewport-fitting creation shell, responsive grid and footer arrangement; no font overrides.
+4. [Planning controls](../src/features/shared/planning-controls.css): standard Gantt actions and baseline/comparison controls.
+5. [Dropdown search input](../src/features/shared/search-input.css): visibly editable option-list search field.
+6. [Late panel overrides](../src/app/viewport-panels.css): Gantt panes, read-only records, table bounds and Dependencies layout.
+7. [Risk editor surfaces](../src/features/risks/risk-editor-surfaces.css): accepted compact Risk context/actions, Matrix margin and multiline exception; Decision retains its distinct existing recipe.
+8. [Baseline surfaces](../src/features/baselines/baseline-surfaces.css): compact baseline controls, action popover and manager.
+9. [Shared table headings](../src/features/shared/table-headings.css): the existing universal table/Gantt/Tube Map heading typography and background.
+10. [Timeline surfaces](../src/features/shared/timeline-surfaces.css): compact footers, legends and final dependency rendering/focus rules.
 
 Risk styles now follow the remaining late panel rules: the crossed Dependencies/read-only/Baselines selectors do not match Risk editor elements. Risk compact controls remain after creation fields, and the multiline override remains after the compact base.
 
