@@ -1,0 +1,68 @@
+/* Original drawer footprint with the existing embedded-control density. */
+.dialog-backdrop.creation-backdrop>section {
+ width:min(560px,100vw);
+ padding:var(--space-2);
+}
+.dialog-backdrop.creation-backdrop>section>header {
+ margin-bottom:var(--space-1);
+ gap:var(--space-2);
+}
+.dialog-backdrop.creation-backdrop>section>header>.icon {
+ height:var(--ui-action-height);
+ min-height:var(--ui-action-height);
+ padding:var(--space-1) var(--space-2);
+}
+.dialog-backdrop.creation-backdrop .creation-fields {
+ --field-height:var(--ui-field-embedded-height);
+ min-height:0;
+ padding:2px 4px var(--space-1);
+ gap:2px var(--space-2);
+}
+.dialog-backdrop.creation-backdrop .creation-fields>.muted { margin:0; }
+.dialog-backdrop.creation-backdrop :is(.creation-field,.creation-selector,.creation-fields--task>.creation-relationship) { gap:2px; }
+.dialog-backdrop.creation-backdrop .creation-fields .form-field-error {
+ height:auto;
+ min-height:12px;
+ line-height:12px;
+ overflow:visible;
+}
+.dialog-backdrop.creation-backdrop .creation-fields--task>.creation-selector>details>summary,
+.dialog-backdrop.creation-backdrop .creation-fields--task>.creation-relationship>details>summary {
+ height:var(--field-height);
+ line-height:var(--field-text-line);
+}
+.dialog-backdrop.creation-backdrop .creation-fields--task>.creation-selector>details:has(>summary .scope-pill)>summary { padding-block:3px; }
+.dialog-backdrop.creation-backdrop .creation-relations { gap:var(--space-1); padding-bottom:var(--space-1); }
+.dialog-backdrop.creation-backdrop .creation-footer {
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:center;
+ gap:var(--space-2);
+ padding-top:var(--space-1);
+}
+.dialog-backdrop.creation-backdrop .creation-footer>.actions { margin:0; }
+.dialog-backdrop.creation-backdrop .creation-actions {
+ grid-template-columns:minmax(0,1fr) auto;
+ gap:var(--space-1);
+ align-items:center;
+}
+.dialog-backdrop.creation-backdrop .creation-action {
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ align-items:end;
+ gap:var(--space-1);
+ padding:var(--space-1) 0;
+}
+.dialog-backdrop.creation-backdrop .creation-action>label:first-child { grid-column:auto; }
+.dialog-backdrop.creation-backdrop .creation-actions>strong { grid-column:1; grid-row:1; }
+.dialog-backdrop.creation-backdrop .creation-actions>button { grid-column:2; }
+.dialog-backdrop.creation-backdrop .creation-actions>.creation-action,
+.dialog-backdrop.creation-backdrop .creation-actions>.form-field-error { grid-column:1/-1; }
+.dialog-backdrop.creation-backdrop .creation-fields--risk>.creation-actions:not(:has(.creation-action)) {
+ grid-column:auto;
+ grid-template-columns:minmax(0,1fr);
+ gap:2px;
+}
+.dialog-backdrop.creation-backdrop .creation-fields--risk>.creation-actions:not(:has(.creation-action))>button { grid-column:1; grid-row:2; }
+@media(max-width:480px) {
+ .dialog-backdrop.creation-backdrop .creation-footer { grid-template-columns:minmax(0,1fr); gap:var(--space-1); }
+}

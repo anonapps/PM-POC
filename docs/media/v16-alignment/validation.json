@@ -1,0 +1,910 @@
+{
+  "base": "1e9a35e71eaa4f0e6cb4014fc6e0a21de9f2c2f2",
+  "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+  "stages": [
+    {
+      "name": "unit",
+      "seconds": 13.95,
+      "code": 0,
+      "counts": [
+        "Test Files  55 passed (55)",
+        "Tests  477 passed (477)"
+      ],
+      "log": "unit.log"
+    },
+    {
+      "name": "typecheck",
+      "seconds": 3.66,
+      "code": 0,
+      "counts": [],
+      "log": "typecheck.log"
+    },
+    {
+      "name": "lint",
+      "seconds": 4.48,
+      "code": 0,
+      "counts": [],
+      "log": "lint.log"
+    },
+    {
+      "name": "build",
+      "seconds": 18.03,
+      "code": 0,
+      "counts": [],
+      "log": "build.log"
+    },
+    {
+      "name": "lifecycle",
+      "seconds": 86.42,
+      "code": 0,
+      "counts": [
+        "Acceptance: 245 passed, 0 failed (all)"
+      ],
+      "log": "lifecycle.log"
+    },
+    {
+      "name": "layout",
+      "seconds": 124.44,
+      "code": 1,
+      "counts": [
+        "69 passed (2.1m)"
+      ],
+      "log": "layout.log"
+    }
+  ],
+  "note": "Initial full run: all 69 existing browser cases passed; new case failed because of its center measurement. First targeted rerun exposed unstable generated radio-group names. Final targeted rerun compares visible semantics/geometry and passes. Application source unchanged. No full pipeline success is claimed.",
+  "finalTargeted": [
+    {
+      "name": "targeted-layout",
+      "seconds": 3.23,
+      "code": 0,
+      "counts": [
+        "1 passed (2.9s)"
+      ],
+      "log": "targeted-layout.log"
+    }
+  ],
+  "taskAlignmentFollowup": {
+    "changes": "Task-only creation selector height and relationship row alignment; shared in standalone and Extended",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 59.09,
+        "code": 0,
+        "counts": [
+          "29 passed (58.8s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "scope": "No domain, persistence or editing behavior changed; initial full-suite evidence above predates this layout fix.",
+    "finalPairedControlChecks": [
+      {
+        "name": "targeted-layout",
+        "seconds": 7.18,
+        "code": 0,
+        "counts": [
+          "3 passed (6.9s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ]
+  },
+  "extendedTableFollowup": {
+    "changes": "Extended Tasks only: continuous native table header/rows, aligned control band, all columns fit without horizontal scrolling; standalone Tasks unchanged",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 25.46,
+        "code": 0,
+        "counts": [
+          "12 passed (25.1s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "widths": [
+      900,
+      1024,
+      1440,
+      1920
+    ],
+    "checks": [
+      "header colors match standalone",
+      "continuous header cells align with body columns",
+      "one table row per task",
+      "all controls contained and vertically centered",
+      "no horizontal overflow",
+      "date-validation error leaves input geometry unchanged",
+      "existing Extended creation-panel equivalence, resizing, shared edits/history and PMP reopen"
+    ],
+    "resolvedDuringValidation": "Narrow-width checks caught fixed-width Owner selectors and action wrapping/2px overflow. Corrected without relaxing assertions.",
+    "scope": "Prior unit/lifecycle evidence predates these CSS corrections; no domain or persistence change."
+  },
+  "singleLineToolbarFollowup": {
+    "changes": "Gantt and embedded Tasks toolbars only: one row, centered search and vertical alignment; no action removed",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targeted": [
+      {
+        "name": "targeted-layout",
+        "seconds": 87.33,
+        "code": 0,
+        "counts": [
+          "46 passed (1.5m)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "newToolbarWidthChecks": [
+      900,
+      1024,
+      1280,
+      1440,
+      1920
+    ],
+    "states": [
+      "Simple",
+      "Extended",
+      "expanded sidebar",
+      "collapsed sidebar"
+    ],
+    "checks": [
+      "every control shares a vertical centerline",
+      "title/search/action regions do not overlap",
+      "actions do not overlap Search or intercept mode-toggle clicks",
+      "search remains at full content center",
+      "no horizontal overflow",
+      "all relevant timeline navigation/filter/panel/table regressions retained"
+    ],
+    "resolvedDuringValidation": "900px geometry/click checks caught Search/filter overlapping Simple. Reduced action spacing and reserved adequate width; final assertions pass without forced clicks.",
+    "searchWidthPolicy": "340px at ordinary wide desktop widths; Gantt/embedded search may shrink at narrower widths to preserve one line and centering. Other standalone pages retain original widths/layout.",
+    "scope": "Earlier unit/lifecycle evidence predates these CSS changes; no domain or persistence changes."
+  },
+  "approvedBaselinesImplementation": {
+    "scope": "Approved continuous Baselines comparison table, compact management list, one-line centered toolbar and aligned columns; same canonical commands and data",
+    "productionBuild": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "targetedUnit": [
+      {
+        "name": "targeted-unit",
+        "seconds": 0.85,
+        "code": 0,
+        "counts": [
+          "Test Files  3 passed (3)",
+          "Tests  44 passed (44)"
+        ],
+        "log": "targeted-unit.log"
+      }
+    ],
+    "targetedBrowser": [
+      {
+        "name": "targeted-layout",
+        "seconds": 14.57,
+        "code": 0,
+        "counts": [
+          "7 passed (14.2s)"
+        ],
+        "log": "targeted-layout.log"
+      }
+    ],
+    "widths": [
+      900,
+      1024,
+      1440,
+      1920
+    ],
+    "checks": [
+      "all nine columns fit without horizontal overflow",
+      "continuous header and aligned single-line rows",
+      "long entity and historical/current stream text preserved with full titles",
+      "management actions aligned even without description",
+      "positive variance and search preserved",
+      "existing CRUD selection Undo save/reopen and historical-name cases retained"
+    ],
+    "resolvedDuringValidation": "900px heading overflow corrected without weakening checks.",
+    "notes": "Mockup approved by owner; actual app date formats, labels and shell retained. No domain or persistence implementation change; broader earlier evidence remains historical."
+  },
+  "finalCombinedPRValidation": {
+    "applicationCommit": "7e497710dd918606cc5116411a84fb911429340b",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "result": "passed",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.99,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.29,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.33,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.1,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 148.85,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 149.82,
+        "code": 0,
+        "counts": [
+          "83 passed (2.5m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "githubCI": {
+      "run": "https://github.com/anonapps/PM-POC/actions/runs/40373016033",
+      "result": "success",
+      "jobs": {
+        "validate": "success",
+        "lifecycle-release-gate": "success"
+      },
+      "productionAudit": "success",
+      "fullAudit": "success",
+      "reviewThreads": 0
+    },
+    "reactReview": "Reviewed two changed TSX components with React best-practices checklist; no additional scope-relevant issues. Existing hooks/store/commands retained, no new dependencies/effects/requests; full text stays in DOM and signed variance carries meaning without color alone.",
+    "limitations": [
+      "Native Windows/macOS file-picker consent and physical-machine disk acceptance remain manual.",
+      "CI evidence is for the application commit above; documentation-only evidence commit follows without rerunning successful local checks."
+    ],
+    "releaseActions": "No merge, deploy, tag, publication or release."
+  },
+  "macDesktopAcceptanceCorrection": {
+    "applicationCommit": "e6d35a2a1f1f20039da1805cdeb42546a92649c3",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "result": "passed",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.55,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.36,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.52,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 10.69,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 106.83,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 159.91,
+        "code": 0,
+        "counts": [
+          "94 passed (2.7m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "recordPageViewports": [
+      [
+        1366,
+        768
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1152,
+        720
+      ],
+      [
+        1024,
+        640
+      ],
+      [
+        900,
+        600
+      ]
+    ],
+    "modules": [
+      "People",
+      "Streams",
+      "Tasks",
+      "Milestones",
+      "Risk Log",
+      "Decision Log"
+    ],
+    "sidebarHeights": [
+      400,
+      480,
+      600,
+      720,
+      768,
+      900
+    ],
+    "checks": [
+      "desktop headers are native table cells with continuous backgrounds",
+      "header/body column boundaries and field vertical centers match",
+      "column headings and controls fit without horizontal overflow",
+      "all 14 sidebar entries stay visible/in order with no scrolling",
+      "sidebar cannot scroll even programmatically",
+      "collapse/expand retains row positions",
+      "File Information remains reachable",
+      "main workspace scrolling does not move sidebar"
+    ],
+    "coverageGap": "Earlier assertions allowed responsive grid cards, so they missed desktop header/body mismatch. New checks require actual column continuity at Mac-like CSS viewport sizes.",
+    "implementation": "Generic cards limited to <=600px content; responsive native desktop column widths; minimum milestone picker/name widths fit cells; sidebar rows/gaps derive from viewport height and actual module count with overflow:clip.",
+    "nativeScope": "Chromium on Linux at Mac laptop/short-window sizes; owner must pull/restart and confirm actual Mac rendering. Native file-picker/physical disk acceptance remains manual.",
+    "historicalEvidence": "Earlier successful 83-case full verification remains historical; this full 94-case run supersedes it for current application code.",
+    "releaseActions": "No merge/deploy/tag/release."
+  },
+  "compactRhythmWarningNavigationAndSearch": {
+    "applicationCommit": "d4ca7abadcf3aab043f9fe709d34120ac82ee2e0",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 13.56,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  477 passed (477)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.44,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.57,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.48,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.32,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 162.19,
+        "code": 0,
+        "counts": [
+          "104 passed (2.7m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "targeted": "21 focused browser cases passed before final warning-count nowrap refinement; final full gate includes all strengthened assertions.",
+    "requirements": [
+      "58px minimum desktop record rows, 52px embedded rows, 4px lower padding, preserved ID band",
+      "36px heading bands and aligned control/text centers; scope pills may wrap",
+      "milestone warnings share predecessor band with complete keyboard-dismissible popup",
+      "warning content navigates via keyboard or description click to highlighted owning record; no Open button",
+      "Dependencies shared font tokens, compact columns, full native titles and working editor",
+      "Gantt Search matches People exact rectangle at seven desktop widths in both modes/sidebar states",
+      "previous desktop table, non-scrolling sidebar, PMP compatibility/save-reopen and baseline behavior retained"
+    ],
+    "exploratoryFindings": [
+      "Full initial gate: 103/104 browser cases; narrow Risk level badge overflow corrected.",
+      "Subsequent run compiled before last nowrap change: 103/104; strengthened warning-count text-line assertion caught wrapping. Final committed full gate: all 104 passed."
+    ],
+    "screenshots": [
+      "compact-tasks.png",
+      "compact-streams.png",
+      "compact-milestones.png",
+      "compact-dependencies.png",
+      "clickable-warnings.png",
+      "standard-gantt-search.png",
+      "standard-gantt-search-narrow.png"
+    ],
+    "nativeLimit": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering/native picker consent/disk acceptance remain manual.",
+    "releaseActions": "No merge, deployment, tag or release."
+  },
+  "sharedFieldTextAlignment": {
+    "applicationCommit": "0956f17a27b1bbd950a6432bff0ca085a0e26e4b",
+    "changes": "Shared 20px text line, 8px inset, symmetric height-derived padding, Arial normal weight; consistent native select painting/chevron and column fit; multiline/pills retained.",
+    "command": "CHROME_PATH=/usr/bin/chromium LAYOUT_OUTPUT_DIR=work/shared-text-final npm run test:targeted -- layout e2e/layout/compact-rhythm.spec.ts e2e/layout/desktop-records.spec.ts e2e/layout/creation-panels.spec.ts e2e/layout/extended.spec.ts",
+    "result": "60 passed (1.5m)",
+    "seconds": 90.25,
+    "build": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "checks": [
+      "actual rendered summary glyph centers within 1.5px of field centers",
+      "shared line-height/inset/padding/font metrics across six record pages, Extended Tasks and Create Task",
+      "selected labels fit beside chevron at 1366px",
+      "existing viewport/creation/inline editing/PMP reopen/Undo behavior in selected specs preserved"
+    ],
+    "exploratory": "First strengthened test caught native Chromium selects reporting normal line height; shared select styling corrected that. Screenshot review then identified indicator crowding; table selects now fill their existing columns and selected-text clearance is asserted.",
+    "priorFullGate": "477 unit tests, 245 lifecycle checkpoints and 104 browser cases passed on d4ca7ab before this presentation-only correction. These historical results were not rerun for CSS; current affected 60-case suite/build/typecheck/lint passed. No persistence/domain/command changes.",
+    "screenshots": [
+      "shared-field-text-streams.png",
+      "shared-field-text-create-task.png"
+    ],
+    "nativeLimit": "Linux Chromium evidence; owner should pull/restart/hard-refresh for physical Mac confirmation."
+  },
+  "ganttStandardSurfaceAndFullViewport": {
+    "applicationCommit": "a8dc681983670244771e8c22cdd5d295d0f62111",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.18,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  480 passed (480)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.62,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.88,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.6,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.43,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 170.71,
+        "code": 0,
+        "counts": [
+          "111 passed (2.8m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "targetedEvidence": [
+      "53 tests in two selected Vitest files passed (0.85s)",
+      "34 focused/shared-field/Extended browser cases passed (46.5s)",
+      "Final measured splitter minimum: all 23 Gantt/Extended browser cases passed (33.5s)"
+    ],
+    "requirements": [
+      "shared standard Gantt action font/height; extra action row when needed, exact ordinary Search rectangle retained",
+      "compact shared comparison row, centered selector text and label/checkbox alignment across Gantt/Tube Map/Baselines",
+      "14px grey dashed baseline bands visibly below current bars; red delayed-finish days strictly after approved finish; independent variance labels",
+      "shared dropdown inputs visibly editable before focus, Type to filter placeholder, existing keyboard/filter semantics",
+      "Simple footer at viewport bottom and Extended footer at upper pane bottom",
+      "Tasks fills remainder through viewport bottom; measured heading/row minimum plus a lower 1fr track prevents leftover grid space",
+      "Add Task/focus outline completely shown and actionable; task title/control and header selection alignment",
+      "prior sidebar/standalone editing/creation/baseline/dependency/PMP contracts preserved"
+    ],
+    "viewportCases": [
+      [
+        900,
+        700
+      ],
+      [
+        1280,
+        900
+      ],
+      [
+        1440,
+        900
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "exploratoryFindings": [
+      "Old cascade kept standard actions over Search and shifted Search 4.5px; corrected without relaxing geometry assertions.",
+      "Current bars initially obscured grey bands; offset and row separation now asserted.",
+      "Measured upper minimum exposed 40px unused space from fractional grid tracks at 900px; explicit measured upper plus remaining 1fr fixed it.",
+      "Earlier full browser run was stopped because an overlapping rebuild invalidated its assets; it is not passing evidence. Final serial full run on the committed application passed every stage."
+    ],
+    "screenshots": [
+      "gantt-standard-simple.png",
+      "gantt-standard-extended.png",
+      "gantt-standard-extended-900.png",
+      "gantt-visible-baseline-comparison.png",
+      "dropdown-editable-search.png"
+    ],
+    "nativeScope": "Linux Chromium at Mac-like CSS viewport sizes; physical Mac rendering, picker consent and disk acceptance remain manual.",
+    "releaseActions": "Draft PR25 only; no merge, deployment, tag, publication or release."
+  },
+  "footerZoomShortPlaceholderAndTasksSelection": {
+    "applicationCommit": "357c2dda415d2798cb0acff7e754416db6030e1f",
+    "scope": [
+      "Zoom relocated to docked Gantt date-navigation row in both modes; same selection/date-offset handler and shared field geometry",
+      "Header wrap breakpoint reclaims former Zoom width; Search geometry remains exact",
+      "Dropdown placeholders exactly Type to filter; descriptive accessible labels retained",
+      "Standalone and Extended Tasks share centered header/body checkbox geometry; actual selection/indeterminate behavior preserved"
+    ],
+    "validation": {
+      "affectedMatrix": "71 passed / 3 new selection cases failed solely on comparing the header border-box center instead of its inner content center; production geometry was already correct horizontally. Corrected the measurement to exclude borders without relaxing center precision.",
+      "selectionRerun": "All 3 selection cases passed (9.0s), each testing both modes, both sidebar states, exact header/row centers and keyboard/select-all/indeterminate behavior.",
+      "matrixSeconds": 101.89,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed",
+      "earlierZoomMatrix": "60 cases passed before adding shared Tasks selection geometry and restoring footer select border. The final 71-case success includes all these relevant regressions.",
+      "testFiles": [
+        "compact-rhythm.spec.ts",
+        "gantt-surface.spec.ts",
+        "extended.spec.ts",
+        "timeline-toolbar.spec.ts",
+        "desktop-records.spec.ts"
+      ]
+    },
+    "historicalCompleteGate": "480 unit tests / 245 lifecycle checkpoints / all 111 browser cases passed on a8dc681 before this small presentation follow-up. No schema, codec, commands or file-service changes; affected Extended tests retain PMP reopen coverage.",
+    "screenshots": [
+      "gantt-footer-zoom-simple.png",
+      "gantt-footer-zoom-extended.png",
+      "dropdown-short-placeholder.png",
+      "tasks-selection-aligned.png"
+    ],
+    "nativeScope": "Linux Chromium; owner must pull/restart/hard-refresh to confirm physical Mac rendering.",
+    "releaseActions": "PR25 remains draft; no merge/deploy/tag/release."
+  },
+  "compactRiskBaselineToolbarAndSharedHeadings": {
+    "applicationCommit": "fcb9d7844615127d8feda18c98734e89efc70cc1",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.08,
+        "code": 0,
+        "counts": [
+          "Test Files  55 passed (55)",
+          "Tests  480 passed (480)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 1.38,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.5,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.09,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 69.87,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 186.74,
+        "code": 0,
+        "counts": [
+          "120 passed (3.1m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "requirements": [
+      "Risk Project-wide checkbox shares Owner selector centerline",
+      "Risk context/actions compressed 30px fields, 20px text band and compact gaps; multiline description still natively resizes",
+      "Matrix toggle precedes Show Deleted in the toolbar; session state/filtering/keyboard preserved",
+      "Baselines selected value and accessible actions menu share title/Search toolbar; full dated/described management list in dialog",
+      "New/renamed names capitalize first letter on blur and Enter, including Unicode; legacy display normalizes without persisted migration",
+      "Dependencies information docked at bottom",
+      "One heading font/family/weight/background across all record tables, sorted/Extended headings and both timeline axes; full text/titles retained",
+      "Existing commands/history/creation/selection/filters/PMP compatibility/save-reopen/snapshots preserved"
+    ],
+    "targetedEvidence": [
+      "53 selected regressions passed (76.37s)",
+      "12 shared-surface/Baselines cases passed (16.15s)",
+      "13 final focused shared-surface/status cases passed (16.36s), including actual native textarea drag-resize"
+    ],
+    "viewportCoverage": {
+      "baselineToolbar": [
+        900,
+        1280,
+        1440
+      ],
+      "uniformHeadings": [
+        900,
+        1440
+      ],
+      "existingFullMatrices": "All existing desktop/sidebar/creation/Gantt/Tube Map viewport cases retained."
+    },
+    "exploratoryFindings": [
+      "Initial full gate caught stale header-first-child assumption; retained disabled-search/creation assertions and now verify requested relative Matrix/Show Deleted/Add order.",
+      "Broader run passed 117/120; old single-line tests counted wrapper box plus text. They now measure actual label contents with unchanged one-line limit.",
+      "New menu focus check exposed lost focus after auto-focused dialog; component restores trigger focus after modal close.",
+      "Isolated native resize check confirmed important height declaration blocked resizing; variable-based normal height/padding and real drag assertion preserve it.",
+      "Stopped/intermediate runs are superseded by the final serial all-pass gate."
+    ],
+    "screenshots": [
+      "shared-compact-risk-context.png",
+      "shared-compact-risk-actions.png",
+      "shared-baselines-toolbar.png",
+      "shared-baselines-toolbar-900.png",
+      "shared-dependencies-footer.png"
+    ],
+    "nativeScope": "Linux Chromium at Mac-like CSS viewports; physical Mac/picker/disk acceptance remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
+  },
+  "readOnlyPageConsistencyAndSorting": {
+    "applicationCommit": "face0f09873a498043b10ba35e7d47f8cf51ebce",
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:pr",
+    "stages": [
+      {
+        "name": "unit",
+        "seconds": 14.34,
+        "code": 0,
+        "counts": [
+          "Test Files  56 passed (56)",
+          "Tests  483 passed (483)"
+        ],
+        "log": "unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 2.41,
+        "code": 0,
+        "counts": [],
+        "log": "typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 4.68,
+        "code": 0,
+        "counts": [],
+        "log": "lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 11.31,
+        "code": 0,
+        "counts": [],
+        "log": "build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 70.52,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 194.75,
+        "code": 0,
+        "counts": [
+          "126 passed (3.2m)"
+        ],
+        "log": "layout.log"
+      }
+    ],
+    "requirements": [
+      "Shared record-page filter categories/popups, preserved Clear all and filter semantics",
+      "No secondary Schedule comparison heading row",
+      "Baseline/Dependency values use ordinary record-body fonts/breakpoints, shared colors/spacing and complete tooltips",
+      "All nine columns sort both ways with aria-sort, ISO dates, numeric variance, stable ordering and missing-last behavior",
+      "Dependencies results scroll strictly above footer; final row reachable; no leaked content after scroll/navigation/resize",
+      "Context opening label on both Risk/Decision retains behavior",
+      "Original sidebar, Gantt/Tasks, baseline immutability, history, creation and PMP compatibility preserved"
+    ],
+    "focusedEvidence": [
+      "Three new sorting unit cases passed (0.35s)",
+      "33 focused read-only/shared/compact/Baselines cases passed (44.28s)",
+      "Seven final focused checks passed (8.61s), including Tasks body-font reference and resize separation"
+    ],
+    "newCoverage": "Six read-only page cases at 900/1440 plus three sort-unit cases; every previous test retained.",
+    "exploratoryNotes": [
+      "People fixture has no filter categories; reference comparison now uses populated Tasks categories.",
+      "Value-font parity uses actual Tasks cells rather than toolbar count typography.",
+      "Action column reserved for standard-sized Inspect / Edit; full type/value titles retained."
+    ],
+    "screenshots": [
+      "readonly-baselines-filters.png",
+      "readonly-dependencies-filters.png",
+      "readonly-dependencies-footer.png",
+      "readonly-dependencies-footer-900.png",
+      "readonly-context-label.png"
+    ],
+    "nativeScope": "Linux Chromium; physical Mac/picker/disk confirmation remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/publish/release."
+  },
+  "timelineDependenciesAndCompactFooters": {
+    "applicationCommit": "15f6fa0a53aeaf8979dd65a881851433bb55caa7",
+    "fullConnectorGate": {
+      "commit": "081fbe4",
+      "logs": "work/validation-2026-10-27T13-36-43.925Z",
+      "unitTests": 483,
+      "lifecycleCheckpoints": 245,
+      "browserTests": 128,
+      "typecheck": "passed",
+      "lint": "passed",
+      "build": "passed"
+    },
+    "footerFollowup": {
+      "logs": "work/validation-2026-10-27T13-48-10.264Z",
+      "browserTests": 61,
+      "seconds": 81.33,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed"
+    },
+    "finalArrowProportionsAndAnchors": {
+      "logs": "work/validation-2026-10-27T13-51-50.563Z",
+      "browserTests": 37,
+      "seconds": 55.94,
+      "unitLogs": "work/validation-2026-10-27T13-50-58.092Z",
+      "affectedUnitTests": 17,
+      "build": "passed",
+      "typecheck": "passed",
+      "lint": "passed"
+    },
+    "coverage": "Full 128-case suite preceded footer changes; footer follow-up added three geometry comparisons. Intermediate 131-case run had 126 passes and five failures (measured-header inheritance and legacy icon-size check). The final 61-case affected suite passed with a fixed standard height and readable 12px diamond icons; final 37-case suite passed after pixel-space arrow/finish-edge refinement. Unaffected successful suites were retained.",
+    "exploratoryIssues": [
+      "Initial browser launch omitted CHROME_PATH; corrected to installed Chromium.",
+      "Deterministic screenshot fixture humanId type annotation corrected before the successful full connector gate."
+    ],
+    "screenshots": [
+      "dependency-gantt-overview.png",
+      "dependency-gantt-focus.png",
+      "dependency-tube-overview.png",
+      "dependency-tube-focus.png",
+      "footer-gantt-900.png",
+      "footer-tube-900.png",
+      "footer-gantt-1440.png",
+      "footer-tube-1440.png"
+    ],
+    "nativeScope": "Linux Chromium only; Mac acceptance remains manual.",
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/release."
+  },
+  "dottedDependencySelectionAndFooterBounds": {
+    "applicationCommit": "54b80d6f9ed3c3e6aae7c9c198407ae4e6005c4b",
+    "focusedBrowserChecks": {
+      "logs": "work/validation-2026-10-27T14-20-46.255Z",
+      "passed": 5,
+      "seconds": 10.25,
+      "scope": "Real pointer click/hover, exclusive pin replacement, Enter/Escape, endpoint-only status colors, hide/reset controls, and complete 56px footer/bottom-edge comparisons at 900/1280/1440."
+    },
+    "remainingBrowserChecks": {
+      "logs": "work/validation-2026-10-27T14-24-00.354Z",
+      "passed": 126,
+      "seconds": 193.38,
+      "scope": "Every remaining Playwright case including Atlas; excludes only the five already successful focused cases."
+    },
+    "lifecycle": {
+      "command": "CHROME_PATH=/usr/bin/chromium npm run test:lifecycle -- --skip-atlas",
+      "logs": "work/dependency-focus-lifecycle.log",
+      "checkpoints": 245,
+      "server": "Harness-owned Next development server; final browser regression uses the unchanged production build.",
+      "elapsed": "Not separately measured."
+    },
+    "build": "passed; work/dependency-focus-build2.log",
+    "typecheck": "passed during production build",
+    "lint": "passed; work/dependency-focus-lint.log",
+    "exploratoryCorrections": [
+      "Higher-specificity legacy path CSS suppressed the dotted pattern; explicit shared line selector now applies the dots.",
+      "Viewport-bottom assertion exposed two enclosing Tube Map borders in addition to workspace padding; both extra bottom regions removed."
+    ],
+    "screenshots": [
+      "dotted-gantt-default.png",
+      "dotted-gantt-selected.png",
+      "dotted-tube-default.png",
+      "dotted-tube-selected.png",
+      "hide-dependencies-gantt.png",
+      "hide-dependencies-tube.png",
+      "matched-footer-gantt-900.png",
+      "matched-footer-tube-900.png",
+      "matched-footer-gantt-1440.png",
+      "matched-footer-tube-1440.png"
+    ],
+    "releaseActions": "Draft PR25 only; no merge/deploy/tag/release."
+  }
+}

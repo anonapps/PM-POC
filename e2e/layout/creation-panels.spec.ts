@@ -54,10 +54,106 @@ test('task bulk toolbar, scope pills, tall rows and horizontal context editors',
  expect(await page.locator('summary:has(.scope-pill)').first().evaluate(e=>getComputedStyle(e).borderTopWidth)).toBe('0px');
  await page.locator('nav').getByRole('button',{name:'Milestones',exact:true}).click();expect(await page.locator('summary:has(.scope-pill)').first().evaluate(e=>getComputedStyle(e).borderTopWidth)).toBe('0px');expect(await page.locator('tbody tr:has(.scope-pill) td').evaluateAll(cells=>cells.every(e=>getComputedStyle(e).verticalAlign==='middle'))).toBe(true);
  await page.locator('nav').getByRole('button',{name:'People',exact:true}).click();const notes=page.getByLabel('Notes for PERSON-001',{exact:true});await notes.evaluate(e=>(e as HTMLElement).style.height='160px');const row=notes.locator('..').locator('..'),del=row.getByRole('button',{name:'Delete',exact:true});expect((await notes.boundingBox())!.x+(await notes.boundingBox())!.width).toBeLessThan((await del.boundingBox())!.x);expect(await row.locator('td').evaluateAll(cells=>cells.every(e=>getComputedStyle(e).verticalAlign==='middle'))).toBe(true);
- for(const name of ['Risk Log','Decision Log']){await page.locator('nav').getByRole('button',{name,exact:true}).click();await page.getByRole('button',{name:'Edit context',exact:true}).first().click();const editor=page.locator(name==='Risk Log'?'.risk-context-editor':'.decision-context-editor'),textarea=editor.locator('textarea');expect((await textarea.boundingBox())!.width).toBeGreaterThan((await editor.boundingBox())!.width*.85);await editor.locator('.relationship-picker summary').first().click();await expect(page.locator('.relationship-options:popover-open')).toBeVisible();await page.keyboard.press('Escape');await editor.getByRole('button',{name:'Cancel',exact:true}).click();}
+ for(const name of ['Risk Log','Decision Log']){await page.locator('nav').getByRole('button',{name,exact:true}).click();await page.getByRole('button',{name:'Context',exact:true}).first().click();const editor=page.locator(name==='Risk Log'?'.risk-context-editor':'.decision-context-editor'),textarea=editor.locator('textarea');expect((await textarea.boundingBox())!.width).toBeGreaterThan((await editor.boundingBox())!.width*.85);await editor.locator('.relationship-picker summary').first().click();await expect(page.locator('.relationship-options:popover-open')).toBeVisible();await page.keyboard.press('Escape');await editor.getByRole('button',{name:'Cancel',exact:true}).click();}
 });
 
 test('conditional scope and initial Risk action validation stays associated and focused',async({page})=>{
  await page.setViewportSize({width:1440,height:1000});await setup(page);await page.locator('nav').getByRole('button',{name:'Milestones',exact:true}).click();await page.getByRole('button',{name:'Add Milestone',exact:true}).click();const milestone=page.getByRole('dialog',{name:'Create Milestone',exact:true});await milestone.getByLabel('Name',{exact:true}).fill('Gate');await milestone.getByLabel('Date',{exact:true}).fill('2028-02-29');await milestone.getByLabel('Project-wide',{exact:true}).uncheck();await milestone.getByRole('button',{name:'Create',exact:true}).click();const scope=milestone.locator('summary').filter({hasText:/^Streams ·/});await expect(scope).toBeFocused();await expect(scope).toHaveAttribute('aria-invalid','true');await milestone.getByRole('button',{name:'Cancel',exact:true}).click();
  await page.locator('nav').getByRole('button',{name:'Risk Log',exact:true}).click();await page.getByRole('button',{name:'Add Risk',exact:true}).click();const risk=page.getByRole('dialog',{name:'Create Risk',exact:true});await risk.getByLabel('Risk title',{exact:true}).fill('Risk');await risk.getByRole('button',{name:'Add action',exact:true}).click();const action=risk.getByLabel('Action description 1',{exact:true}),before=await action.boundingBox();await risk.getByRole('button',{name:'Create',exact:true}).click();await expect(action).toBeFocused();await expect(action).toHaveAttribute('aria-invalid','true');expect(await action.boundingBox()).toEqual(before);await risk.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+});
+
+for(const [width,height] of [[560,600],[900,600],[1024,768],[1366,768]] as const)test(`all creation forms fit ${width} by ${height} without validation displacement`,async({page})=>{
+ await page.setViewportSize({width,height});await setup(page);
+ for(const [moduleName,entity,,label] of cases){
+  await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
+  await page.getByRole('button',{name:`Add ${entity}`,exact:true}).click();
+  const panel=page.getByRole('dialog',{name:`Create ${entity}`,exact:true}),fields=panel.locator('.creation-fields');
+  const header=panel.locator(':scope>header'),footer=panel.locator('.creation-footer');
+  const initialHeader=await header.boundingBox(),initialFooter=await footer.boundingBox();
+  const assertFit=async()=>{
+   const geometry=await fields.evaluate(element=>{
+    const box=element.getBoundingClientRect();
+    return {clientHeight:element.clientHeight,scrollHeight:element.scrollHeight,clientWidth:element.clientWidth,scrollWidth:element.scrollWidth,box:{top:box.top,bottom:box.bottom,left:box.left,right:box.right},controls:[...element.querySelectorAll('input,select,textarea,summary,button')].filter(control=>!control.closest('.multi-select-options,.relationship-options')&&control.getClientRects().length>0).map(control=>{const rect=control.getBoundingClientRect();return {name:control.getAttribute('aria-label')||control.textContent||control.tagName,top:rect.top,bottom:rect.bottom,left:rect.left,right:rect.right};})};
+   });
+   expect(geometry.scrollHeight,`${entity} fields fit vertically`).toBeLessThanOrEqual(geometry.clientHeight+1);
+   expect(geometry.scrollWidth,`${entity} fields fit horizontally`).toBeLessThanOrEqual(geometry.clientWidth+1);
+   const columns=await fields.evaluate(element=>getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/));
+   expect(columns,`${entity} desktop creation retains two columns`).toHaveLength(2);
+   const singleLine=await fields.locator('input:not([type=checkbox]):not([type=radio]),select,summary').evaluateAll(elements=>elements.filter(element=>!element.closest('.multi-select-options,.relationship-options')&&element.getClientRects().length>0).map(element=>({name:element.getAttribute('aria-label')||element.textContent||element.tagName,height:element.getBoundingClientRect().height})));
+   for(const control of singleLine)expect(control.height,`${entity}: ${control.name} compact height`).toBe(30);
+   for(const control of geometry.controls){
+    expect(control.top,`${entity}: ${control.name} top`).toBeGreaterThanOrEqual(geometry.box.top-1);
+    expect(control.bottom,`${entity}: ${control.name} bottom`).toBeLessThanOrEqual(geometry.box.bottom+1);
+    expect(control.left,`${entity}: ${control.name} left`).toBeGreaterThanOrEqual(geometry.box.left-1);
+    expect(control.right,`${entity}: ${control.name} right`).toBeLessThanOrEqual(geometry.box.right+1);
+   }
+   for(const box of [await header.boundingBox(),await footer.boundingBox()]){
+    expect(box).not.toBeNull();expect(box!.y).toBeGreaterThanOrEqual(0);expect(box!.y+box!.height).toBeLessThanOrEqual(height+1);
+   }
+   for(const action of ['Cancel','Create']){
+    const box=await footer.getByRole('button',{name:action,exact:true}).boundingBox();
+    expect(box!.y).toBeGreaterThanOrEqual(0);expect(box!.y+box!.height).toBeLessThanOrEqual(height+1);
+   }
+   const fonts=await fields.locator('.creation-field,input:not([type=checkbox]):not([type=radio]),select,textarea').evaluateAll(elements=>elements.filter(element=>!element.closest('.multi-select-options,.relationship-options')).map(element=>getComputedStyle(element).fontSize));
+   expect(new Set(fonts),`${entity} existing label/control typography`).toEqual(new Set(['13px']));
+  };
+  await assertFit();
+  await panel.getByRole('button',{name:'Create',exact:true}).click();
+  await expect(panel.getByLabel(label,{exact:true})).toBeFocused();
+  await expect(panel.getByLabel(label,{exact:true})).toHaveAttribute('aria-invalid','true');
+  await assertFit();
+  expect(await header.boundingBox()).toEqual(initialHeader);expect(await footer.boundingBox()).toEqual(initialFooter);
+  if(entity==='Risk'&&height===768){
+   await panel.getByRole('button',{name:'Add action',exact:true}).click();
+   const description=panel.getByLabel('Action description 1',{exact:true});
+   await description.scrollIntoViewIfNeeded();await expect(description).toBeVisible();
+   await description.fill('A compact mitigation');
+   await panel.getByLabel('Action status 1',{exact:true}).selectOption('Complete');
+   await panel.getByLabel('Action due date 1',{exact:true}).fill('2028-03-02');
+   expect(await fields.evaluate(element=>element.scrollHeight<=element.clientHeight+1),'Risk with one initial action fits vertically').toBe(true);
+   const remove=panel.getByRole('button',{name:'Remove action',exact:true}),add=panel.getByRole('button',{name:'Add action',exact:true});
+   expect((await add.boundingBox())!.y).toBeGreaterThanOrEqual((await remove.boundingBox())!.y);
+   await remove.focus();await remove.press('Tab');await expect(add).toBeFocused();
+   expect(await header.boundingBox()).toEqual(initialHeader);expect(await footer.boundingBox()).toEqual(initialFooter);
+   const owner=panel.locator('summary[aria-label="Owner"]');await owner.scrollIntoViewIfNeeded();await owner.click();
+   const options=page.locator('.multi-select-options:popover-open');await expect(options).toBeVisible();
+   const popup=await options.boundingBox();expect(popup!.y).toBeGreaterThanOrEqual(0);expect(popup!.y+popup!.height).toBeLessThanOrEqual(height+1);
+   await page.keyboard.press('Escape');await expect(owner).toBeFocused();
+   expect(await footer.boundingBox()).toEqual(initialFooter);
+  }
+  await panel.getByRole('button',{name:'Cancel',exact:true}).click();
+ }
+});
+
+test('narrow creation keeps scrolling inside the fields and footer actions in view',async({page})=>{
+ const width=375,height=600;await page.setViewportSize({width,height});await setup(page);
+ await page.locator('nav').getByRole('button',{name:'Risk Log',exact:true}).click();
+ await page.getByRole('button',{name:'Add Risk',exact:true}).click();
+ const panel=page.getByRole('dialog',{name:'Create Risk',exact:true}),fields=panel.locator('.creation-fields'),footer=panel.locator('.creation-footer');
+ const footerBefore=await footer.boundingBox();
+ const scroll=await fields.evaluate(element=>({height:element.clientHeight,total:element.scrollHeight,width:element.clientWidth,totalWidth:element.scrollWidth}));
+ expect(scroll.total).toBeGreaterThan(scroll.height);expect(scroll.totalWidth).toBeLessThanOrEqual(scroll.width+1);
+ await fields.evaluate(element=>{element.scrollTop=element.scrollHeight;});
+ expect(await fields.evaluate(element=>element.scrollTop)).toBeGreaterThan(0);
+ expect(await footer.boundingBox()).toEqual(footerBefore);
+ for(const action of ['Cancel','Create']){
+  const box=await footer.getByRole('button',{name:action,exact:true}).boundingBox();expect(box!.y).toBeGreaterThanOrEqual(0);expect(box!.y+box!.height).toBeLessThanOrEqual(height+1);expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual(width+1);
+ }
+});
+
+
+test('expanded Risk action lists keep header and submit actions fixed',async({page})=>{
+ await page.setViewportSize({width:900,height:600});await setup(page);
+ await page.locator('nav').getByRole('button',{name:'Risk Log',exact:true}).click();
+ await page.getByRole('button',{name:'Add Risk',exact:true}).click();
+ const panel=page.getByRole('dialog',{name:'Create Risk',exact:true}),fields=panel.locator('.creation-fields'),header=panel.locator(':scope>header'),footer=panel.locator('.creation-footer');
+ const originalHeader=await header.boundingBox(),originalFooter=await footer.boundingBox();
+ for(let index=0;index<6;index++)await panel.getByRole('button',{name:'Add action',exact:true}).click();
+ const last=panel.getByLabel('Action description 6',{exact:true});await last.fill('Last mitigation remains reachable');
+ expect(await fields.evaluate(element=>element.scrollHeight>element.clientHeight)).toBe(true);
+ expect(await fields.evaluate(element=>element.scrollWidth<=element.clientWidth+1)).toBe(true);
+ expect(await header.boundingBox()).toEqual(originalHeader);expect(await footer.boundingBox()).toEqual(originalFooter);
+ await expect(last).toBeVisible();
+ for(const name of ['Cancel','Create']){const box=await footer.getByRole('button',{name,exact:true}).boundingBox();expect(box!.y+box!.height).toBeLessThanOrEqual(601);}
+ await panel.getByRole('button',{name:'Cancel',exact:true}).click();await expect(panel).toBeHidden();
 });

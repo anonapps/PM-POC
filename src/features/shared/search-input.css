@@ -1,0 +1,6 @@
+/* The unfocused search field must be visibly editable in every dropdown. */
+.searchable-option-list>input[type=search] {
+ box-sizing:border-box; display:block; width:100%; min-width:0; height:34px; min-height:34px;
+ border:1px solid var(--control-border); border-radius:4px; background:var(--surface); color:var(--text);
+ padding:6px 8px; font:400 var(--type-control)/20px Arial,Helvetica,sans-serif; cursor:text;
+}

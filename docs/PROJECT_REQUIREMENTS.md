@@ -2045,3 +2045,81 @@ New Project Status starts blank and must be explicitly selected; Choose File & C
 - Tube Map uses existing milestone colours in a single-line diamond legend above date navigation and a multi-status filter. Status filtering precedes lane population and combines with search/Hide Empty Streams; Clear all restores unrestricted statuses. Remove extra footer scroll space, preserving the last lane, sticky axis and navigation.
 - Risk Matrix is one expanded-by-default section, with accessible Risk Matrix chevron toggle and session-only remembered state. Context relationship headings and equal-height selectors align across Risk/Decision editors; Decision Streams/Milestones/Tasks/Risks share one desktop line, with existing Project-wide exclusivity. Overview Quick Actions sizes to content independently of Timeline.
 - These controls are presentation/transient state except the explicitly selected Task status. Keep the confirmed search centre, timeline dates/navigation, canonical command history and local-first project-file boundaries. No merge/tag/release/deploy/publish authorised.
+
+## Approved Create Task alignment correction — 26 October 2026
+
+Align adjacent fields and control boxes in the Create Task panel, including predictive selectors, Scope and Predecessor tasks beside Progress. Apply the correction to the shared task creation panel in standalone Tasks and Extended Gantt equally. Preserve panel size/location, field order, existing Scope pill styling, validation/error space and editing behavior. This targeted correction supersedes exact preservation of the prior misaligned creation-control geometry.
+
+## Approved Extended Tasks table correction — 26 October 2026
+
+Extended Tasks must use the existing standalone Tasks header colors with continuous header backgrounds/spacing. Each task occupies one horizontal table row rather than wrapping its fields into labelled cards; all boxes/text align vertically. Retain every field/action and the approved creation panel. This supersedes the earlier multi-line Extended task-card layout; standalone Tasks remains unchanged.
+
+Owner clarification: keep all Extended task columns visible without horizontal scrolling at narrow desktop widths; adapt column/control spacing rather than wrapping fields into multiple rows.
+
+## Approved Gantt toolbar alignment correction — 26 October 2026
+
+Gantt's title, Search, Simple/Extended, Expand All, Collapse All and Zoom must occupy a single vertically centered toolbar line. Extended Tasks likewise keeps its title, Search, Show Deleted and Add Task on a single vertically centered line. Follow the other pages' existing toolbar styling; retain centered Search and all actions. Adapt control/search widths as necessary at narrow desktop sizes instead of wrapping these two toolbars. Other standalone page toolbars remain unchanged. This supersedes the earlier second-search-row fallback for Gantt/embedded Tasks only.
+
+## Approved Baselines mockup alignment — 26 October 2026
+
+The owner approved the Baselines proposal for implementation, with later enhancement deferred. Replace responsive comparison cards with a continuous nine-column table and single-line, vertically aligned rows. Preserve the existing centered toolbar, sidebar/header, baseline selector/list and Create/Rename/Delete behavior, filtering/sorting, historical/current stream names, immutable snapshots and PMP persistence. Compact the management list and align its actions. Retain actual application labels/tokens and DD/MM/YYYY dates over incidental generated-image differences; long names remain accessible through full-text titles while fitting the viewport. No new trend/scheduling features or release actions are authorized.
+
+## Native desktop acceptance correction — 26 October 2026
+
+Owner Mac screenshots reject fragmented column headings and card-style rows on ordinary desktop record pages (including People, Streams and Risk Log). Restore continuous table headers aligned to body columns and vertically aligned field controls on desktop-width workspaces; reserve card fallback for genuinely narrow content only. Preserve fields/actions, existing sorting/filtering and no horizontal overflow. The left sidebar must never scroll: retain every page name/order/icon and collapse behavior, adapting navigation row spacing to viewport height so File Information remains visible. Do not hide overflowed navigation entries or remove pages to suppress a scrollbar.
+
+## Approved compact rhythm, warnings and Dependencies correction — 26 October 2026
+
+Reduce excess lower whitespace in record rows while retaining room above ID/name controls. Align text, fields and buttons to a common control band; allow scope-pill fields to grow naturally when pills wrap. Reduce table heading-band height. Use existing font/spacing tokens on Dependencies and compact its content without changing canonical dependency behavior or warning calculations. Replace the separate Warnings Open button with keyboard-accessible clickable warning content that navigates to the same owning module and targeted entity for correction; preserve separately confirmed corrective actions. Gantt Search must match other pages' search size and horizontal position, preserving all actions and the fixed non-scrolling sidebar.
+
+The latest Gantt Search size/position correction uses the standard shared 340px Search and the same narrow-window second-row fallback as other pages. Ordinary desktop widths keep the single-line toolbar. This resolves the previous narrow compact Search-width exception in favor of the explicitly requested consistency.
+
+## Approved shared field text position — 26 October 2026
+
+All boxed editable fields must reuse shared internal text metrics across pages: consistent font family/weight, line height, horizontal text inset and vertically centered single-line text. Inputs, native selects, dates and disclosure/predictive selectors must align their text, not only their outer borders. Preserve established regular/creation/embedded control heights through shared size variables; wrapping scope pills and multiline text remain supported. Keep native disclosure affordances and all editing/popup semantics.
+
+## Approved Gantt surface and viewport correction — 26 October 2026
+
+Gantt mode/expand/collapse/zoom controls must use ordinary page action font/height tokens rather than special tiny desktop fonts. Keep Search centered at its shared width; if standard controls cannot fit, use additional toolbar space instead of reducing typography or clipping actions. Comparison controls use the compact shared secondary-control rhythm, vertically centered field text and aligned labels/checkboxes. Dropdown search inputs throughout the app must visibly look editable even when unfocused.
+
+Render baseline schedules as noticeable grey comparison bars with dashed outlines, with red delayed-finish segments following the approved mockup reference, retaining status-colored current bars, variance labels, immutable snapshot calculations and toggle semantics. Maximize the chart's available viewport space and dock its legend/date footer to the bottom of the Simple workspace or upper Extended pane. Extended Tasks must occupy all remaining space to the viewport bottom, preserve scrolling/resizing and standalone behavior, fully show Add Task/focus outline, and align its heading/selection controls and table header checkbox. Preserve all prior shell/file boundaries; no merge/deploy/release.
+
+## Approved Gantt Zoom location — 26 October 2026
+
+Move the existing Gantt Zoom label/dropdown out of the top-right toolbar into the docked date-navigation footer, on the same vertically centered row as Previous/Next/Jump to today. Apply in Simple and Extended modes, preserving zoom/date-reset behavior, standard field sizing, centered Search and all footer/pane sizing. Reclaim the freed header space rather than reserving the former Zoom width. Tube Map behavior remains unchanged.
+
+Dropdown search placeholders show only “Type to filter” throughout the app; keep the specific accessible search label separately.
+
+## Approved standalone Tasks selection alignment — 26 October 2026
+
+Use the same centered selection-column checkbox geometry on standalone Tasks and Extended Tasks. Header and row checkbox horizontal centers must match; retain header vertical centering, select-all/individual/indeterminate states and bulk behavior. No other standalone Tasks change.
+
+## Approved compact editors and shared headings — 27 October 2026
+
+Align Risk Project-wide checkbox/label with the Owner selector. Risk Edit context and Actions expanded editors use the same compressed 30px field/20px text-band rhythm as Extended Tasks, with compact gaps/padding while retaining multiline descriptions, errors and all commands. Place Risk Matrix toggle in the toolbar between Search and Show Deleted, retaining session disclosure/filter behavior.
+
+On Baselines, selected-baseline control and a compact actions menu share the title/Search toolbar. Offer Create/Rename/Delete and a Manage baselines dialog for the complete dated/described list; avoid consuming comparison space with a permanently expanded management list. Preserve all CRUD/selection/history/filter/sort/PMP behavior. Baseline create/rename follows the shared first-letter capitalization rule, including Enter submit; display legacy lowercase names consistently without rewriting loaded snapshots or files.
+
+Move Dependencies informational disclaimer to a docked bottom footer. Establish one reusable column-heading font family, size, weight and background across pages, including sorted headings and Extended Tasks; responsive widths may truncate heading display with full titles retained, rather than change font size. Preserve every column, alignment, sidebar and file behavior. No merge/deploy/release.
+
+## Approved Baselines/Dependencies consistency correction — 27 October 2026
+
+Use shared record-page filter categories/controls in Baselines and Dependencies search popups, preserving filter semantics and Clear all. Remove the entire secondary Schedule comparison heading row on Baselines. Apply shared readable value typography/spacing/backgrounds to both read-only tables; retain full text/titles, existing columns, variance meaning and no horizontal overflow.
+
+Every Baselines column supports keyboard/click ascending and descending sorting, with visible/accessible direction and standard missing-value handling; sort actual dates chronologically and variances numerically. Dependencies results must scroll inside the available viewport above its docked footer; no rows/content may appear below or behind the footer and the last row remains reachable. Risk Log and Decision Log context-opening buttons read Context. Preserve commands, selection, history and PMP behavior; no merge/deploy/release.
+
+#### Timeline dependency readability correction — 27 October 2026
+
+Gantt and Tube Map use a shared readable dependency presentation: smooth directional connectors, successor arrows, crossing separation from grid lines, and pointer/keyboard emphasis of a named relationship. Unrelated connections fade while one is emphasized. Preserve existing relationship semantics, visible-window filtering and Dependencies toggles; visual emphasis does not modify the project.
+
+Timeline footer correction: Gantt and Tube Map share the smaller compact footer geometry, typography, button appearance and spacing. Reduce excess vertical padding to the page-title toolbar rhythm. Retain legends, date navigation increments, outside-window counts, connection information and footer Zoom.
+
+Timeline focus correction: dependency connectors in Gantt and Tube Map are dotted and grey by default. Hover/focus previews one relationship; clicking or Enter/Space pins exactly one relationship, with another selection replacing it. Escape or toggling the selected relationship clears the pin. Only active endpoints retain status colors; unrelated Gantt tasks/milestones and Tube Map milestones are greyed. Both search filter panels offer Hide dependencies, synchronized with the existing Dependencies checkbox and reset by Clear all. Footer heights include the complete visible bottom region, without extra Tube Map workspace padding.
+
+## Approved creation-panel viewport-fit correction — 29 October 2026
+
+Owner Mac screenshots show Task/Risk creation content requiring scrolling and excessive structural whitespace. Record Add/Create panels must fit their initial complete forms and Create/Cancel actions in ordinary desktop viewports, including short laptop windows. Reuse the existing font tokens and control/error metrics; do not introduce a smaller font. Reflow fields and relationships into a wider responsive grid and reduce structural padding/gaps instead. Apply one shared recipe to all six record kinds and the identical standalone/Extended Task entry points. Preserve every field, required/optional semantics, DOM/keyboard order, validation association/reserved space, native controls, dirty dismissal, canonical creation commands and Undo/PMP behavior. This supersedes the earlier exact 560px drawer/two-column geometry and pair-based Task alignment only where necessary for viewport fit. Narrow screens and user-expanded multiline/arbitrary initial Risk-action content may scroll within the field body; header and submit/cancel actions must remain visible and no content may be clipped or hidden to simulate fitting.
+
+## Owner correction — retain the original creation drawer footprint — 29 October 2026
+
+The owner rejects the 880px/three-column creation reflow as too wide and too empty. Restore the original maximum560px drawer and two-column main field layout. Keep descriptions full-width and original Task field pairs. Fit content by reducing inter-field/structural whitespace and reusing the existing30px embedded/Extended control recipe, with unchanged existing font sizes. Creation message slots use a compact12px minimum and expand naturally for actual messages rather than clipping or hiding them; IDs, announcements and validation behavior remain unchanged. The empty Risk actions group may sit beside Due date, expanding across the form when actions exist. Preserve all fields and visible Create/Cancel, exact standalone/Extended parity, native behavior, dismissal, commands and persistence. This supersedes the earlier29October permission to widen the drawer or use three main columns; narrow screens and genuinely expanded lists keep content-only scrolling.

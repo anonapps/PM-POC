@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ganttConnectorPaths } from "./gantt";
+import { barPosition } from "./model";
 import type { GanttModel } from "./model";
 
 const base: GanttModel = {
@@ -72,10 +73,15 @@ describe("Gantt connector validation", () => {
 it('keeps connector anchors aligned when variance rows are taller',()=>{
  const paths=ganttConnectorPaths(base,52);
  expect(paths).toHaveLength(1);
- expect(paths[0].path).toContain('V 70');
+ expect(paths[0].path).toMatch(/, [\d.]+ 70$/);
 });
 
 it('uses measured bar centers for rows that grow to different heights',()=>{
  const paths=ganttConnectorPaths(base,52,[24,85]);
- expect(paths[0].path).toContain(' 24 H ');expect(paths[0].path).toContain('V 85');
+ expect(paths[0].path).toContain(' 24 C ');expect(paths[0].path).toMatch(/, [\d.]+ 85$/);
+});
+
+it('anchors Finish-to-Start at the displayed finish edge instead of the start of the last day',()=>{
+ const connector=ganttConnectorPaths(base)[0],bar=barPosition(base.rows[0].start,base.rows[0].end,base.start,base.end)!;
+ expect(connector.fromX).toBeCloseTo(bar.left+bar.width);expect(connector.label).toBe('First → Second · Finish-to-Start');
 });

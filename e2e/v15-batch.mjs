@@ -66,7 +66,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await click('Clear all');
   await evaluate(`document.querySelector('.shared-search-filter>button').click()`);
   await nav('Risk Log');
-  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
+  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Context').click()})()`);
   const riskSelections=await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').textContent`);
   await evaluate(`(()=>{const trigger=document.querySelector('.risk-context-editor .relationship-picker summary');trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
   await search('.risk-context-editor .relationship-picker[open] input[type=search]','STREAM-003');
@@ -76,7 +76,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await key('Escape',27);
   record('Context filtering by human ID retains hidden relationship selections',await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').textContent.includes('selected')`));
   await evaluate(`document.querySelector('.risk-context-editor button.secondary').click()`);
-  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
+  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('RISK-002'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Context').click()})()`);
   record('Context Cancel restores the original relationship selections',await evaluate(`document.querySelector('.risk-context-editor .relationship-picker summary').textContent===${JSON.stringify(riskSelections)}`));
   await evaluate(`(()=>{const input=document.querySelector('.risk-context-editor textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,'Risk hidden narrative');input.dispatchEvent(new Event('input',{bubbles:true}));input.focus()})()`);
   await key('Enter',13,2);await waitFor(`!document.querySelector('.risk-context-editor')`);
@@ -84,7 +84,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await waitFor(`document.querySelectorAll('tbody tr').length===1`);record('Risk optional context supports multiline keyboard save and hidden-field search',true);
   // Edit relationships and hidden text, submit a multiline context with Ctrl+Enter, save/reopen.
   await nav('Decision Log');
-  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('DECISION-001'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
+  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('DECISION-001'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Context').click()})()`);
   for(const [label,id] of [['Decision tasks','TASK-004'],['Decision risks','RISK-005']]) {
     await evaluate(`(()=>{const trigger=[...document.querySelectorAll('.decision-context-editor .relationship-picker summary')].find(x=>x.getAttribute('aria-label')===${JSON.stringify(label)}||x.textContent.startsWith(${JSON.stringify(label)}));trigger.scrollIntoView({block:'center',inline:'nearest'});trigger.click()})()`);
     await search('.decision-context-editor .relationship-picker[open] input[type=search]',id);
@@ -101,7 +101,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await nav('Search');await setLabel('Search names, IDs, roles, notes, status and dates','hidden narrative');await waitFor(`[...document.querySelectorAll('.search-result-row')].some(row=>row.textContent.includes('DECISION-001'))`);
   record('Hidden context survives PMP save/reopen and matches global search',true);
   await nav('Decision Log');
-  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('DECISION-001'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Edit context').click()})()`);
+  await evaluate(`(()=>{const row=[...document.querySelectorAll('tbody tr')].find(r=>r.innerText.includes('DECISION-001'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Context').click()})()`);
   record('New Task and Risk context relationships survive PMP save/reopen',await evaluate(`['TASK-004','RISK-005'].every(id=>[...document.querySelectorAll('.decision-context-editor .relationship-picker label')].some(label=>label.textContent.includes(id)&&label.querySelector('input')?.checked))`));
   await evaluate(`document.querySelector('.decision-context-editor .actions button.secondary').click()`);
 

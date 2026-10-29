@@ -1,5 +1,14 @@
 "use client";
-import { useLayoutEffect, useRef, type ComponentPropsWithRef } from "react";
+import { Children,cloneElement,isValidElement,useLayoutEffect,useRef,type ReactNode,type ComponentPropsWithRef } from "react";
+
+/** Consistent clipped header labels retain full text and sortable controls. */
+function headingText(value:ReactNode):string{return Children.toArray(value).map(child=>typeof child==='string'||typeof child==='number'?String(child):isValidElement<{children?:ReactNode}>(child)?headingText(child.props.children):'').join('');}
+function sharedHeadings(children:ReactNode):ReactNode{return Children.map(children,child=>{
+ if(!isValidElement<{children?:ReactNode;title?:string}>(child))return child;
+ if(child.type==='th')return cloneElement(child,{title:child.props.title??(headingText(child.props.children)||undefined)},<div className="column-heading-label">{child.props.children}</div>);
+ if(child.type==='thead'||child.type==='tr')return cloneElement(child,{},sharedHeadings(child.props.children));
+ return child;
+});}
 
 /** Preserve all cells and sorting controls when rows wrap to fit the workspace. */
 export function FitTable({children,ref:externalRef,className="",...props}:ComponentPropsWithRef<"table">) {
@@ -15,5 +24,5 @@ export function FitTable({children,ref:externalRef,className="",...props}:Compon
     table.current=node;
     if(typeof externalRef==="function")return externalRef(node);
     if(externalRef)externalRef.current=node;
-  }}>{children}</table>;
+  }}>{sharedHeadings(children)}</table>;
 }

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "npm run ui:tokens:check && next build --webpack",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
@@ -17,7 +17,10 @@
     "validate:quick": "node scripts/validate.mjs quick",
     "test:targeted": "node scripts/validate.mjs targeted",
     "validate:pr": "node scripts/validate.mjs pr",
-    "validate:release": "node scripts/validate.mjs release"
+    "validate:release": "node scripts/validate.mjs release",
+    "ui:catalogue": "next dev --webpack tools/ui-catalogue --hostname 127.0.0.1 --port 3100",
+    "ui:tokens": "node scripts/generate-ui-tokens.mjs",
+    "ui:tokens:check": "node scripts/generate-ui-tokens.mjs --check"
   },
   "dependencies": {
     "@heroui/react": "2.8.10",

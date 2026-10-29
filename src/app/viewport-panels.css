@@ -1,0 +1,86 @@
+/* Full-height pane layout is measured from its actual top, including alert/header changes. */
+.workspace.module-gantt { padding-bottom:0; }
+.workspace .gantt-workspace { height:var(--gantt-available-height,calc(100dvh - 56px)); min-width:0; }
+.workspace .gantt-workspace .gantt-panel { height:100%; min-height:0; }
+.workspace .gantt-workspace .gantt-panel .gantt { max-height:none; grid-template-rows:max-content max-content; align-content:start; }
+.workspace .gantt-workspace .gantt-panel>footer { position:relative; bottom:auto; margin-top:0; }
+.workspace .gantt-extended .gantt-tasks-pane { background:var(--surface); }
+.workspace .gantt-extended .gantt-tasks-pane>.panel { margin:0; min-height:100%; }
+.workspace .gantt-workspace .gantt-tasks-pane .page-toolbar>.header-actions { padding-right:4px; box-sizing:border-box; }
+.workspace .gantt-workspace .gantt-tasks-pane .tasks-table thead input[type=checkbox] { display:block; margin:0 auto; vertical-align:middle; }
+.workspace .gantt-workspace .gantt-tasks-pane .tasks-table thead th { vertical-align:middle; }
+/* Compare a substantial grey schedule band against current status-coloured bars. */
+.workspace .gantt-workspace .gantt-row .gantt-baseline { top:18px; height:14px; border:1.5px dashed #68778a; background:#d5dbe4; opacity:1; }
+.workspace .gantt-workspace .gantt-row .gantt-baseline.milestone { top:18px; width:12px!important; height:12px; }
+.workspace .gantt-workspace .gantt-with-variance .gantt-row .gantt-baseline { top:22px; }
+.gantt-track .gantt-delay { position:absolute; top:8px; height:18px; min-width:2px; box-sizing:border-box; border:2px dashed #b42318; border-radius:3px; background:#fbe2df; opacity:.9; pointer-events:none; }
+/* Standard controls move as a group when the centered Search leaves insufficient room. */
+@container (min-width:901px) and (max-width:1330px) {
+ .workspace .gantt-workspace .panel.gantt-panel>.page-toolbar>.actions:last-child { grid-column:1/-1; grid-row:2; }
+}
+@container (max-width:900px) {
+ .workspace .gantt-workspace .panel.gantt-panel>.page-toolbar>.actions:last-child { grid-column:1/-1; grid-row:1; }
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar>:first-child { grid-row:1; }
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar .actions { padding-left:70px; box-sizing:border-box; flex-wrap:wrap; }
+}
+@media (max-width:1100px) {
+ .workspace .gantt-workspace .panel.gantt-panel>.page-toolbar>.actions:last-child { grid-column:1/-1; grid-row:1; }
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar .actions { padding-left:70px; box-sizing:border-box; flex-wrap:wrap; }
+}
+@container (min-width:901px) and (max-width:1330px) {
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar { grid-template-rows:39px 30px; }
+}
+@container (max-width:900px) {
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar { grid-template-rows:auto auto; }
+}
+@media (max-width:1100px) {
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar { grid-template-rows:auto auto; }
+}
+.workspace .gantt-workspace .gantt-with-baseline .gantt-row:not(.section)>div { min-height:44px; }
+.workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-bar { top:8px; height:18px; }
+.workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-bar.milestone { top:8px; height:14px; }
+.workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-baseline { top:24px; height:14px; }
+.workspace .gantt-workspace .gantt-with-baseline .gantt-row .gantt-baseline.milestone { top:24px; height:12px; }
+.searchable-option-list { --field-height:var(--ui-field-creation-height); }
+.workspace .gantt-workspace .gantt-panel>.page-toolbar .filter-trigger { height:32px; min-height:0; padding:6px; }
+/* Gantt Zoom belongs with the docked date navigation, not the header actions. */
+.workspace .gantt-panel>footer .gantt-zoom-control { display:flex; align-items:center; gap:6px; margin-left:auto; font-size:var(--type-control); white-space:nowrap; }
+.workspace .gantt-panel>footer .gantt-zoom-control select { width:80px; min-width:80px; max-width:80px; font-size:var(--type-control); }
+@container (min-width:1041px) {
+ .workspace .gantt-workspace .gantt-panel>.page-toolbar { grid-template-rows:none; }
+ .workspace .gantt-workspace .panel.gantt-panel>.page-toolbar>.actions:last-child { grid-column:3; grid-row:1; }
+}
+.workspace .gantt-panel>footer .gantt-zoom-control select { border:1px solid var(--control-border); border-radius:4px; background-color:var(--surface); color:var(--text); }
+/* One selection column geometry for standalone and Extended Tasks. */
+.app-main .workspace .panel table.tasks-table>thead th:first-child { text-align:center; vertical-align:middle; }
+.app-main .workspace .panel table.tasks-table>thead input[type=checkbox],
+.app-main .workspace .panel table.tasks-table>tbody>tr>td:first-child>input[type=checkbox] { display:block; margin:0 auto; }
+
+/* Informational copy is a docked footer, never above Dependencies results. */
+.workspace .panel.dependencies-panel>.dependency-description { bottom:0; z-index:16; }
+/* Shared readable read-only record values; page-specific tiny fonts are superseded. */
+.app-main .workspace .panel table.record-data-table>tbody>tr>td { height:40px; padding:4px 6px; font:400 var(--type-body)/20px Arial,Helvetica,sans-serif; background:var(--surface); color:var(--text); vertical-align:middle; }
+.app-main .workspace .panel table.record-data-table .comparison-kind,
+.app-main .workspace .panel table.record-data-table td small { font-size:var(--type-caption); color:var(--text-muted); }
+.app-main .workspace .panel table.comparison-table td[data-variance=later] { color:#805b00; }
+.app-main .workspace .panel table.comparison-table td[data-variance=earlier] { color:#237244; }
+.app-main .workspace .panel table.record-data-table .table-actions button { font-size:var(--action-font); padding:2px 10px; height:var(--action-height); }
+/* Results own scrolling; no table content can render behind or below the footer. */
+.workspace.module-dependencies { padding-bottom:0; }
+.workspace .panel.dependencies-panel { height:var(--data-panel-height,calc(100dvh - 56px)); min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+.workspace .panel.dependencies-panel>.page-toolbar { flex:0 0 auto; position:relative; top:auto; }
+.workspace .panel.dependencies-panel>.data-table-scroll { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; }
+.workspace .panel.dependencies-panel .data-table-scroll thead th { position:sticky; top:0; }
+.workspace .panel.dependencies-panel>footer.dependency-description { flex:0 0 auto; position:static; margin:0; padding:6px 0; background:var(--canvas); border-top:1px solid var(--border); }
+.app-main .workspace .panel table.dependency-table th { width:calc((100% - 120px) * .2); }
+.app-main .workspace .panel table.dependency-table th:nth-child(3) { width:calc((100% - 120px) * .15); }
+.app-main .workspace .panel table.dependency-table th:nth-child(5) { width:calc((100% - 120px) * .25); }
+.app-main .workspace .panel table.dependency-table th:last-child { width:120px; }
+.app-main .workspace .panel table.record-data-table .table-actions button { white-space:nowrap; }
+
+@container (max-width:1350px) {
+ .app-main .workspace .panel table.record-data-table>tbody>tr>td { font-size:12px; }
+}
+@container (min-width:636px) {
+ .workspace .panel.baselines-panel>.page-toolbar { --baseline-search-width:340px; }
+}

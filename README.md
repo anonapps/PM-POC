@@ -112,3 +112,13 @@ The 11 October 2026 regression baseline passed 27 Vitest files / 139 tests, Type
 
 The `.pmp` project file is the sole source of truth for project data. Persistence remains behind the Project File Service abstraction. The application does not depend on cloud storage, a database, browser local storage or an application backend for project data.
 
+
+## UI standardization proposal
+
+The documentation-only [Stage 1 proposal](docs/UI_STANDARD_PROPOSAL.md) captures the [current UI audit](docs/UI_STANDARD_AUDIT.md), reusable component contracts and a [sequenced migration/acceptance plan](docs/UI_STANDARD_MIGRATION_PLAN.md). Proposed token normalization is not yet approved; current requirements and accepted UI remain the reference.
+
+### Internal UI catalogue
+
+Run `npm run ui:catalogue` for the separate local component review app. See the [catalogue guide](tools/ui-catalogue/README.md) and [component contracts](docs/UI_COMPONENT_CONTRACTS.md). Production pages and approved visual values remain unchanged.
+
+For UI changes, use the [initial token inventory](docs/UI_TOKEN_INVENTORY.md) and [style ownership map](docs/UI_STYLE_OWNERSHIP.md) to locate existing assets and rules before adding a new override.

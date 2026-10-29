@@ -1,0 +1,12 @@
+import {describe,it,expect} from 'vitest';
+import type {ScheduleComparison,ScheduleItem} from '../../domain/baselines';
+import {comparisonSortValue} from './comparison-sorting';
+import {sortRows} from '../shared/sorting';
+const item:ScheduleItem={id:'t',kind:'task',humanId:'TASK-002',name:'Delivery',startDate:'2025-12-31',finishDate:'2026-01-02',streamIds:['s'],projectWide:false};
+const historical=new Map([['s','Hardware']]),current=new Map([['s','Devices']]);
+const row:ScheduleComparison={key:'task:t',baseline:item,current:{...item,startDate:'2026-01-02',finishDate:'2026-01-12'},status:'Matched',startVariance:2,finishVariance:10};
+describe('comparison column sorting',()=>{
+ it('uses full entity and historical/current stream labels',()=>{expect(comparisonSortValue(row,'name',historical,current)).toBe('TASK-002 · Delivery');expect(comparisonSortValue(row,'streams',historical,current)).toBe('Baseline: Hardware · Current: Devices');expect(comparisonSortValue({...row,current:null,status:'Removed'},'streams',historical,current)).toBe('Hardware');});
+ it('sorts schedule dates across year boundaries and keeps missing dates last in both directions',()=>{const rows=[row,{...row,key:'earlier',baseline:{...item,startDate:'2025-01-15'}},{...row,key:'missing',baseline:null,status:'Added' as const}];const value=(r:ScheduleComparison)=>comparisonSortValue(r,'baselineStart',historical,current);expect(sortRows(rows,{key:'date',direction:'asc'},value).map(r=>r.key)).toEqual(['earlier','task:t','missing']);expect(sortRows(rows,{key:'date',direction:'desc'},value).map(r=>r.key)).toEqual(['task:t','earlier','missing']);expect(comparisonSortValue(row,'currentStart',historical,current)).toBe('2026-01-02');expect(comparisonSortValue(row,'baselineFinish',historical,current)).toBe('2026-01-02');expect(comparisonSortValue(row,'currentFinish',historical,current)).toBe('2026-01-12');});
+ it('sorts variances numerically instead of signed display strings and exposes comparison status',()=>{const rows=[row,{...row,key:'two',startVariance:12,finishVariance:-2},{...row,key:'three',startVariance:-3,finishVariance:2}];expect(sortRows(rows,{key:'start',direction:'asc'},r=>comparisonSortValue(r,'start',historical,current)).map(r=>r.key)).toEqual(['three','task:t','two']);expect(sortRows(rows,{key:'finish',direction:'desc'},r=>comparisonSortValue(r,'finish',historical,current)).map(r=>r.key)).toEqual(['task:t','three','two']);expect(comparisonSortValue(row,'status',historical,current)).toBe('Matched');});
+});

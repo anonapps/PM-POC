@@ -1,104 +1,11 @@
-/* v1.6 REQ-001: layout fits available width; scrolling is vertical only. */
-.workspace { container-type:inline-size; }
-.workspace .panel { min-width:0; max-width:100%; box-sizing:border-box; }
-.workspace .panel>.page-toolbar::after,.workspace .panel>.title-row::after { content:none; }
-.workspace .gantt-panel .gantt { grid-template-columns:clamp(175px,23%,275px) minmax(0,1fr); overflow-x:clip; }
-.workspace section.panel.tube-map,.workspace .tube-map>.tube-map { min-width:0; width:100%; box-sizing:border-box; }
-.workspace .tube-axis { min-width:0; grid-template-columns:160px repeat(12,minmax(0,1fr)); }
-.workspace .tube-axis span { min-width:0; overflow-wrap:anywhere; }
-.workspace .timeline-status-legend { height:auto; min-height:24px; flex-wrap:wrap; overflow:visible; white-space:normal; }
-.workspace footer.timeline-navigation { flex-wrap:wrap; height:auto; gap:8px; }
-.workspace .timeline-navigation>span { overflow-wrap:anywhere; }
-.workspace .gantt-dates>span { min-width:0; white-space:normal; overflow-wrap:anywhere; }
-.workspace .tube-station-link { overflow-wrap:anywhere; }
-.workspace .panel table.fit-table { width:100%; min-width:0; table-layout:fixed; }
-.workspace .panel table.fit-table th,.workspace .panel table.fit-table td { min-width:0; overflow-wrap:anywhere; }
-.workspace .panel table.fit-table :is(input:not([type=checkbox]),select,textarea,.multi-select,.predictive-select) { min-width:0; max-width:100%; box-sizing:border-box; }
-@container (max-width:1350px) {
-  .workspace .panel table.fit-table { display:block; }
-  .workspace .panel table.fit-table :is(thead,tbody) { display:block; }
-  .workspace .panel table.fit-table tr { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr)); gap:8px 12px; padding:12px 0; border-bottom:1px solid var(--border); }
-  .workspace .panel table.fit-table thead tr { display:flex; flex-wrap:wrap; gap:6px 12px; padding:8px 0; }
-  .workspace .panel table.fit-table thead th { position:static; width:auto; height:auto; padding:2px; white-space:normal; }
-  .workspace .panel table.fit-table tbody td { display:flex; flex-direction:column; align-items:stretch; justify-content:center; position:static; width:auto; min-width:0; height:auto; min-height:58px; padding:4px; border:0; white-space:normal; }
-  .workspace .panel table.fit-table tbody td::before { content:attr(data-field); display:block; font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:4px; }
-  .workspace .panel table.fit-table td[colspan] { grid-column:1 / -1; }
-  .workspace .panel table.fit-table td[colspan]::before { content:none; }
-  .workspace .panel table.fit-table td :is(.task-row-id,.entity-row-id),.workspace .panel table.fit-table td>small:first-child { position:static; display:block; margin:0 0 3px; }
-  .workspace .panel table.fit-table :is(input:not([type=checkbox]),select,textarea,.multi-select,.predictive-select) { width:100%; }
-  .workspace .panel table.fit-table td.table-actions { flex-direction:row; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
-  .workspace .panel table.fit-table td.table-actions::before { flex-basis:100%; }
-  .workspace .tasks-table td>.field-error { position:static; height:auto; white-space:normal; }
-}
-@container (max-width:900px) {
-  .workspace .panel>.page-toolbar { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
-  .workspace .panel>.page-toolbar>.shared-search-filter { grid-column:1/-1; grid-row:2; }
-  .workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:2; }
-}
-/* Leave room for the final station diamond while keeping dates and tracks aligned. */
-.workspace .tube-map>.tube-axis { padding-right:14px; box-sizing:border-box; }
-.workspace .tube-map>.tube-body { width:calc(100% - 174px); margin-right:14px; }
-.workspace .panel table.fit-table td.table-actions { white-space:normal; }
-.workspace .panel table.fit-table td.table-actions button { max-width:100%; white-space:normal; }
-.baseline-controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:10px 0; }
-.baseline-selector { display:flex; align-items:center; gap:8px; min-width:0; max-width:100%; font-size:12px; }
-.baseline-selector>.multi-select { min-width:150px; max-width:240px; }
-.baseline-list { list-style:none; padding:0; display:grid; gap:8px; }
-.baseline-list li { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:8px; border:1px solid var(--border); border-radius:5px; overflow-wrap:anywhere; }
-.baseline-list time { font-size:12px; color:var(--text-muted); }
-.baseline-list li>span { flex:1; }
-.baseline-controls label { display:flex; align-items:center; gap:5px; font-size:12px; }
-.gantt-track .gantt-baseline { position:absolute; top:28px; height:5px; border:1px dashed #68778a; background:#d5dbe4; border-radius:2px; box-sizing:border-box; min-width:4px; }
-.gantt-track .gantt-baseline.milestone { height:6px; width:6px!important; border-radius:0; transform:translateX(-50%) rotate(45deg); }
-.workspace .gantt-row .variance-indicator { font-size:10px; color:#526278; }
-.workspace .gantt-row:has(.variance-indicator)>div { min-height:52px; }
-.tube-baseline-strip { border-top:1px dashed #aab5c3; padding:10px 14px 10px 0; }
-.tube-baseline-strip h2 { font-size:13px; margin:4px 8px 10px; }
-.tube-baseline-strip p { font-size:12px; margin:8px; }
-.tube-baseline-lane { display:grid; grid-template-columns:160px minmax(0,1fr); min-height:32px; font-size:12px; align-items:center; }
-.tube-baseline-lane>span { padding:4px 8px; overflow-wrap:anywhere; }
-.tube-baseline-lane>div { position:relative; border-bottom:1px dashed #c3cbd6; height:24px; }
-.tube-baseline-indicator { position:absolute; top:0; transform:translateX(-50%); font-size:20px; line-height:24px; color:#526278; }
-.workspace .gantt-with-variance .gantt-row>div { min-height:52px; }
-/* Size chart + controls + footer together so the sticky footer never covers the final row. */
-.workspace .gantt-panel { display:flex; flex-direction:column; height:calc(100dvh - 120px); min-height:380px; }
-.workspace .gantt-panel>.page-toolbar,.workspace .gantt-panel>.baseline-controls,.workspace .gantt-panel>footer { flex-shrink:0; }
-.workspace .gantt-panel .gantt { flex:1; min-height:0; max-height:none; }
-.workspace .gantt-panel .gantt-head { top:0; }
-.tube-baseline-indicator:is(:hover,:focus-visible)::after { content:attr(aria-label); position:absolute; z-index:50; bottom:100%; left:0; width:210px; max-width:45vw; padding:6px 8px; border:1px solid #acb8c7; border-radius:4px; background:white; color:#26364d; font:12px/1.4 Arial,sans-serif; box-shadow:0 3px 10px #17243a20; }
-.tube-baseline-indicator.label-left:is(:hover,:focus-visible)::after { left:auto; right:0; }
-@container (max-width:1350px) {
-  .workspace .panel table.fit-table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:auto; min-height:76px; }
-}
-/* Approved Extended Gantt: compact module surfaces only. Dialogs live at page level. */
-.gantt-workspace>.gantt-pane { display:contents; }
-.gantt-workspace>.gantt-tasks-pane[hidden] { display:none!important; }
-.gantt-mode-switch { display:inline-flex; gap:0; padding:2px; border:1px solid #acb8c7; border-radius:5px; }
-.workspace .gantt-mode-switch button { padding:3px 7px; border:0; border-radius:3px; }
-.gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
-.workspace .gantt-extended { display:grid; height:calc(100dvh - 120px); min-width:0; }
-.gantt-extended>.gantt-pane { display:block; min-height:0; min-width:0; }
-.workspace .gantt-extended .gantt-panel { height:100%; min-height:0; }
-.gantt-extended .gantt-tasks-pane { overflow-y:auto; overflow-x:clip; min-height:0; min-width:0; overscroll-behavior:contain; }
-.gantt-extended .gantt-splitter { display:flex; align-items:center; justify-content:center; height:12px; background:#e1e8f0; border-block:1px solid #b1bece; cursor:ns-resize; touch-action:none; color:#68778a; line-height:8px; }
-.gantt-splitter:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
-.workspace .gantt-extended .gantt-row>div { min-height:32px; padding-top:3px; padding-bottom:3px; }
-.workspace .gantt-extended .gantt-row .sort-heading { font-size:12px; }
-.workspace .gantt-extended .gantt-row small { font-size:10px; }
-.workspace .gantt-extended .gantt-with-variance .gantt-row>div { min-height:44px; }
-.workspace .gantt-extended .gantt-row .gantt-bar { top:8px; height:16px; }
-.workspace .gantt-extended .gantt-row .gantt-bar.milestone { top:10px; height:12px; }
-.workspace .gantt-extended .gantt-row .gantt-baseline { top:26px; height:4px; }
-.workspace .gantt-extended .gantt-with-variance .gantt-baseline { top:34px; }
-.workspace .gantt-extended .gantt-panel>.baseline-controls { padding-block:6px; gap:8px; }
-.workspace .gantt-extended .gantt-panel footer.timeline-navigation { gap:5px; padding-block:5px; }
-.workspace .gantt-extended .gantt-panel .timeline-status-legend { gap:8px; font-size:10px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table { font-size:12px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table td { padding:3px 4px; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr:has(.task-name-cell)>td { min-height:62px; height:auto; }
-.workspace .gantt-extended .gantt-tasks-pane .panel table.fit-table tbody tr { padding-block:6px; gap:6px 10px; }
-.workspace .gantt-extended .gantt-tasks-pane table.fit-table :is(input:not([type=checkbox]),select,summary) { font-size:12px; min-height:30px; height:30px; }
-.workspace .gantt-extended .gantt-tasks-pane table.fit-table td::before { font-size:10px; margin-bottom:3px; }
-.workspace .gantt-panel .gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
-.workspace .gantt-extended .gantt-row.section .gantt-open-stream { height:22px; min-height:22px; padding:0 3px; }
-.workspace .gantt-extended .gantt-row.section .sort-heading { min-height:0; padding:0; }
+/* Ordered compatibility entry: preserve unlayered declaration order. */
+@import "./viewport-layout.css";
+@import "../features/shared/field-surfaces.css";
+@import "../features/shared/creation-surfaces.css";
+@import "../features/shared/planning-controls.css";
+@import "../features/shared/search-input.css";
+@import "./viewport-panels.css";
+@import "../features/risks/risk-editor-surfaces.css";
+@import "../features/baselines/baseline-surfaces.css";
+@import "../features/shared/table-headings.css";
+@import "../features/shared/timeline-surfaces.css";

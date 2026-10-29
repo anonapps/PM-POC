@@ -304,9 +304,6 @@ table td.table-actions button { margin:.12rem; }
 .gantt-row.section .sort-heading { display: inline-block; flex: 0 1 auto; min-width: 0; }
 .gantt-row.section > div:first-child > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Reserve room for the full Zoom select border and native dropdown arrow. */
-.gantt-panel .title-row .gantt-zoom-control { display:inline-flex; align-items:center; gap:.4rem; flex:0 0 auto; margin-right:10px; }
-.gantt-panel .title-row .gantt-zoom-control select { box-sizing:border-box; width:116px; min-width:0; max-width:116px; padding: .35rem 1.4rem .35rem .45rem; border:1px solid #8293a8; border-radius:4px; background-color:#fff; }
 
 /* Compact Gantt rows to the same density as the project entity tables. */
 .gantt-panel .gantt-row > div { min-height:44px; padding:4px 8px; box-sizing:border-box; }
@@ -341,30 +338,23 @@ table td.table-actions button { margin:.12rem; }
   font-size:var(--type-control); font-weight:600; line-height:1.1;
   border-radius:6px;
 }
-.workspace .gantt-panel > .title-row .gantt-zoom-control {
-  margin-right:0; gap:6px; font-size:var(--type-control); line-height:1.1;
-}
-.workspace .gantt-panel > .title-row .gantt-zoom-control select {
-  height:30px; width:116px; min-width:116px; max-width:116px;
-  padding:2px 24px 2px 8px; font-size:var(--type-control); line-height:1.1;
-}
 
 
 /* Typography design tokens. Adjust these values to rescale the app consistently.
    Responsive chart labels use fluid clamp() rules intentionally. */
 :root {
-  --type-display:2rem;
-  --type-kpi:1.65rem;
-  --type-section:1rem;
-  --type-body:.9rem;
-  --type-control:.8rem;
-  --type-caption:.72rem;
+  --type-display:var(--ui-type-display);
+  --type-kpi:var(--ui-type-kpi);
+  --type-section:var(--ui-type-section);
+  --type-body:var(--ui-type-body);
+  --type-control:var(--ui-type-control);
+  --type-caption:var(--ui-type-caption);
   --type-page-title:var(--type-caption);
 }
 
 /* Unified action-button system: one 30px geometry, with semantic colour variants.
    Excludes navigation, KPI cards, timeline cells and icon-only canvas controls. */
-:root { --action-height:30px; --action-radius:6px; --action-font:var(--type-control); }
+:root { --action-height:var(--ui-action-height); --action-radius:var(--ui-action-radius); --action-font:var(--ui-action-font); }
 .app-main > header .header-actions button,
 .workspace .panel > .title-row button:not(.sort-heading),
 .workspace .panel .quick-actions button,
@@ -378,8 +368,8 @@ table td.table-actions button { margin:.12rem; }
 .workspace .panel .tube-quick-edit .actions button {
   box-sizing:border-box;
   height:var(--action-height); min-height:var(--action-height);
-  padding:2px 10px; border-radius:var(--action-radius);
-  font-size:var(--action-font); font-weight:600; line-height:1.1;
+  padding:var(--ui-action-inset-block) var(--ui-action-inset-inline); border-radius:var(--action-radius);
+  font-size:var(--action-font); font-weight:var(--ui-action-weight); line-height:var(--ui-action-line-height);
   display:inline-flex; align-items:center; justify-content:center;
   white-space:nowrap;
 }
@@ -650,11 +640,8 @@ table td.table-actions button { margin:.12rem; }
   bottom:0;
   left:auto;
   right:auto;
-  z-index:24;
   width:100%;
-  background:var(--surface);
   border-top:1px solid var(--border);
-  box-shadow:0 -3px 10px #17243a12;
 }
 
 /* Tube Map: header dates and body grid share one fixed 160px label column
@@ -949,7 +936,6 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .workspace .panel>.page-toolbar>.shared-search-filter { grid-column:2; grid-row:1; justify-self:center; width:340px; max-width:100%; min-width:0; height:34px; margin:0; }
 .workspace .panel>.page-toolbar>:last-child:not(.shared-search-filter) { grid-column:3; grid-row:1; justify-self:end; min-width:0; max-width:100%; margin-left:0; }
 .workspace .panel>.page-toolbar>.actions,.workspace .panel>.page-toolbar>.header-actions { justify-content:flex-end; flex-wrap:wrap; }
-.workspace .panel>.page-toolbar .gantt-zoom-control { margin-right:0; }
 @media(max-width:1100px) {
   .workspace .panel>.page-toolbar { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
   .workspace .panel>.page-toolbar>.shared-search-filter { grid-column:1 / -1; grid-row:2; width:340px; max-width:100%; order:0; }
@@ -1048,8 +1034,6 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .timeline-status-legend>span { display:inline-flex; align-items:center; gap:6px; font-size:12px; line-height:20px; }
 .timeline-status-legend i { display:inline-block; flex:0 0 auto; width:20px; height:10px; border-radius:3px; }
 .timeline-status-legend.milestone i { width:16px; height:16px; border-radius:1px; transform:rotate(45deg); margin:0 3px; }
-.workspace .panel footer.timeline-navigation { gap:4px 10px; }
-.workspace .tube-map>footer.tube-navigation::after { content:none; height:0; }
 .workspace .gantt-panel .gantt { max-height:calc(100dvh - var(--module-toolbar-height,46px) - 172px); }
 .gantt-bar.task i { position:absolute; left:0; bottom:0; height:3px; background:#26364d; opacity:.65; }
 .risk-matrix-section { margin:4px 0 8px; }
@@ -1121,3 +1105,9 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
   content:none;
   height:0;
 }
+
+/* Task creation: align picker boxes with the adjacent labelled input rows. */
+.creation-fields--task>.creation-relationship { display:flex; flex-direction:column; justify-content:flex-end; gap:4px; min-width:0; }
+.creation-fields--task>.creation-selector>details>summary,
+.creation-fields--task>.creation-relationship>details>summary { box-sizing:border-box; height:34px; line-height:20px; }
+.creation-fields--task>.creation-selector>details:has(>summary .scope-pill)>summary { padding-block:5px; }

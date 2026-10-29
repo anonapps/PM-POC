@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import "./ui-tokens.generated.css";
 import "./globals.css";
 import "./design-system.css";
 import "./heroui-experiment.css";

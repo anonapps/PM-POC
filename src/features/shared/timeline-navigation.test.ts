@@ -17,7 +17,7 @@ describe('shared calendar footer',()=>{
  });
  it('retains Tube Map labels and context while allowing today away from origin',()=>{
   const html=renderToStaticMarkup(createElement(TimelineNavigation,{...handlers,label:'Tube Map date navigation',start:'2026-12-07',end:'2027-02-28',todayDisabled:false,previousLabel:'← Previous 4 weeks (2 before)',context:'3 connections'}));
-  expect(html).toContain('Previous 4 weeks (2 before)');expect(html).toContain('28/02/2027 · 3 connections');expect(html).not.toContain('disabled=');
+  expect(html).toContain('Previous 4 weeks (2 before)');expect(html).toContain('07/12/2026 – 28/02/2027');expect(html).toContain('<small class="timeline-navigation-context">3 connections</small>');expect(html.indexOf('3 connections')).toBeLessThan(html.indexOf('timeline-navigation-controls'));expect(html).not.toContain('disabled=');
  });
 });
 describe('Gantt footer preserves each existing navigation increment',()=>{
