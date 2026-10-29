@@ -79,3 +79,5 @@ The token reference also shows both typography scales, spacing/radius values and
 Creation examples inherit the production viewport-fit recipe: the original560px/two-column footprint, compact shell/footer spacing, existing30px embedded controls and unchanged typography. Blank error slots start at12px and expand for real messages. The same real panel is used for standalone and Extended Tasks.
 
 Timeline quick-editor coverage includes the real shared Save/Open/Cancel actions in both charts: native submit/button types, secondary classes, cancel/discard, save/reopen and record navigation. These reuse ActionButton without adding styles, wrappers or state.
+
+The Warnings example renders the real WarningsPanel on a separate resettable in-memory fixture. Its corrective-action journey covers confirmation dismiss/accept, native danger/button semantics, navigation and Reset; it never accesses a user project file. Gantt/Tube Map checkbox rows now share ChoiceRow while retaining controlled state, baseline-disabled states and dependency-focus clearing.

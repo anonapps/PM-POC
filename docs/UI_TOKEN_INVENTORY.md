@@ -55,6 +55,8 @@ Keep the inventory frozen when generation is fresh, aliases retain their origina
 
 The automatic compatibility queue for this inventory comprises source generation, unchanged aliases, catalogue coverage, before/after comparison, full PR validation, documentation and a reviewable PR update. Those activities run without per-task owner confirmation. Their final evidence is recorded in the migration plan.
 
-Optional consumer work remains recorded rather than implied complete: ordinary Warnings actions (timeline quick-edit actions now use ActionButton), conditional-message/table-body recipes, overlay appearance ownership and consumer-proven retirement of legacy selectors. Each can reuse the established contracts when a concrete consumer needs work; none changes this inventory's root-token boundary.
+Optional consumer work remains recorded rather than implied complete: conditional-message/table-body recipes, overlay appearance ownership and consumer-proven retirement of legacy selectors. Each can reuse the established contracts when a concrete consumer needs work; none changes this inventory's root-token boundary.
 
 Decisions that change visible defaults—merging typography scales, font rounding, density reduction, changing theme radii, palette consolidation or whitespace normalization—require a concrete side-by-side proposal and owner acceptance. They are not inferred from compatibility work. Native physical-machine acceptance remains manual; automated Linux checks do not establish real Windows/macOS control appearance. Validation never authorizes merge, release or deployment.
+
+Warnings corrective actions and timeline quick-editor actions now reuse ActionButton; timeline checkbox rows reuse ChoiceRow. Navigation-content, sort/disclosure/segmented controls and table selection remain distinct. See the migration evidence for scoped validation.

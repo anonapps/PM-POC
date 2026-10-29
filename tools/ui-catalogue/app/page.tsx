@@ -5,6 +5,7 @@ import { ActionButton } from '../../../src/features/shared/action-button';
 import { ChoiceRow } from '../../../src/features/shared/choice-row';
 import { ReferenceExamples } from './reference-examples';
 import { TimelineExamples } from './timeline-examples';
+import { WarningsExamples } from './warnings-examples';
 import { RecordExamples } from './record-examples';
 import { CreationExamples } from './creation-examples';
 import { buildGanttModel, type GanttZoom } from '../../../src/features/gantt/model';
@@ -28,7 +29,7 @@ import { useDependencyFocus } from '../../../src/features/shared/use-dependency-
 const people=[{id:'one',name:'Marta',humanId:'PERSON-001'},{id:'two',name:'Long owner name for overflow review',humanId:'PERSON-002'},{id:'deleted',name:'Previous owner',deleted:true}];
 const related=[{id:'task-one',humanId:'TASK-001',name:'First task',deletion:{isDeleted:false}},{id:'task-two',humanId:'TASK-002',name:'A long task name for full-value access',deletion:{isDeleted:false}},{id:'removed',humanId:'TASK-003',name:'Previous task',deletion:{isDeleted:true}}];
 const paths=[{key:'a-b',fromX:10,fromY:30,toX:70,toY:85,label:'First task → Second task · Finish-to-Start'},{key:'b-c',fromX:70,fromY:85,toX:35,toY:135,label:'Second task → Third task · Finish-to-Start'}];
-const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Creation','Records','Timelines','Footers','References','Tokens'];
+const sections=['Actions','Fields','Selections','Search','Indicators','Relationships','Containers','Creation','Records','Timelines','Warnings','Footers','References','Tokens'];
 export default function Catalogue() {
   const [store]=useState(()=>{let sequence=0;return createProjectStore(makeProjectState({streams:[streamFixture()],tasks:[taskFixture()],identifierSequences:{stream:1,task:1,milestone:0,person:0,risk:0,decision:0}}),{createId:()=>`catalogue-${++sequence}`,now:()=> '2026-10-27T12:00:00Z'});});
   const [panel,setPanel]=useState<'standalone'|'extended'|null>(null);
@@ -63,6 +64,7 @@ export default function Catalogue() {
       <CreationExamples/>
       <RecordExamples/>
       <TimelineExamples/>
+      <WarningsExamples/>
       <ReferenceExamples/>
       <section id="tokens" className="catalogue-section"><h2>Token reference</h2><p className="catalogue-note">Core colors and field/footer metrics use the production token source. Task and milestone status palettes retain their separate domain meanings.</p><div className="catalogue-tokens" data-testid="typography-tokens">{Object.entries(uiTokens.typography).flatMap(([family,scale])=>Object.entries(scale).map(([name,value])=><div key={`${family}-${name}`}><span data-token-font={`${family}-${name}`} style={{fontSize:`var(--ui-${family==='app'?'type':'text'}-${name})`}}>{family} {name} · {value}</span></div>))}</div><div className="catalogue-tokens"><div>Spacing · {Object.values(uiTokens.spacing).join(' / ')}px</div><div>Radius · {Object.entries(uiTokens.radius).map(([name,value])=>`${name} ${value}px`).join(' / ')}</div><div>Actions · {uiTokens.action.height}px high · {uiTokens.action.insetBlock}/{uiTokens.action.insetInline}px inset</div></div><div className="catalogue-tokens" data-testid="core-color-tokens">{Object.entries(uiTokens.coreColor).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:`var(--ui-color-${name.replace(/[A-Z]/g,letter=>`-${letter.toLowerCase()}`)})`}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div><div className="catalogue-tokens">{Object.entries({...TASK_STATUS_COLOURS,...Object.fromEntries(Object.entries(MILESTONE_STATUS_COLOURS).map(([key,value])=>[`Milestone ${key}`,value]))}).map(([name,color])=><div key={name}><i className="catalogue-swatch" style={{background:color}} aria-hidden="true"/><span>{name} · {color}</span></div>)}</div></section>
     </div></div>
