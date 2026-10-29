@@ -1,12 +1,21 @@
-# v1.6.0 development candidate — unreleased
+# ARGOS PM v1.6.0 — 29 October 2026
 
-- Fit desktop workspaces without horizontal scrolling; preserve every record field, sorting and action using responsive vertical layouts.
-- Create/select/rename/delete multiple named schedule baselines; preserve immutable historical dates and stream references independently of optional audit recording.
-- Compare baseline/current dates, calendar-day variance, additions/removals and undated entities; save/open validated snapshots in the native PMP format.
-- Add optional Gantt historical overlays/variance and a separate, aligned Tube Map historical milestone strip; retain live chart interactions and dependency visibility controls.
-- Inspect/filter/sort/edit existing cross-stream dependencies, retain supported types/IDs, reject cycles/invalid links/duplicates and recalculate informational warnings without changing dates.
-- Add regression coverage and a version-matched candidate guide/PDF.
-- Add approved Extended Gantt: resizable compact chart/Tasks panes, independent scrolling and shared edits/history, centered Search and unchanged status colors. Reuse the exact standalone Tasks creation panel at full page height/right edge. No release, merge or deployment.
+- Capture multiple named schedule baselines with immutable historical dates, entity names and stream references; create, select, rename and delete them with Undo/Redo.
+- Compare baseline/current dates, calendar-day variance, Matched/Added/Removed entities and undated records. Search, filter and sort all nine comparison columns.
+- Display optional Gantt historical overlays and variance indicators, plus a separate date-aligned Tube Map baseline milestone strip.
+- Inspect, filter, sort and edit existing cross-stream dependencies while retaining stable relationship IDs. Reject invalid endpoints, duplicate links and cycles; informational warnings never reschedule dates automatically.
+- Use Extended Gantt with resizable chart/Tasks panes, independent scrolling and shared canonical edits/history. Standalone and Extended Task creation share the same accepted panel.
+- Improve dependency readability in both charts with dotted grey connectors, exclusive hover/pinned focus, endpoint emphasis and synchronized Hide dependencies filters.
+- Standardize compact timeline footers, DD/MM chart labels, shared column headings, Baselines controls and the Dependencies footer. Keep all fields/actions reachable without horizontal scrolling at supported desktop sizes.
+- Retain the accepted 560px/two-column creation drawer with existing compact controls, unchanged fonts, reduced whitespace and visible Create/Cancel actions.
+- Establish a canonical 58-variable compatibility token inventory, reusable native action/field/choice compositions, real component catalogue and contributor/reuse guidance. Intentional native, table and overlay variants remain explicit.
+- Bundle the version-matched v1.6 UI reference in Markdown/PDF. The existing v1.5 demo remains historical; this release does not relabel it as v1.6 footage.
+
+PMP format 1/schema 2 and legacy projects remain supported. Files containing schedule baselines require a v1.6 reader; files without baselines retain their existing compatibility calculation. Preserve backups when testing real projects across versions. No `.mpp` conversion or production-service deployment is included.
+
+Pre-publication UI-standard verification passed 489 unit tests, 245 lifecycle checkpoints, 138 production browser tests and 21 catalogue tests, plus TypeScript, lint and build. These are the recorded compatibility-closeout results, not a substitute for the publication's final release gate. The owner accepted the corrected UI after local testing. Linux/Chromium automation does not certify physical Windows/macOS file-picker permissions or every native widget/accessibility state.
+
+See [v1.6 release notes](releases/v1.6.0.md), [UI reference](V1.6_UI_REFERENCE.md), [migration evidence](UI_STANDARD_MIGRATION_PLAN.md), [reuse matrix](UI_REUSE_MATRIX.md) and [contributor guide](../src/ui/README.md).
 
 # ARGOS PM v1.5.0 — 25 October 2026
 

@@ -1,7 +1,7 @@
 export interface UiManual {version:string;pdf:string;source:string;status:"candidate"|"published"}
 export const UI_MANUALS:readonly UiManual[]=[{
   version:"1.6.0",pdf:"/manuals/1.6/ARGOS_PM_UI_REFERENCE.pdf",
-  source:"https://github.com/anonapps/PM-POC/blob/feature/v1.6-consolidated-enhancements/docs/V1.6_UI_REFERENCE.md",status:"candidate",
+  source:"https://github.com/anonapps/PM-POC/blob/v1.6.0/docs/V1.6_UI_REFERENCE.md",status:"published",
 },{
   version:"1.5.0",pdf:"/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf",
   source:"https://github.com/anonapps/PM-POC/blob/main/docs/V1.5_UI_REFERENCE.md",status:"published",
