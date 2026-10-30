@@ -17,8 +17,8 @@ function fixture(partial = false) {
  state.dependencies=[...state.dependencies,{id:'dep-milestone',projectId:'project-1',predecessor:{kind:'task',id:'004'},successor:{kind:'milestone',id:'milestone-1'},type:'Finish-to-Start'}];
  return {...state,baselines:[{id:'original',name:'Original plan',createdAt:'2026-10-25T00:00:00Z',snapshot:captureSchedule(state)}]};
 }
-async function open(page:Page,partial=false,unavailable=false){
- const saved=serializeProject(fixture(partial),{createdAt:'2026-10-25T00:00:00Z',lastSavedAt:'2026-10-25T00:00:00Z',runtimeVersion:'1.6.0'});if(!saved.ok)throw Error(JSON.stringify(saved.errors));
+async function open(page:Page,partial=false,unavailable=false,source=fixture(partial)){
+ const saved=serializeProject(source,{createdAt:'2026-10-25T00:00:00Z',lastSavedAt:'2026-10-25T00:00:00Z',runtimeVersion:'1.6.0'});if(!saved.ok)throw Error(JSON.stringify(saved.errors));
  await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'critical-path-disposable.pmp',async getFile(){return{name:this.name,size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer}},async createWritable(){return{write:async(value:Uint8Array)=>{data=new Uint8Array(value)},close:async()=>{}}}};Object.assign(window,{showOpenFilePicker:async()=>[handle],__saved:()=>[...data]});},{bytes:[...saved.value]});
  await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();await expect(page.locator('.critical-path-overview')).toContainText(unavailable?'Unavailable':partial?'Provisional':'03/11/2026');
 }
@@ -106,4 +106,38 @@ for (const lowerPanel of ['Tasks', 'Critical Path Analysis']) test(`Extended cha
   await anchor.scrollIntoViewIfNeeded();await anchor.click();await expect(editor).not.toHaveAttribute('popover');await expect(editor).toHaveCSS('position','fixed');
   await editor.getByLabel('Task name',{exact:true}).fill('Discarded Simple edit');await editor.getByRole('button',{name:'Cancel',exact:true}).click();await expect(editor).toHaveCount(0);await expect(anchor).toHaveText('Overlay saved task');
  }
+});
+
+test('Hide Unscheduled Tasks composes chart filters across modes without changing analysis or PMP data',async({page})=>{
+ const base=fixture(true),source={...base,streams:[...base.streams,streamFixture({id:'unplanned',humanId:'STREAM-003',name:'Unplanned stream'})],tasks:[...base.tasks,taskFixture({id:'007',humanId:'TASK-007',name:'Unplanned inbox',scope:{kind:'stream',streamId:'unplanned'}})],auditHistory:{enabled:true,events:[]}};
+ await page.setViewportSize({width:1366,height:900});await open(page,true,false,source);
+ const savedBefore=await page.evaluate(()=>(window as unknown as {__saved:()=>number[]}).__saved());
+ await nav(page,'Gantt');const chart=page.locator('.gantt-panel'),taskRows=chart.locator('.gantt-row.task');
+ const controls=page.getByRole('region',{name:'Search and filter controls for gantt',exact:true});
+ const filters=async()=>{await chart.getByRole('button',{name:'Search and filter gantt',exact:true}).click();await expect(controls).toBeVisible()};
+ const hide=controls.getByRole('checkbox',{name:'Hide Unscheduled Tasks',exact:true}),empty=controls.getByRole('checkbox',{name:'Hide Empty Streams',exact:true});
+ await expect(taskRows).toHaveCount(7);await expect(page.getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');
+ await chart.getByLabel('Baseline overlay',{exact:true}).check();await filters();await expect(hide).not.toBeChecked();
+ expect(await empty.evaluate(input=>input.closest('label')!.nextElementSibling?.textContent?.trim())).toBe('Hide Unscheduled Tasks');
+ await hide.check();await expect(taskRows).toHaveCount(5);await expect(chart.locator('.gantt-row.section[data-entity-id="unplanned"]')).toHaveCount(1);
+ await empty.check();await expect(chart.locator('.gantt-row.section[data-entity-id="unplanned"]')).toHaveCount(0);
+ await controls.getByRole('checkbox',{name:'Filter Task Status: Completed',exact:true}).check();await page.keyboard.press('Escape');
+ const search=chart.getByRole('searchbox',{name:'Search gantt',exact:true});await search.fill('Validate');await expect(taskRows).toHaveCount(1);await expect(taskRows).toContainText('Validate service');
+ await search.fill('Unscheduled');await expect(taskRows).toHaveCount(0);await filters();await controls.getByRole('button',{name:'Clear all',exact:true}).click();await expect(hide).not.toBeChecked();await expect(empty).not.toBeChecked();await expect(search).toHaveValue('');await expect(taskRows).toHaveCount(7);
+ await hide.check();await empty.check();await controls.getByRole('checkbox',{name:'Hide dependencies',exact:true}).check();await page.keyboard.press('Escape');
+ await page.getByRole('button',{name:'Extended',exact:true}).click();await expect(taskRows).toHaveCount(5);await expect(page.locator('.gantt-tasks-pane .tasks-table tbody tr').filter({has:page.locator('.task-name-cell')})).not.toHaveCount(0);
+ await page.getByRole('group',{name:'Gantt lower panel'}).getByRole('button',{name:'Critical Path Analysis',exact:true}).click();
+ await expect(page.locator('.analysis-table tbody tr')).toHaveCount(7);await expect(taskRow(page,'TASK-007')).toContainText('Unscheduled');const summary=await page.locator('.analysis-summary').textContent();
+ await filters();await expect(hide).toBeChecked();await hide.uncheck();await expect(taskRows).toHaveCount(7);await hide.check();await expect(taskRows).toHaveCount(5);await page.keyboard.press('Escape');
+ await expect(page.locator('.analysis-summary')).toHaveText(summary!);await expect(chart.getByLabel('Baseline overlay',{exact:true})).toBeChecked();await expect(chart.getByRole('checkbox',{name:'Dependencies',exact:true})).not.toBeChecked();
+ // Approved temporary selection reveal must not rewrite any chart filter.
+ await taskRow(page,'TASK-007').getByRole('button',{name:'TASK-007 Unplanned inbox',exact:true}).click();await expect(chart.locator('.gantt-row.task[data-entity-id="007"]')).toContainText('Temporarily revealed');
+ await filters();await expect(hide).toBeChecked();await page.keyboard.press('Escape');await search.press('Escape');await expect(chart.locator('.gantt-row.task[data-entity-id="007"]')).toHaveCount(0);
+ await page.getByRole('group',{name:'Gantt lower panel'}).getByRole('button',{name:'Tasks',exact:true}).click();await expect(taskRows).toHaveCount(5);
+ await filters();await controls.getByRole('button',{name:'Clear all',exact:true}).click();await expect(hide).not.toBeChecked();await expect(taskRows).toHaveCount(7);await page.keyboard.press('Escape');await expect(chart.getByRole('checkbox',{name:'Dependencies',exact:true})).toBeChecked();
+ await filters();await hide.check();await page.keyboard.press('Escape');
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ await nav(page,'File Information');await expect(page.getByText('0 recorded events',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();
+ await nav(page,'Gantt');await filters();await expect(hide).not.toBeChecked();await expect(taskRows).toHaveCount(7);
+ const savedAfter=await page.evaluate(()=>(window as unknown as {__saved:()=>number[]}).__saved());expect(savedAfter).toEqual(savedBefore);
 });

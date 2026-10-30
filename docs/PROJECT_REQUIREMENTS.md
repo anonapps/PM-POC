@@ -13,6 +13,10 @@ The owner's approved [74 decisions and mandatory UI conditions](V1.7_APPROVED_DE
 
 Use a pure local calculation engine and disposable background worker; derive results only in memory. Support the existing four dependency types, same-day FS, inclusive calendar dates, Project Start anchor, full-graph per-stream analysis, separate reliability, partial results and deduplicated maximal critical sequences. Preserve all planned values, native schema, baselines and audit/Undo semantics. Reuse the approved Extended Gantt lower pane, shared Quick Edit and divider; independent chart toggles start off; Overview links directly to analysis and distinguishes provisional/unresolved results. See [implementation and validation](V1.7_IMPLEMENTATION.md).
 
+### Gantt filter enhancement — approved 31 October 2026
+
+Add **Hide Unscheduled Tasks** directly below **Hide Empty Streams** in the existing Gantt Search/Filter dropdown. Default unchecked on project opening; preserve its state across Simple/Extended and lower-panel switches. When enabled, include only tasks with two valid calendar dates and finish on/after start, subject to approved D74 temporary selection reveal. Combine with existing search/status filtering; Clear all resets it. Evaluate Hide Empty Streams from the remaining chart content, preserving existing milestone behavior. This is transient Gantt presentation state only: do not change Critical Path scope/results, lower-panel tasks, canonical dates/dependencies, audit history or `.pmp` storage.
+
 ---
 
 ## v1.6.0 approved scope — 26 October 2026
