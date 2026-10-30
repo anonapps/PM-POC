@@ -68,3 +68,42 @@ test('worker failure leaves project usable and Retry restores derived results',a
  await expect(page.locator('.analysis-summary')).toContainText('Unavailable');await expect(page.getByRole('button',{name:'Export CSV',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
  await page.getByRole('button',{name:'Retry',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(page.locator('.analysis-summary')).toContainText('03/11/2026');await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
 });
+
+// Exercise the chart's floating editor, separately from the in-flow analysis editor.
+for (const lowerPanel of ['Tasks', 'Critical Path Analysis']) test(`Extended chart Quick Edit crosses ${lowerPanel} boundary and follows divider`, async ({page}) => {
+ await page.setViewportSize({width:1366,height:768});await open(page);await analysis(page);
+ await page.getByRole('group',{name:'Gantt lower panel'}).getByRole('button',{name:lowerPanel,exact:true}).click();
+ const chart=page.locator('.gantt-panel .gantt');
+ const anchor=chart.locator('.gantt-row.task .sort-heading').last();
+ const editor=page.getByRole('form',{name:'Quick edit task'});
+ const accessible=async()=>expect.poll(()=>editor.evaluate(form=>[...form.querySelectorAll<HTMLInputElement|HTMLButtonElement>('input,button')].filter(control=>{
+  const r=control.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+  return r.top<0||r.bottom>innerHeight||r.left<0||r.right>innerWidth||!hit||!control.contains(hit);
+ }).map(control=>control.getAttribute('aria-label')??control.textContent?.trim()))).toEqual([]);
+ for (const size of [{width:1366,height:768},{width:1280,height:720}]) {
+  await page.setViewportSize(size);await anchor.scrollIntoViewIfNeeded();const originalHeight=(await page.locator(".gantt-pane").boundingBox())!.height;await anchor.click();await accessible();
+  expect((await page.locator(".gantt-pane").boundingBox())!.height).toBeCloseTo(originalHeight,0);
+  await expect.poll(()=>editor.evaluate(form=>{
+   const r=form.getBoundingClientRect();
+   for(let y=r.top+4;y<r.bottom-4;y+=8)for(const x of [r.left+4,r.left+r.width/2,r.right-4]){
+    const hit=document.elementFromPoint(x,y);if(!hit||!form.contains(hit))return `Editor obscured at ${Math.round(x)},${Math.round(y)} by ${hit?.className}`;
+   }
+   return 'Unobscured';
+  })).toBe('Unobscured');
+  // At least part of the editor must escape the upper pane and remain hit-testable.
+  const pane=(await page.locator('.gantt-pane').boundingBox())!,box=(await editor.boundingBox())!;expect(box.y+box.height).toBeGreaterThan(pane.y+pane.height);
+  const separator=page.getByRole('separator');await separator.press('ArrowDown');await separator.press('ArrowDown');await accessible();
+  await expect.poll(async()=>{const a=(await anchor.boundingBox())!,p=(await editor.boundingBox())!;return Math.abs(p.y-(a.y+a.height+6));}).toBeLessThan(2);
+  await chart.evaluate(node=>node.scrollTop=Math.max(0,node.scrollTop-24));await accessible();
+  await expect.poll(async()=>{const a=(await anchor.boundingBox())!,p=(await editor.boundingBox())!;return Math.abs(p.y-(a.y+a.height+6));}).toBeLessThan(2);
+  await editor.getByLabel('Task name',{exact:true}).press('Escape');await expect(editor).toHaveCount(0);await expect(anchor).toBeFocused();
+  await anchor.click();await accessible();await editor.getByRole('button',{name:'Cancel',exact:true}).click();await expect(editor).toHaveCount(0);
+ }
+ await anchor.click();await editor.getByLabel('Task name',{exact:true}).fill('Overlay saved task');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(editor).toHaveCount(0);await expect(anchor).toHaveText('Overlay saved task');
+ await anchor.click();await editor.getByRole('button',{name:'Open Task',exact:true}).click();await expect(page.getByRole('navigation',{name:'Project modules'}).getByRole('button',{name:'Tasks',exact:true})).toHaveAttribute('aria-current','page');
+ if(lowerPanel==='Tasks'){
+  await nav(page,'Gantt');await expect(page.getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');
+  await anchor.scrollIntoViewIfNeeded();await anchor.click();await expect(editor).not.toHaveAttribute('popover');await expect(editor).toHaveCSS('position','fixed');
+  await editor.getByLabel('Task name',{exact:true}).fill('Discarded Simple edit');await editor.getByRole('button',{name:'Cancel',exact:true}).click();await expect(editor).toHaveCount(0);await expect(anchor).toHaveText('Overlay saved task');
+ }
+});
