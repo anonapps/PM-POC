@@ -32,6 +32,8 @@ for(const [width,height] of [[900,700],[1280,900],[1440,900],[1920,1080]])test(`
  }
 });
 test('baseline comparison uses substantial grey bars and red finish delay segments with independent toggles',async({page},info)=>{
+ // This scenario asserts the approved October snapshot inside a specific Week window.
+ await page.clock.setFixedTime(new Date('2026-10-26T12:00:00Z'));
  await page.setViewportSize({width:1440,height:900});await open(page);await nav(page,'Gantt');await page.getByLabel('Baseline overlay',{exact:true}).check();
  const row=page.locator('.gantt-row.task').filter({has:page.getByRole('button',{name:'Baseline alignment task',exact:true})});
  await expect(row.locator('.gantt-baseline')).toBeVisible();expect((await row.locator('.gantt-baseline').boundingBox())!.height).toBeGreaterThanOrEqual(12);await expect(row.locator('.gantt-baseline')).toHaveCSS('border-top-style','dashed');const historical=(await row.locator('.gantt-baseline').boundingBox())!,current=(await row.locator('.gantt-bar').boundingBox())!;expect(historical.y+historical.height).toBeGreaterThan(current.y+current.height+8);await expect(row.locator('.gantt-delay')).toHaveAttribute('aria-label',/4 days after baseline/);await expect(row.locator('.gantt-delay')).toHaveCSS('border-top-color','rgb(180, 35, 24)');

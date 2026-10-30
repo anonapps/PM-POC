@@ -1,9 +1,17 @@
 # ARGOS PM — Authoritative Requirements
 
-**Document status:** v1.6 approved scope; stable v1.5 requirements retained
+**Document status:** v1.7 approved scope; stable v1.6 and v1.5 requirements retained
 **Repository:** `anonapps/PM-POC`
 **Purpose:** Authoritative product, behavioural, data-model and implementation requirements for the local-first Project Management POC.  
 **Precedence:** If any other repository document conflicts with this file, this file takes precedence unless the user explicitly approves a change.
+
+---
+
+## v1.7 approved scope — Critical Path Analysis
+
+The owner's approved [74 decisions and mandatory UI conditions](V1.7_APPROVED_DECISIONS.md) govern this implementation. They supersede the historical v1.6 critical-path/float exclusion within the approved scope. Implementation was explicitly authorised after UI approval; merging, releasing and deploying remain separate gates.
+
+Use a pure local calculation engine and disposable background worker; derive results only in memory. Support the existing four dependency types, same-day FS, inclusive calendar dates, Project Start anchor, full-graph per-stream analysis, separate reliability, partial results and deduplicated maximal critical sequences. Preserve all planned values, native schema, baselines and audit/Undo semantics. Reuse the approved Extended Gantt lower pane, shared Quick Edit and divider; independent chart toggles start off; Overview links directly to analysis and distinguishes provisional/unresolved results. See [implementation and validation](V1.7_IMPLEMENTATION.md).
 
 ---
 

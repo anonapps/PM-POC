@@ -4,11 +4,12 @@ import { PageToolbar } from "../shared/page-toolbar";
 import { ModuleSearch } from "../shared/module-search";
 import { matchesOption } from "../shared/searchable-option-list";
 import { FilterChoices } from "../shared/record-filters";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import type { ProjectCommand, ProjectState, ProjectStore } from "../../application";
 import type { ModuleName } from "../shell/shell";
 import { EmptyState } from "../shell/shell";
-import { deriveProjectWarnings, type ProjectWarning } from "./warnings";
+import type { ProjectWarning } from "./warnings";
+import { useProjectWarnings } from "./use-project-warnings";
 
 export function canApplyWarningCorrection(state: ProjectState, warning: ProjectWarning): boolean {
   if (warning.action?.kind !== "remove-scope") return Boolean(warning.action);
@@ -32,7 +33,7 @@ export function WarningsPanel({ store, navigate }: { store: ProjectStore; naviga
   const [types, setTypes] = useState<string[]>([]);
   const [query,setQuery]=useState("");
   const [entityTypes, setEntityTypes] = useState<string[]>([]);
-  const all = useMemo(() => deriveProjectWarnings(state), [state]);
+  const all = useProjectWarnings(state);
   const warnings = all.filter((warning) => (!types.length || types.includes(warning.type)) && (!entityTypes.length || entityTypes.includes(warning.entityType)) && (!query.trim() || matchesOption({label:[warning.type,warning.entityType,warning.humanId,warning.entityName,warning.description].join(" ")},query)));
   const correct = (warning: ProjectWarning) => {
     if (!canApplyWarningCorrection(state, warning)) {

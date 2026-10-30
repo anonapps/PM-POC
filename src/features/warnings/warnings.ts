@@ -3,6 +3,7 @@ import type { ModuleName } from "@/features/shell/shell";
 
 export type WarningEntityType = "Stream" | "Task" | "Milestone";
 export type WarningType =
+  | "Critical path analysis"
   | "Invalid date range"
   | "Outside project dates"
   | "Outside stream dates"

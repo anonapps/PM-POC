@@ -1,0 +1,59 @@
+.analysis-panel-selector { display:flex; gap:16px; padding:8px 16px; border-bottom:1px solid var(--border); flex:none; }
+.analysis-panel-selector button { min-height:30px; font-size:var(--type-control); }
+.analysis-panel-selector button[aria-pressed=true] { color:var(--primary); border-bottom:2px solid var(--primary); font-weight:700; }
+.workspace .gantt-tasks-pane.analysis-active { display:flex; flex-direction:column; overflow:hidden; }
+.gantt-tasks-pane.analysis-active[hidden] { display:none!important; }
+.workspace .critical-path-analysis { display:flex; flex-direction:column; flex:1; min-height:0; min-width:0; margin:0; max-width:none; }
+.critical-path-analysis>.page-toolbar,.analysis-summary { flex:none; }
+.analysis-summary { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:6px 12px; border-bottom:1px solid var(--border); font-size:var(--type-control); }
+.analysis-summary label { display:flex; gap:8px; align-items:center; }
+.analysis-summary select { height:30px; max-width:180px; border:1px solid var(--control-border); border-radius:6px; background:var(--surface); font:inherit; padding:2px 8px; }
+.analysis-summary p { flex:1; min-width:200px; margin:0; }
+.analysis-summary .actions { display:flex; gap:6px; margin:0; }
+.analysis-results { overflow-y:auto; overflow-x:clip; min-height:0; flex:1; }
+.analysis-results>p { padding:8px 12px; }
+.workspace .analysis-table { width:100%; table-layout:fixed; border-collapse:collapse; }
+.workspace .analysis-table thead { position:sticky; top:0; z-index:3; background:var(--surface-subtle); }
+.workspace .analysis-table th { position:static; top:auto; }
+.analysis-table th:first-child { width:23%; }.analysis-table th:nth-child(2) { width:15%; }
+.analysis-table th:last-child { width:12%; }
+.workspace .analysis-table td { padding:6px; font-size:var(--type-control); overflow-wrap:anywhere; vertical-align:middle; }
+.analysis-table .scope-pill { max-width:100%; }
+.analysis-task-link { display:inline-flex; flex-direction:column; text-align:left; max-width:calc(100% - 24px); vertical-align:middle; overflow-wrap:anywhere; }
+.analysis-task-link small { display:block; color:var(--text-muted); }
+.analysis-expand { width:22px; vertical-align:middle; }
+.analysis-table button { white-space:normal; }
+.analysis-details { background:var(--surface-subtle); }
+.analysis-detail-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; padding:10px; }
+.analysis-detail-grid:has(.analysis-editor-slot) { grid-template-columns:minmax(0,1fr) minmax(280px,382px); }
+.analysis-detail-copy { min-width:0; overflow-wrap:anywhere; }
+.analysis-detail-copy p { margin:4px 0; }
+.workspace .panel .analysis-editor-slot .analysis-quick-edit { position:static; width:100%; max-width:100%; margin:0; box-sizing:border-box; transform:none; }
+.analysis-editor-slot { min-width:0; }
+.analysis-negative,.analysis-status { color:#8a5200; }
+.analysis-status { display:inline-block; background:#fff3d4; padding:3px 10px; border-radius:20px; margin-left:10px; }
+.critical-summary-counts { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.critical-summary-counts strong { display:block; font-size:var(--text-page); }
+.critical-summary-link { text-align:left; }
+.critical-summary-link h2 { display:inline; }
+.critical-path-overview p { margin:8px 0; }
+.critical-path-legend { display:inline-flex; align-items:center; gap:6px; font-size:var(--type-caption); color:var(--text-muted); white-space:nowrap; }
+.critical-path-legend i { display:inline-block; width:16px; height:10px; border:1.5px solid #164a91; border-radius:2px; }
+.gantt-bar[data-critical=true],.tube-station-diamond[data-critical=true] i { outline:1.5px solid #164a91; outline-offset:2px; }
+.gantt-row.analysis-selection>div { background-color:#e8f1ff; }
+.analysis-reveal-note { color:var(--text-muted); font-size:var(--type-caption); margin-left:6px; }
+@media(max-width:1100px) {
+  .analysis-detail-grid:has(.analysis-editor-slot) { grid-template-columns:minmax(0,1fr); }
+  .analysis-editor-slot { max-width:382px; justify-self:end; width:100%; }
+  .analysis-summary { gap:6px; }
+}
+@media(max-width:850px) { .analysis-table .action-button { padding-inline:3px; } }
+
+.overview-actions-stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.timeline-navigation-legend-row:has(.critical-path-legend){flex-wrap:wrap;gap:8px}
+/* The v1.6 Tasks pane gives direct panels a full-height minimum. Analysis instead
+   reserves its selector and toolbar, keeping only the result body scrollable. */
+.workspace .gantt-extended .gantt-tasks-pane.analysis-active>.critical-path-analysis{min-height:0}
+.analysis-results{container-type:size}
+.workspace .panel .analysis-editor-slot .analysis-quick-edit{max-height:calc(100cqh - 44px);overflow-y:auto;scroll-margin-block:44px 8px}
+.analysis-summary p,.critical-summary-counts strong{overflow-wrap:anywhere}
