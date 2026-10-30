@@ -79,7 +79,7 @@ export function GanttView({ store, navigate, extended=false, onModeChange, selec
   const chartState=selectedStream?{...state,streams:state.streams.map(stream=>stream.id===selectedStream?{...stream,deletion:{...stream.deletion,isDeleted:false}}:stream)}:state;
   const columns=timelineColumns(zoom,today,offset);
   let visibleOffset=offset;
-  if(selectionKey!==lastSelection&&selectedTask?.startDate&&validScheduleDate(selectedTask.startDate)&&(selectedTask.startDate<columns[0].start||selectedTask.startDate>columns.at(-1)!.end)){
+  if(selectionKey!==lastSelection&&selectedTask?.startDate&&selectedTask.endDate&&validScheduleDate(selectedTask.startDate)&&validScheduleDate(selectedTask.endDate)&&selectedTask.endDate>=selectedTask.startDate&&(selectedTask.startDate<columns[0].start||selectedTask.startDate>columns.at(-1)!.end)){
     const width=zoom==="Week"?1:zoom==="Month"?7:14;
     const base=zoom==="Week"?today:(()=>{const value=new Date(today+"T00:00:00Z");value.setUTCDate(value.getUTCDate()-(value.getUTCDay()||7)+1);return value.toISOString().slice(0,10);})();
     visibleOffset=Math.floor((Date.parse(selectedTask.startDate+"T00:00:00Z")-Date.parse(base+"T00:00:00Z"))/(86400000*width));
@@ -101,7 +101,18 @@ export function GanttView({ store, navigate, extended=false, onModeChange, selec
   useLayoutEffect(()=>{
     if(!selectedTaskId)return;
     const target=[...(bodyRef.current?.querySelectorAll<HTMLElement>(".gantt-row")??[])].find(row=>row.dataset.entityId===selectedTaskId);
-    target?.scrollIntoView({block:"nearest"});
+    // Rows use display:contents: measure their cells, not the empty row box.
+    const chart=bodyRef.current?.closest<HTMLElement>(".gantt");
+    if(!target||!chart)return;
+    const cells=Array.from(target.children,cell=>cell.getBoundingClientRect());
+    const top=Math.min(...cells.map(cell=>cell.top)),bottom=Math.max(...cells.map(cell=>cell.bottom));
+    const viewport=chart.getBoundingClientRect();
+    const heading=chart.querySelector<HTMLElement>(".gantt-head")?.getBoundingClientRect();
+    const visibleTop=Math.max(viewport.top+chart.clientTop,heading?.bottom??viewport.top);
+    const visibleBottom=viewport.top+chart.clientTop+chart.clientHeight;
+    if(top>=visibleTop&&bottom<=visibleBottom)return;
+    // Assign only this scroller; scrollIntoView can move the page and lower pane.
+    chart.scrollTop+=(top+bottom-visibleTop-visibleBottom)/2;
   },[selectedTaskId,selectionRequest,state.tasks,zoom,today,model.start,model.end,rowSignature]);
 
   useLayoutEffect(()=>{

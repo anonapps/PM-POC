@@ -16,17 +16,17 @@ import { useProjectWarnings } from "../warnings/use-project-warnings";
 import { sortRows, nextSort, type SortSelection } from "../shared/sorting";
 
 type SortKey = "id" | "name" | "stream" | "start" | "finish" | "critical" | "total" | "free";
-export function CriticalPathAnalysis({ store, selectedId, selectionRequest=0, onSelect, onOpenTask }: { store: ProjectStore; selectedId: string | null; selectionRequest?: number; onSelect: (id: string) => void; onOpenTask: (id: string) => void }) {
+export function CriticalPathAnalysis({ store, selectedId, selectionRequest=0, revealSelection=true, onSelect, onOpenTask }: { store: ProjectStore; selectedId: string | null; selectionRequest?: number; revealSelection?:boolean; onSelect: (id: string) => void; onOpenTask: (id: string) => void }) {
   const state = useProjectState(store), analysis = useCriticalPath();
   const [scope, setScope] = useState<string | null>(null), [query, setQuery] = useState(""), [streams, setStreams] = useState<string[]>([]), [critical, setCritical] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string[]>([]), [editing, setEditing] = useState<string | null>(null), [sort, setSort] = useState<SortSelection<SortKey> | null>(null);
   const opener = useRef<HTMLElement | null>(null);
   const results = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (!selectedId || editing === selectedId) return;
+    if (!revealSelection || !selectedId || editing === selectedId) return;
     const row = [...(results.current?.querySelectorAll<HTMLElement>("tr[data-task-id]") ?? [])].find(row => row.dataset.taskId === selectedId);
     row?.scrollIntoView({ block: "nearest" });
-  }, [selectedId, selectionRequest, editing]);
+  }, [revealSelection, selectedId, selectionRequest, editing]);
   const { snapshot } = analysis;
   const { requestScope } = analysis;
   useEffect(() => { if (scope) void requestScope(scope); }, [scope, snapshot.revision, snapshot.stale, requestScope]);

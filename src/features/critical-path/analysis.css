@@ -1,6 +1,7 @@
-.analysis-panel-selector { display:flex; gap:16px; padding:8px 16px; border-bottom:1px solid var(--border); flex:none; }
-.analysis-panel-selector button { min-height:30px; font-size:var(--type-control); }
-.analysis-panel-selector button[aria-pressed=true] { color:var(--primary); border-bottom:2px solid var(--primary); font-weight:700; }
+.analysis-panel-selector { display:flex; gap:4px; padding:8px 16px; border-bottom:1px solid var(--border); flex:none; }
+.analysis-panel-selector [role=tab] { min-height:30px; padding:4px 12px; border:1px solid var(--control-border); border-radius:var(--radius-control,6px); background:var(--surface-subtle); color:var(--text); font-size:var(--type-control); cursor:pointer; }
+.analysis-panel-selector [role=tab]:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.analysis-panel-selector [role=tab][aria-selected=true] { color:var(--primary); border-color:var(--primary); background:var(--surface); box-shadow:inset 0 -2px var(--primary); font-weight:700; }
 .workspace .gantt-tasks-pane.analysis-active { display:flex; flex-direction:column; overflow:hidden; }
 .gantt-tasks-pane.analysis-active[hidden] { display:none!important; }
 .workspace .critical-path-analysis { display:flex; flex-direction:column; flex:1; min-height:0; min-width:0; margin:0; max-width:none; }
@@ -57,3 +58,6 @@
 .analysis-results{container-type:size}
 .workspace .panel .analysis-editor-slot .analysis-quick-edit{max-height:calc(100cqh - 44px);overflow-y:auto;scroll-margin-block:44px 8px}
 .analysis-summary p,.critical-summary-counts strong{overflow-wrap:anywhere}
+
+.workspace .gantt-tasks-pane.analysis-active>[role=tabpanel]:not([hidden]) { display:flex; flex-direction:column; flex:1; min-height:0; }
+.workspace .gantt-extended .gantt-tasks-pane.analysis-active>[role=tabpanel]>.critical-path-analysis { min-height:0; }
