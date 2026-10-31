@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect,type Locator} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
 const original=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
@@ -9,6 +9,39 @@ const encoded=serializeProject(stress,{createdAt:original.value.manifest.created
 if(!encoded.ok)throw new Error(JSON.stringify(encoded.errors));
 const bytes=[...encoded.value];
 const modules=['Search','People','Streams','Tasks','Milestones','Risk Log','Decision Log','Warnings','Gantt','Tube Map'];
+// Compare rendered geometry, including the portalled popup rather than toolbar ancestry.
+async function chartFilterGeometry(panel:Locator) {
+ return panel.evaluate(element=>{
+  const panel=element.getBoundingClientRect(),style=getComputedStyle(element);
+  const heading=element.querySelector<HTMLElement>('.filter-panel-heading')!,headingBox=heading.getBoundingClientRect();
+  const clear=heading.querySelector('button')!.getBoundingClientRect();
+  const sections=element.querySelector('.filter-sections')!,toggles=[...sections.querySelectorAll<HTMLElement>(':scope > label')];
+  const category=sections.querySelector('fieldset')!,legend=category.querySelector('legend')!.getBoundingClientRect();
+  const options=[...category.querySelectorAll('label')],last=options.at(-1)!.getBoundingClientRect();
+  const row=options[0],rowBox=row.getBoundingClientRect(),checkbox=row.querySelector('input')!.getBoundingClientRect();
+  const rounded=(value:number)=>Math.round(value*1000)/1000;
+  const rows=[...toggles,...options];
+  return {
+   shared:{width:panel.width,padding:style.padding,border:style.borderWidth,
+    headingLeft:headingBox.left-panel.left,headingTop:headingBox.top-panel.top,headingHeight:headingBox.height,
+    clearRight:panel.right-clear.right,clearTop:clear.top-panel.top,clearHeight:clear.height,
+    headingToRows:toggles[0].getBoundingClientRect().top-headingBox.bottom,
+    toggleGap:rounded(toggles[1].getBoundingClientRect().top-toggles[0].getBoundingClientRect().bottom),
+    beforeSection:rounded(legend.top-toggles.at(-1)!.getBoundingClientRect().bottom),
+    afterSection:rounded(rowBox.top-legend.bottom),rowPadding:getComputedStyle(row).padding,
+    rowAlign:getComputedStyle(row).alignItems,rowGap:getComputedStyle(row).gap,
+    checkboxWidth:checkbox.width,checkboxHeight:checkbox.height,checkboxTop:checkbox.top-rowBox.top,
+    rowHeights: [...new Set(rows.map(row=>row.getBoundingClientRect().height))]},
+   // Different option counts should determine the popup height, with no fixed blank area.
+   bottomSpace:panel.bottom-last.bottom,
+   expectedBottomSpace:parseFloat(style.paddingBottom)+parseFloat(style.borderBottomWidth),
+   horizontalOverflow:element.scrollWidth-element.clientWidth,
+   fits:rows.every(row=>{const r=row.getBoundingClientRect();return r.left>=panel.left&&r.right<=panel.right&&r.top>=headingBox.bottom&&r.bottom<=panel.bottom;}),
+   labels:rows.map(row=>row.textContent!.trim())
+  };
+ });
+}
+
 for(const width of [1280,1440,1920])test(`shared search/filter geometry and interactions at ${width}`,async({page},testInfo)=>{
  await page.setViewportSize({width,height:1000});
  await page.addInitScript(({bytes})=>{
@@ -17,6 +50,7 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle});
  },{bytes});
  await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();
+ let ganttGeometry:Awaited<ReturnType<typeof chartFilterGeometry>>|undefined;
  for(const moduleName of modules){
   await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();
   const search=page.locator('.shared-search-filter'),trigger=search.locator('button'),input=search.locator('input');
@@ -32,10 +66,29 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   expect(await panel.locator('input[type=checkbox]').evaluateAll(inputs=>inputs.every(e=>e.getBoundingClientRect().width<=18&&e.getBoundingClientRect().height<=18))).toBe(true);
   expect(await panel.locator('.filter-category').evaluateAll(sections=>sections.every((e,i)=>i===0||e.getBoundingClientRect().top>=sections[i-1].getBoundingClientRect().bottom))).toBe(true);
   expect(await panel.locator('input[type=search]').evaluateAll(inputs=>inputs.every(e=>{const r=e.getBoundingClientRect();return r.width>100&&r.height<=34&&e.scrollWidth<=e.clientWidth+2;}))).toBe(true);
+  if(moduleName==='Gantt'||moduleName==='Tube Map'){
+   const geometry=await chartFilterGeometry(panel);
+   expect(geometry.horizontalOverflow).toBeLessThanOrEqual(1);expect(geometry.fits).toBe(true);
+   expect(Math.abs(geometry.bottomSpace-geometry.expectedBottomSpace)).toBeLessThanOrEqual(1);
+   if(moduleName==='Gantt')ganttGeometry=geometry;
+   else{
+    expect(geometry.shared).toEqual(ganttGeometry!.shared);
+    expect(geometry.labels).toEqual(['Hide Empty Streams','Hide dependencies','Tentative','Planned','Delayed','Complete']);
+    await expect(panel.getByRole('group',{name:'Milestone Status',exact:true})).toBeVisible();
+    const dependencies=panel.getByRole('checkbox',{name:'Hide dependencies',exact:true});
+    await dependencies.check();await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).not.toBeChecked();
+    const planned=panel.getByRole('checkbox',{name:'Filter Milestone Status: Planned',exact:true});
+    await planned.check();await expect(page.locator('.tube-station:not(.status-planned)')).toHaveCount(0);
+    // Tube Map search filters stream lanes; the Project-wide lane remains by design.
+    await input.fill('zzzz-no-match');await expect(page.locator('.tube-line')).toHaveCount(1);await expect(page.locator('.tube-line')).toContainText('Project-wide');await input.fill('');
+    await page.keyboard.press('Escape');await trigger.click();await expect(dependencies).toBeChecked();await expect(planned).toBeChecked();
+   }
+  }
   const checkbox=panel.locator('input[type=checkbox]').first();
   if(await checkbox.count()){await checkbox.check();if(['People','Streams','Tasks','Milestones','Risk Log','Decision Log'].includes(moduleName)){await input.fill('zzzz-no-match');await expect(page.locator('tbody tr')).toHaveCount(0);await input.fill('');}await page.keyboard.press('Escape');await expect(trigger).toBeFocused();await trigger.click();await expect(checkbox).toBeChecked();}
   await panel.getByRole('button',{name:'Clear all',exact:true}).click();
   await expect(input).toHaveValue('');
+  if(moduleName==='Tube Map'){await expect(panel.locator('input:checked')).toHaveCount(0);await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).toBeChecked();}
   if(moduleName==='Gantt'||moduleName==='Tube Map')await expect(page.getByText('Hide Empty Streams',{exact:true})).toHaveCount(1);
   if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${moduleName.replaceAll(' ','-')}-after.png`)});
   await page.locator('.workspace').evaluate(e=>{e.scrollTop=180;});
