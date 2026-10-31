@@ -15,7 +15,7 @@ async function chartFilterGeometry(panel:Locator) {
   const panel=element.getBoundingClientRect(),style=getComputedStyle(element);
   const heading=element.querySelector<HTMLElement>('.filter-panel-heading')!,headingBox=heading.getBoundingClientRect();
   const clear=heading.querySelector('button')!.getBoundingClientRect();
-  const sections=element.querySelector('.filter-sections')!,toggles=[...sections.querySelectorAll<HTMLElement>(':scope > label')];
+  const sections=element.querySelector('.filter-sections')!,toggles=[...sections.querySelectorAll<HTMLElement>(':scope > .filter-category > label.toggle')];
   const category=sections.querySelector('fieldset')!,legend=category.querySelector('legend')!.getBoundingClientRect();
   const options=[...category.querySelectorAll('label')],last=options.at(-1)!.getBoundingClientRect();
   const row=options[0],rowBox=row.getBoundingClientRect(),checkbox=row.querySelector('input')!.getBoundingClientRect();
