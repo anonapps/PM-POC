@@ -4,6 +4,10 @@ import { serializeProject, deserializeProject } from '../../src/persistence/pmp/
 import { makeProjectState, projectFixture, streamFixture, taskFixture } from '../../src/domain/test-fixtures';
 import { captureSchedule } from '../../src/domain/baselines';
 
+// The hand-derived network and visible-chart assertions use October 2026 dates.
+// Keep the browser's date deterministic without freezing timers or recalculation.
+test.beforeEach(async({page})=>{await page.clock.setFixedTime(new Date('2026-10-30T12:00:00Z'));});
+
 function fixture(partial = false) {
  const tasks = [
   taskFixture({id:'001',humanId:'TASK-001',name:'Discovery',startDate:'2026-10-25',endDate:'2026-10-27'}),
@@ -173,4 +177,39 @@ test('Extended lower tabs support keyboard navigation and preserve divider/defau
  await tasks.press('End');await expect(critical).toBeFocused();await expect(critical).toHaveAttribute('aria-selected','true');await critical.press('ArrowRight');await expect(tasks).toBeFocused();await tasks.press('Home');await expect(tasks).toBeFocused();
  expect((await page.locator('.gantt-pane').boundingBox())!.height).toBeCloseTo(upper,0);
  await critical.click();await page.getByRole('button',{name:'Simple',exact:true}).click();await page.getByRole('button',{name:'Extended',exact:true}).click();await expect(tasks).toHaveAttribute('aria-selected','true');
+});
+
+test('linked milestone conflict is discoverable in analysis and shares one Warnings record',async({page})=>{
+ const base=fixture(),source={...base,milestones:base.milestones.map(m=>({...m,plannedDate:'2026-10-25'}))};
+ await open(page,false,false,source);await analysis(page);await expect(page.locator('.analysis-summary')).toContainText('Partial');
+ await taskRow(page,'TASK-004').getByRole('button',{name:'Expand TASK-004',exact:true}).click();
+ const description='Finish-to-Start conflicts with planned dates. Calculated dates respect dependencies; planned dates are unchanged.';
+ const warning=page.locator('.analysis-detail-copy .field-warning').filter({hasText:description});
+ await expect(warning).toHaveCount(1);await expect(warning).toContainText('MILESTONE-001');
+ await page.getByRole('button',{name:'Refresh',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Partial');await expect(warning).toHaveCount(1);
+ await nav(page,'Warnings');await expect(page.locator('.warning-list > li').filter({hasText:description})).toHaveCount(1);
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+});
+
+test('reversed task dates remain Unscheduled, filterable and correctable without rewriting PMP dates',async({page})=>{
+ const base=fixture(true),source={...base,tasks:base.tasks.map(task=>task.id==='006'?{...task,startDate:'2026-11-08',endDate:'2026-11-01'}:task)};
+ await open(page,true,false,source);await analysis(page);const row=taskRow(page,'TASK-006');await expect(row).toContainText('Unscheduled');
+ await page.locator('.critical-path-analysis .filter-trigger').click();await page.getByRole('checkbox',{name:'Filter Critical status: Unscheduled',exact:true}).check();await page.keyboard.press('Escape');
+ await expect(page.locator('.analysis-table tbody tr')).toHaveCount(1);await expect(row).toContainText('Unscheduled');
+ const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Export CSV',exact:true}).click();const download=await downloadPromise;const csv=await readFile((await download.path())!,'utf8');expect(csv).toContain('2026-11-08');expect(csv).toContain('2026-11-01');expect(csv).toContain('Unscheduled');
+ await row.getByRole('button',{name:'Quick Edit',exact:true}).click();const editor=page.getByRole('form',{name:'Quick edit task'});await expect(editor.getByLabel('Start date',{exact:true})).toHaveValue('2026-11-08');await expect(editor.getByLabel('End date',{exact:true})).toHaveValue('2026-11-01');await expect(editor).toContainText('End date must not precede start date.');await editor.getByRole('button',{name:'Cancel',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ const bytes=await page.evaluate(()=>(window as unknown as {__saved:()=>number[]}).__saved()),loaded=deserializeProject(new Uint8Array(bytes));expect(loaded.ok).toBe(true);if(loaded.ok)expect(loaded.value.projectState.tasks).toEqual(source.tasks);
+ // Correction remains an explicit canonical edit; neither filtering nor calculation repairs dates.
+ await row.getByRole('button',{name:'Quick Edit',exact:true}).click();await editor.getByLabel('Start date',{exact:true}).fill('2026-10-25');await editor.getByLabel('End date',{exact:true}).fill('2026-10-25');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(row).toHaveCount(1); // D74 keeps the selected corrected task revealed.
+ await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(row).toContainText('Unscheduled');
+});
+
+test('temporary stream reveal exposes expanded state and restores collapse preference on Escape',async({page})=>{
+ await open(page);await analysis(page);const chart=page.locator('.gantt-panel'),stream=chart.locator('.gantt-row.section[data-entity-id="docs"]'),task=chart.locator('.gantt-row.task[data-entity-id="005"]');
+ await chart.getByRole('button',{name:'Collapse All',exact:true}).click();await expect(stream.locator('.gantt-open-stream')).toHaveAttribute('aria-expanded','false');await expect(task).toHaveCount(0);
+ await taskRow(page,'TASK-005').getByRole('button',{name:'TASK-005 Documentation',exact:true}).click();await expect(task).toHaveCount(1);await expect(stream.getByRole('button',{name:'Collapse Documentation',exact:true})).toHaveAttribute('aria-expanded','true');await expect(stream.locator('.gantt-open-stream')).toHaveText('▾');
+ await stream.getByRole('button',{name:'Collapse Documentation',exact:true}).click();await expect(task).toHaveCount(0);await expect(stream.locator('.gantt-open-stream')).toHaveAttribute('aria-expanded','false');await taskRow(page,'TASK-005').getByRole('button',{name:'TASK-005 Documentation',exact:true}).click();await expect(stream.locator('.gantt-open-stream')).toHaveAttribute('aria-expanded','true');
+ await chart.getByRole('searchbox',{name:'Search gantt',exact:true}).press('Escape');await expect(task).toHaveCount(0);await expect(stream.getByRole('button',{name:'Expand Documentation',exact:true})).toHaveAttribute('aria-expanded','false');
+ await chart.getByRole('button',{name:'Expand All',exact:true}).click();await taskRow(page,'TASK-005').getByRole('button',{name:'TASK-005 Documentation',exact:true}).click();await chart.getByRole('searchbox',{name:'Search gantt',exact:true}).press('Escape');await expect(task).toHaveCount(1);await expect(stream.locator('.gantt-open-stream')).toHaveAttribute('aria-expanded','true');
 });

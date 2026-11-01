@@ -1,5 +1,5 @@
 import { DEPENDENCY_TYPES } from "../relationships";
-import { calendarDate, dayNumber } from "./calendar";
+import { calendarDate, dayNumber, taskScheduleDuration } from "./calendar";
 import type { ActivityResult, AnalysisDiagnostic, CalculationSource, CriticalPathResult } from "./types";
 
 interface Node { key: string; id: string; kind: "task" | "milestone"; h: number | null; streams: readonly string[]; unscheduled: boolean }
@@ -38,8 +38,8 @@ export function calculateCriticalPath(source: CalculationSource, scope: string |
   const anchor = dayNumber(source.project.startDate);
   const linked = new Set(source.dependencies.flatMap(d => [d.predecessor, d.successor]).filter(e => e.kind === "milestone").map(e => e.id));
   for (const task of source.tasks) if (!task.deletion.isDeleted) {
-    const start = dayNumber(task.startDate), finish = dayNumber(task.endDate);
-    const h = start !== null && finish !== null && finish >= start ? finish - start : null;
+    const duration = taskScheduleDuration(task);
+    const h = duration === null ? null : duration - 1;
     nodes.set(`task:${task.id}`, { key: `task:${task.id}`, id: task.id, kind: "task", h, streams: task.scope.kind === "stream" ? [task.scope.streamId] : [], unscheduled: h === null });
   }
   for (const milestone of source.milestones) if (!milestone.deletion.isDeleted && linked.has(milestone.id)) {
