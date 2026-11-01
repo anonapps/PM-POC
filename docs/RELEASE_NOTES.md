@@ -1,3 +1,9 @@
+# ARGOS PM v1.7.0 — unpublished release candidate
+
+Prepared 1 November 2026 on the v1.7 development branch. Adds local Critical Path Analysis, scoped float/reliability, Extended lower-pane tabs, task reveal, shared Quick Edit, chart indicators and CSV. The release-readiness remediation surfaces milestone diagnostics, makes invalid schedules discoverable as Unscheduled, and corrects temporary expansion accessibility without changing project dates or the PMP format.
+
+The package and bundled version-matched manual identify v1.7.0 as a candidate. macOS local UAT passed **for the reported v1.7 UI fixes only**; full-feature UAT and subsequent-remediation UAT are not claimed. See [candidate notes](releases/v1.7.0.md), [manual](V1.7_UI_REFERENCE.md) and [readiness/evidence](V1.7_RELEASE_READINESS.md). No merge, tag, release or deployment is implied.
+
 # ARGOS PM v1.6.0 — 29 October 2026
 
 - Capture multiple named schedule baselines with immutable historical dates, entity names and stream references; create, select, rename and delete them with Undo/Redo.

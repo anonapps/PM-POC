@@ -1,6 +1,12 @@
 # ARGOS PM
 
-A local-first ARGOS PM v1.6.0 built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first ARGOS PM v1.7.0 release candidate built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+
+## v1.7.0 release candidate
+
+Critical Path Analysis runs locally in the Extended Gantt lower pane, with project/stream scope, reliable calculated dates and float, independent chart highlighting, shared Quick Edit and local CSV. Task reveal preserves filters and pane positions. The three release-readiness findings are addressed without changing the PMP format or planned dates.
+
+This feature branch is not a published release. macOS local UAT passed for the reported v1.7 UI fixes only; full-feature and subsequent-remediation UAT are not claimed. See the [candidate release notes](docs/releases/v1.7.0.md), [version-matched manual](docs/V1.7_UI_REFERENCE.md) and [readiness register](docs/V1.7_RELEASE_READINESS.md) for validation and remaining gates.
 
 ## v1.6.0
 
@@ -28,7 +34,7 @@ The v1.5 release includes shared search and filtering, anchored pickers, updated
 
 ## UI reference manual
 
-Use the current [v1.5 UI Reference Manual](docs/V1.5_UI_REFERENCE.md) and [versioned PDF](public/manuals/1.5/ARGOS_PM_UI_REFERENCE.pdf), also bundled in File Information. The [earlier illustrated reference](docs/ARGOS_PM_UI_REFERENCE.md) remains an archive.
+Use the bundled candidate [v1.7 UI Reference Manual](docs/V1.7_UI_REFERENCE.md) and [versioned PDF](public/manuals/1.7/ARGOS_PM_UI_REFERENCE.pdf) from File Information. Published v1.6 and v1.5 manuals remain available for those versions. The [earlier illustrated reference](docs/ARGOS_PM_UI_REFERENCE.md) remains an archive.
 
 ## Quick start — first run (macOS / Terminal)
 
