@@ -3,7 +3,7 @@
 ## v1.5 architecture guidance (approved scope)
 
 - Reuse the application command boundary for text edits: normalise the first character of human-readable fields on blur as part of the same logical edit, so Undo and audit history contain no separate formatting mutation. Preserve IDs, emails, URLs, file paths and technical identifiers.
-- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient and resets on navigation. Predictive selection state must be independent of the currently typed search query.
+- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient. Ordinary navigation resets destination preferences; Search journeys preserve their context for the open project session (see `SEARCH_NAVIGATION.md`). Predictive selection state must be independent of the currently typed search query.
 - Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and exposed once in its shared filter panel (24 October manual acceptance correction).
 - Persist optional last-save timezone metadata in the existing .pmp manifest without silently migrating compatible v1.4 files. Preserve UTC instant, original saving-device local display time, IANA timezone name where available and UTC offset. Update metadata only after successful file writes; display “Timezone unavailable” for legacy files until saved.
 - Keep browser file-picker operations behind the Project File Service. Save/Discard/Cancel and navigation-draft warnings must not discard data without the user's chosen action.
@@ -316,7 +316,7 @@ Global search indexes current project entities by human ID and name/title. It mu
 
 Deleted entities are excluded by default and included only when `Include Deleted` is enabled.
 
-Search results navigate through the application navigation layer so module context and Quick View behaviour remain consistent.
+Search result title buttons navigate through the existing application navigation target. Search and Warnings share exact-record focus, temporary filter inclusion, highlighting and content scrolling. Baselines reveal their existing management dialog; Dependencies reveal their existing row. Per-open-project navigation preferences preserve Search return context without writing UI state to `.pmp`. See `SEARCH_NAVIGATION.md` for the approved 2 November 2026 interaction, which supersedes the earlier Quick View-first behavior.
 
 ## 17. Gantt and Tube Map
 
@@ -439,7 +439,7 @@ HeroUI v2 Button/Chip controls and provider are part of the main presentation la
 
 ## v1.5 shared interaction implementation
 
-- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Module unmount resets this transient state.
+- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Ordinary non-Search module navigation resets this transient state; the approved Search return journey retains it in the per-project navigation context.
 - Creation uses `CreationField`, pure calendar/required-field validation and `useCreationFeedback`. Only mandatory user inputs appear in creation; optional scope, owners and dependencies remain in row/context editing. Successful commands clear all creation inputs and active filters while retaining creation mode. No UI state is written to `.pmp`.
 - `PredictiveSelect`, `RelationshipPicker` and `SearchableOptionList` share query matching, arrows, Enter and Escape behaviour. Selection lives in canonical state or an explicit context draft, independently of query-filtered results. Native disclosure closing clears query state; outside clicks dismiss disclosures. Short fixed-value entity controls remain native selects.
 - `matchesEntitySearch` is the shared pure projection for module/global search, including descriptive text, owner and relationship names/human IDs, dependencies and risk actions. Matching itself lives in `option-matching.ts`, without React imports. Deleted related names remain excluded, preserving the established search contract.

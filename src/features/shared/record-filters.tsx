@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useNavigationPreference } from "./navigation-session";
 import { TASK_STATUSES } from "../../domain";
 import type { ProjectState } from "../../application";
 import { matchesFilters, toggleFilter } from "./filtering";
@@ -22,7 +22,7 @@ export function FilterChoices({label,options,selected,onChange,searchable=false}
   return <fieldset className="filter-category"><legend>{label}</legend>{searchable?<SearchableOptionList items={options} label={`Search ${label} filters`} renderOption={option}/>:options.map(option)}</fieldset>;
 }
 export function useRecordFilters(state: ProjectState, collection: Collection) {
-  const [selected,setSelected]=useState<Record<string,string[]>>({});
+  const [selected,setSelected]=useNavigationPreference<Record<string,string[]>>(`${collection}.filters`,{});
   const entities=state[collection];
   const categories=["Status","Owner","Scope","Level"].map(category=>{
     const ids=category==="Status"&&collection==="tasks"?[...TASK_STATUSES]:category==="Level"&&collection==="risks"?["Low","Medium","High"]:[...new Set(entities.filter(entity=>!entity.deletion.isDeleted).flatMap(entity=>recordFilterValues(entity)[category]))];
