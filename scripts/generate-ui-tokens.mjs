@@ -5,7 +5,7 @@ const source = new URL('../src/ui/tokens.json', import.meta.url);
 const destination = new URL('../src/app/ui-tokens.generated.css', import.meta.url);
 const tokens = JSON.parse(await readFile(source, 'utf8'));
 const lines = ['/* Generated from src/ui/tokens.json. Run npm run ui:tokens; do not edit. */', ':root {'];
-const coreColorNames = ['canvas', 'surface', 'surfaceSubtle', 'text', 'textMuted', 'border', 'controlBorder', 'primary', 'primaryHover', 'primaryActive', 'sidebar', 'focus'];
+const coreColorNames = ['canvas', 'surface', 'surfaceSubtle', 'text', 'textMuted', 'border', 'controlBorder', 'primary', 'primaryHover', 'primaryActive', 'sidebar', 'focus', 'danger'];
 if (Object.keys(tokens.coreColor).length !== coreColorNames.length || coreColorNames.some(name => !Object.hasOwn(tokens.coreColor, name))) {
   throw new Error('Core color roles must match the compatibility contract.');
 }

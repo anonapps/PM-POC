@@ -581,3 +581,7 @@ See V1.6_IMPLEMENTATION.md for approved phases, V1.6_PROGRESS.md for actual vali
 
 
 The owner subsequently approved the revised Extended Mode mockup conditional on exact standalone Tasks creation-panel equivalence. Phase 6 implementation reuses the existing modules/panel, with scoped compact surfaces and a shared page-level modal. Continue the same v1.6 draft PR through consolidated regression/documentation checks; merge/release/deployment still require separate approval.
+
+## Global compact icon button standardisation
+
+The dedicated feature/global-icon-buttons branch audits/adopts shared Lucide action icons and HeroUI tooltips while preserving native commands and workflow labels. Detailed scope, screenshot provenance, verification and owner visual review: ICON_BUTTON_STANDARDISATION.md. Review PR only; merge/release/publish remain unauthorised.
