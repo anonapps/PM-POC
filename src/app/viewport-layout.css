@@ -355,3 +355,7 @@
  .workspace .panel .milestones-table .milestone-warning>summary::-webkit-details-marker { display:none; }
 }
 .app-main .workspace.module-risk-log>.panel>table.fit-table .risk-level-chip { min-width:0; max-width:100%; }
+/* Search titles follow the same quiet, keyboard-visible navigation as Warnings. */
+.workspace.module-search .panel .search-result-title { display:inline; min-height:0; height:auto; max-width:100%; margin:0; padding:0; border:0; border-radius:2px; background:transparent; color:var(--text); font:inherit; font-weight:700; line-height:1.4; text-align:left; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
+.workspace.module-search .panel .search-result-title:hover { color:var(--primary); text-decoration:underline; }
+.workspace.module-search .panel .search-result-title:focus-visible { outline:2px solid var(--focus); outline-offset:3px; }

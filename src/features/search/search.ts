@@ -1,8 +1,11 @@
+import { dependencyEntity, dependencyScopes, dependencyWarnings } from "../../domain/dependency-analysis";
 import { matchesOption } from "../shared/option-matching";
 import type { ProjectState } from "../../application";
 import type { ModuleName } from "../shell/shell";
-export type SearchEntityType="Stream"|"Person"|"Task"|"Milestone"|"Risk"|"Decision";
-export interface SearchResult{readonly entityType:SearchEntityType;readonly module:ModuleName;readonly entityId:string;readonly humanId:string;readonly label:string;readonly isDeleted:boolean}
+export const SEARCH_ENTITY_TYPES=["Stream","Person","Task","Milestone","Risk","Decision","Baseline","Dependency"] as const;
+export type SearchEntityType=(typeof SEARCH_ENTITY_TYPES)[number];
+export type SearchRestoreKind="stream"|"person"|"task"|"milestone"|"risk"|"decision";
+export interface SearchResult{readonly entityType:SearchEntityType;readonly module:ModuleName;readonly entityId:string;readonly humanId:string;readonly label:string;readonly isDeleted:boolean;readonly restoreKind?:SearchRestoreKind}
 const registrations=[
  {type:"Stream",module:"Streams",collection:"streams"},{type:"Person",module:"People",collection:"people"},{type:"Task",module:"Tasks",collection:"tasks"},{type:"Milestone",module:"Milestones",collection:"milestones"},{type:"Risk",module:"Risk Log",collection:"risks"},{type:"Decision",module:"Decision Log",collection:"decisions"},
 ] as const;
@@ -36,7 +39,19 @@ export function searchProject(state:ProjectState,query:string,includeDeleted=fal
   for(const registration of registrations)for(const entity of state[registration.collection]){
     if(entity.deletion.isDeleted&&!includeDeleted)continue;
     if(!matchesEntitySearch(state,entity,query))continue;
-    results.push({entityType:registration.type,module:registration.module,entityId:entity.id,humanId:entity.humanId,label:"name" in entity?entity.name:entity.title,isDeleted:entity.deletion.isDeleted});
+    results.push({entityType:registration.type,module:registration.module,entityId:entity.id,humanId:entity.humanId,label:"name" in entity?entity.name:entity.title,isDeleted:entity.deletion.isDeleted,restoreKind:registration.type==="Person"?"person":registration.type.toLowerCase() as SearchRestoreKind});
   }
-  return results.sort((a,b)=>registrations.findIndex(x=>x.type===a.entityType)-registrations.findIndex(x=>x.type===b.entityType)||a.humanId.localeCompare(b.humanId)||a.label.localeCompare(b.label));
+  // Baselines and dependencies have stored IDs but no synthetic human-ID sequence.
+  for(const baseline of state.baselines??[]){
+    if(matchesOption({label:[baseline.id,baseline.name,baseline.description,baseline.createdAt].join(" ")},query))
+      results.push({entityType:"Baseline",module:"Baselines",entityId:baseline.id,humanId:baseline.id,label:baseline.name,isDeleted:false});
+  }
+  for(const dependency of state.dependencies){
+    const label=(endpoint:typeof dependency.predecessor)=>{const entity=dependencyEntity(state,endpoint);return entity?`${entity.humanId} · ${entity.name}${entity.deletion.isDeleted?" (deleted)":""}`:`Missing ${endpoint.kind}: ${endpoint.id}`;};
+    const scopes=[dependency.predecessor,dependency.successor].flatMap(endpoint=>dependencyScopes(state,endpoint)).map(id=>id==="project"?"Project-wide":state.streams.find(stream=>stream.id===id)?.name??id);
+    const title=`${label(dependency.predecessor)} → ${label(dependency.successor)} · ${dependency.type}`;
+    if(matchesOption({label:[dependency.id,title,...scopes,...dependencyWarnings(state,dependency)].join(" ")},query))
+      results.push({entityType:"Dependency",module:"Dependencies",entityId:dependency.id,humanId:dependency.id,label:title,isDeleted:false});
+  }
+  return results.sort((a,b)=>SEARCH_ENTITY_TYPES.indexOf(a.entityType)-SEARCH_ENTITY_TYPES.indexOf(b.entityType)||a.humanId.localeCompare(b.humanId)||a.label.localeCompare(b.label));
 }
