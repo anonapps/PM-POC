@@ -1,3 +1,4 @@
+@import "../features/critical-path/analysis.css";
 @import "tailwindcss";
 @config "../../tailwind.config.ts";
 

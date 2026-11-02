@@ -30,3 +30,13 @@ it("links the versioned published v1.6 manual and ships its PDF",()=>{
  expect(result.manual.status).toBe('published');expect(result.label).not.toContain('not published');expect(result.manual.source).toContain('/blob/v1.6.0/');
  expect(readFileSync(new URL('../../public'+result.manual.pdf,import.meta.url)).subarray(0,5).toString()).toBe('%PDF-');
 });
+
+
+it("ships the current v1.7 version-matched candidate manual without claiming publication",async()=>{
+ const {APP_VERSION}=await import('./app-info');
+ expect(APP_VERSION).toBe('1.7.0');const result=resolveUiManual(APP_VERSION)!;
+ expect(result.exact).toBe(true);expect(result.manual.status).toBe('candidate');expect(result.label).toContain('not published');
+ expect(result.manual.source).toContain('/blob/feature/v1.7-critical-path-analysis/docs/V1.7_UI_REFERENCE.md');
+ expect(readFileSync(new URL('../../public'+result.manual.pdf,import.meta.url)).subarray(0,5).toString()).toBe('%PDF-');
+ expect(readFileSync(new URL('../../docs/V1.7_UI_REFERENCE.md',import.meta.url),'utf8')).toContain('Version 1.7.0');
+});

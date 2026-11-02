@@ -82,3 +82,30 @@ describe("baseline finish delay display",()=>{
  it("omits unchanged, earlier and missing finishes",()=>{for(const current of ["2026-10-25","2026-10-26",null])expect(baselineDelayPosition("2026-10-26",current,"2026-10-24","2026-11-04")).toBeNull();});
  it("clips the delayed segment at visible bounds",()=>{expect(baselineDelayPosition("2026-10-20","2026-11-10","2026-10-24","2026-11-04")).toEqual({left:0,width:100,outside:false});expect(baselineDelayPosition("2026-11-10","2026-11-12","2026-10-24","2026-11-04")?.outside).toBe(true);});
 });
+
+describe('Gantt Hide Unscheduled Tasks projection',()=>{
+ it('excludes missing, invalid and reversed dates only when enabled, without changing source data',()=>{
+  const dates=[['2026-02-28','2026-02-28'],['2028-02-28','2028-02-29'],[null,null],['2026-02-28',null],[null,'2026-03-01'],['2026-02-30','2026-03-01'],['2026-03-02','2026-03-01'],['invalid','2026-03-01']];
+  const state=makeProjectState({streams:[streamFixture()],tasks:dates.map(([startDate,endDate],index)=>taskFixture({id:`t-${index}`,startDate,endDate,scope:index===0?{kind:'project'}:{kind:'stream',streamId:'stream-1'}}))});
+  const before=JSON.stringify(state);
+  expect(buildGanttModel(state,'Week','2026-10-25').rows.filter(row=>row.kind==='task')).toHaveLength(8);
+  const filtered=buildGanttModel(state,'Week','2026-10-25',0,false,[],undefined,true);
+  expect(filtered.rows.filter(row=>row.kind==='task').map(row=>row.id)).toEqual(['t-0','t-1']);
+  expect(buildGanttModel(state,'Week','2026-10-25').rows.filter(row=>row.kind==='task')).toHaveLength(8);
+  expect(JSON.stringify(state)).toBe(before);
+ });
+ it('evaluates empty streams after schedule and status filters while preserving milestone content',()=>{
+  const state=makeProjectState({streams:[streamFixture(),streamFixture({id:'unplanned'}),streamFixture({id:'milestone-only'})],tasks:[taskFixture({id:'scheduled',startDate:'2026-10-25',endDate:'2026-10-27',status:'Completed'}),taskFixture({id:'unscheduled'}),taskFixture({id:'inbox',scope:{kind:'stream',streamId:'unplanned'}})],milestones:[{id:'gate',projectId:'project-1',humanId:'MILESTONE-001',name:'Gate',plannedDate:'2026-10-27',status:'Planned',ownerId:null,scope:{kind:'streams',streamIds:['milestone-only']},relatedTaskIds:[],deletion:{isDeleted:false}}]});
+  const filtered=buildGanttModel(state,'Week','2026-10-25',0,true,[],undefined,true);
+  expect(filtered.rows.filter(row=>row.kind==='section').map(row=>row.id)).toEqual(['project','stream-1','milestone-only']);
+  expect(filtered.rows.filter(row=>row.kind==='task').map(row=>row.id)).toEqual(['scheduled']);
+  expect(buildGanttModel(state,'Week','2026-10-25',0,true,['In Progress'],undefined,true).rows.map(row=>row.id)).toEqual(['project','milestone-only','gate:milestone-only']);
+ });
+ it('preserves D74 temporary reveal and hides deleted tasks and connectors to filtered tasks',()=>{
+  const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({id:'scheduled',startDate:'2026-10-25',endDate:'2026-10-27'}),taskFixture({id:'unscheduled'}),taskFixture({id:'deleted',deletion:{isDeleted:true}})],dependencies:[{id:'link',projectId:'project-1',type:'Finish-to-Start',predecessor:{kind:'task',id:'scheduled'},successor:{kind:'task',id:'unscheduled'}}]});
+  expect(buildGanttModel(state,'Week','2026-10-25',0,true,[],undefined,true).rows.filter(row=>row.kind==='task').map(row=>row.id)).toEqual(['scheduled']);
+  expect(buildGanttModel(state,'Week','2026-10-25',0,true,['Completed'],'unscheduled',true).rows.filter(row=>row.kind==='task').map(row=>row.id)).toEqual(['unscheduled']);
+  expect(buildGanttModel(state,'Week','2026-10-25',0,true,[],'deleted',true).rows.some(row=>row.id==='deleted')).toBe(false);
+  expect(buildGanttModel(state,'Week','2026-10-25',0,true,[],undefined,true).dependencies).toEqual([]);
+ });
+});
