@@ -7,6 +7,8 @@ export interface AnalysisDiagnostic {
   entityId: string;
   kind: "task" | "milestone";
   dependencyId?: string;
+  /** Transient navigation links for a milestone cycle; never persisted. */
+  dependencyIds?: readonly string[];
   code: "unscheduled" | "reference" | "cycle" | "type" | "schedule";
   description: string;
 }

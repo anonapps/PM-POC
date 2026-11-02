@@ -25,4 +25,10 @@ describe('transient record navigation',()=>{
   expect(session.values.get('search.query')).toBe('handover');expect(session.values.get('search.types')).toEqual(['Task']);
   expect(createNavigationSession().values.size).toBe(0);
  });
+ it('preserves Dependencies query, filters and sort only across the Warnings round trip',()=>{
+  const session=createNavigationSession();session.values.set('Dependencies.dependencies.query','hidden');session.values.set('Dependencies.dependencies.sort',{key:'type',direction:'desc'});session.values.set('Dependencies.dependencies.crossOnly',true);
+  session.prepareNavigation('Dependencies','Warnings');session.prepareNavigation('Warnings','Dependencies');expect(session.values.size).toBe(3);
+  session.prepareNavigation('Dependencies','People');expect(session.values.size).toBe(0);
+ });
+
 });

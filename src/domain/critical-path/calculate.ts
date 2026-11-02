@@ -6,7 +6,7 @@ interface Node { key: string; id: string; kind: "task" | "milestone"; h: number 
 interface Edge { from: string; to: string; weight: number; ids: string[] }
 
 /** Iterative Kosaraju traversal avoids call-stack limits on imported large graphs. */
-function cycleMembers(keys: readonly string[], outgoing: Map<string, string[]>, incoming: Map<string, string[]>): Set<string> {
+function cycleMembers(keys: readonly string[], outgoing: Map<string, string[]>, incoming: Map<string, string[]>, components: Map<string, ReadonlySet<string>>): Set<string> {
   const seen = new Set<string>(), order: string[] = [];
   for (const root of keys) {
     if (seen.has(root)) continue;
@@ -24,7 +24,7 @@ function cycleMembers(keys: readonly string[], outgoing: Map<string, string[]>, 
     if (seen.has(root)) continue;
     const component: string[] = [], stack = [root]; seen.add(root);
     while (stack.length) { const key = stack.pop()!; component.push(key); for (const next of incoming.get(key) ?? []) if (!seen.has(next)) { seen.add(next); stack.push(next); } }
-    if (component.length > 1 || outgoing.get(root)?.includes(root)) component.forEach(key => cycles.add(key));
+    if (component.length > 1 || outgoing.get(root)?.includes(root)) { const members=new Set(component); component.forEach(key => {cycles.add(key);components.set(key,members);}); }
   }
   return cycles;
 }
@@ -77,8 +77,17 @@ export function calculateCriticalPath(source: CalculationSource, scope: string |
     if (!previous || weight > previous.weight) edges.set(key, { from, to, weight, ids: [dependency.id] });
     else if (weight === previous.weight) previous.ids.push(dependency.id);
   }
-  const keys = [...nodes.keys()].sort(), cycles = cycleMembers(keys, outgoing, incoming);
-  for (const key of cycles) { tainted.add(key); const node = nodes.get(key)!; diagnostics.push({ id: `cpm:cycle:${key}`, entityId: node.id, kind: node.kind, code: "cycle", description: "Activity belongs to a circular dependency chain. Review Dependencies; links have not been changed." }); }
+  const components=new Map<string,ReadonlySet<string>>();
+  const keys = [...nodes.keys()].sort(), cycles = cycleMembers(keys, outgoing, incoming, components);
+  const cycleLinks=new Map<ReadonlySet<string>,string[]>();
+  for(const dependency of source.dependencies){
+    const group=components.get(`${dependency.predecessor.kind}:${dependency.predecessor.id}`);
+    if(group && group===components.get(`${dependency.successor.kind}:${dependency.successor.id}`) && dependency.projectId===source.project.id && DEPENDENCY_TYPES.includes(dependency.type)){
+      const ids=cycleLinks.get(group)??[];ids.push(dependency.id);cycleLinks.set(group,ids);
+    }
+  }
+  for(const ids of cycleLinks.values())ids.sort();
+  for (const key of cycles) { tainted.add(key); const node = nodes.get(key)!; diagnostics.push({ id: `cpm:cycle:${key}`, entityId: node.id, kind: node.kind, code: "cycle", ...(node.kind === "milestone" ? {dependencyIds:cycleLinks.get(components.get(key)!)??[]} : {}), description: "Activity belongs to a circular dependency chain. Review Dependencies; links have not been changed." }); }
   const pending = [...tainted];
   for (let i = 0; i < pending.length; i++) for (const next of outgoing.get(pending[i]) ?? []) if (!tainted.has(next)) { tainted.add(next); pending.push(next); }
   const usable = keys.filter(key => !tainted.has(key)), degree = new Map(usable.map(key => [key, 0]));

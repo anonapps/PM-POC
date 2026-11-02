@@ -12,6 +12,7 @@ export function createNavigationSession(owner?: ProjectStore) {
       // Preserve destination preferences for Search journeys. Ordinary page
       // navigation retains the existing reset behavior; Search itself survives.
       if (from === to || from === "Search" || to === "Search") return;
+      if (from === "Dependencies" && to === "Warnings" || from === "Warnings" && to === "Dependencies") return;
       for (const key of values.keys()) if (!key.startsWith("search.")) values.delete(key);
     },
   };
