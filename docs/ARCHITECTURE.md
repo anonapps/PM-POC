@@ -508,3 +508,7 @@ UI standard closeout retains native table-cell/selection and overlay adapters as
 ## Global compact actions
 
 ActionIconButton forwards native button semantics and caller commands, supplying bundled Lucide icons and a shared HeroUI Tooltip adapter. Its isolated CSS owns the approved compact action variant; native labels/confirmation/propagation remain caller-owned. Disabled tooltip wrappers never enable actions. No domain, application, file-service or PMP changes. See ICON_BUTTON_STANDARDISATION.md for the page audit, mapping, retained labelled actions and visual-acceptance boundary.
+
+## Tube Map baseline comparison modes
+
+TubeMapView owns a transient below/map display choice beside existing baseline visibility. The pure buildTubeBaselineOverlay projection reuses compareSchedule and calendar-day positions, matches stable stream IDs, groups identical historical date/scope occurrences and appends read-only historical lanes when no live lane is displayed. It does not change buildTubeMap or canonical station/dependency geometry. The existing strip remains the default; new markers use shared hover/focus tooltips. The mode never enters PMP, commands or history. Scope, filtering semantics, screenshots and focused evidence: TUBE_MAP_COMPARISON_MODES.md.

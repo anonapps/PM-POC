@@ -96,3 +96,7 @@ Focused validation: `E2E_BASE_URL=http://127.0.0.1:3000 CHROME_PATH=/usr/bin/chr
 [Before at 1440 px](media/milestone-scope/before-1440.png) · [After at 1440 px](media/milestone-scope/after-1440.png). Both screenshots use the same generated scope fixture and current icon-button implementation; the before image applies the prior column widths through a temporary test-only stylesheet. At 1440 px, four pills occupy two lines instead of four and twelve occupy six instead of twelve. All rows remain content-driven. Detailed logs: ignored `work/validation-2026-11-03T00-35-24.867Z/`.
 
 The update remains in PR #29 on `feature/global-icon-buttons`; no merge or release is authorised.
+
+## Tube Map comparison follow-up
+
+PR #29 also adds the agreed In the same map / Below the map historical milestone selector, preserving live chart geometry and default below-map behavior. [Usage, screenshots, projection rules and focused verification](TUBE_MAP_COMPARISON_MODES.md). No merge or release.

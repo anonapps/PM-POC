@@ -2145,3 +2145,8 @@ The owner authorises shared icon-only controls for compact recognisable actions 
 ## Approved Milestones Scope column adjustment
 
 On Milestones only, widen Scope by approximately 50% at desktop table widths, taking the needed space from ID / Name while keeping Date, Status, Owner, Dependencies and Actions usable and aligned. Preserve existing pill styling, colours, 4 px spacing, natural wrapping, content-driven row growth and the icon-only actions. Do not introduce horizontal scrolling or change other page layouts, canonical data or functionality. Implement in open PR #29 and use focused validation only; no merge or release.
+
+
+## Approved Tube Map baseline display choice
+
+Add a labelled selector offering In the same map and Below the map for comparison milestones, alongside the existing Baseline milestones toggle. Default to the existing below-map display. Same-map historical markers share the live date axis, remain read-only hollow diamonds with hover/keyboard details, and preserve live station geometry, editing, dependencies and Critical Path styling. Baseline-only streams remain visible as labelled historical lanes in that chart. Keep date-window filtering and immutable comparison snapshots; the mode is transient UI state, never persisted or recorded in history. No merge or release is authorised.
