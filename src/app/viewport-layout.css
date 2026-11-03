@@ -355,3 +355,14 @@
  .workspace .panel .milestones-table .milestone-warning>summary::-webkit-details-marker { display:none; }
 }
 .app-main .workspace.module-risk-log>.panel>table.fit-table .risk-level-chip { min-width:0; max-width:100%; }
+
+/* Milestones only: give Scope 50% more of its former share, taking that space
+   from ID / Name. The five remaining columns keep their previous widths. */
+@container (min-width:601px) {
+ .workspace.module-milestones>.panel>table.milestones-table th:first-child { width:calc(100% / 14); }
+ .workspace.module-milestones>.panel>table.milestones-table th:nth-child(4) { width:calc(300% / 14); }
+}
+@container (min-width:601px) and (max-width:1350px) {
+ .workspace.module-milestones>.panel>table.milestones-table th:first-child { width:17.3%; }
+ .workspace.module-milestones>.panel>table.milestones-table th:nth-child(4) { width:17.1%; }
+}

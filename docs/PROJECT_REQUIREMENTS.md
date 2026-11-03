@@ -2140,3 +2140,8 @@ The owner rejects the 880px/three-column creation reflow as too wide and too emp
 ## Approved global compact action icons
 
 The owner authorises shared icon-only controls for compact recognisable actions across modules: Context=MessageCircle, Actions=Zap (retain all existing numeric counts including zero), Duplicate=Copy, Delete=Trash2, Inspect/Edit=Pencil. Reuse Lucide and existing surface/accent/radius/focus tokens, consistent approximately 36 px square / 18 px icons, approximately 40 px pointer targets where feasible, muted-red destructive accents and accessible custom tooltips (300ms hover, keyboard focus, full labels/counts, viewport positioning). Keep primary workflow actions labelled. Preserve commands, native button types, confirmations, event propagation, permissions, page/toolbar/sidebar structures, filters and PMP compatibility. Shared implementation and audited exceptions: [ICON_BUTTON_STANDARDISATION.md](ICON_BUTTON_STANDARDISATION.md). The owner confirms the written specifications are sufficient and that the unavailable mockup must not block implementation. Feature branch and review PR only; no merge, publish or release.
+
+
+## Approved Milestones Scope column adjustment
+
+On Milestones only, widen Scope by approximately 50% at desktop table widths, taking the needed space from ID / Name while keeping Date, Status, Owner, Dependencies and Actions usable and aligned. Preserve existing pill styling, colours, 4 px spacing, natural wrapping, content-driven row growth and the icon-only actions. Do not introduce horizontal scrolling or change other page layouts, canonical data or functionality. Implement in open PR #29 and use focused validation only; no merge or release.

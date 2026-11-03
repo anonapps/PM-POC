@@ -86,3 +86,13 @@ The original PR command stopped on legacy native-title selectors before the layo
 Logs: `work/validation-2026-11-02T23-40-27.120Z/` (unit/static/initial gate), `work/icon-lifecycle.log`, `work/icon-layout.log`, `work/validation-2026-11-02T23-54-15.341Z/` (read-only scope) and `work/validation-2026-11-02T23-56-18.943Z/` (final 32-case verification). These are intentionally ignored local logs, not committed runtime assets.
 
 Remaining acceptance: owner visual review; physical OS/native-picker and assistive-technology acceptance remain manual. Draft PR only. No merge, tag, release or deployment performed.
+
+## Milestones Scope follow-up
+
+The owner requested approximately 50% more Scope width on Milestones only, funded by reducing ID / Name. The stylesheet changes only the Milestones table's first/fourth heading widths in its existing desktop container ranges. Date, Status, Owner, Dependencies and Actions retain their previous widths. Existing 4 px pill gaps, colours, shape, selectors, natural wrapping, content-driven row growth and icon buttons are unchanged. The narrow card fallback and every other module's styles remain untouched; no renderer, command or persisted data changes.
+
+Focused validation: `E2E_BASE_URL=http://127.0.0.1:3000 CHROME_PATH=/usr/bin/chromium npm run test:targeted -- layout e2e/layout/milestone-scope.spec.ts e2e/layout/desktop-records.spec.ts --grep 'Milestones Scope|desktop record headers'` passed **9 cases in 13.34 s**. New cases use one/four/twelve scopes at 1024/1280/1440/1920 px, measure the approximate50% gain against the previous column allocation, verify unchanged widths for all five other columns, compare pill styles, check natural row growth/reduction, alignment, no horizontal overflow, retained 36 px action icons and scope editing/Undo. The existing five desktop alignment cases cover all six record modules at 900–1366 px. Production build/typecheck/token freshness and focused ESLint passed. No full suites were run for this follow-up.
+
+[Before at 1440 px](media/milestone-scope/before-1440.png) · [After at 1440 px](media/milestone-scope/after-1440.png). Both screenshots use the same generated scope fixture and current icon-button implementation; the before image applies the prior column widths through a temporary test-only stylesheet. At 1440 px, four pills occupy two lines instead of four and twelve occupy six instead of twelve. All rows remain content-driven. Detailed logs: ignored `work/validation-2026-11-03T00-35-24.867Z/`.
+
+The update remains in PR #29 on `feature/global-icon-buttons`; no merge or release is authorised.
