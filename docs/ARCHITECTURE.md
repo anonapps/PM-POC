@@ -504,3 +504,11 @@ The owner-corrected29October creation layout retains the original560px maximum d
 
 
 UI standard closeout retains native table-cell/selection and overlay adapters as explicit variants in [the reuse matrix](UI_REUSE_MATRIX.md). The unused historical `CreationField` helper has been retired; current record creation uses EntityCreationPanel with FormField/FieldMessage. Earlier v1.5 implementation descriptions remain historical. No model, command or PMP contract changes accompany this cleanup.
+
+## Global compact actions
+
+ActionIconButton forwards native button semantics and caller commands, supplying bundled Lucide icons and a shared HeroUI Tooltip adapter. Its isolated CSS owns the approved compact action variant; native labels/confirmation/propagation remain caller-owned. Disabled tooltip wrappers never enable actions. No domain, application, file-service or PMP changes. See ICON_BUTTON_STANDARDISATION.md for the page audit, mapping, retained labelled actions and visual-acceptance boundary.
+
+## Tube Map baseline comparison modes
+
+TubeMapView owns a transient below/map display choice beside existing baseline visibility. The pure buildTubeBaselineOverlay projection reuses compareSchedule and calendar-day positions, matches stable stream IDs, groups identical historical date/scope occurrences and appends read-only historical lanes when no live lane is displayed. It does not change buildTubeMap or canonical station/dependency geometry. The existing strip remains the default; new markers use shared hover/focus tooltips. The mode never enters PMP, commands or history. Scope, filtering semantics, screenshots and focused evidence: TUBE_MAP_COMPARISON_MODES.md.

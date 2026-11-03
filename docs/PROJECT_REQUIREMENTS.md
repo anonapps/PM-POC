@@ -2135,3 +2135,18 @@ Owner Mac screenshots show Task/Risk creation content requiring scrolling and ex
 ## Owner correction — retain the original creation drawer footprint — 29 October 2026
 
 The owner rejects the 880px/three-column creation reflow as too wide and too empty. Restore the original maximum560px drawer and two-column main field layout. Keep descriptions full-width and original Task field pairs. Fit content by reducing inter-field/structural whitespace and reusing the existing30px embedded/Extended control recipe, with unchanged existing font sizes. Creation message slots use a compact12px minimum and expand naturally for actual messages rather than clipping or hiding them; IDs, announcements and validation behavior remain unchanged. The empty Risk actions group may sit beside Due date, expanding across the form when actions exist. Preserve all fields and visible Create/Cancel, exact standalone/Extended parity, native behavior, dismissal, commands and persistence. This supersedes the earlier29October permission to widen the drawer or use three main columns; narrow screens and genuinely expanded lists keep content-only scrolling.
+
+
+## Approved global compact action icons
+
+The owner authorises shared icon-only controls for compact recognisable actions across modules: Context=MessageCircle, Actions=Zap (retain all existing numeric counts including zero), Duplicate=Copy, Delete=Trash2, Inspect/Edit=Pencil. Reuse Lucide and existing surface/accent/radius/focus tokens, consistent approximately 36 px square / 18 px icons, approximately 40 px pointer targets where feasible, muted-red destructive accents and accessible custom tooltips (300ms hover, keyboard focus, full labels/counts, viewport positioning). Keep primary workflow actions labelled. Preserve commands, native button types, confirmations, event propagation, permissions, page/toolbar/sidebar structures, filters and PMP compatibility. Shared implementation and audited exceptions: [ICON_BUTTON_STANDARDISATION.md](ICON_BUTTON_STANDARDISATION.md). The owner confirms the written specifications are sufficient and that the unavailable mockup must not block implementation. Feature branch and review PR only; no merge, publish or release.
+
+
+## Approved Milestones Scope column adjustment
+
+On Milestones only, widen Scope by approximately 50% at desktop table widths, taking the needed space from ID / Name while keeping Date, Status, Owner, Dependencies and Actions usable and aligned. Preserve existing pill styling, colours, 4 px spacing, natural wrapping, content-driven row growth and the icon-only actions. Do not introduce horizontal scrolling or change other page layouts, canonical data or functionality. Implement in open PR #29 and use focused validation only; no merge or release.
+
+
+## Approved Tube Map baseline display choice
+
+Add a labelled selector offering In the same map and Below the map for comparison milestones, alongside the existing Baseline milestones toggle. Default to the existing below-map display. Same-map historical markers share the live date axis, remain read-only hollow diamonds with hover/keyboard details, and preserve live station geometry, editing, dependencies and Critical Path styling. Baseline-only streams remain visible as labelled historical lanes in that chart. Keep date-window filtering and immutable comparison snapshots; the mode is transient UI state, never persisted or recorded in history. No merge or release is authorised.

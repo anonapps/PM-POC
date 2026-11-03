@@ -17,7 +17,7 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
     ['Streams', 'Add Stream', 'Stream name', 'new-stream-name', 'STREAM'],
   ]) {
     await nav(module);
-    await click(`Search ${{"Risk Log":"risks","Decision Log":"decisions"}[module]??module.toLowerCase()}`);
+    await click(`Search and filter ${{"Risk Log":"risks","Decision Log":"decisions"}[module]??module.toLowerCase()}`);
     await setSearch('.shared-search-filter input', 'no existing record matches this');
     await waitFor(`document.querySelectorAll('tbody tr').length===0`);
     await evaluate(`document.querySelector('h1').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))`);
@@ -66,11 +66,11 @@ export async function verifyV15SharedControls({ cdp, evaluate, waitFor, click, n
   record('Predictive ArrowUp returns from first result to search', await evaluate(`document.activeElement?.type==='search'`));
   await key('Escape', 27);
   await nav('Risk Log');
-  await click('Search risks');
+  await click('Search and filter risks');
   await evaluate(`document.querySelector('input[aria-label="Filter Level: High"]').click()`);
   await evaluate(`document.querySelector('h1').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))`);
   await waitFor(`!document.querySelector('.module-search-controls')`);
-  await click('Search risks');
+  await click('Search and filter risks');
   record('Outside dismissal preserves active filters when reopened', await evaluate(`document.querySelector('input[aria-label="Filter Level: High"]')?.checked`));
   await click('Clear all');
   for (const [module, bodySelector, headerSelector] of [['Gantt','.gantt-body','.gantt-time-heading'],['Tube Map','.tube-body','.tube-axis']]) {

@@ -10,7 +10,7 @@ Date: 28 October 2026. Authority: [project requirements](PROJECT_REQUIREMENTS.md
 
 | Family | Canonical values | Existing aliases and consumer ownership |
 | --- | --- | --- |
-| Core colors | Canvas `#f4f6f8`; surface `#ffffff`; subtle surface `#edf1f5`; text `#0f172a`; muted text `#526174`; border `#dce2e9`; control border `#8293a8`; primary `#164a91`, hover `#123e7a`, active `#0e3263`; sidebar `#17243a`; focus `#1b65c9`. | `--ui-color-*` feeds the twelve existing aliases in [design-system.css](../src/app/design-system.css). Theme and component overrides continue to apply. |
+| Core colors | Canvas `#f4f6f8`; surface `#ffffff`; subtle surface `#edf1f5`; text `#0f172a`; muted text `#526174`; border `#dce2e9`; control border `#8293a8`; primary `#164a91`, hover `#123e7a`, active `#0e3263`; sidebar `#17243a`; focus `#1b65c9`; danger `#a12b20` (existing destructive accent). | `--ui-color-*` feeds thirteen aliases in [design-system.css](../src/app/design-system.css). Theme and component overrides continue to apply. |
 | Application typography | Display `2rem`, KPI `1.65rem`, section `1rem`, body `.9rem`, control `.8rem`, caption `.72rem`. | `--ui-type-*` feeds `--type-*` in [globals.css](../src/app/globals.css). `--type-page-title` remains an alias of `--type-caption`. |
 | Baseline typography | XS `.75rem`, small `.8125rem`, base `.875rem`, section `1rem`, page `1.25rem`, display `1.75rem`. | `--ui-text-*` feeds `--text-*` in [design-system.css](../src/app/design-system.css). This separate scale retains its original units and values. |
 | Spacing scale | Keys `1,2,3,4,6,8,12,16` map to `4,8,12,16,24,32,48,64px`. | `--ui-space-*` feeds the existing `--space-*` design-system aliases. Matching local literals are not automatically consumers. |
@@ -62,3 +62,5 @@ Decisions that change visible defaults—merging typography scales, font roundin
 Warnings corrective actions and timeline quick-editor actions now reuse ActionButton; timeline checkbox rows reuse ChoiceRow. Navigation-content, sort/disclosure/segmented controls and table selection remain distinct. See the migration evidence for scoped validation.
 
 The remaining table/message/menu/overlay inventory is completed in the [reuse matrix](UI_REUSE_MATRIX.md). The [contributor guide](../src/ui/README.md) provides implementation examples and context selection. The final migration closeout records proof-backed cleanup and verification; explicit similar/distinct recipes are retained without forcing universal wrappers.
+
+The global icon action variant promotes the existing destructive text colour `#a12b20` to `coreColor.danger` / `--ui-color-danger` / `--danger`. Original roles/values are unchanged; the bounded core inventory now contains 13 roles. See ICON_BUTTON_STANDARDISATION.md for the approved visible variant.
