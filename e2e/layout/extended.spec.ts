@@ -1,3 +1,4 @@
+import {globalAction} from './global-actions';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
@@ -86,12 +87,12 @@ test('Extended edits, creation, quick edits, history, baselines and PMP reopen s
  await page.setViewportSize({width:1440,height:1000});await page.clock.setFixedTime(new Date('2026-10-26T12:00:00Z'));await openProject(page);await navigate(page,'Gantt');await extended(page);
  const lower=page.locator('.gantt-tasks-pane'),gantt=page.locator('.gantt-panel');
  const name=lower.getByLabel('Name for TASK-001',{exact:true}),original=await name.inputValue();await name.fill('Extended shared task');await name.press('Tab');await expect(gantt.getByRole('button',{name:'Extended shared task',exact:true})).toBeVisible();
- await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(name).toHaveValue(original);await page.getByRole('button',{name:'Redo',exact:true}).click();await expect(name).toHaveValue('Extended shared task');
+ await globalAction(page,'Undo');await expect(name).toHaveValue(original);await globalAction(page,'Redo');await expect(name).toHaveValue('Extended shared task');
  await lower.getByRole('button',{name:'Add Task',exact:true}).click();const panel=page.getByRole('dialog',{name:'Create Task',exact:true});await panel.getByLabel('Task name',{exact:true}).fill('Extended created task');await panel.getByLabel('Start date',{exact:true}).fill('2026-10-26');await panel.getByLabel('End date',{exact:true}).fill('2026-10-29');await panel.getByRole('button',{name:'Create',exact:true}).click();await expect(panel).toHaveCount(0);
  await gantt.getByRole('button',{name:'Extended created task',exact:true}).click();const quick=page.getByRole('form',{name:'Quick edit task'});await quick.getByLabel('Task name',{exact:true}).fill('Extended quick edit');await quick.getByRole('button',{name:'Save',exact:true}).click();const newRow=lower.locator('tbody tr').filter({has:page.locator('input[value="Extended quick edit"]')});await expect(newRow).toBeVisible();
- await newRow.getByRole('button',{name:'Delete',exact:true}).click();await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toBeVisible();
+ await newRow.getByRole('button',{name:'Delete',exact:true}).click();await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toHaveCount(0);await globalAction(page,'Undo');await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toBeVisible();
  await gantt.getByLabel('Baseline overlay',{exact:true}).check();await gantt.getByLabel('Variance indicators',{exact:true}).check();await expect(gantt.locator('.variance-indicator').first()).toBeVisible();await gantt.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(gantt.locator('.gantt-connectors .dependency-line')).toHaveCount(0);
- await page.getByRole('button',{name:'Save Now',exact:true}).click();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();const bytes=await page.evaluate(()=>(window as unknown as {__extendedBytes:()=>number[]}).__extendedBytes());const saved=deserializeProject(new Uint8Array(bytes));expect(saved.ok).toBe(true);if(!saved.ok)throw new Error('Invalid saved project');expect(saved.value.projectState.tasks.some(t=>t.name==='Extended quick edit'&&!t.deletion.isDeleted)).toBe(true);expect(saved.value.projectState.baselines![0].snapshot).toEqual(captureSchedule(fixture.projectState));expect(saved.value.projectState.auditHistory!.events.length).toBeGreaterThan(3);
+ await globalAction(page,'Save Now');await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();const bytes=await page.evaluate(()=>(window as unknown as {__extendedBytes:()=>number[]}).__extendedBytes());const saved=deserializeProject(new Uint8Array(bytes));expect(saved.ok).toBe(true);if(!saved.ok)throw new Error('Invalid saved project');expect(saved.value.projectState.tasks.some(t=>t.name==='Extended quick edit'&&!t.deletion.isDeleted)).toBe(true);expect(saved.value.projectState.baselines![0].snapshot).toEqual(captureSchedule(fixture.projectState));expect(saved.value.projectState.auditHistory!.events.length).toBeGreaterThan(3);
  await page.screenshot({path:testInfo.outputPath('extended-baselines-and-edits.png')});await navigate(page,'File Information');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await navigate(page,'Gantt');await expect(page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');await extended(page);await expect(page.locator('.gantt-tasks-pane input[value="Extended quick edit"]')).toBeVisible();
 });
 
@@ -101,7 +102,7 @@ test('approved alignment preserves navigation, project header and standalone Tas
  const names=['Overview','Search','Streams','People','Tasks','Gantt','Milestones','Tube Map','Risk Log','Decision Log','Baselines','Dependencies','Warnings','File Information'];
  const navigation=()=>nav.getByRole('button').evaluateAll(buttons=>buttons.map(button=>({name:button.getAttribute('aria-label'),icon:button.querySelector('.module-letter')?.innerHTML})));
  const originalNavigation=await navigation();expect(originalNavigation.map(item=>item.name)).toEqual(names);
- const header=()=>page.locator('.app-main>header').evaluate(element=>({text:element.textContent,html:element.innerHTML,rect:element.getBoundingClientRect().toJSON()}));
+ const header=()=>page.locator('.sidebar-project').evaluate(element=>({text:element.textContent,html:element.innerHTML,rect:element.getBoundingClientRect().toJSON()}));
  const originalHeader=await header();
  await navigate(page,'Tasks');await expect(page.getByRole('heading',{name:'Tasks',exact:true})).toBeVisible();
  const taskSurface=()=>page.locator('.workspace>.panel').evaluate(element=>({
@@ -130,7 +131,7 @@ test('approved alignment preserves navigation, project header and standalone Tas
  await navigate(page,'Tasks');
  // Compare visible fields, values, actions and geometry; generated radio-group IDs change on remount.
  expect(await taskSurface()).toEqual(standalone);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
  await page.screenshot({path:testInfo.outputPath('alignment-standalone-tasks.png')});
 });
 

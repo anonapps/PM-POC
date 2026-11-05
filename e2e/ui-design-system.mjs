@@ -6,7 +6,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await nav('People');
     await waitFor(`(()=>{const t=document.querySelector('.panel>.title-row'),w=document.querySelector('.workspace');return !!t&&!!w&&Math.abs(parseFloat(getComputedStyle(w).getPropertyValue('--module-toolbar-height'))-t.getBoundingClientRect().height)<1})()`);
     record(`Measured toolbar offset at ${width}px`, await evaluate(`(()=>{const t=document.querySelector('.panel>.title-row'),h=document.querySelector('.panel>table th');return !h||Math.abs(parseFloat(getComputedStyle(h).top)-t.getBoundingClientRect().height)<1})()`));
-    record(`Save status and navigation visible at ${width}px`, await evaluate(`(()=>{const s=document.querySelector('.save-state');return !!s&&getComputedStyle(s).display!=='none'&&[...document.querySelectorAll('nav button')].every(b=>b.querySelector('span')?.getBoundingClientRect().width>0&&b.getAttribute('aria-label'))})()`));
+    record(`Save status and navigation visible at ${width}px`, await evaluate(`(()=>{const s=document.querySelector('.sidebar-save-dot');return !!s&&s.checkVisibility()&&[...document.querySelectorAll('nav button')].every(b=>b.querySelector('span')?.getBoundingClientRect().width>0&&b.getAttribute('aria-label'))})()`));
     await nav('Tube Map');
     await evaluate(`(()=>{const w=document.querySelector('.workspace');w.scrollTop=w.scrollHeight})()`);
     // Let sticky geometry settle across a paint, rather than asserting in the scroll mutation.
@@ -20,7 +20,7 @@ export async function verifyDesignSystem({ cdp, evaluate, waitFor, click, nav, r
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
     await evaluate(`document.querySelector('[aria-label="Collapse sidebar"]')?.click()`);
     await waitFor(`Boolean(document.querySelector('[aria-label="Expand sidebar"]'))`);
-    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.app-main>header').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(['Overview','Search','People','Tasks'].includes(b.getAttribute('aria-label'))?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
+    record(`Collapsed rail letters and header separation at ${width}px`, await evaluate(`(()=>{const a=document.querySelector('aside').getBoundingClientRect(),h=document.querySelector('.workspace').getBoundingClientRect();return a.width===64&&h.left>=a.right&&[...document.querySelectorAll('nav button')].every(b=>(['Overview','Search','People','Tasks'].includes(b.getAttribute('aria-label'))?!!b.querySelector('.module-letter svg'):b.querySelector('.module-letter')?.textContent.trim()===b.getAttribute('aria-label').slice(0,1)))})()`));
     await nav('People');
     record(`Collapsed navigation works at ${width}px`, await evaluate(`document.querySelector('nav [aria-current="page"]').getAttribute('aria-label')==='People'`));
     await evaluate(`document.querySelector('[aria-label="Expand sidebar"]').click()`);

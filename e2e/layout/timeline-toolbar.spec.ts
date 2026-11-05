@@ -40,7 +40,7 @@ for(const width of [900,1024,1280,1440,1920])test(`independent search centre acr
   if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${name.replaceAll(' ','-')}-centred.png`)});
  }
  await page.locator('.sidebar-toggle').click();await centred(page);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 for(const width of [900,1280,1440,1920])for(const scenario of [
  {name:'short year-boundary project',today:'2026-12-31T12:00:00',range:['2026-12-28','2027-01-15'] as [string,string]},
@@ -76,7 +76,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
   await page.getByRole('button',{name:'Expand All',exact:true}).click();
   await chart.evaluate(e=>{e.scrollTop=0;e.scrollLeft=0;});
  }
- if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 // PR #12: footer paint must not extend scroll overflow and unstick the axis.
@@ -103,7 +103,7 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  const last=(await page.locator('.tube-line').last().boundingBox())!,footer=(await page.getByRole('navigation',{name:'Tube Map date navigation'}).boundingBox())!;
  expect(last.y+last.height).toBeLessThanOrEqual(footer.y+1);
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 for(const width of [900,1024,1280,1440,1920])test(`v1.6 all modules fit viewport at ${width}`,async({page})=>{
@@ -159,7 +159,7 @@ for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are tra
  await expect(page.locator('.dependency-connection[data-active=true]')).toHaveCount(0);
  await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(links).toHaveCount(0);
  await page.getByRole('checkbox',{name:'Dependencies',exact:true}).check();expect(await links.count()).toBeGreaterThan(1);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 for(const width of [900,1280,1440])test(`timeline footers share compact geometry at ${width}`,async({page},testInfo)=>{
@@ -182,5 +182,5 @@ for(const width of [900,1280,1440])test(`timeline footers share compact geometry
  expect(Math.abs(footerBottom-workspaceBottom)).toBeLessThanOrEqual(1);
  expect(await page.locator('.workspace').evaluate(e=>getComputedStyle(e).paddingBottom)).toBe('0px');
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-compact-footer.png`)});
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
