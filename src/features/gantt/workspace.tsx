@@ -18,7 +18,7 @@ export function GanttWorkspace({store,navigate,openAnalysis=false}:{store:Projec
   useLayoutEffect(()=>{
     const root=workspace.current;if(!root)return;
     const measure=()=>root.style.setProperty('--gantt-available-height',`${Math.max(1,Math.floor(window.innerHeight-root.getBoundingClientRect().top))}px`);
-    const observer=new ResizeObserver(measure);observer.observe(root.closest('main')!);observer.observe(root.closest('.app-main')!.querySelector('header')!);
+    const observer=new ResizeObserver(measure);observer.observe(root.closest('main')!);
     window.addEventListener('resize',measure);measure();
     return()=>{observer.disconnect();window.removeEventListener('resize',measure);};
   },[]);

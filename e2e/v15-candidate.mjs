@@ -24,11 +24,11 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
   }
   await nav('People');await edit('textarea[aria-label="Notes for PERSON-001"]','  (équipe XML)\nsecond LINE  ');
   record('People notes preserve whitespace, accents and subsequent casing on blur',await evaluate(`document.querySelector('textarea[aria-label="Notes for PERSON-001"]').value===${JSON.stringify('  (Équipe XML)\nsecond LINE  ')}`));
-  const beforeProject=await auditCount();await nav('Overview');const originalProject=await evaluate(`document.querySelector('.project-name-inline strong').textContent`);
+  const beforeProject=await auditCount();await nav('Overview');const originalProject=await evaluate(`document.querySelector('.sidebar-project strong').textContent`);
   await click('Edit Project');await edit('[role=dialog] input:not([type])','équipe PROJECT');
   record('Project Details shows normalised draft before Save',await evaluate(`document.querySelector('[role=dialog] input:not([type])').value==='Équipe PROJECT'`));
   await evaluate(`[...document.querySelectorAll('[role=dialog] button')].find(b=>b.textContent==='Cancel').click()`);
-  record('Project Details Cancel discards normalised draft',await evaluate(`document.querySelector('.project-name-inline strong').textContent===${JSON.stringify(originalProject)}`));
+  record('Project Details Cancel discards normalised draft',await evaluate(`document.querySelector('.sidebar-project strong').textContent===${JSON.stringify(originalProject)}`));
   record('Project Details Cancel creates no audit mutation',(await auditCount())===beforeProject);
   await nav('Overview');await click('Edit Project');await edit('[role=dialog] input:not([type])','équipe PROJECT');await click('Done');
   record('Project Details Save commits one normalised event',(await auditCount())===beforeProject+1);
@@ -52,7 +52,7 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
     await evaluate(`document.querySelector('.filter-popover input[type=checkbox]').click()`);
     record(`${moduleName}: single Hide Empty Streams filter updates`,await evaluate(`[...document.querySelectorAll('.filter-popover label')].filter(e=>e.textContent.trim()==='Hide Empty Streams').length===1&&document.querySelector('.filter-popover input[type=checkbox]').checked&&document.querySelector('.filter-trigger').dataset.active==='true'`));
   }
-  await click('Save Now');await waitFor(`document.querySelector('.save-state').textContent.startsWith('Saved')`);
+  await click('Save Now');await waitFor(`document.querySelector('.toolbar-save-status').textContent.startsWith('Saved')`);
   // Open bytes produced by the actual v1.4 serializer, not a v1.5 relabelled fixture.
   await nav('File Information');await click('Close Project');await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   const bytes=[...await readFile(new URL('../src/testing/fixtures/v1.4-rich-project.pmp',import.meta.url))];
@@ -60,7 +60,7 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
   await click('Open Project');await waitFor(`Boolean(document.querySelector('nav'))`);await nav('File Information');
   record('Real v1.4 fixture opens with legacy timezone unavailable',await evaluate(`document.body.innerText.includes('Timezone unavailable')`));
   await nav('People');record('Legacy lowercase notes are not silently normalised on load',await evaluate(`document.querySelector('textarea[aria-label="Notes for PERSON-001"]').value===${JSON.stringify('  legacy notes\nsecond LINE  ')}`));
-  await edit('input[aria-label="Name for PERSON-001"]','équipe legacy QA');await click('Save Now');await waitFor(`document.querySelector('.save-state').textContent.startsWith('Saved')`);
+  await edit('input[aria-label="Name for PERSON-001"]','équipe legacy QA');await click('Save Now');await waitFor(`document.querySelector('.toolbar-save-status').textContent.startsWith('Saved')`);
   await nav('File Information');await click('Close Project');await waitFor(`Boolean(document.querySelector('main.launcher'))`);await click('Open Project');await waitFor(`Boolean(document.querySelector('nav'))`);
   await nav('People');record('v1.4 open/edit/save/reopen preserves edited name and untouched notes',await evaluate(`document.querySelector('input[aria-label="Name for PERSON-001"]').value==='Équipe legacy QA'&&document.querySelector('textarea[aria-label="Notes for PERSON-001"]').value===${JSON.stringify('  legacy notes\nsecond LINE  ')}`));
   for(const [moduleName,prefix] of [['People','PERSON'],['Streams','STREAM'],['Tasks','TASK'],['Milestones','MILESTONE'],['Risk Log','RISK'],['Decision Log','DECISION']]){
@@ -83,6 +83,6 @@ export async function verifyV15Candidate({cdp,evaluate,waitFor,click,nav,record}
   await dirty('retry after failure');await evaluate(`window.__RC_WRITE__=window.__E2E_FILE__.createWritable;window.__E2E_FILE__.createWritable=async()=>{throw new Error('Simulated write failure')}`);
   await click('Open Project');await waitFor(`Boolean(document.querySelector('[role=dialog]'))`);await click('Save');await waitFor(`Boolean(document.querySelector('[role=dialog] [role=alert]'))`);
   record('Failed Save keeps the decision dialog and current work',await evaluate(`Boolean(document.querySelector('nav')&&document.querySelector('[role=dialog]'))`));
-  await click('Cancel');await evaluate(`window.__E2E_FILE__.createWritable=window.__RC_WRITE__;delete window.__RC_WRITE__`);await click('Save Now');await waitFor(`document.querySelector('.save-state').textContent.startsWith('Saved')`);
+  await click('Cancel');await evaluate(`window.__E2E_FILE__.createWritable=window.__RC_WRITE__;delete window.__RC_WRITE__`);await click('Save Now');await waitFor(`document.querySelector('.toolbar-save-status').textContent.startsWith('Saved')`);
   record('Save recovery succeeds after restoring file access',true);
 }

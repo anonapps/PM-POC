@@ -1,0 +1,28 @@
+/* Reuse the shell's existing brand/toggle band without changing navigation geometry. */
+.sidebar-project { position:absolute; top:62px; left:20px; right:48px; min-width:0; }
+.sidebar-project p { margin:0; color:inherit; font-size:var(--text-xs); line-height:16px; }
+.sidebar-project-value { display:flex; align-items:center; gap:var(--space-2); min-width:0; }
+.sidebar-project strong { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:var(--text-base); line-height:20px; }
+.sidebar-save-dot { display:block; width:4px; height:4px; flex:0 0 4px; border-radius:50%; background:var(--ui-status-milestone-complete); }
+.sidebar-save-dot.dirty { background:#805b00; }
+.sidebar-save-dot.saving { animation:sidebar-saving 1.2s ease-in-out infinite; }
+.sidebar-save-dot.failed,.sidebar-save-dot.lost { background:#a12b20; }
+.sidebar-hidden .sidebar-project { top:55px; left:0; right:0; }
+.sidebar-hidden .sidebar-project p,.sidebar-hidden .sidebar-project strong { display:none; }
+.sidebar-hidden .sidebar-project-value { justify-content:center; }
+@keyframes sidebar-saving { 50% { opacity:.35; } }
+@media (prefers-reduced-motion:reduce) { .sidebar-save-dot.saving { animation:none; } }
+/* The global row is gone; the workspace now owns its complete existing grid cell. */
+.app-shell .app-main { position:relative; grid-template-rows:minmax(0,1fr); }
+.global-toolbar-region { position:absolute; top:0; right:var(--space-4); z-index:50; width:max-content; max-width:calc(100% - var(--space-4)); padding-top:10px; pointer-events:none; }
+.global-toolbar-trigger { position:absolute; inset:0 0 auto; height:10px; pointer-events:auto; }
+.global-floating-toolbar { display:flex; align-items:center; gap:var(--space-1); width:max-content; max-width:100%; box-sizing:border-box; padding:var(--space-1); background:var(--surface); border:1px solid var(--border); border-radius:var(--action-radius); box-shadow:var(--shadow-popover); pointer-events:auto; }
+.global-toolbar-region[data-open="false"] .global-floating-toolbar { visibility:hidden; pointer-events:none; }
+.toolbar-save-status { min-width:0; overflow:hidden; text-overflow:ellipsis; padding-inline:var(--space-1); font-size:var(--type-caption); white-space:nowrap; }
+.global-floating-toolbar button.icon { flex:0 0 30px; width:30px; min-width:30px; height:30px; min-height:30px; padding:2px; }
+@media (max-height:420px) {
+ .sidebar-project { top:40px; }
+ .sidebar-project p { line-height:12px; }
+ .sidebar-project strong { line-height:16px; }
+ .sidebar-hidden .sidebar-project { top:35px; }
+}

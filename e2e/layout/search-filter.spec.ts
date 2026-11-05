@@ -96,7 +96,7 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   await page.keyboard.press('Escape');await expect(panel).toHaveCount(0);
   await input.fill('zzzz-no-match');await trigger.click();await panel.getByRole('button',{name:'Clear all'}).click();await expect(input).toHaveValue('');
   await page.locator('h1').click();await expect(panel).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
  }
  await page.locator('nav').getByRole('button',{name:'Milestones',exact:true}).click();
  expect(await page.locator('summary .scope-pill').evaluateAll(pills=>pills.length>0&&pills.every(pill=>{const parent=pill.parentElement!.getBoundingClientRect(),r=pill.getBoundingClientRect();return r.top>=parent.top&&r.bottom<=parent.bottom&&r.width>30;}))).toBe(true);
