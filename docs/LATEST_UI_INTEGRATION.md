@@ -5,7 +5,7 @@
 - `fix/milestone-scope-single-line`: fixed one-line milestone scope summaries and clickable +N overflow.
 - `feature/global-icon-buttons`: shared accessible icon actions, wider milestone Scope column and same-map/below-map baseline choice.
 - `feature/ux-improvement-batch`: Search result title navigation with preserved destination preferences, Tube Map names/tooltips and warning navigation to stable dependency IDs. This includes the changes also published independently on `feature/search-result-navigation` and `feature/tube-map-display`.
-- `feature/global-sidebar-floating-toolbar`: sidebar project/save status, floating global controls, compact Gantt section/date bands, inline warning triangles and the single-band Tube Map header.
+- `feature/global-sidebar-floating-toolbar`: sidebar project/save status, floating global controls, compact Gantt section/date bands, inline warning triangles the single-band Tube Map header, and PR #30 at `a87e616` including the Today-focused window with four historical weeks.
 
 ## Reconciled overlapping changes
 

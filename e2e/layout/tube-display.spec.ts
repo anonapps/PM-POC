@@ -7,7 +7,7 @@ import {serializeProject,deserializeProject} from '../../src/persistence/pmp/cod
 import {APP_VERSION} from '../../src/shared/app-info';
 const milestone=(id:string,date:string,streams:string[]=[]):Milestone=>({id,projectId:'project-1',humanId:`MILESTONE-${id.padStart(3,'0')}`,name:`Gate ${id}`,plannedDate:date,status:'Planned',ownerId:null,scope:streams.length?{kind:'streams',streamIds:streams}:{kind:'project'},relatedTaskIds:[],deletion:{isDeleted:false}});
 const streams=[streamFixture({name:'Delivery'}),streamFixture({id:'stream-2',humanId:'STREAM-002',name:'Operations'})];
-const original=makeProjectState({project:projectFixture({metadata:{schemaVersion:2,minimumAppVersion:'1.7.0',gettingStartedCompleted:true}}),streams,milestones:[milestone('1','2026-11-02'),milestone('2','2026-11-09',['stream-1','stream-2']),milestone('3','2026-11-16',['stream-1']),milestone('4','2027-01-24',['stream-2'])]});
+const original=makeProjectState({project:projectFixture({metadata:{schemaVersion:2,minimumAppVersion:'1.7.0',gettingStartedCompleted:true}}),streams,milestones:[milestone('1','2026-11-02'),milestone('2','2026-11-09',['stream-1','stream-2']),milestone('3','2026-11-16',['stream-1']),milestone('4','2026-12-27',['stream-2'])]});
 const baseline={id:'original',name:'Original plan',createdAt:'2026-11-01T00:00:00Z',snapshot:captureSchedule(original)};
 const source={...original,milestones:original.milestones.map(m=>m.id==='1'?{...m,plannedDate:'2026-11-09'}:m),baselines:[baseline,{...baseline,id:'second',name:'Second plan',snapshot:captureSchedule({...original,milestones:original.milestones.map(m=>({...m,plannedDate:'2026-11-23'}))})}]};
 async function open(page:Page){
@@ -34,7 +34,7 @@ for(const mode of ['off','overlay','separate'])for(const names of [true,false])t
  if(mode!=='off'){
   const old=await historical(page,'2').boundingBox(),live=await current(page,'2').boundingBox();expect(Math.abs(old!.x+old!.width/2-live!.x-live!.width/2)).toBeLessThan(1);
   const before=await historical(page).evaluate(node=>(node as HTMLElement).style.left);
-  await page.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(historical(page)).toHaveCount(0);await page.getByRole('button',{name:'Jump to today',exact:true}).click();await expect(historical(page)).toBeVisible();expect(await historical(page).evaluate(node=>(node as HTMLElement).style.left)).toBe(before);
+  await page.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(historical(page)).toBeVisible();await page.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(historical(page)).toHaveCount(0);await page.getByRole('button',{name:'Jump to today',exact:true}).click();await expect(historical(page)).toBeVisible();expect(await historical(page).evaluate(node=>(node as HTMLElement).style.left)).toBe(before);
  }
  expect(await current(page).evaluate(node=>node.getBoundingClientRect().width)).toBeGreaterThanOrEqual(24);await expect(current(page)).toHaveCSS('height','26px');
  const alignment=await current(page).evaluate(node=>{const station=node.closest<HTMLElement>('.tube-station')!,body=node.closest<HTMLElement>('.tube-body')!,box=node.getBoundingClientRect();return Math.abs(box.top+box.height/2-body.getBoundingClientRect().top-parseFloat(station.style.top));});expect(alignment).toBeLessThan(1);

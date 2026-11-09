@@ -2197,3 +2197,7 @@ Place the existing warning triangle immediately before the item name on the same
 ## Approved Tube Map single header band — 9 November 2026
 
 Make the Tube Map Stream/week-number header one 24px-high row, equal to a single Gantt date band, not the combined 48px year/date stack. Retain the existing header font, colors, column widths/alignment, Stream sorting, week/date modes and sticky behavior. Preserve all stream lane heights, stations, connectors, chart controls, footer, sidebar and PMP behavior.
+
+## Approved Tube Map today-focused window — 9 November 2026
+
+Opening Tube Map and Jump to today both show the same twelve-week, Monday-aligned window: four complete weeks before the current week, followed by the current week and seven further weeks. Today therefore lies in the fifth weekly column, approximately one-third across the timeline (exactly one-third on Monday, at its actual day position during the week). Preserve actual local-calendar today, week/date labels, the 24px header, four-week Previous/Next steps, filters, chart data and PMP behavior. This supersedes the former default window starting in the current week.

@@ -47,11 +47,11 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
   await expect(page.getByRole('region', { name: 'Baseline milestone indicators', exact: true })).toHaveCount(0);
   await expect(page.getByText('Historical stream (baseline only)', { exact: true })).toBeVisible();
   expect(await geometry(page)).toEqual(before);
-  // The historical checkpoint is one day into the existing 84-day date axis.
+  // The historical checkpoint follows four complete historical weeks in the 84-day date axis.
   const checkpoint = markers(page).filter({ hasText: '2' });
-  expect(await checkpoint.evaluate(node => parseFloat((node as HTMLElement).style.left))).toBeCloseTo(100 / 84);
+  expect(await checkpoint.evaluate(node => parseFloat((node as HTMLElement).style.left))).toBeCloseTo(29 * 100 / 84);
   const historicalBox = (await checkpoint.boundingBox())!, chartBox = (await page.locator('.tube-body').boundingBox())!;
-  expect(historicalBox.x + historicalBox.width / 2).toBeCloseTo(chartBox.x + chartBox.width / 84, 1);
+  expect(historicalBox.x + historicalBox.width / 2).toBeCloseTo(chartBox.x + 29 * chartBox.width / 84, 1);
   if (width === 1440) await page.screenshot({ path: 'docs/media/tube-comparison/same-map.png' });
   expect(await page.locator('.workspace').evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   const footer = (await page.getByRole('navigation', { name: 'Tube Map date navigation', exact: true }).boundingBox())!;
@@ -78,7 +78,9 @@ test('comparison markers expose grouped historical/current details on hover and 
   await group.hover(); const tooltip = page.getByRole('tooltip'); await expect(tooltip).toContainText('Original checkpoint'); await expect(tooltip).toContainText('Coincident checkpoint'); await expect(tooltip).toContainText('27/10/2026'); await expect(tooltip).toContainText('02/11/2026');
   await page.mouse.move(0, 0); await group.focus(); await page.keyboard.press('Tab'); await page.keyboard.press('Shift+Tab'); await expect(tooltip).toBeVisible();
   await page.keyboard.press('Escape'); await expect(tooltip).toHaveCount(0);
+  await page.getByRole('button', { name: 'Next 4 weeks', exact: true }).click(); await expect(markers(page)).toHaveCount(4);
   await page.getByRole('button', { name: 'Next 4 weeks', exact: true }).click(); await expect(markers(page)).toHaveCount(0);
+  await page.getByRole('button', { name: 'Previous 4 weeks', exact: true }).click(); await expect(markers(page)).toHaveCount(4);
   await page.getByRole('button', { name: 'Previous 4 weeks', exact: true }).click(); await expect(markers(page)).toHaveCount(4);
   await page.locator('summary[aria-label="Comparison baseline"]').click(); await page.getByRole('radio', { name: 'Revised plan', exact: true }).click();
   await expect(markers(page)).toHaveCount(5); await expect(markers(page).filter({ hasText: '2' })).toHaveCount(0);

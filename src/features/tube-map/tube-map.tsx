@@ -28,7 +28,7 @@ import { useProjectState } from "../shell/use-project-state";
 import { editMilestone } from "../milestones/commands";
 import type { ProjectStore } from "../../application";
 import { buildTubeMap, countTubeMilestones } from "./model";
-import { inclusiveTubeMapEnd, tubeMapAnchorDate, tubeMapDisplayDate } from "./local-date";
+import { inclusiveTubeMapEnd, tubeMapAnchorDate, tubeMapWindowAnchorDate, tubeMapDisplayDate } from "./local-date";
 import type { ModuleName } from "../shell/shell";
 const dateLabel = (date: string) => tubeMapDisplayDate(date).slice(0, 5);
 export function TubeMapView({ store, navigate }: { store: ProjectStore; navigate: (module: ModuleName, entityId?: string) => void }) {
@@ -53,7 +53,7 @@ export function TubeMapView({ store, navigate }: { store: ProjectStore; navigate
   const openEdit = (id: string, anchor: HTMLElement) => { const milestone = state.milestones.find(item=>item.id===id&&!item.deletion.isDeleted); if(!milestone)return;const rect = anchor.getBoundingClientRect();setEditorPosition({ position: "fixed", left: Math.max(12, Math.min(rect.left, window.innerWidth - 372)), top: Math.max(12, Math.min(rect.bottom + 8, window.innerHeight - 320)), margin: 0 });setEditingId(id);setDraftName(milestone.name);setDraftDate(milestone.plannedDate); };
   const saveEdit = () => { if(!editingId || !draftName.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(draftDate)||!Number.isFinite(Date.parse(`${draftDate}T00:00:00Z`))||new Date(`${draftDate}T00:00:00Z`).toISOString().slice(0,10)!==draftDate)return;const milestone = store.getState().milestones.find(item=>item.id===editingId&&!item.deletion.isDeleted);if(!milestone){setEditingId(null);return;}store.execute(editMilestone(editingId,{name:draftName,plannedDate:draftDate}));setEditingId(null); };
   const today = tubeMapAnchorDate(new Date(), 0);
-  const anchor=tubeMapAnchorDate(new Date(),windowOffset);
+  const anchor=tubeMapWindowAnchorDate(new Date(),windowOffset);
   const windowModel=buildTubeMap(state,anchor,streamSort,hideEmptyStreams,filterQuery,statuses,{showNames});
   const historical=showBaseline&&baseline?baselineTubeLanes(baseline,state,windowModel.start,windowModel.end,showNames,filterQuery,statuses,streamSort):[];
   const overlay=showBaseline&&!!baseline&&baselineDisplay==="map";
