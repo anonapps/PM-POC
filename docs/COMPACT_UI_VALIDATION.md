@@ -69,3 +69,9 @@ Initial dependency installation encountered an unavailable default npm cache pat
 ## Limits and lifecycle
 
 Linux Chromium uses deterministic `.pmp` fixtures and mocked file pickers; this does not establish native Windows/macOS file-picker or physical-disk behavior. Manual owner visual acceptance remains separate. No merge, original-branch change, branch deletion, release or deployment is performed.
+
+## Follow-up: Settings Edit Project Details button
+
+The Settings card's Edit Project Details trigger was outside the existing compact page-action selector and used larger default sizing. It now participates in that shared recipe, matching Open Project's 30px height, padding, font size/weight, line height, radius and border width. No handler, dialog or layout behavior changes.
+
+Validation: production build (including TypeScript/token checks) and lint on the updated test pass. `CHROME_PATH=/usr/bin/chromium npm run test:targeted -- layout e2e/layout/consolidated-ui.spec.ts --grep 'Settings reuses'`: **3 passed**, 7.4s browser / 7.88s harness, at 375, 900 and 1440px. Tests compare actual computed button metrics and retain edit/save/audit/serialization checks. Logs: ignored `work/validation-2026-11-09T22-15-20.169Z/`, `work/settings-button-build.log`, `work/settings-button-lint.log`.

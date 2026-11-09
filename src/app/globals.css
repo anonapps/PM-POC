@@ -359,6 +359,7 @@ table td.table-actions button { margin:.12rem; }
 .app-main > header .header-actions button,
 .workspace .panel > .title-row button:not(.sort-heading),
 .workspace .panel .quick-actions button,
+.workspace .panel .settings-project-details > button,
 .workspace .panel .warning-list button,
 .workspace .panel .search-results button,
 .workspace .panel .table-actions button,
