@@ -1,3 +1,4 @@
+import { settleSidebar } from './sidebar-animation';
 import { tubeFilter } from './tube-controls';
 import {captureSchedule} from '../../src/domain/baselines';
 import {test, expect, type Page } from "@playwright/test";
@@ -41,7 +42,7 @@ for(const width of [900,1024,1280,1440,1920])test(`independent search centre acr
   expect(await centred(page)).toBeCloseTo(centre,0);
   if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${name.replaceAll(' ','-')}-centred.png`)});
  }
- await page.locator('.sidebar-toggle').click();await centred(page);
+ await page.locator('.sidebar-toggle').click();await settleSidebar(page);await centred(page);
  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 for(const width of [900,1280,1440,1920])for(const scenario of [
@@ -110,7 +111,7 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
 
 for(const width of [900,1024,1280,1440,1920])test(`v1.6 all modules fit viewport at ${width}`,async({page})=>{
  await page.setViewportSize({width,height:1000});await openProject(page);
- for(const name of ["Overview",...pages,"Baselines","Dependencies","File Information"]){
+ for(const name of ["Overview",...pages,"Baselines","Dependencies","Settings"]){
   await page.locator('nav').getByRole('button',{name,exact:true}).click();
   await expect.poll(()=>page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth),{message:`${name} workspace must fit`}).toBeLessThanOrEqual(1);
   expect(await page.locator('.panel').first().evaluate(e=>e.scrollWidth-e.clientWidth),`${name} panel`).toBeLessThanOrEqual(1);

@@ -84,3 +84,6 @@
 .workspace.module-tube-map > .panel.tube-map { background:transparent; }
 .gantt-baseline-tooltip { display:grid; gap:4px; }
 .gantt-baseline:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+
+/* Remove only the visible page-frame lines, retaining their footprint and exact chart geometry. */
+.workspace.module-tube-map > .panel.tube-map { border-left-color:transparent; border-right-color:transparent; }

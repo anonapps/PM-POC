@@ -19,7 +19,7 @@ test('compact actions render shared geometry, named icons and zero/nonzero count
   await open(page);
   for (const width of [900, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const name of ['Tasks', 'Streams', 'People', 'Milestones', 'Risk Log', 'Decision Log', 'Dependencies', 'Warnings', 'Search', 'File Information']) {
+    for (const name of ['Tasks', 'Streams', 'People', 'Milestones', 'Risk Log', 'Decision Log', 'Dependencies', 'Warnings', 'Search', 'Settings']) {
       await nav(page, name);
       if (name === 'Search') await page.getByRole('searchbox', { name: 'Search names, IDs, roles, notes, status and dates' }).fill('Regression');
       const buttons = page.locator('.workspace .action-icon-button');

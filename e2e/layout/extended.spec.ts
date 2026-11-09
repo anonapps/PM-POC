@@ -1,3 +1,4 @@
+import { settleSidebar } from './sidebar-animation';
 import { setTimelineFilter } from './timeline-filters';
 import {globalAction} from './global-actions';
 import {test,expect,type Page} from '@playwright/test';
@@ -94,16 +95,16 @@ test('Extended edits, creation, quick edits, history, baselines and PMP reopen s
  await newRow.getByRole('button',{name:'Delete',exact:true}).click();await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toHaveCount(0);await globalAction(page,'Undo');await expect(gantt.getByRole('button',{name:'Extended quick edit',exact:true})).toBeVisible();
  await gantt.getByLabel('Baseline overlay',{exact:true}).check();await gantt.locator('.gantt-baseline').first().focus();await expect(page.getByRole('tooltip')).toContainText('Baseline end:');await page.keyboard.press('Escape');await setTimelineFilter(page,'Hide Dependencies',true);await expect(gantt.locator('.gantt-connectors .dependency-line')).toHaveCount(0);
  await globalAction(page,'Save Now');await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();const bytes=await page.evaluate(()=>(window as unknown as {__extendedBytes:()=>number[]}).__extendedBytes());const saved=deserializeProject(new Uint8Array(bytes));expect(saved.ok).toBe(true);if(!saved.ok)throw new Error('Invalid saved project');expect(saved.value.projectState.tasks.some(t=>t.name==='Extended quick edit'&&!t.deletion.isDeleted)).toBe(true);expect(saved.value.projectState.baselines![0].snapshot).toEqual(captureSchedule(fixture.projectState));expect(saved.value.projectState.auditHistory!.events.length).toBeGreaterThan(3);
- await page.screenshot({path:testInfo.outputPath('extended-baselines-and-edits.png')});await navigate(page,'File Information');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await navigate(page,'Gantt');await expect(page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');await extended(page);await expect(page.locator('.gantt-tasks-pane input[value="Extended quick edit"]')).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('extended-baselines-and-edits.png')});await navigate(page,'Settings');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await navigate(page,'Gantt');await expect(page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true})).toHaveAttribute('aria-pressed','true');await extended(page);await expect(page.locator('.gantt-tasks-pane input[value="Extended quick edit"]')).toBeVisible();
 });
 
 test('approved alignment preserves navigation, project header and standalone Tasks across modes',async({page},testInfo)=>{
  await page.setViewportSize({width:1440,height:1000});await openProject(page);
  const nav=page.getByRole('navigation',{name:'Project modules'});
- const names=['Overview','Search','Streams','People','Tasks','Gantt','Milestones','Tube Map','Risk Log','Decision Log','Baselines','Dependencies','Warnings','File Information'];
+ const names=['Overview','Search','Streams','People','Tasks','Gantt','Milestones','Tube Map','Risk Log','Decision Log','Baselines','Dependencies','Warnings','Settings'];
  const navigation=()=>nav.getByRole('button').evaluateAll(buttons=>buttons.map(button=>({name:button.getAttribute('aria-label'),icon:button.querySelector('.module-letter')?.innerHTML})));
  const originalNavigation=await navigation();expect(originalNavigation.map(item=>item.name)).toEqual(names);
- const header=()=>page.locator('.sidebar-project').evaluate(element=>({text:element.textContent,html:element.innerHTML,rect:element.getBoundingClientRect().toJSON()}));
+ const header=async()=>{await page.mouse.move(0,0);return page.locator('.sidebar-project').evaluate(element=>({text:element.textContent,html:element.innerHTML,rect:element.getBoundingClientRect().toJSON()}));};
  const originalHeader=await header();
  await navigate(page,'Tasks');await expect(page.getByRole('heading',{name:'Tasks',exact:true})).toBeVisible();
  const taskSurface=()=>page.locator('.workspace>.panel').evaluate(element=>({
@@ -120,12 +121,12 @@ test('approved alignment preserves navigation, project header and standalone Tas
  expect(await navigation()).toEqual(originalNavigation);expect(await header()).toEqual(originalHeader);
  const positions=()=>nav.getByRole('button').evaluateAll(buttons=>buttons.map(button=>button.getBoundingClientRect().y));
  const expandedPositions=await positions();
- await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+ await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);
  expect(await navigation()).toEqual(originalNavigation);expect(await positions()).toEqual(expandedPositions);
  const content=await page.locator('.gantt-panel').boundingBox();
  for(const selector of ['.gantt-panel>.page-toolbar>.shared-search-filter','.gantt-tasks-pane .shared-search-filter'])expect(await searchCenter(page,selector)).toBeCloseTo(content!.x+content!.width/2,0);
  await page.screenshot({path:testInfo.outputPath('alignment-collapsed-sidebar.png')});
- await page.getByRole('button',{name:'Expand sidebar',exact:true}).click();expect(await header()).toEqual(originalHeader);
+ await page.getByRole('button',{name:'Expand sidebar',exact:true}).click();await settleSidebar(page);expect(await header()).toEqual(originalHeader);
  await page.screenshot({path:testInfo.outputPath('alignment-extended-shell.png')});
  await page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true}).click();
  expect(await navigation()).toEqual(originalNavigation);expect(await header()).toEqual(originalHeader);
@@ -178,7 +179,7 @@ for(const width of [900,1024,1280,1440,1920])test(`Gantt and embedded Tasks tool
   expect(geometry.searchCenter).toBeCloseTo(geometry.rect.x+geometry.rect.width/2,0);expect(geometry.overflow).toBeLessThanOrEqual(1);
  };
  for(const collapsed of [false,true]){
-  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);
   await check('.gantt-panel>.page-toolbar');await extended(page);await check('.gantt-panel>.page-toolbar');await check('.gantt-tasks-pane .page-toolbar');
   await page.screenshot({path:testInfo.outputPath(`${width}-${collapsed?'collapsed':'expanded'}-single-line-toolbars.png`)});
   await page.getByRole('group',{name:'Gantt mode'}).getByRole('button',{name:'Simple',exact:true}).click();

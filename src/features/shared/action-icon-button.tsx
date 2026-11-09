@@ -1,4 +1,5 @@
 "use client";
+import { useRowActionFeedback } from "./row-action-feedback";
 import { Tooltip } from "@heroui/react";
 import type { LucideIcon } from "lucide-react";
 import type { ComponentPropsWithRef, ReactElement } from "react";
@@ -22,8 +23,9 @@ export type ActionIconButtonProps = Omit<ComponentPropsWithRef<"button">, "child
 
 /** Pure presentation: callers retain native type, event propagation, commands and disabled policy. */
 export function ActionIconButton({ icon: Icon, label, count, compact = false, variant, className, ...props }: ActionIconButtonProps) {
+  const feedback=useRowActionFeedback();
   const name = count === undefined ? label : `${label} (${count})`;
-  const button = <button {...props} aria-label={props["aria-label"] ?? name}
+  const button = <button {...props} onClick={event=>{const action=()=>props.onClick?.(event);if(feedback)feedback(event.currentTarget,action);else action();}} aria-label={props["aria-label"] ?? name}
       className={`action-icon-button${compact ? " action-icon-button--compact" : ""}${variant === "danger" ? " danger" : ""}${className ? ` ${className}` : ""}`}>
       <Icon size={18} strokeWidth={1.75} aria-hidden="true" focusable="false" />
       {count !== undefined && <span className="action-icon-badge" aria-hidden="true">{count}</span>}

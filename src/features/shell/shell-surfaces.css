@@ -26,3 +26,24 @@
  .sidebar-project strong { line-height:16px; }
  .sidebar-hidden .sidebar-project { top:35px; }
 }
+/* Preserve the 232px/64px (200px/64px on small screens) grid tracks and reverse natively. */
+.heroui-experiment .app-shell { transition:grid-template-columns 300ms ease; }
+.heroui-experiment .app-shell #project-sidebar { width:100%; min-width:0; box-sizing:border-box; transition:padding 300ms ease; }
+.heroui-experiment .app-shell #project-sidebar .hero-nav { justify-content:flex-start; overflow:hidden; transition:padding 300ms ease; }
+.heroui-experiment .app-shell.sidebar-hidden #project-sidebar .hero-nav { padding-inline:13px; gap:0; }
+.heroui-experiment .app-shell #project-sidebar .module-letter { flex:0 0 22px; width:22px; }
+.heroui-experiment .app-shell #project-sidebar .module-label { display:inline; flex:1 1 auto; min-width:0; overflow:hidden; white-space:nowrap; opacity:1; transition:opacity 300ms ease; }
+.heroui-experiment .app-shell.sidebar-hidden #project-sidebar .module-label { opacity:0; }
+.sidebar-project { transition:top 300ms ease,left 300ms ease,right 300ms ease; }
+.heroui-experiment .app-shell.sidebar-hidden .sidebar-project { left:30px; right:30px; }
+.heroui-experiment .app-shell .sidebar-project p { position:absolute; top:0; left:0; max-width:100%; overflow:hidden; white-space:nowrap; display:block; opacity:1; transition:opacity 300ms ease; }
+.heroui-experiment .app-shell .sidebar-project-value { position:relative; height:20px; margin-top:16px; justify-content:flex-start; transition:height 300ms ease,margin-top 300ms ease; }
+.heroui-experiment .app-shell .sidebar-project strong { position:absolute; top:0; left:12px; width:calc(100% - 12px); display:block; opacity:1; transition:opacity 300ms ease; }
+.heroui-experiment .app-shell.sidebar-hidden .sidebar-project-value { height:4px; margin-top:0; }
+.heroui-experiment .app-shell.sidebar-hidden .sidebar-project p,.heroui-experiment .app-shell.sidebar-hidden .sidebar-project strong { opacity:0; pointer-events:none; }
+@media(prefers-reduced-motion:reduce) {
+ .heroui-experiment .app-shell,.heroui-experiment .app-shell #project-sidebar,.heroui-experiment .app-shell #project-sidebar .hero-nav,.heroui-experiment .app-shell #project-sidebar .module-label,
+ .heroui-experiment .app-shell .sidebar-project,.heroui-experiment .app-shell .sidebar-project p,.heroui-experiment .app-shell .sidebar-project-value,.heroui-experiment .app-shell .sidebar-project strong { transition:none; }
+}
+
+@media(max-height:420px) { .heroui-experiment .app-shell .sidebar-project-value { height:16px; margin-top:12px; } }

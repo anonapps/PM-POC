@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 export async function runRegression({ evaluate, waitFor, click, nav, setLabel, record }) {
   if (!process.env.REGRESSION_PMP_PATH) return;
   if(await evaluate(`Boolean(document.querySelector('nav'))`)){
-  await nav('File Information');
+  await nav('Settings');
   await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher')||document.querySelector('[role=dialog]'))`);
   if(await evaluate(`Boolean(document.querySelector('[role=dialog]'))`))await click('Save');
@@ -60,7 +60,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   }
   await click('Save Now');
   await waitFor(`document.querySelector('.toolbar-save-status')?.textContent.startsWith('Saved')`);
-  await nav('File Information');
+  await nav('Settings');
   await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   await click('Open Project');

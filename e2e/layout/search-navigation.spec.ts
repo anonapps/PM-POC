@@ -41,13 +41,13 @@ test('all supported Search titles reveal exact records with keyboard navigation 
  const bytes=await page.evaluate(()=>(window as unknown as {__searchSaved:()=>number[]}).__searchSaved()),loaded=deserializeProject(new Uint8Array(bytes));expect(loaded.ok).toBe(true);if(loaded.ok){expect(loaded.value.projectState.tasks).toEqual(source.tasks);expect(loaded.value.projectState.baselines).toEqual(source.baselines);}
 });
 
-test('Search return preserves query, type/deleted filters, ordering, focus and scroll; deleted targets are temporary',async({page})=>{
+test('Search sidebar return preserves query, type/deleted filters, ordering and scroll with sidebar focus; deleted targets are temporary',async({page})=>{
  await page.setViewportSize({width:1280,height:800});await open(page);await nav(page,'Search');await search(page).fill('Regression');
  await page.locator('.filter-trigger').click();await page.getByRole('checkbox',{name:'Filter Entity type: Task',exact:true}).check();await page.getByRole('checkbox',{name:'Include Deleted',exact:true}).check();await page.keyboard.press('Escape');
  const ordered=await page.locator('.search-result-title').evaluateAll(nodes=>nodes.map(node=>(node as HTMLElement).dataset.searchResultKey));expect(ordered.length).toBeGreaterThan(10);expect(await page.locator('.workspace').evaluate(node=>node.scrollWidth<=node.clientWidth)).toBe(true);
  const deleted=source.tasks.filter(task=>task.deletion.isDeleted).at(-1)!,button=title(page,'Task',deleted.id);await button.scrollIntoViewIfNeeded();await button.focus();const scroll=await page.locator('.workspace').evaluate(node=>node.scrollTop);expect(scroll).toBeGreaterThan(0);await button.press('Enter');await revealed(page,deleted.id);
  await expect(page.getByRole('checkbox',{name:'Show Deleted',exact:true})).not.toBeChecked();await page.keyboard.press('Escape');await expect(target(page,deleted.id)).toHaveCount(0);await expect(page.locator(`[data-navigation-id="${deleted.id}"]`)).toHaveCount(0);
- await nav(page,'Search');await expect(search(page)).toHaveValue('Regression');await expect(button).toBeFocused();expect(await page.locator('.search-result-title').evaluateAll(nodes=>nodes.map(node=>(node as HTMLElement).dataset.searchResultKey))).toEqual(ordered);
+ await nav(page,'Search');await expect(search(page)).toHaveValue('Regression');await expect(page.locator('nav').getByRole('button',{name:'Search',exact:true})).toBeFocused();await expect(button).toBeInViewport();expect(await page.locator('.search-result-title').evaluateAll(nodes=>nodes.map(node=>(node as HTMLElement).dataset.searchResultKey))).toEqual(ordered);
  expect(await page.locator('.workspace').evaluate(node=>node.scrollTop)).toBeCloseTo(scroll,0);
  await page.locator('.filter-trigger').click();await expect(page.getByRole('checkbox',{name:'Filter Entity type: Task',exact:true})).toBeChecked();await expect(page.getByRole('checkbox',{name:'Include Deleted',exact:true})).toBeChecked();await page.keyboard.press('Escape');
  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
@@ -66,5 +66,5 @@ test('Warnings reuses exact-record reveal and Search starts fresh for another pr
  await open(page);await nav(page,'Search');await search(page).fill('Remember this query');await nav(page,'Warnings');
  const warning=page.locator('.warning-content').filter({hasText:'Task · TASK-'}).first();await expect(warning).toBeVisible();const label=await warning.getAttribute('aria-label');const human=label!.match(/TASK-\d+/)![0],item=source.tasks.find(task=>task.humanId===human)!;
  await warning.click();await revealed(page,item.id);await nav(page,'Search');await expect(search(page)).toHaveValue('Remember this query');
- await nav(page,'File Information');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await nav(page,'Search');await expect(search(page)).toHaveValue('');
+ await nav(page,'Settings');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await nav(page,'Search');await expect(search(page)).toHaveValue('');
 });

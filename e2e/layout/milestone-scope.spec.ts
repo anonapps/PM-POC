@@ -31,12 +31,12 @@ async function open(page: Page) {
 const priorColumns = `
 @container (min-width:601px) {
  .workspace.module-milestones>.panel>table.milestones-table th:first-child,
- .workspace.module-milestones>.panel>table.milestones-table th:nth-child(4),
- .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:auto; }
+ .workspace.module-milestones>.panel>table.milestones-table th:nth-child(4) { width:auto; }
+ .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:10.285714%; }
 }
 @container (min-width:601px) and (max-width:1350px) {
  .workspace.module-milestones>.panel>table.milestones-table th:first-child { width:23%; }
- .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:20%; }
+ .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:16%; }
 }`;
 
 for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half its width without changing other columns at ${width}`, async ({ page }, info) => {

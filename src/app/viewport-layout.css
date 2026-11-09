@@ -346,8 +346,8 @@
 }
 /* Warning information shares the predecessor control band instead of adding a line. */
 @container (min-width:601px) {
- .workspace .panel .milestones-table td:has(>.milestone-warning) { position:relative; }
- .workspace .panel .milestones-table td:has(>.milestone-warning)>details.multi-select { width:calc(100% - 28px); }
+ .workspace .panel .milestones-table td:nth-child(6) { position:relative; }
+ .workspace .panel .milestones-table td:nth-child(6)>details.multi-select { width:calc(100% - 32px); }
  .workspace .panel .milestones-table .milestone-warning { position:absolute; right:3px; top:calc(50% + 7px); transform:translateY(-50%); width:24px; min-width:0; line-height:normal; }
  .workspace .panel .milestones-table .milestone-warning>summary { height:24px; min-height:24px; padding:0; border:0; background:transparent; font-size:11px; line-height:24px; text-align:center; list-style:none; white-space:nowrap; }
  .workspace .panel .milestones-table .milestone-warning>summary::-webkit-details-marker { display:none; }
@@ -389,3 +389,13 @@
 .workspace .panel .warning-dependency-targets button { max-width:100%; height:auto; white-space:normal; overflow-wrap:anywhere; }
 
 .tube-milestone-tooltip > .tube-tooltip-group { display:grid; gap:4px; }
+
+/* Reserve the same warning gutter in every row, moving the whole Actions track right. */
+@container (min-width:601px) {
+ .workspace.module-milestones>.panel>table.milestones-table th:nth-child(6) { width:18.285714%; }
+ .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:10.285714%; }
+}
+@container (min-width:601px) and (max-width:1350px) {
+ .workspace.module-milestones>.panel>table.milestones-table th:nth-child(6) { width:15.4%; }
+ .workspace.module-milestones>.panel>table.milestones-table th:last-child { width:16%; }
+}

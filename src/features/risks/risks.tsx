@@ -38,7 +38,7 @@ function RiskActions({store,riskId,actions}:{store:ProjectStore;riskId:string;ac
   const add=()=>{if(!newDescription.trim())return;store.execute(addRiskAction(riskId,newDescription));setNewDescription("");};
   return <div className="risk-actions-editor">
     <h3>Risk actions</h3>
-    {actions.map((action,index)=><label key={action.id} className="risk-action-row">
+    {actions.map((action,index)=><label key={action.id} data-navigation-id={action.id} className="risk-action-row">
       <span>Action {index+1}</span>
       <HumanTextInput aria-label={`Description for action ${index+1}`} value={drafts[action.id]??action.description}
         onChange={event=>{const value=event.target.value;setDrafts(old=>({...old,[action.id]:value}));if(value.trim())store.execute(editRiskAction(riskId,action.id,{description:value}));}}

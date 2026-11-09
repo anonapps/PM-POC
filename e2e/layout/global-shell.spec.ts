@@ -1,9 +1,11 @@
+import { settleSidebar } from './sidebar-animation';
+import { openProjectDetails } from './project-details';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {deserializeProject} from '../../src/persistence/pmp/codec';
 import {globalAction} from './global-actions';
 const bytes=[...readFileSync('src/testing/fixtures/regression-180.pmp')];
-const modules=['Overview','Search','Streams','People','Tasks','Gantt','Milestones','Tube Map','Risk Log','Decision Log','Baselines','Dependencies','Warnings','File Information'];
+const modules=['Overview','Search','Streams','People','Tasks','Gantt','Milestones','Tube Map','Risk Log','Decision Log','Baselines','Dependencies','Warnings','Settings'];
 async function open(page:Page){
  page.on("pageerror",error=>console.error("SHELL PAGE ERROR",error.message));
  await page.setViewportSize({width:1440,height:900});
@@ -37,7 +39,7 @@ test('all routes keep page controls fixed and clickable with an intrinsic toolba
   await page.keyboard.press('Escape');await expect(toolbar(page)).toBeHidden();expect(await geometry()).toEqual(before);
  }
  await page.locator('nav').getByRole('button',{name:'Overview',exact:true}).click();
- await page.getByRole('button',{name:'Edit Project',exact:true}).click();
+ await openProjectDetails(page);
  const dialog=page.getByRole('dialog',{name:'Project Details',exact:true}),longName='A long project name '.repeat(12).trim();
  await dialog.locator('input:not([type])').first().fill(longName);await dialog.getByRole('button',{name:'Done',exact:true}).click();
  const name=page.locator('.sidebar-project strong');await expect(name).toHaveText(longName);await expect(name).toHaveAttribute('title',longName);expect(await name.evaluate(e=>e.scrollWidth>e.clientWidth)).toBe(true);
@@ -79,7 +81,7 @@ test('save states, reduced motion, actions, history and saved PMP bytes share ru
 for(const height of [900,600,480,420])test(`sidebar fits without navigation changes at ${height}px`,async({page},info)=>{
  await open(page);await page.locator('nav').getByRole('button',{name:'Tasks',exact:true}).click();await page.setViewportSize({width:1440,height});
  for(const collapsed of [false,true]){
-  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);
   const geometry=await page.locator('#project-sidebar').evaluate(sidebar=>{const box=sidebar.getBoundingClientRect(),project=sidebar.querySelector('.sidebar-project')!.getBoundingClientRect(),toggle=sidebar.querySelector('.sidebar-toggle')!.getBoundingClientRect();return{width:box.width,overflow:getComputedStyle(sidebar).overflowY,project:project.toJSON(),toggle:toggle.toJSON(),items:[...sidebar.querySelectorAll('nav button')].map(e=>({label:e.getAttribute('aria-label'),rect:e.getBoundingClientRect().toJSON()})),horizontal:[...sidebar.querySelectorAll("*")].filter(e=>e.checkVisibility({visibilityProperty:true})).some(e=>e.getBoundingClientRect().right>box.right)}});
   expect(geometry.width).toBe(collapsed?64:232);expect(geometry.horizontal).toBe(false);expect(geometry.overflow).toBe('clip');expect(geometry.items.map(i=>i.label)).toEqual(modules);
   for(const item of geometry.items){expect(item.rect.bottom,item.label!).toBeLessThanOrEqual(height);expect(item.rect.left).toBeGreaterThanOrEqual(0);expect(item.rect.right).toBeLessThanOrEqual(geometry.width)}

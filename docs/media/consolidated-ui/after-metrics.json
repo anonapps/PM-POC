@@ -1,0 +1,63 @@
+{
+  "overview": {
+    "width": 1208,
+    "overflow": 0,
+    "cards": [
+      {
+        "text": "30Active streams",
+        "height": 96
+      },
+      {
+        "text": "29People",
+        "height": 96
+      },
+      {
+        "text": "30Active tasks",
+        "height": 96
+      },
+      {
+        "text": "5Upcoming milestones",
+        "height": 96
+      },
+      {
+        "text": "23Open risks",
+        "height": 96
+      },
+      {
+        "text": "7High risks",
+        "height": 96
+      },
+      {
+        "text": "Project Progress (manual)%",
+        "height": 96
+      },
+      {
+        "text": "Quick ActionsAdd StreamAdd PersonAdd TaskAdd Milestone",
+        "height": 96
+      },
+      {
+        "text": "TimelinePlanned Project Duration: 31/12/2025 — 01/02/2027Stream / scop",
+        "height": 1521.125
+      }
+    ],
+    "border": "0px"
+  },
+  "milestones": {
+    "width": 1208,
+    "overflow": 0,
+    "cards": [],
+    "border": "0px"
+  },
+  "tube-map": {
+    "width": 1208,
+    "overflow": 0,
+    "cards": [],
+    "border": "1px"
+  },
+  "settings": {
+    "width": 1208,
+    "overflow": 0,
+    "cards": [],
+    "border": "0px"
+  }
+}

@@ -97,7 +97,7 @@ export async function verifyV15Batch({cdp,evaluate,waitFor,click,nav,setLabel,re
   await waitFor(`document.querySelectorAll('tbody tr').length===1`);
   record('Decision module searches hidden multiline context',await evaluate(`document.querySelector('tbody tr').innerText.includes('DECISION-001')`));
   await click('Save Now');await waitFor(`document.querySelector('.toolbar-save-status')?.textContent.startsWith('Saved')`);
-  await nav('File Information');await click('Close Project');await waitFor(`Boolean(document.querySelector('main.launcher'))`);await click('Open Project');await waitFor(`Boolean(document.querySelector('nav'))`);
+  await nav('Settings');await click('Close Project');await waitFor(`Boolean(document.querySelector('main.launcher'))`);await click('Open Project');await waitFor(`Boolean(document.querySelector('nav'))`);
   await nav('Search');await setLabel('Search names, IDs, roles, notes, status and dates','hidden narrative');await waitFor(`[...document.querySelectorAll('.search-result-row')].some(row=>row.textContent.includes('DECISION-001'))`);
   record('Hidden context survives PMP save/reopen and matches global search',true);
   await nav('Decision Log');
