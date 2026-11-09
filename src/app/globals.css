@@ -1112,3 +1112,28 @@ td:has(.scope-pill) .predictive-select > summary { min-width:0; }
 .creation-fields--task>.creation-selector>details>summary,
 .creation-fields--task>.creation-relationship>details>summary { box-sizing:border-box; height:34px; line-height:20px; }
 .creation-fields--task>.creation-selector>details:has(>summary .scope-pill)>summary { padding-block:5px; }
+
+/* Milestone scopes stay in one control band, regardless of selection count. */
+.workspace .panel .milestones-table details.multi-select > summary.scope-summary {
+  height:36px;
+  flex-wrap:nowrap;
+  overflow:hidden;
+}
+.workspace .panel .milestones-table .scope-summary > .scope-pill {
+  display:block;
+  flex:0 1 auto;
+  min-width:0;
+}
+.workspace .panel .milestones-table .scope-overflow-pill {
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  height:24px;
+  padding:2px 8px;
+  border-radius:999px;
+  background:var(--surface-muted, #e7edf4);
+  color:var(--text-muted, #334c67);
+  font-size:var(--type-caption);
+  line-height:20px;
+  white-space:nowrap;
+}

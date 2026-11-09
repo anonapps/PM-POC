@@ -2135,3 +2135,8 @@ Owner Mac screenshots show Task/Risk creation content requiring scrolling and ex
 ## Owner correction — retain the original creation drawer footprint — 29 October 2026
 
 The owner rejects the 880px/three-column creation reflow as too wide and too empty. Restore the original maximum560px drawer and two-column main field layout. Keep descriptions full-width and original Task field pairs. Fit content by reducing inter-field/structural whitespace and reusing the existing30px embedded/Extended control recipe, with unchanged existing font sizes. Creation message slots use a compact12px minimum and expand naturally for actual messages rather than clipping or hiding them; IDs, announcements and validation behavior remain unchanged. The empty Risk actions group may sit beside Due date, expanding across the form when actions exist. Preserve all fields and visible Create/Cancel, exact standalone/Extended parity, native behavior, dismissal, commands and persistence. This supersedes the earlier29October permission to widen the drawer or use three main columns; narrow screens and genuinely expanded lists keep content-only scrolling.
+
+
+## Milestone scope summary refinement (9 November 2026)
+
+Milestones table scope selectors keep a fixed single-line height. Show the first active selected stream and, when more are selected, a compact +N pill counting the remaining active selections. Clicking the summary, including +N, opens the existing scope selection dropdown. Preserve Project-wide and Deleted streams fallback labels, keyboard interaction and canonical scope data. This supersedes earlier wrapping-scope layout guidance for the Milestones table only.
