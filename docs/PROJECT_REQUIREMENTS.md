@@ -2229,3 +2229,8 @@ Reserve a consistent external warning gutter in every Milestones Dependencies ce
 ## Overview progress layout consistency — 9 November 2026
 
 Enabling Show progress information must preserve the Overview dashboard column structure: progress, optional Getting started, Quick Actions and Critical Path belong to the left stack; Timeline remains alongside that stack on desktop. Disabling progress removes only its tile without moving Timeline or reordering the other sections. On narrow screens retain the same reading order in one column. Preserve summary-card heights, editing behavior and all other dashboard functionality.
+
+
+## Overview progress control visibility — 9 November 2026
+
+Double the manual progress bar’s preferred length from 160px to 320px, allowing it to shrink on narrow screens without overflow. The percentage input retains a soft visible border when unfocused, the normal keyboard focus indicator, and its fixed internal percentage suffix. Preserve card sizing, dashboard order and percentage editing/saving behavior.

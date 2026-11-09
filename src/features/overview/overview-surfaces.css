@@ -5,9 +5,9 @@
 }
 .overview-panel .project-progress-card h2,.overview-panel .quick-actions-card h2 { margin:0 0 8px; }
 .overview-panel .project-progress-controls { display:flex; align-items:center; gap:12px; min-width:0; }
-.overview-panel .project-progress-controls progress { flex:0 1 160px; width:160px; min-width:30px; height:12px; }
+.overview-panel .project-progress-controls progress { flex:0 1 320px; width:320px; min-width:30px; height:12px; }
 .overview-panel .project-progress-number { position:relative; display:inline-flex; flex:0 0 76px; margin-left:auto; }
-.overview-panel .project-progress-number input[type=number] { box-sizing:border-box; width:76px; min-width:0; height:30px; margin:0; padding:3px 34px 3px 6px; font:inherit; font-size:var(--type-control); }
+.overview-panel .project-progress-number input[type=number] { box-sizing:border-box; width:76px; min-width:0; height:30px; margin:0; border:1px solid var(--border); border-radius:5px; background:var(--surface); padding:3px 34px 3px 6px; font:inherit; font-size:var(--type-control); }
 .overview-panel .project-progress-number>span { position:absolute; right:20px; top:50%; transform:translateY(-50%); pointer-events:none; font-size:var(--type-control); }
 .overview-panel .quick-actions { gap:4px; }
 .settings-panel>.card { width:100%; min-width:0; box-sizing:border-box; }
