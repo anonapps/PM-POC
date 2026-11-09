@@ -19,8 +19,8 @@ test('record rows and heading bands remove empty lower space without displacing 
   if(['Streams','Tasks','Milestones'].includes(name))await page.screenshot({path:info.outputPath(`${name}-compact.png`)});
  }
  await nav(page,'Milestones');const pills=page.locator('tbody tr').filter({has:page.getByLabel('Name for MILESTONE-002',{exact:true})});
- expect(await pills.locator('.scope-pill').count()).toBeGreaterThan(1);await expect(pills.locator('summary.scope-summary')).toBeVisible();
- const scope=await pills.locator('summary.scope-summary').boundingBox();expect(scope!.height).toBeGreaterThan(36);
+ expect(await pills.locator('.scope-pill').count()).toBe(1);await expect(pills.locator('.scope-overflow-pill')).toHaveCount(1);await expect(pills.locator('summary.scope-summary')).toBeVisible();
+ const scope=await pills.locator('summary.scope-summary').boundingBox();expect(scope!.height).toBe(36);
  const band=await pills.locator('input:not([type=checkbox]),select,summary:not(.scope-summary),.table-actions>button').evaluateAll(nodes=>nodes.filter(e=>!e.closest('.multi-select-options,.relationship-options')).map(e=>{const r=e.getBoundingClientRect();return r.y+r.height/2;}));expect(Math.max(...band)-Math.min(...band)).toBeLessThan(3);
  const badge=page.locator('.milestone-warning').first(),warningRow=badge.locator('xpath=ancestor::tr[1]');
  const centers=await warningRow.locator('input:not([type=checkbox]),select,summary:not(.scope-summary),.table-actions>button').evaluateAll(nodes=>nodes.filter(e=>!e.closest('.multi-select-options,.relationship-options')).map(e=>{const r=e.getBoundingClientRect();return r.y+r.height/2;}));expect(Math.max(...centers)-Math.min(...centers)).toBeLessThan(3);

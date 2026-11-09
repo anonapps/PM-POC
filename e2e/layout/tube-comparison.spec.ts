@@ -63,7 +63,7 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
   await expect(page.getByRole('checkbox', { name: 'Critical Path', exact: true })).toBeChecked();
   await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).uncheck(); await expect(markers(page)).toHaveCount(0); await expect(mode).toBeDisabled();
   await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).check(); await expect(mode).toHaveValue('map'); await expect(markers(page)).toHaveCount(4);
-  await expect(page.getByRole('button', { name: 'Save Now', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Save Now', exact: true, includeHidden: true })).toBeDisabled();
   expect(await page.evaluate(() => (window as unknown as { __tubeBytes: () => number[] }).__tubeBytes())).toEqual(initial);
   // Live diamonds still open their existing editor and preserve cancellation.
   await page.getByRole('button', { name: 'Edit milestone Original checkpoint via diamond', exact: true }).click();

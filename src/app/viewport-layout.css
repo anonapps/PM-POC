@@ -387,3 +387,5 @@
 .warning-dependency-targets { max-width:45%; min-width:0; }
 .warning-dependency-targets .actions { flex-wrap:wrap; }
 .workspace .panel .warning-dependency-targets button { max-width:100%; height:auto; white-space:normal; overflow-wrap:anywhere; }
+
+.tube-milestone-tooltip > .tube-tooltip-group { display:grid; gap:4px; }

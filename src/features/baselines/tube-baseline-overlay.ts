@@ -9,17 +9,18 @@ export interface TubeBaselineMarker {
   x: number;
   y: number;
   descriptions: string[];
+  milestoneIds: string[];
 }
 
 /** Read-only historical projection; never changes live lane/station coordinates. */
-export function buildTubeBaselineOverlay(baseline: ProjectBaseline, state: ProjectState, model: TubeMapModel) {
+export function buildTubeBaselineOverlay(baseline: ProjectBaseline, state: ProjectState, model: TubeMapModel, visible?: ReadonlyMap<string, ReadonlySet<string>>) {
   const rows = compareSchedule(baseline.snapshot, state).filter(row => row.baseline?.kind === 'milestone' && validScheduleDate(row.baseline.finishDate) && row.baseline.finishDate >= model.start && row.baseline.finishDate < model.end);
   const lanes = new Map(model.streams.map(stream => [stream.id, stream]));
   const historicalStreams = [{ id: 'project', name: 'Project-wide' }, ...baseline.snapshot.streams];
   const extraStreams: TubeStream[] = [];
   for (const stream of historicalStreams) {
-    if (lanes.has(stream.id) || !rows.some(row => row.baseline!.projectWide ? stream.id === 'project' : row.baseline!.streamIds.includes(stream.id))) continue;
-    const lane = { id: stream.id, label: `${stream.name} (baseline only)`, lane: model.streams.length + extraStreams.length, top: model.height + extraStreams.length * 88, height: 88 };
+    if ((visible && !visible.has(stream.id)) || lanes.has(stream.id) || !rows.some(row => row.baseline!.projectWide ? stream.id === 'project' : row.baseline!.streamIds.includes(stream.id))) continue;
+    const lane = { id: stream.id, label: `${stream.name} (baseline only)`, lane: model.streams.length + extraStreams.length, top: model.height + extraStreams.length * 88, height: 88, contentHeight: 88 };
     lanes.set(stream.id, lane);
     extraStreams.push(lane);
   }
@@ -28,15 +29,17 @@ export function buildTubeBaselineOverlay(baseline: ProjectBaseline, state: Proje
     const item = row.baseline!;
     const date = item.finishDate!;
     for (const streamId of item.projectWide ? ['project'] : item.streamIds) {
+      if (visible && !visible.get(streamId)?.has(item.id)) continue;
       const lane = lanes.get(streamId);
       if (!lane) continue;
       const key = `${streamId}:${date}`;
       let marker = grouped.get(key);
       if (!marker) {
-        marker = { streamId, date, x: (dateVariance(model.start, date)! / dateVariance(model.start, model.end)!) * 100, y: lane.top + 12, descriptions: [] };
+        marker = { streamId, date, x: (dateVariance(model.start, date)! / dateVariance(model.start, model.end)!) * 100, y: lane.top + 12, descriptions: [], milestoneIds: [] };
         grouped.set(key, marker);
       }
       const historicalName = historicalStreams.find(stream => stream.id === streamId)?.name ?? lane.label;
+      marker.milestoneIds.push(item.id);
       marker.descriptions.push(`${item.humanId} · ${item.name} · ${historicalName}: baseline ${timelineDisplayDate(date)}, current ${row.current?.finishDate ? timelineDisplayDate(row.current.finishDate) : 'removed or undated'}`);
     }
   }

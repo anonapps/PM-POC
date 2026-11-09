@@ -55,4 +55,16 @@ describe('same-map historical milestone projection', () => {
     const filtered = buildTubeMap(current, '2026-10-26', 'original', false, 'No match');
     expect(buildTubeBaselineOverlay(baseline(original), current, filtered).extraStreams[0].label).toBe('Old name (baseline only)');
   });
+  it('applies the shared historical lane filter without revealing excluded scopes or changing live geometry', () => {
+    const original = makeProjectState({streams:[streamFixture(),streamFixture({id:'s2',name:'Operations'})],milestones:[milestone('1','2026-10-27',['stream-1','s2']),milestone('2','2026-10-28')]});
+    const model=buildTubeMap(original,'2026-10-26'),before=JSON.stringify(model);
+    const visible=new Map([['s2',new Set(['1'])]]);
+    const result=buildTubeBaselineOverlay(baseline(original),original,model,visible);
+    expect(result.markers).toHaveLength(1);
+    expect(result.markers[0]).toMatchObject({streamId:'s2',milestoneIds:['1']});
+    expect(result.extraStreams).toHaveLength(0);
+    expect(JSON.stringify(model)).toBe(before);
+    expect(buildTubeBaselineOverlay(baseline(original),original,model,new Map()).markers).toHaveLength(0);
+  });
+
 });

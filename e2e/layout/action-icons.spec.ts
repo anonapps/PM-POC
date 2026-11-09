@@ -1,3 +1,4 @@
+import { globalAction } from './global-actions';
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
@@ -23,12 +24,13 @@ test('compact actions render shared geometry, named icons and zero/nonzero count
       if (name === 'Search') await page.getByRole('searchbox', { name: 'Search names, IDs, roles, notes, status and dates' }).fill('Regression');
       const buttons = page.locator('.workspace .action-icon-button');
       if (['Tasks', 'Risk Log', 'Decision Log', 'Dependencies'].includes(name)) expect(await buttons.count()).toBeGreaterThan(0);
-      for (const button of await buttons.all()) {
-        await expect(button).toHaveAccessibleName(/.+/);
-        expect(await button.getAttribute('title')).toBeNull();
-        await expect(button.locator('svg')).toHaveAttribute('aria-hidden', 'true');
-        const box = await button.boundingBox();
-        if (box) { expect(box.width).toBe(36); expect(box.height).toBe(36); }
+      const buttonStates=await buttons.evaluateAll(nodes=>nodes.map(button=>{
+        const box=button.getBoundingClientRect();
+        return {label:button.getAttribute('aria-label'),title:button.getAttribute('title'),icon:button.querySelector('svg')?.getAttribute('aria-hidden'),width:box.width,height:box.height,visible:box.width>0&&box.height>0};
+      }));
+      for(const button of buttonStates){
+        expect(button.label).toMatch(/.+/);expect(button.title).toBeNull();expect(button.icon).toBe('true');
+        if(button.visible){expect(button.width).toBe(36);expect(button.height).toBe(36);}
       }
       expect(await page.locator('.workspace').evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
       if (name === 'Risk Log') {
@@ -60,14 +62,16 @@ test('tooltips appear on delayed hover and keyboard focus, dismiss on Escape, an
 
 test('duplicate/delete/restore, confirmation cancellation, and disabled Undo preserve behavior', async ({ page }) => {
   await open(page);
-  const undo = page.getByRole('button', { name: 'Undo', exact: true });
+  const undo = page.getByRole('button', { name: 'Undo', exact: true, includeHidden: true });
   await expect(undo).toBeDisabled();
+  await page.keyboard.press('Alt+Shift+T');
+  await page.mouse.move(0,400);
   await undo.locator('..').hover(); await expect(page.getByRole('tooltip', { name: 'Undo', exact: true })).toBeVisible();
   await page.mouse.move(0, 0); await nav(page, 'Tasks');
   const rows = page.locator('tbody tr'), before = await rows.count();
   await page.getByRole('button', { name: 'Duplicate', exact: true }).first().click();
   await expect(rows).toHaveCount(before + 1); await expect(undo).toBeEnabled();
-  await undo.click(); await expect(rows).toHaveCount(before);
+  await globalAction(page,'Undo'); await expect(rows).toHaveCount(before);
   // The first task is a prerequisite; cancellation must retain it and its links.
   const remove = page.locator('tbody tr').filter({ has: page.getByLabel('Name for TASK-005', { exact: true }) }).getByRole('button', { name: 'Delete', exact: true });
   const cancelled = page.waitForEvent('dialog').then(async dialog => { expect(dialog.message()).toContain('depend'); await dialog.dismiss(); });

@@ -1,3 +1,4 @@
+import { globalAction } from './global-actions';
 import {test,expect,type Page} from '@playwright/test';
 import {makeProjectState,projectFixture,streamFixture} from '../../src/domain/test-fixtures';
 import {captureSchedule} from '../../src/domain/baselines';
@@ -17,19 +18,19 @@ async function open(page:Page){
  await expect(page.getByRole('checkbox',{name:'Show milestone names',exact:true})).toBeChecked();
 }
 const current=(page:Page,id='1')=>page.locator(`.tube-station[data-entity-id="${id}"] .tube-station-diamond`).first();
-const historical=(page:Page,id='1')=>page.locator(`.tube-baseline-indicator[data-baseline-id="${id}"]`).first();
+const historical=(page:Page,id='1')=>page.locator(`.tube-baseline-indicator[data-baseline-id="${id}"], .tube-baseline-overlay-marker[data-baseline-id="${id}"]`).first();
 async function comparison(page:Page,mode:string){
  await page.getByRole('checkbox',{name:'Baseline milestones',exact:true}).setChecked(mode!=='off');
- if(mode!=='off')await page.getByRole('combobox',{name:'Baseline comparison display',exact:true}).selectOption(mode);
+ if(mode!=='off')await page.getByRole('combobox',{name:'Baseline milestone display',exact:true}).selectOption(mode==='overlay'?'map':'below');
 }
 for(const mode of ['off','overlay','separate'])for(const names of [true,false])test(`${mode}, names ${names}: compact geometry, shared date alignment and unchanged data`,async({page},testInfo)=>{
  await page.setViewportSize({width:1280,height:800});await open(page);await comparison(page,mode);await page.getByRole('checkbox',{name:'Show milestone names',exact:true}).setChecked(names);
  await expect(page.locator('.tube-station-link')).toHaveCount(names?5:0);
- await expect(page.locator('.tube-baseline-name')).toHaveCount(mode==='off'||!names?0:5);
- await expect(page.locator('.tube-baseline-strip')).toHaveCount(mode==='separate'?1:0);await expect(page.locator('.tube-baseline-overlay')).toHaveCount(mode==='overlay'?1:0);
+ await expect(page.locator('.tube-baseline-name')).toHaveCount(mode!=='separate'||!names?0:5);
+ await expect(page.locator('.tube-baseline-strip')).toHaveCount(mode==='separate'?1:0);await expect(page.locator('.tube-baseline-overlay-marker')).toHaveCount(mode==='overlay'?5:0);
  await expect(page.getByRole('navigation',{name:'Tube Map date navigation',exact:true})).toHaveCount(1);await expect(page.locator('.baseline-selector summary')).toHaveCount(1);
  if(process.env.CAPTURE_LAYOUT)await page.screenshot({path:testInfo.outputPath('tube-display.png')});
- const lane=await page.locator('.tube-line').first().boundingBox();expect(lane!.height).toBe(mode==='overlay'?(names?136:76):(names?88:48));
+ const lane=await page.locator('.tube-line').first().boundingBox();expect(lane!.height).toBe(names?88:48);
  if(mode!=='off'){
   const old=await historical(page,'2').boundingBox(),live=await current(page,'2').boundingBox();expect(Math.abs(old!.x+old!.width/2-live!.x-live!.width/2)).toBeLessThan(1);
   const before=await historical(page).evaluate(node=>(node as HTMLElement).style.left);
@@ -38,11 +39,11 @@ for(const mode of ['off','overlay','separate'])for(const names of [true,false])t
  expect(await current(page).evaluate(node=>node.getBoundingClientRect().width)).toBeGreaterThanOrEqual(24);await expect(current(page)).toHaveCSS('height','26px');
  const alignment=await current(page).evaluate(node=>{const station=node.closest<HTMLElement>('.tube-station')!,body=node.closest<HTMLElement>('.tube-body')!,box=node.getBoundingClientRect();return Math.abs(box.top+box.height/2-body.getBoundingClientRect().top-parseFloat(station.style.top));});expect(alignment).toBeLessThan(1);
  expect(await page.locator('.workspace').evaluate(node=>node.scrollWidth<=node.clientWidth)).toBe(true);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 test('one accessible tooltip for hover/focus, no native/pseudo tooltip, viewport-safe edges and Quick Edit',async({page})=>{
- await page.setViewportSize({width:900,height:700});await open(page);await comparison(page,'overlay');await page.getByRole('checkbox',{name:'Show milestone names',exact:true}).uncheck();
+ await page.setViewportSize({width:900,height:700});await open(page);await comparison(page,'separate');await page.getByRole('checkbox',{name:'Show milestone names',exact:true}).uncheck();
  for(const marker of [current(page),historical(page),historical(page,'4')]){
   await marker.scrollIntoViewIfNeeded();await marker.focus();await expect(page.getByRole('tooltip')).toHaveCount(1);await expect(marker).toHaveAttribute('aria-describedby',await page.getByRole('tooltip').getAttribute('id') as string);
   await expect(marker).not.toHaveAttribute('title');expect(await marker.evaluate(node=>getComputedStyle(node,'::after').content)).toBe('none');
@@ -54,10 +55,10 @@ test('one accessible tooltip for hover/focus, no native/pseudo tooltip, viewport
 });
 
 test('baseline selection, filters, axis and Quick Edit remain shared and snapshots survive save',async({page})=>{
- await open(page);await comparison(page,'separate');await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Second plan',exact:true}).check();await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23/);
- await page.getByRole('combobox',{name:'Baseline comparison display',exact:true}).selectOption('overlay');await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23/);
- await page.getByRole('combobox',{name:'Axis',exact:true}).selectOption('date');await expect(page.locator('.tube-axis')).toContainText('02/11');
+ await open(page);await comparison(page,'separate');await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Second plan',exact:true}).check();await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23|23\/11\/2026/);
+ await page.getByRole('combobox',{name:'Baseline milestone display',exact:true}).selectOption('map');await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23|23\/11\/2026/);
+ await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption('date');await expect(page.locator('.tube-axis')).toContainText('02/11');
  await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('Operations');await expect(page.locator('.tube-line')).toHaveCount(2);await expect(historical(page,'1')).toHaveCount(0);await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('');
- await current(page).click();await page.getByRole('textbox',{name:'Milestone name',exact:true}).fill('Revised gate');await page.getByRole('button',{name:'Save',exact:true}).click();await page.getByRole('button',{name:'Save Now',exact:true}).click();
+ await current(page).click();await page.getByRole('textbox',{name:'Milestone name',exact:true}).fill('Revised gate');await page.getByRole('button',{name:'Save',exact:true}).click();await globalAction(page,'Save Now');
  const loaded=deserializeProject(new Uint8Array(await page.evaluate(()=>(window as unknown as {__tubeSaved:()=>number[]}).__tubeSaved())));expect(loaded.ok).toBe(true);if(loaded.ok){expect(loaded.value.projectState.baselines).toEqual(source.baselines);expect(loaded.value.projectState.milestones.find(m=>m.id==='1')!.name).toBe('Revised gate');}
 });

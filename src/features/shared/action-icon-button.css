@@ -81,3 +81,7 @@ body .action-tooltip {
 /* Creation Close retains the accepted 30px header band and a 40px hit target. */
 body .action-icon-button--compact { --action-icon-size: var(--ui-action-height); }
 body .action-icon-button--compact::after { inset: -5px; }
+/* Disabled actions delegate pointer events to their focusable tooltip wrapper. */
+.disabled-action-trigger > button:disabled { pointer-events:none; }
+
+body .action-tooltip-layer { pointer-events:none; }

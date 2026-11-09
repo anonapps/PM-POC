@@ -244,7 +244,7 @@ for(const width of [375,900,1440])test(`Tube Map Stream and weeks use a single G
  await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
  const axis=page.locator('.tube-axis'),sort=axis.getByRole('button'),laneHeights=await page.locator('.tube-line').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));
  for(const mode of ['week','date']){
-  await page.getByRole('combobox',{name:/^Axis/}).selectOption(mode);
+  await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption(mode);
   const geometry=await axis.evaluate(e=>({box:e.getBoundingClientRect().toJSON(),cells:[...e.children].map(n=>{const range=document.createRange();range.selectNodeContents(n);return{box:n.getBoundingClientRect().toJSON(),textBox:range.getBoundingClientRect().toJSON(),font:getComputedStyle(n).fontSize,line:getComputedStyle(n).lineHeight,align:getComputedStyle(n).alignItems,text:n.textContent}})}));
   expect(geometry.box.height).toBe(dateHeight);expect(geometry.box.height).not.toBe(dateHeight+yearHeight);expect(geometry.cells).toHaveLength(13);
   for(const cell of geometry.cells){expect(cell.box.top).toBe(geometry.box.top);expect(cell.box.bottom).toBeLessThanOrEqual(geometry.box.bottom);expect(cell.box.height).toBe(23);expect(cell.font).toBe('12.8px');expect(cell.line).toBe('20px');expect(cell.align).toBe('center');expect(Math.abs(cell.textBox.y+cell.textBox.height/2-cell.box.y-cell.box.height/2)).toBeLessThan(2)}

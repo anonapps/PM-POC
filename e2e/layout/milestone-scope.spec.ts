@@ -1,3 +1,4 @@
+import { globalAction } from './global-actions';
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync, mkdirSync } from 'node:fs';
 import { deserializeProject, serializeProject } from '../../src/persistence/pmp/codec';
@@ -70,7 +71,7 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
     const headings = await table.locator('thead th').evaluateAll(nodes => nodes.map(node => { const rect = node.getBoundingClientRect(); return { left: rect.left, width: rect.width }; }));
     expect(geometry).toEqual(headings);
     const summary = row.locator('.scope-summary');
-    await expect(summary).toHaveCSS('flex-wrap', 'wrap');
+    await expect(summary).toHaveCSS('flex-wrap', 'nowrap');
     await expect(summary).toHaveCSS('gap', '4px');
     const bounds = (await row.locator(':scope>td').nth(3).boundingBox())!;
     for (const pill of await row.locator('.scope-pill').all()) {
@@ -85,8 +86,8 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
       expect(box.x + box.width).toBeLessThanOrEqual(cell.x + cell.width + 1);
     }
   }
-  if (width >= 1280) expect(after.heights[2]).toBeLessThan(before.heights[2]);
-  expect(after.heights[2]).toBeGreaterThan(after.heights[0]);
+  expect(after.heights[2]).toBe(before.heights[2]);
+  expect(after.heights[2]).toBe(after.heights[0]);
   expect(await page.locator('.workspace').evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   expect(await table.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   if (width === 1440) await page.screenshot({ path: 'docs/media/milestone-scope/after-1440.png' });
@@ -95,7 +96,9 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
   const choice = page.getByRole('checkbox', { name: 'Stream 2', exact: true });
   await choice.check();
   await page.keyboard.press('Escape');
-  await expect(rows[0].locator('.scope-pill')).toHaveCount(2);
-  await page.getByRole('button', { name: 'Undo', exact: true }).click();
   await expect(rows[0].locator('.scope-pill')).toHaveCount(1);
+  await expect(rows[0].locator('.scope-overflow-pill')).toHaveText('+1');
+  await globalAction(page,'Undo');
+  await expect(rows[0].locator('.scope-pill')).toHaveCount(1);
+  await expect(rows[0].locator('.scope-overflow-pill')).toHaveCount(0);
 });

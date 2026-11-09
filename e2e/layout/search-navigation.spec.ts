@@ -36,7 +36,7 @@ test('all supported Search titles reveal exact records with keyboard navigation 
    await expect(page.locator('.baseline-selector')).toContainText('Original plan');await page.getByRole('dialog',{name:'Manage baselines'}).getByRole('button',{name:'Done',exact:true}).click();
   }
   if(kind==='Dependency')await expect(target(page,id).getByRole('button',{name:`Edit dependency ${id}`,exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
  }
  const bytes=await page.evaluate(()=>(window as unknown as {__searchSaved:()=>number[]}).__searchSaved()),loaded=deserializeProject(new Uint8Array(bytes));expect(loaded.ok).toBe(true);if(loaded.ok){expect(loaded.value.projectState.tasks).toEqual(source.tasks);expect(loaded.value.projectState.baselines).toEqual(source.baselines);}
 });
@@ -50,7 +50,7 @@ test('Search return preserves query, type/deleted filters, ordering, focus and s
  await nav(page,'Search');await expect(search(page)).toHaveValue('Regression');await expect(button).toBeFocused();expect(await page.locator('.search-result-title').evaluateAll(nodes=>nodes.map(node=>(node as HTMLElement).dataset.searchResultKey))).toEqual(ordered);
  expect(await page.locator('.workspace').evaluate(node=>node.scrollTop)).toBeCloseTo(scroll,0);
  await page.locator('.filter-trigger').click();await expect(page.getByRole('checkbox',{name:'Filter Entity type: Task',exact:true})).toBeChecked();await expect(page.getByRole('checkbox',{name:'Include Deleted',exact:true})).toBeChecked();await page.keyboard.press('Escape');
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 test('Search temporarily reveals a filtered record and preserves destination preferences while normal navigation still resets',async({page})=>{

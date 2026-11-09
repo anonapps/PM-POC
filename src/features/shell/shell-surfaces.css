@@ -15,7 +15,7 @@
 /* The global row is gone; the workspace now owns its complete existing grid cell. */
 .app-shell .app-main { position:relative; grid-template-rows:minmax(0,1fr); }
 .global-toolbar-region { position:absolute; top:0; right:var(--space-4); z-index:50; width:max-content; max-width:calc(100% - var(--space-4)); padding-top:10px; pointer-events:none; }
-.global-toolbar-trigger { position:absolute; inset:0 0 auto; height:10px; pointer-events:auto; }
+.global-toolbar-trigger { position:absolute; inset:0 calc(-1 * var(--space-4)) auto auto; width:var(--space-4); height:10px; pointer-events:auto; }
 .global-floating-toolbar { display:flex; align-items:center; gap:var(--space-1); width:max-content; max-width:100%; box-sizing:border-box; padding:var(--space-1); background:var(--surface); border:1px solid var(--border); border-radius:var(--action-radius); box-shadow:var(--shadow-popover); pointer-events:auto; }
 .global-toolbar-region[data-open="false"] .global-floating-toolbar { visibility:hidden; pointer-events:none; }
 .toolbar-save-status { min-width:0; overflow:hidden; text-overflow:ellipsis; padding-inline:var(--space-1); font-size:var(--type-caption); white-space:nowrap; }

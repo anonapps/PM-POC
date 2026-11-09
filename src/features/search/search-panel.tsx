@@ -1,10 +1,11 @@
 "use client";
+import { RotateCcw } from "lucide-react";
 import { ActionIconButton } from "../shared/action-icon-button";
 import { ChoiceRow } from "../shared/choice-row";
 import { PageToolbar } from "../shared/page-toolbar";
 import { ModuleSearch } from "../shared/module-search";
 import { FilterChoices } from "../shared/record-filters";
-import { useMemo, useState, useSyncExternalStore, useLayoutEffect, useRef } from "react";
+import { useMemo, useSyncExternalStore, useLayoutEffect, useRef } from "react";
 import { useNavigationPreference } from "../shared/navigation-session";
 import { restore, type ProjectStore } from "../../application";
 import type { ModuleName } from "../shell/shell";
