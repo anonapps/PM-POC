@@ -3,6 +3,11 @@ export function tubeMapAnchorDate(now: Date, windowOffset: number): string {
   return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate() + windowOffset * 28)).toISOString().slice(0, 10);
 }
 
+/** Keep four historical weeks before the current week in the twelve-week view. */
+export function tubeMapWindowAnchorDate(now: Date, windowOffset: number): string {
+  return tubeMapAnchorDate(now, windowOffset - 1);
+}
+
 /** Show the inclusive final day for a timeline whose end boundary is exclusive. */
 export function inclusiveTubeMapEnd(exclusiveEnd: string): string {
   const end = new Date(`${exclusiveEnd}T00:00:00Z`);
