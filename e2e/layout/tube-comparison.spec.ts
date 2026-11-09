@@ -57,11 +57,11 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
   expect(await page.locator('.workspace').evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   const footer = (await page.getByRole('navigation', { name: 'Tube Map date navigation', exact: true }).boundingBox())!;
   expect(footer.y + footer.height).toBeLessThanOrEqual(901);
-  await page.getByRole('checkbox', { name: 'Critical Path', exact: true }).check();
+  await tubeFilter(page,'Show Critical Path',true);
   await tubeFilter(page,'Hide Dependencies',true);
   await mode.check(); await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);
   await page.getByRole('radio',{name:'Combined',exact:true}).check(); expect(await geometry(page)).toEqual(before);
-  await expect(page.getByRole('checkbox', { name: 'Critical Path', exact: true })).toBeChecked();
+  await page.locator('.filter-trigger').click();await expect(page.getByRole('checkbox',{name:'Show Critical Path',exact:true})).toBeChecked();await page.keyboard.press('Escape');
   await mode.check(); await expect(markers(page)).toHaveCount(0); await expect(mode).toBeChecked();
    await page.getByRole('radio',{name:'Combined',exact:true}).check(); await expect(markers(page)).toHaveCount(4);
   await expect(page.getByRole('button', { name: 'Save Now', exact: true, includeHidden: true })).toBeDisabled();

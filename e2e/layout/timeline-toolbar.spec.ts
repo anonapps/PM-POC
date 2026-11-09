@@ -154,13 +154,13 @@ for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are tra
  await page.getByRole('button',{name:moduleName==='Gantt'?'Gantt':'Tube Map',exact:true}).first().focus();
  const hover=await point();await page.mouse.move(hover.x,hover.y);await expect(first).toHaveAttribute('data-active','true');await expect(colouredItems()).toHaveCount(2);
  await page.mouse.move(10,10);await expect(first).toHaveAttribute('data-active','false');await expect(mutedItems()).toHaveCount(0);
- await page.locator('.filter-trigger').click();await page.getByRole('checkbox',{name:moduleName==='Tube Map'?'Hide Dependencies':'Hide dependencies',exact:true}).check();await expect(links).toHaveCount(0);
- if(moduleName==='Tube Map')await expect(page.getByRole('checkbox',{name:'Hide Dependencies',exact:true})).toBeChecked();else await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).not.toBeChecked();await expect(mutedItems()).toHaveCount(0);
+ await page.locator('.filter-trigger').click();await page.getByRole('checkbox',{name:'Hide Dependencies',exact:true}).check();await expect(links).toHaveCount(0);
+ await expect(page.getByRole('checkbox',{name:'Hide Dependencies',exact:true})).toBeChecked();await expect(mutedItems()).toHaveCount(0);
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${moduleName}-hide-dependencies-filter.png`)});
  await page.getByRole('button',{name:'Clear all',exact:true}).click();await page.keyboard.press('Escape');expect(await links.count()).toBeGreaterThan(1);
  await expect(page.locator('.dependency-connection[data-active=true]')).toHaveCount(0);
- if(moduleName==='Tube Map')await tubeFilter(page,'Hide Dependencies',true);else await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(links).toHaveCount(0);
- if(moduleName==='Tube Map')await tubeFilter(page,'Hide Dependencies',false);else await page.getByRole('checkbox',{name:'Dependencies',exact:true}).check();expect(await links.count()).toBeGreaterThan(1);
+ await tubeFilter(page,'Hide Dependencies',true);await expect(links).toHaveCount(0);
+ await tubeFilter(page,'Hide Dependencies',false);expect(await links.count()).toBeGreaterThan(1);
  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
@@ -215,7 +215,7 @@ test('Gantt stream, year and date bands share compact height without changing ty
  }
  // Existing baseline/variance row rules must never increase section-band heights.
  await page.getByRole('button',{name:'Expand All',exact:true}).click();
- for(const label of ['Baseline overlay','Variance indicators']){
+ for(const label of ['Baseline overlay']){
   const toggle=page.getByLabel(label,{exact:true});await expect(toggle).toBeEnabled();await toggle.check();
  }
  for(const mode of ['Simple','Extended']){

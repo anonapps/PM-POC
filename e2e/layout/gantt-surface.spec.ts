@@ -31,18 +31,31 @@ for(const [width,height] of [[900,700],[1280,900],[1440,900],[1920,1080]])test(`
   await page.screenshot({path:info.outputPath(`${width}-${extended?'extended':'simple'}-surface.png`)});
  }
 });
-test('baseline comparison uses substantial grey bars and red finish delay segments with independent toggles',async({page},info)=>{
+test('baseline comparison uses substantial grey bars and red finish delay segments with baseline date tooltips',async({page},info)=>{
  // This scenario asserts the approved October snapshot inside a specific Week window.
  await page.clock.setFixedTime(new Date('2026-10-26T12:00:00Z'));
  await page.setViewportSize({width:1440,height:900});await open(page);await nav(page,'Gantt');await page.getByLabel('Baseline overlay',{exact:true}).check();
  const row=page.locator('.gantt-row.task').filter({has:page.getByRole('button',{name:'Baseline alignment task',exact:true})});
  await expect(row.locator('.gantt-baseline')).toBeVisible();expect((await row.locator('.gantt-baseline').boundingBox())!.height).toBeGreaterThanOrEqual(12);await expect(row.locator('.gantt-baseline')).toHaveCSS('border-top-style','dashed');const historical=(await row.locator('.gantt-baseline').boundingBox())!,current=(await row.locator('.gantt-bar').boundingBox())!;expect(historical.y+historical.height).toBeGreaterThan(current.y+current.height+8);await expect(row.locator('.gantt-delay')).toHaveAttribute('aria-label',/4 days after baseline/);await expect(row.locator('.gantt-delay')).toHaveCSS('border-top-color','rgb(180, 35, 24)');
  await page.screenshot({path:info.outputPath('baseline-comparison-visible.png')});
- await page.getByLabel('Variance indicators',{exact:true}).check();await expect(row.locator('.variance-indicator')).toBeVisible();await page.getByLabel('Baseline overlay',{exact:true}).uncheck();await expect(row.locator('.gantt-baseline,.gantt-delay')).toHaveCount(0);await expect(row.locator('.variance-indicator')).toBeVisible();
+ const marker=row.locator('.gantt-baseline');await marker.hover();const tooltip=page.getByRole('tooltip');
+ await expect(tooltip).toContainText('Baseline alignment task');
+ for(const detail of ['Current start: 25/10/2026','Current end: 31/10/2026','Baseline start: 25/10/2026','Baseline end: 27/10/2026'])await expect(tooltip).toContainText(detail);
+ await expect(marker).not.toHaveAttribute('title');await page.mouse.move(0,0);await marker.focus();await expect(tooltip).toBeVisible();await expect(marker).toHaveAttribute('aria-describedby',await tooltip.getAttribute('id') as string);await page.keyboard.press('Escape');await expect(tooltip).toHaveCount(0);
+ await expect(page.getByRole('checkbox',{name:'Variance indicators',exact:true})).toHaveCount(0);await page.getByLabel('Baseline overlay',{exact:true}).uncheck();await expect(row.locator('.gantt-baseline,.gantt-delay')).toHaveCount(0);await expect(row.locator('.variance-indicator')).toHaveCount(0);
 });
 test('dropdown search is visibly editable before focus and comparison text is centered',async({page},info)=>{
  await page.setViewportSize({width:1440,height:900});await open(page);await nav(page,'Gantt');const summary=page.locator('.baseline-selector summary');
  const offset=await summary.evaluate(e=>{const range=document.createRange();range.selectNodeContents(e);const text=range.getBoundingClientRect(),box=e.getBoundingClientRect();return Math.abs(text.top+text.height/2-box.top-box.height/2);});expect(offset).toBeLessThanOrEqual(1.5);
  await summary.click();const input=page.getByRole('searchbox',{name:'Search Comparison baseline',exact:true});await expect(input).not.toBeFocused();await expect(input).toHaveCSS('border-top-style','solid');await expect(input).toHaveCSS('border-top-width','1px');await expect(input).toHaveAttribute('placeholder','Type to filter');await input.fill('unavailable');await expect(page.getByText('No matching options',{exact:true})).toBeVisible();await page.keyboard.press('Escape');await expect(summary).toBeFocused();
  await nav(page,'Streams');await page.locator('tbody .predictive-select summary').first().click();const owner=page.getByRole('searchbox',{name:/^Search Owner for STREAM-/}).first();await expect(owner).toHaveCSS('border-top-style','solid');await expect(owner).toHaveAttribute('placeholder','Type to filter');await page.screenshot({path:info.outputPath('shared-dropdown-search-input.png')});
+});
+
+
+test('Tube Map inherits the Gantt page surface and retains matching chart/header colours',async({page})=>{
+ await page.setViewportSize({width:1440,height:900});await open(page);await nav(page,'Gantt');
+ const colours=await page.locator('.gantt-panel').evaluate(panel=>({panel:getComputedStyle(panel).backgroundColor,controls:getComputedStyle(panel.querySelector('.baseline-controls')!).backgroundColor,plot:getComputedStyle(panel.querySelector('.gantt')!).backgroundColor,header:getComputedStyle(panel.querySelector('.gantt-head')!).backgroundColor}));
+ await nav(page,'Tube Map');
+ const tube=await page.locator('.workspace > .panel').evaluate(panel=>({panel:getComputedStyle(panel).backgroundColor,controls:getComputedStyle(panel.querySelector('.baseline-controls')!).backgroundColor,plot:getComputedStyle(panel.querySelector(':scope > .tube-map')!).backgroundColor,header:getComputedStyle(panel.querySelector('.tube-axis')!).backgroundColor}));
+ expect(tube).toEqual(colours);
 });

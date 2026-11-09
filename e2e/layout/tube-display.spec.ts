@@ -75,7 +75,7 @@ test('comparison controls reject identical snapshots and filters own names/depen
  await expect(page.locator('.timeline-navigation-legend-row .tube-baseline-key')).toBeVisible();
  const legend=(await page.getByRole('list',{name:'Milestone status legend',exact:true}).boundingBox())!,key=(await page.locator('.timeline-navigation-legend-row .tube-baseline-key').boundingBox())!;
  expect(key.x-legend.x-legend.width).toBeGreaterThanOrEqual(0);expect(key.x-legend.x-legend.width).toBeLessThanOrEqual(12);
- await expect(page.locator('.baseline-controls input[type=checkbox]')).toHaveCount(1);
+ await expect(page.locator('.baseline-controls input[type=checkbox]')).toHaveCount(0);
  await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Current plan copy',exact:true}).check();
  await expect(page.getByRole('radio',{name:'Combined',exact:true})).toBeDisabled();await expect(page.getByRole('radio',{name:'Detached',exact:true})).toBeDisabled();
  await expect(page.getByText('Selected baseline matches the current Tube Map.',{exact:true})).toBeVisible();

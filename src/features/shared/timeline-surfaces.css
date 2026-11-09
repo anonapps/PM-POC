@@ -80,3 +80,7 @@
 .workspace.module-tube-map .panel footer.timeline-navigation .timeline-status-legend { flex:0 1 auto; }
 .workspace.module-tube-map .timeline-navigation-legend-row > .tube-baseline-key { flex:0 1 auto; max-width:100%; }
 .workspace.module-tube-map .panel footer.timeline-navigation .timeline-navigation-context { margin-left:auto; max-width:100%; }
+/* Tube Map uses the same inherited page surface as Gantt; chart/header surfaces stay shared. */
+.workspace.module-tube-map > .panel.tube-map { background:transparent; }
+.gantt-baseline-tooltip { display:grid; gap:4px; }
+.gantt-baseline:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
