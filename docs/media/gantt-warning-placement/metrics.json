@@ -1,0 +1,54 @@
+{
+  "before": [
+    {
+      "mode": "Simple",
+      "data": {
+        "text": "Regression milestone 30",
+        "x": 271,
+        "width": 240.015625,
+        "height": 20.296875,
+        "font": "14px / 20.3px Arial, Helvetica, sans-serif",
+        "offsetY": 5,
+        "rowHeight": 64.375
+      }
+    },
+    {
+      "mode": "Extended",
+      "data": {
+        "text": "Regression milestone 30",
+        "x": 271,
+        "width": 240.015625,
+        "height": 20.296875,
+        "font": "14px / 20.3px Arial, Helvetica, sans-serif",
+        "offsetY": 4,
+        "rowHeight": 59.984375
+      }
+    }
+  ],
+  "after": [
+    {
+      "mode": "Simple",
+      "data": {
+        "text": "Regression milestone 30",
+        "x": 271,
+        "width": 240.015625,
+        "height": 20.296875,
+        "font": "14px / 20.3px Arial, Helvetica, sans-serif",
+        "offsetY": 5,
+        "rowHeight": 45.6875
+      }
+    },
+    {
+      "mode": "Extended",
+      "data": {
+        "text": "Regression milestone 30",
+        "x": 271,
+        "width": 240.015625,
+        "height": 20.296875,
+        "font": "14px / 20.3px Arial, Helvetica, sans-serif",
+        "offsetY": 4,
+        "rowHeight": 41.296875
+      }
+    }
+  ]
+}

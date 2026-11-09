@@ -1,3 +1,4 @@
+import {globalAction} from './global-actions';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { serializeProject, deserializeProject } from '../../src/persistence/pmp/codec';
@@ -51,7 +52,7 @@ test('current .pmp, independent controls, scope, CSV, temporary reveal and save 
 test('Partial withholds unreliable values, Quick Edit commits and Undo recalculates',async({page})=>{
  await page.setViewportSize({width:1366,height:900});await open(page,true);await expect(page.locator('.critical-path-overview')).toContainText('Partial');await expect(page.locator('.critical-path-overview')).toContainText('unresolved');await analysis(page);
  await expect(taskRow(page,'TASK-006')).toContainText('Unscheduled');await expect(taskRow(page,'TASK-001')).toContainText('Unresolved');await page.getByRole('checkbox',{name:'Critical Path',exact:true}).check();await expect(page.locator('[data-critical=true]')).toHaveCount(0);
- await taskRow(page,'TASK-006').getByRole('button',{name:'Quick Edit',exact:true}).click();const editor=page.getByRole('form',{name:'Quick edit task'});await editor.getByLabel('Start date',{exact:true}).fill('2026-10-25');await editor.getByLabel('End date',{exact:true}).fill('2026-10-25');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(taskRow(page,'TASK-001')).toContainText('Critical');await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Partial');await expect(taskRow(page,'TASK-006')).toContainText('Unscheduled');await page.getByRole('button',{name:'Redo',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');
+ await taskRow(page,'TASK-006').getByRole('button',{name:'Quick Edit',exact:true}).click();const editor=page.getByRole('form',{name:'Quick edit task'});await editor.getByLabel('Start date',{exact:true}).fill('2026-10-25');await editor.getByLabel('End date',{exact:true}).fill('2026-10-25');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(taskRow(page,'TASK-001')).toContainText('Critical');await globalAction(page,'Undo');await expect(page.locator('.analysis-summary')).toContainText('Partial');await expect(taskRow(page,'TASK-006')).toContainText('Unscheduled');await globalAction(page,'Redo');await expect(page.locator('.analysis-summary')).toContainText('Up to date');
 });
 for(const size of [{width:1366,height:768},{width:1280,height:720},{width:1024,height:768},{width:900,height:700}])test(`Quick Edit fits reserved details slot at ${size.width}x${size.height}`,async({page},info)=>{
  await page.setViewportSize(size);await open(page);await analysis(page);await page.getByRole('checkbox',{name:'Critical Path',exact:true}).check();await expect(page.locator('.critical-path-legend')).toBeVisible();await taskRow(page,'TASK-001').getByRole('button',{name:'Quick Edit',exact:true}).click();const editor=page.getByRole('form',{name:'Quick edit task'});await expect(editor).toBeVisible();await editor.getByRole('button',{name:'Cancel',exact:true}).scrollIntoViewIfNeeded();
@@ -69,8 +70,8 @@ test('worker failure leaves project usable and Retry restores derived results',a
   };
  });
  await open(page,false,true);await page.getByRole('button',{name:'Open Critical Path Analysis in Gantt'}).click();
- await expect(page.locator('.analysis-summary')).toContainText('Unavailable');await expect(page.getByRole('button',{name:'Export CSV',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
- await page.getByRole('button',{name:'Retry',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(page.locator('.analysis-summary')).toContainText('03/11/2026');await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.locator('.analysis-summary')).toContainText('Unavailable');await expect(page.getByRole('button',{name:'Export CSV',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
+ await page.getByRole('button',{name:'Retry',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(page.locator('.analysis-summary')).toContainText('03/11/2026');await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 // Exercise the chart's floating editor, separately from the in-flow analysis editor.
@@ -140,7 +141,7 @@ test('Hide Unscheduled Tasks composes chart filters across modes without changin
  await page.getByRole('tablist',{name:'Gantt lower panel'}).getByRole('tab',{name:'Tasks',exact:true}).click();await expect(taskRows).toHaveCount(5);
  await filters();await controls.getByRole('button',{name:'Clear all',exact:true}).click();await expect(hide).not.toBeChecked();await expect(taskRows).toHaveCount(7);await page.keyboard.press('Escape');await expect(chart.getByRole('checkbox',{name:'Dependencies',exact:true})).toBeChecked();
  await filters();await hide.check();await page.keyboard.press('Escape');
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
  await nav(page,'File Information');await expect(page.getByText('0 recorded events',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();
  await nav(page,'Gantt');await filters();await expect(hide).not.toBeChecked();await expect(taskRows).toHaveCount(7);
  const savedAfter=await page.evaluate(()=>(window as unknown as {__saved:()=>number[]}).__saved());expect(savedAfter).toEqual(savedBefore);
@@ -188,7 +189,7 @@ test('linked milestone conflict is discoverable in analysis and shares one Warni
  await expect(warning).toHaveCount(1);await expect(warning).toContainText('MILESTONE-001');
  await page.getByRole('button',{name:'Refresh',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Partial');await expect(warning).toHaveCount(1);
  await nav(page,'Warnings');await expect(page.locator('.warning-list > li').filter({hasText:description})).toHaveCount(1);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 test('reversed task dates remain Unscheduled, filterable and correctable without rewriting PMP dates',async({page})=>{
@@ -198,11 +199,11 @@ test('reversed task dates remain Unscheduled, filterable and correctable without
  await expect(page.locator('.analysis-table tbody tr')).toHaveCount(1);await expect(row).toContainText('Unscheduled');
  const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Export CSV',exact:true}).click();const download=await downloadPromise;const csv=await readFile((await download.path())!,'utf8');expect(csv).toContain('2026-11-08');expect(csv).toContain('2026-11-01');expect(csv).toContain('Unscheduled');
  await row.getByRole('button',{name:'Quick Edit',exact:true}).click();const editor=page.getByRole('form',{name:'Quick edit task'});await expect(editor.getByLabel('Start date',{exact:true})).toHaveValue('2026-11-08');await expect(editor.getByLabel('End date',{exact:true})).toHaveValue('2026-11-01');await expect(editor).toContainText('End date must not precede start date.');await editor.getByRole('button',{name:'Cancel',exact:true}).click();
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Undo',exact:true,includeHidden:true})).toBeDisabled();
  const bytes=await page.evaluate(()=>(window as unknown as {__saved:()=>number[]}).__saved()),loaded=deserializeProject(new Uint8Array(bytes));expect(loaded.ok).toBe(true);if(loaded.ok)expect(loaded.value.projectState.tasks).toEqual(source.tasks);
  // Correction remains an explicit canonical edit; neither filtering nor calculation repairs dates.
  await row.getByRole('button',{name:'Quick Edit',exact:true}).click();await editor.getByLabel('Start date',{exact:true}).fill('2026-10-25');await editor.getByLabel('End date',{exact:true}).fill('2026-10-25');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(page.locator('.analysis-summary')).toContainText('Up to date');await expect(row).toHaveCount(1); // D74 keeps the selected corrected task revealed.
- await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(row).toContainText('Unscheduled');
+ await globalAction(page,'Undo');await expect(row).toContainText('Unscheduled');
 });
 
 test('temporary stream reveal exposes expanded state and restores collapse preference on Escape',async({page})=>{

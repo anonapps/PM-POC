@@ -2176,3 +2176,24 @@ Add a labelled selector offering In the same map and Below the map for compariso
 ## Milestone scope summary refinement (9 November 2026)
 
 Milestones table scope selectors keep a fixed single-line height. Show the first active selected stream and, when more are selected, a compact +N pill counting the remaining active selections. Clicking the summary, including +N, opens the existing scope selection dropdown. Preserve Project-wide and Deleted streams fallback labels, keyboard interaction and canonical scope data. This supersedes earlier wrapping-scope layout guidance for the Milestones table only.
+
+
+## Approved global shell update — 5 November 2026
+
+Move the current project name beneath the existing sidebar brand, with its label and full-name title; hide both text elements in the collapsed rail. A 4px save-status dot remains visible in both states (saved green, unsaved amber, saving with reduced-motion-aware pulse, failure/access loss red), with readable state and last successful save time. Reuse the existing runtime/store and file behavior.
+
+Replace the global white header row with an intrinsic-width floating overlay at the content's top-right. Retain page control horizontal positions and reclaim the removed row's height. A restricted 10px top-edge strip reveals the toolbar after 300ms hover; normal content and the sidebar dot do not activate it. Suppress activation during dragging, selection and open dialogs/dropdowns/popovers. Leave dismissal has a 300ms grace; outside clicks pass through; Escape closes and keyboard focus returns predictably. Alt+Shift+T opens it for keyboard use. Hidden controls are inert and do not cover or reflow page content.
+
+Order: compact save status, icon-only Save Now, Undo, Redo; include Settings/Help only if corresponding existing global actions exist. Preserve action handlers, disabled states and existing shortcuts. Preserve sidebar widths, collapse-control position, navigation order, fonts, colors, navigation row heights/spacing and non-scrolling fit at normal/short desktop heights. Fit the name into the existing brand/toggle band. No other page, chart, domain, persistence or PMP change is authorized. No merge, release or deployment is authorized.
+
+## Approved Gantt compact stream/header bands — 9 November 2026
+
+Reduce Gantt Stream section title rows to approximately half their former Simple-mode height, retaining all existing font sizes. Use one 24px band for section cells in Simple and Extended modes, both expanded and collapsed, and with baseline/variance options. Use that same band height for each year/date line above the chart (approximately one-third smaller than their former 36px bands). Include Project-wide grouping. Preserve task/milestone row heights, controls, colors, text, chart geometry alignment, dependencies, scrolling, sidebar and PMP behavior.
+
+## Approved Gantt warning placement — 9 November 2026
+
+Place the existing warning triangle immediately before the item name on the same line, in the existing indentation gutter. Preserve name position, available width, typography and title actions. Show only the triangle at that location, retaining the warning count in the accessible description/title and the existing keyboard-accessible details popup. Preserve existing warning rules/messages; do not introduce new task/milestone validation or change chart data, other row content, sidebar, persistence or PMP behavior.
+
+## Approved Tube Map single header band — 9 November 2026
+
+Make the Tube Map Stream/week-number header one 24px-high row, equal to a single Gantt date band, not the combined 48px year/date stack. Retain the existing header font, colors, column widths/alignment, Stream sorting, week/date modes and sticky behavior. Preserve all stream lane heights, stations, connectors, chart controls, footer, sidebar and PMP behavior.
