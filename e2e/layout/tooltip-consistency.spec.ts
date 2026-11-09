@@ -1,0 +1,33 @@
+import {test,expect,type Locator} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
+import {captureSchedule} from '../../src/domain/baselines';
+const loaded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));if(!loaded.ok)throw Error('Invalid fixture');
+const source=loaded.value.projectState;
+const history={...source,tasks:source.tasks.map((item,i)=>i?item:{...item,name:'Request cables',startDate:'2026-10-26',endDate:'2026-10-28'}),milestones:source.milestones.map((item,i)=>i?item:{...item,name:'Release checkpoint',plannedDate:'2026-10-27'})};
+const state={...history,tasks:history.tasks.map((item,i)=>i?item:{...item,endDate:'2026-10-30'}),milestones:history.milestones.map((item,i)=>i?item:{...item,plannedDate:'2026-10-29'}),baselines:[{id:'original',name:'Original',createdAt:'2026-10-26T12:00:00Z',snapshot:captureSchedule(history)}]};
+const encoded=serializeProject(state,{createdAt:loaded.value.manifest.createdAt,lastSavedAt:loaded.value.manifest.lastSavedAt,runtimeVersion:'1.7.0'});if(!encoded.ok)throw Error('Invalid tooltip fixture');const bytes=[...encoded.value];
+async function surface(tooltip:Locator){return tooltip.evaluate(e=>{const s=getComputedStyle(e.matches('.app-tooltip')?e:e.querySelector('.app-tooltip')??e);return{background:s.backgroundColor,color:s.color,font:s.fontFamily,size:s.fontSize,weight:s.fontWeight,line:s.lineHeight,padding:s.padding,radius:s.borderRadius,border:s.borderColor,shadow:s.boxShadow}});}
+for(const width of [900,1440])test(`native name hints, icon actions and rich chart tooltips share one light surface at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.clock.setFixedTime(new Date('2026-10-26T12:00:00Z'));
+ await page.addInitScript(({bytes})=>{const data=new Uint8Array(bytes);Object.assign(window,{showOpenFilePicker:async()=>[{name:'tooltips.pmp',getFile:async()=>({name:'tooltips.pmp',size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer})}]});},{bytes});
+ await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();
+ const nav=async(name:string)=>page.locator('nav').getByRole('button',{name,exact:true}).click();
+ await nav('Gantt');const name=page.getByRole('button',{name:'Request cables',exact:true});await name.hover();
+ const tooltip=page.getByRole('tooltip');await expect(tooltip).toHaveText('Request cables');const style=await surface(tooltip);
+ expect(style.background).toBe('rgb(227, 227, 227)');expect(style.color).toBe('rgb(51, 51, 51)');expect(style.weight).toBe('400');
+ await expect(name).not.toHaveAttribute('title');const id=await tooltip.getAttribute('id');await expect(name).toHaveAttribute('aria-describedby',id!);
+ await page.keyboard.press('Escape');await expect(tooltip).toHaveCount(0);await expect(name).not.toHaveAttribute('aria-describedby',id!);
+ await page.mouse.move(0,0);await expect(name).toHaveAttribute('title','Request cables');
+ await name.focus();await expect(tooltip).toHaveText('Request cables');expect(await surface(tooltip)).toEqual(style);await page.keyboard.press('Escape');
+ await page.getByRole('checkbox',{name:'Baseline overlay',exact:true}).check();const baseline=page.locator('.gantt-row.task').filter({has:page.getByRole('button',{name:'Request cables',exact:true})}).locator('.gantt-baseline');await baseline.hover();
+ await expect(tooltip).toContainText('Current end: 30/10/2026');await expect(tooltip).toContainText('Baseline end: 28/10/2026');expect(await surface(tooltip)).toEqual(style);await page.mouse.move(0,0);await page.keyboard.press('Escape');
+ await nav('Tasks');await page.getByRole('button',{name:'Duplicate',exact:true}).first().hover();await expect(tooltip).toContainText('Duplicate');expect(await surface(tooltip)).toEqual(style);await page.mouse.move(0,0);await expect(tooltip).toHaveCount(0);
+ await nav('Tube Map');const marker=page.getByRole('button',{name:'Edit milestone Release checkpoint via diamond',exact:true}).first();await marker.hover();await expect(tooltip).toContainText('Release checkpoint');await expect(tooltip).toContainText('Planned: 29/10/2026');expect(await surface(tooltip)).toEqual(style);
+ const box=(await tooltip.boundingBox())!;expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(width);expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThanOrEqual(900);
+ await tooltip.hover();await expect(tooltip).toBeVisible();await page.keyboard.press('Escape');await expect(tooltip).toHaveCount(0);
+ await nav('Gantt');const connection=page.locator('.dependency-connection').first();await connection.focus();
+ await expect(tooltip).toContainText('Finish-to-Start');expect(await surface(tooltip)).toEqual(style);await expect(connection.locator('title')).toHaveText('');
+ await page.keyboard.press('Escape');await expect(tooltip).toHaveCount(0);await page.locator('nav').getByRole('button',{name:'Tasks',exact:true}).focus();await expect(connection.locator('title')).not.toHaveText('');
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
+});

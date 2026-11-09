@@ -1,0 +1,25 @@
+/* Shared tooltip surface, based on the compact light-grey name hint. */
+body .app-tooltip {
+  box-sizing:border-box;
+  width:max-content;
+  max-width:min(340px,calc(100vw - 16px));
+  max-height:calc(100vh - 16px);
+  overflow:auto;
+  padding:5px 8px;
+  border:1px solid #cfcfcf;
+  border-radius:3px;
+  background:#e3e3e3;
+  color:#333;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:var(--type-control);
+  font-weight:400;
+  line-height:1.4;
+  text-align:left;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  box-shadow:0 2px 8px #0000001f;
+  pointer-events:none;
+}
+body .app-tooltip strong { font-weight:600; }
+body .app-tooltip.tube-milestone-tooltip { pointer-events:auto; }
+body .app-tooltip.title-tooltip { position:fixed; z-index:1000; margin:0; }

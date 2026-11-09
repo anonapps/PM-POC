@@ -54,18 +54,7 @@ body .action-icon-button .action-icon-badge {
   line-height: 1;
   pointer-events: none;
 }
-body .action-tooltip {
-  max-width: calc(100vw - 16px);
-  padding: 5px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--ui-radius-control);
-  background: var(--sidebar);
-  color: var(--surface);
-  font-size: var(--type-control);
-  line-height: 1.4;
-  box-shadow: none;
-  pointer-events: none;
-}
+
 
 .disabled-action-trigger { display: inline-flex; vertical-align: middle; }
 .disabled-action-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-control); }

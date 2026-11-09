@@ -512,3 +512,7 @@ ActionIconButton forwards native button semantics and caller commands, supplying
 ## Tube Map baseline comparison modes
 
 TubeMapView owns a transient below/map display choice beside existing baseline visibility. The pure buildTubeBaselineOverlay projection reuses compareSchedule and calendar-day positions, matches stable stream IDs, groups identical historical date/scope occurrences and appends read-only historical lanes when no live lane is displayed. It does not change buildTubeMap or canonical station/dependency geometry. The existing strip remains the default; new markers use shared hover/focus tooltips. The mode never enters PMP, commands or history. Scope, filtering semantics, screenshots and focused evidence: TUBE_MAP_COMPARISON_MODES.md.
+
+### Shared tooltip surface
+
+`tooltip-surfaces.css` owns the appearance of native title hints, action tooltips and rich chart details. `TitleTooltipProvider` renders native HTML/SVG title hints through one delegated, lazily displayed portal rather than adding a tooltip component to every table cell. It temporarily suppresses browser tooltips, restores title metadata, manages accessible descriptions and Escape dismissal, and keeps keyboard-focused hints positioned during chart scrolling. Existing action/chart positioning and rich hover behavior remain separate from the shared surface; this presentation layer never changes ProjectStore or PMP data.

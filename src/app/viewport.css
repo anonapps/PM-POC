@@ -12,3 +12,5 @@
 
 @import "../features/shared/action-icon-button.css";
 @import "../features/shell/shell-surfaces.css";
+
+@import "../features/shared/tooltip-surfaces.css";

@@ -6,7 +6,7 @@ import type { ComponentPropsWithRef, ReactElement } from "react";
 /** HeroUI owns hover/focus, Escape dismissal, portal positioning and viewport flipping. */
 export function ActionTooltip({ label, children }: { label: string; children: ReactElement }) {
   return <Tooltip content={label} delay={300} closeDelay={0} disableAnimation
-    placement="top" shouldFlip classNames={{ base: "action-tooltip-layer", content: "action-tooltip" }}>
+    placement="top" shouldFlip classNames={{ base: "action-tooltip-layer", content: "app-tooltip action-tooltip" }}>
     {children}
   </Tooltip>;
 }

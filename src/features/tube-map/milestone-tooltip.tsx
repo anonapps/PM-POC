@@ -26,7 +26,7 @@ export function TubeTooltipProvider({children}:{children:ReactNode}) {
     const anchor=active.anchor.getBoundingClientRect(),box=node.current.getBoundingClientRect();
     setPosition({left:Math.max(8,Math.min(anchor.left,window.innerWidth-box.width-8)),top:Math.max(8,anchor.bottom+8+box.height<=window.innerHeight-8?anchor.bottom+8:anchor.top-box.height-8)});
   },[active]);
-  return <Context.Provider value={{id,activeKey:active?.key??null,show:(anchor,content,key)=>{keep();setActive({anchor,content,key});},hide,keep,dismiss:()=>{keep();setActive(null);}}}>{children}{active&&createPortal(<div ref={node} id={id} role="tooltip" className="tube-milestone-tooltip" style={position} onMouseEnter={keep} onMouseLeave={hide}>{active.content}</div>,document.body)}</Context.Provider>;
+  return <Context.Provider value={{id,activeKey:active?.key??null,show:(anchor,content,key)=>{keep();setActive({anchor,content,key});},hide,keep,dismiss:()=>{keep();setActive(null);}}}>{children}{active&&createPortal(<div ref={node} id={id} role="tooltip" className="app-tooltip tube-milestone-tooltip" style={position} onMouseEnter={keep} onMouseLeave={hide}>{active.content}</div>,document.body)}</Context.Provider>;
 }
 
 export function useTubeTooltip(content:ReactNode) {
