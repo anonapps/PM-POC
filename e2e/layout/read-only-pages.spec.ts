@@ -5,7 +5,7 @@ import {captureSchedule} from '../../src/domain/baselines';
 const decoded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));if(!decoded.ok)throw new Error('Invalid fixture');const fixture=decoded.value;
 const old=fixture.projectState,snapshot=captureSchedule(old),state={...old,tasks:old.tasks.map((t,i)=>i===1?{...t,startDate:'2026-01-02',endDate:'2026-02-03'}:t),baselines:[{id:'plan',name:'Approved plan',createdAt:'2026-10-26T12:00:00Z',snapshot}]};
 const encoded=serializeProject(state,{createdAt:fixture.manifest.createdAt,lastSavedAt:fixture.manifest.lastSavedAt,runtimeVersion:'1.6.0'});if(!encoded.ok)throw new Error('Invalid encoded fixture');const bytes=[...encoded.value];
-async function open(page:Page){await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'read-only-pages.pmp',async getFile(){return{name:this.name,size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer};},async createWritable(){return{write:async(value:Uint8Array)=>{data=new Uint8Array(value);},close:async()=>{}};}};Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle});},{bytes});await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();}
+async function open(page:Page,projectBytes=bytes){await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'read-only-pages.pmp',async getFile(){return{name:this.name,size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer};},async createWritable(){return{write:async(value:Uint8Array)=>{data=new Uint8Array(value);},close:async()=>{}};}};Object.assign(window,{showOpenFilePicker:async()=>[handle],showSaveFilePicker:async()=>handle});},{bytes:projectBytes});await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();}
 async function nav(page:Page,name:string){await page.getByRole('navigation',{name:'Project modules'}).getByRole('button',{name,exact:true}).click();}
 for(const width of [900,1440])test(`read-only pages share filter controls and readable values at ${width}`,async({page},info)=>{
  await page.setViewportSize({width,height:800});await open(page);let reference:unknown,valueFont='';
@@ -34,4 +34,22 @@ test('every Baselines heading sorts in both directions, dates and variances use 
 });
 test('Context is the opening label on Risk and Decision Log and retains editing/cancel behavior',async({page})=>{
  await open(page);for(const name of ['Risk Log','Decision Log']){await nav(page,name);await expect(page.getByRole('button',{name:'Edit context',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Context',exact:true}).first().click();const editor=page.locator(name==='Risk Log'?'.risk-context-editor':'.decision-context-editor');await expect(editor).toBeVisible();await editor.getByRole('button',{name:'Cancel',exact:true}).click();await expect(editor).toHaveCount(0);}
+});
+
+for(const width of [900,1440])test(`white surfaces own their outline and Dependencies uses shared empty banners at ${width}`,async({page},info)=>{
+ await page.setViewportSize({width,height:800});await open(page);await nav(page,'Dependencies');
+ const search=page.locator('.shared-search-filter input'),toolbar=page.locator('.dependencies-panel>.page-toolbar'),before=(await toolbar.boundingBox())!,searchBefore=(await search.boundingBox())!;
+ await search.fill('no-relationship-can-match-this');await expect(page.locator('.dependency-table')).toHaveCount(0);
+ const empty=page.locator('.dependencies-panel .empty');await expect(empty).toContainText('No matching dependencies');await expect(empty).toHaveCSS('background-color','rgb(255, 255, 255)');await expect(toolbar).toHaveCSS('border-bottom-color','rgba(0, 0, 0, 0)');await expect(toolbar).toHaveCSS('border-bottom-width','1px');
+ expect(await toolbar.boundingBox()).toEqual(before);expect(await search.boundingBox()).toEqual(searchBefore);await expect(page.getByRole('contentinfo',{name:'Dependency information'})).toBeInViewport();
+ await search.fill('');await expect(page.locator('.dependency-table tbody tr')).not.toHaveCount(0);await expect(empty).toHaveCount(0);
+ for(const name of ['Search','Tasks','Risk Log','Decision Log','Settings']){
+  await nav(page,name);if(['Tasks','Risk Log','Decision Log'].includes(name))await page.locator('.shared-search-filter input').fill('nothing-matches-this-record');
+  const heading=page.locator('.workspace>.panel>.title-row');await expect(heading).toHaveCSS('border-bottom-color','rgba(0, 0, 0, 0)');await expect(heading).toHaveCSS('border-bottom-width','1px');
+  if(name!=='Settings')await expect(page.locator('.workspace>.panel>.empty')).toBeVisible();
+ }
+ const saved=serializeProject({...state,dependencies:[],baselines:[]},{createdAt:fixture.manifest.createdAt,lastSavedAt:fixture.manifest.lastSavedAt,runtimeVersion:'1.7.0'});if(!saved.ok)throw Error('Invalid empty-dependency fixture');
+ const blank=await page.context().newPage();await blank.setViewportSize({width,height:800});await open(blank,[...saved.value]);await nav(blank,'Dependencies');await expect(blank.locator('.dependency-table')).toHaveCount(0);await expect(blank.locator('.dependencies-panel .empty')).toContainText('No dependencies yet');await expect(blank.locator('.dependency-count')).toHaveText('0 relationships');await expect(blank.locator('.dependencies-panel .empty')).toHaveCSS('border-top-style','dashed');
+ await blank.screenshot({path:info.outputPath('dependencies-empty-banner.png')});
+ await nav(blank,'Baselines');await expect(blank.locator('.baselines-panel>.page-toolbar')).not.toHaveCSS('border-bottom-color','rgba(0, 0, 0, 0)');await blank.close();
 });
