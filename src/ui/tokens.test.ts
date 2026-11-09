@@ -10,7 +10,7 @@ describe('approved UI compatibility tokens',()=>{
     const expected = {
       canvas:'#f4f6f8',surface:'#ffffff',surfaceSubtle:'#edf1f5',text:'#0f172a',textMuted:'#526174',
       border:'#dce2e9',controlBorder:'#8293a8',primary:'#164a91',primaryHover:'#123e7a',
-      primaryActive:'#0e3263',sidebar:'#17243a',focus:'#1b65c9',
+      primaryActive:'#0e3263',sidebar:'#17243a',focus:'#1b65c9',danger:'#a12b20',
     };
     expect(tokens.coreColor).toEqual(expected);
     const generated=readFileSync('src/app/ui-tokens.generated.css','utf8');

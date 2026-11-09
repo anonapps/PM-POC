@@ -49,3 +49,21 @@
 .workspace.module-tube-map { padding-bottom:0; }
 .workspace .dependency-connectors .dependency-connection .dependency-line { stroke-dasharray:1 5; }
 .workspace.module-tube-map .tube-map { border-bottom:0; }
+
+
+/* Tube Map comparison uses the live date axis without moving live stations. */
+.workspace.module-tube-map .tube-baseline-display { display:flex; align-items:center; gap:var(--space-1); }
+.workspace.module-tube-map .tube-baseline-display select { width:auto; }
+.workspace.module-tube-map .tube-baseline-key { color:var(--text-muted); font-size:var(--type-caption); }
+.workspace.module-tube-map .tube-baseline-overlay-marker {
+ position:absolute; z-index:3; display:inline-flex; align-items:center; justify-content:center;
+ width:18px; min-width:18px; height:18px; transform:translate(-50%,-50%);
+ color:var(--text-muted); background:var(--surface); border-radius:var(--radius-control);
+ font-size:20px; line-height:18px; white-space:nowrap;
+}
+.workspace.module-tube-map .tube-baseline-overlay-marker sup { position:absolute; left:100%; top:0; font-size:var(--type-caption); line-height:1; }
+.workspace.module-tube-map .tube-baseline-overlay-marker:focus-visible { outline:2px solid var(--focus); outline-offset:2px; z-index:5; }
+.workspace.module-tube-map .tube-baseline-only-label { padding:4px 8px; color:var(--text-muted); font-size:var(--type-control); overflow-wrap:anywhere; }
+.workspace.module-tube-map .tube-baseline-only-line>div { background:transparent; border-top:1px dashed var(--control-border); }
+
+.workspace.module-tube-map .tube-baseline-overlay-marker.label-left sup { left:auto; right:100%; }
