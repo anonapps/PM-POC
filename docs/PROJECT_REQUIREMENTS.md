@@ -2147,3 +2147,7 @@ Order: compact save status, icon-only Save Now, Undo, Redo; include Settings/Hel
 ## Approved Gantt compact stream/header bands — 9 November 2026
 
 Reduce Gantt Stream section title rows to approximately half their former Simple-mode height, retaining all existing font sizes. Use one 24px band for section cells in Simple and Extended modes, both expanded and collapsed, and with baseline/variance options. Use that same band height for each year/date line above the chart (approximately one-third smaller than their former 36px bands). Include Project-wide grouping. Preserve task/milestone row heights, controls, colors, text, chart geometry alignment, dependencies, scrolling, sidebar and PMP behavior.
+
+## Approved Gantt warning placement — 9 November 2026
+
+Place the existing warning triangle immediately before the item name on the same line, in the existing indentation gutter. Preserve name position, available width, typography and title actions. Show only the triangle at that location, retaining the warning count in the accessible description/title and the existing keyboard-accessible details popup. Preserve existing warning rules/messages; do not introduce new task/milestone validation or change chart data, other row content, sidebar, persistence or PMP behavior.
