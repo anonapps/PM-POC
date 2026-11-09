@@ -2239,3 +2239,8 @@ Double the manual progress bar’s preferred length from 160px to 320px, allowin
 ## Sidebar navigation through Search — 9 November 2026
 
 Search’s deferred focus restoration must respect focus on sidebar page buttons, so Up/Down can traverse Search in either direction and both sidebar widths. Sidebar focus is assigned synchronously after navigation; deferred work must not take focus back from a user who has pressed Tab into the page. Preserve Search query, result, scroll restoration and normal page-control keyboard behavior.
+
+
+## Text hints only for clipped content — 9 November 2026
+
+On non-chart pages, text-repetition tooltips appear only when the displayed text is clipped by its available column/control width, including abbreviated scope labels. Apply consistently to table cells/headings, predictive selections, scope pills, baseline lists and sidebar text. Suppress native title popups as well as application hints for fully visible text. Preserve accessible labels, keyboard behavior, action-icon/explanatory tooltips and all existing Gantt/Tube Map chart tooltip behavior. Measure current rendered content so filtering, responsive sizing and sidebar changes are respected.

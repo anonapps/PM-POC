@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { textHintIsNeeded } from './text-hint-overflow';
 
 type Hint={anchor:Element;text:string;restore:()=>void};
 /** One delegated surface for native title hints, including SVG connector titles. */
@@ -41,7 +42,7 @@ export function TitleTooltipProvider() {
       }};
       current=next;observe.observe(document.body,{childList:true,subtree:true});
       const show=()=>{
-        if(!anchor.isConnected)return;
+        if(!anchor.isConnected||!textHintIsNeeded(anchor,text))return;
         anchor.setAttribute('aria-describedby',[describedBy,id].filter(Boolean).join(' '));visible=true;setHint(next);
       };
       if(event.type==='focusin')show();else timer=setTimeout(show,300);
