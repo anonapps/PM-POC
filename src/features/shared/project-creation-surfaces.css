@@ -1,0 +1,24 @@
+/* New Project uses the same compact controls as Project Details, retaining
+   the shared fields, reserved validation slots and native form semantics. */
+.launcher.new-project-launcher { min-height:100dvh; padding:var(--space-3); background:var(--canvas); }
+.launcher.new-project-launcher>section {
+ width:min(520px,100%); max-height:calc(100dvh - 24px); padding:var(--space-3);
+ display:flex; flex-direction:column; overflow:hidden;
+ --field-height:var(--ui-field-embedded-height);
+}
+.launcher.new-project-launcher h1 { margin:0 0 var(--space-2); font-size:var(--type-section); font-weight:600; line-height:1.25; }
+.new-project-launcher>section>.muted { margin:0 0 var(--space-1); font-size:var(--type-control); }
+.new-project-launcher form { display:flex; flex-direction:column; min-height:0; }
+.new-project-launcher form>.form-field-error { height:auto; min-height:12px; flex-shrink:0; }
+.new-project-launcher .project-form-fields {
+ min-height:0; overflow:auto; overscroll-behavior:contain;
+ margin-top:var(--space-1); padding:var(--space-1); gap:var(--space-1) var(--space-2);
+}
+.new-project-launcher .project-form-fields>.form-field:first-child { grid-column:1/-1; }
+.new-project-launcher .project-form-fields :is(input,select,textarea) { width:100%; min-width:0; font-size:var(--type-control); }
+.launcher.new-project-launcher .project-form-fields .form-field>textarea { --field-height:60px; --field-padding-block:var(--space-1); height:60px; min-height:60px; field-sizing:fixed; }
+.new-project-launcher form>.actions { flex-shrink:0; justify-content:flex-end; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-2); }
+
+/* Reserve the same compact message band as record creation; real messages
+   expand naturally so wrapped validation stays readable. */
+.new-project-launcher .project-form-fields .form-field-error { height:auto; min-height:12px; line-height:12px; overflow:visible; }
