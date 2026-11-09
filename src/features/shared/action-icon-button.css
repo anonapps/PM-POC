@@ -74,3 +74,13 @@ body .action-icon-button--compact::after { inset: -5px; }
 .disabled-action-trigger > button:disabled { pointer-events:none; }
 
 body .action-tooltip-layer { pointer-events:none; }
+
+/* Reuse the page action height for record/dialog icons; floating global actions
+   retain their accepted geometry. Icon choices, badges, tooltips and feedback stay shared. */
+.workspace .action-icon-button,.dialog-backdrop .action-icon-button { --action-icon-size:var(--ui-action-height); }
+/* Extend vertically in roomy record rows without reaching into adjacent actions. */
+body .workspace .action-icon-button::after { inset:-5px -2px; }
+.app-main .workspace .panel table.record-data-table .action-icon-button::after { content:none; }
+/* Reserve space for the existing overhanging count, including Risk Log's
+   narrow zero-margin action cells. Do not resize or clip the badge itself. */
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:has(>.action-icon-badge) { margin-inline-end:var(--space-2); }

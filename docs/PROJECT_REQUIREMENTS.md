@@ -2244,3 +2244,10 @@ Search’s deferred focus restoration must respect focus on sidebar page buttons
 ## Text hints only for clipped content — 9 November 2026
 
 On non-chart pages, text-repetition tooltips appear only when the displayed text is clipped by its available column/control width, including abbreviated scope labels. Apply consistently to table cells/headings, predictive selections, scope pills, baseline lists and sidebar text. Suppress native title popups as well as application hints for fully visible text. Preserve accessible labels, keyboard behavior, action-icon/explanatory tooltips and all existing Gantt/Tube Map chart tooltip behavior. Measure current rendered content so filtering, responsive sizing and sidebar changes are respected.
+
+
+## Approved dialog and baseline compactness — 9 November 2026
+
+Reuse existing compact page-button and embedded-field tokens across dialogs and popovers, preserving keyboard, focus, validation and dismissal behavior. Keep row actions square when icon-only, retaining existing labels/icons, colors, counters and commands. Decision Log title inputs fill their existing ID / Title cell with 12–16px separation before Date; other columns and row heights remain unchanged. Baseline comparison entity cells show ID and saved name without the separately rendered type suffix. Manage baselines uses equal-height rows with name/timestamp, single-line read-only descriptions (full text on hover/focus), compact rename/delete icons and an internally scrolling list above Create baseline/Done. Create/Rename baseline uses compact required Name and optional Description fields. These presentation changes do not modify persisted data or the `.pmp` contract.
+
+The consolidated integration retains the shared Lucide action/feedback components and clipping-only shared text hints. The compact record/dialog icon geometry uses the existing 30px page-action height, superseding the earlier approximately 36px record-action geometry; floating global controls retain their accepted implementation.

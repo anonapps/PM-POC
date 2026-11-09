@@ -516,3 +516,8 @@ TubeMapView owns a transient below/map display choice beside existing baseline v
 ### Shared tooltip surface
 
 `tooltip-surfaces.css` owns the appearance of native title hints, action tooltips and rich chart details. `TitleTooltipProvider` renders native HTML/SVG title hints through one delegated, lazily displayed portal rather than adding a tooltip component to every table cell. It temporarily suppresses browser tooltips, restores title metadata, manages accessible descriptions and Escape dismissal, and keeps keyboard-focused hints positioned during chart scrolling. Existing action/chart positioning and rich hover behavior remain separate from the shared surface; this presentation layer never changes ProjectStore or PMP data.
+
+
+## Compact dialog surfaces — 9 November 2026
+
+`features/shared/dialog-surfaces.css` reuses action/embedded-field tokens for dialogs and native popovers. Dialog lifecycle/focus handling and domain commands are unchanged. Baseline management uses a bounded flex list with fixed-height CSS grid rows and the existing delegated clipping-only title hints for full names/descriptions; the footer stays outside the scroll region. The Decision Log width rule is restricted to its existing title cell.

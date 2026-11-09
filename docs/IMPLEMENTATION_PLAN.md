@@ -589,3 +589,8 @@ The dedicated feature/global-icon-buttons branch audits/adopts shared Lucide act
 ## Tube Map comparison display choice
 
 Add the agreed In the same map / Below the map selector to PR #29. Preserve the existing below-map default, shared snapshot calculations and live chart geometry. Historical-only scopes remain visible in read-only lanes on the shared axis. Focused model/browser verification and screenshots are documented in TUBE_MAP_COMPARISON_MODES.md; no merge or release is authorised.
+
+
+## Approved compact dialogs and baseline management — 9 November 2026
+
+Presentation-only integration on `integration/consolidated-compact-ui` from `2b074ab` (adapting `c901c75`): shared compact dialog/popover controls, square icon actions, full-width Decision title input, removal of separately rendered comparison type labels, and a bounded baseline manager with equal-height rows and hover/focus text access. Existing commands, validation, selection, confirmations and persistence remain unchanged. Validation evidence is recorded in `docs/COMPACT_UI_VALIDATION.md`; PR review does not authorize merge, release or deployment.
