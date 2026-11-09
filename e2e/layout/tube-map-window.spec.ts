@@ -20,9 +20,9 @@ for(const scenario of [
   await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
   await expect(page.locator('.tube-axis>span')).toHaveCount(12);expect((await page.locator('.tube-axis').boundingBox())!.height).toBe(24);
  };
- await check();await page.getByRole('combobox',{name:/^Axis/}).selectOption('date');await expect(page.locator('.tube-axis>span').nth(4)).toHaveText(scenario.today==='2027-01-01'?'28/12':scenario.today==='2026-03-29'?'23/03':'09/11');
+ await check();await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption('date');await expect(page.locator('.tube-axis>span').nth(4)).toHaveText(scenario.today==='2027-01-01'?'28/12':scenario.today==='2026-03-29'?'23/03':'09/11');
  await footer.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(jump).toBeEnabled();expect(Date.parse((await range.getAttribute('data-start'))!)-Date.parse(scenario.start)).toBe(28*86400000);
- await jump.click();await check();await expect(page.getByRole('combobox',{name:/^Axis/})).toHaveValue('date');
+ await jump.click();await check();await expect(page.getByRole('combobox',{name:'Tube Map axis',exact:true})).toHaveValue('date');
  await footer.getByRole('button',{name:'Previous 4 weeks',exact:true}).click();expect(Date.parse(scenario.start)-Date.parse((await range.getAttribute('data-start'))!)).toBe(28*86400000);await jump.click();await check();
  await nav('People');await nav('Tube Map');await check();
  if(scenario.name==='Monday')await page.screenshot({path:info.outputPath('tube-map-today-one-third.png')});
