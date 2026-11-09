@@ -26,3 +26,9 @@ This branch is for combined local testing. It does not merge into main, publish 
 - Comparison fixtures/assertions now account for the four historical weeks, including marker date-axis positions and explicit four-week paging. The imported window test uses the shared accessible Axis name.
 
 Ignored detailed logs remain under `work/integration/` and the referenced `work/validation-*` directories. Browser file adapters do not establish physical Windows/macOS picker acceptance. No main merge, release or deployment was performed.
+
+## Tube Map control refinement — 9 November 2026
+
+The baseline/current key sits immediately beside the bottom Milestone legend, with footer counts wrapping safely on narrow maps. Search filters exclusively own Hide Dependencies and Hide Milestones Names; names start visible and Clear all restores them. Combined/Detached native radio segments replace the baseline checkbox and display dropdown. A selected snapshot is compared with live captured milestone and stream content, independently of task-only edits, filters, sorting, paging and capture identity. Identical or absent snapshots disable both options with an explanation; differing snapshots compare automatically, defaulting to Detached. Critical Path stays in the control row.
+
+Validation: the three relevant unit files passed all 15 cases (1.94s); production build/token check/TypeScript passed. Twenty-one comparison/display/filter/date-window browser cases passed (62.4s), both dependency connector cases passed, and the adapted baseline edit/save/reopen journey passed (8.15s): 24 relevant browser scenarios in total. An initial narrow-footer overflow was corrected without hiding the legend, and obsolete checkbox selectors were migrated to the requested filter/radio behavior. The save/reopen test explicitly saves its newly introduced live-plan edit before closing. Earlier unrelated broad checks were not repeated.

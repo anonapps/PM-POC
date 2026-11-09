@@ -1,3 +1,4 @@
+import { tubeFilter } from './tube-controls';
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { deserializeProject, serializeProject } from '../../src/persistence/pmp/codec';
@@ -37,13 +38,13 @@ const geometry = (page: Page) => page.locator('.tube-station').evaluateAll(nodes
 
 for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches between below and same map without moving live milestones at ${width}`, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 }); const initial = await open(page);
-  const mode = page.getByRole('combobox', { name: 'Baseline milestone display', exact: true });
-  await expect(mode).toBeDisabled(); await expect(mode).toHaveValue('below');
-  await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).check();
+  const mode = page.getByRole('radio', { name: 'Detached', exact: true });
+  await expect(mode).toBeEnabled(); await expect(mode).toBeChecked();
+
   await expect(page.getByRole('region', { name: 'Baseline milestone indicators', exact: true })).toBeVisible();
   const before = await geometry(page);
   if (width === 1440) { mkdirSync('docs/media/tube-comparison', { recursive: true }); await page.screenshot({ path: 'docs/media/tube-comparison/below.png' }); }
-  await mode.selectOption('map'); await expect(markers(page)).toHaveCount(4);
+  await page.getByRole('radio',{name:'Combined',exact:true}).check(); await expect(markers(page)).toHaveCount(4);
   await expect(page.getByRole('region', { name: 'Baseline milestone indicators', exact: true })).toHaveCount(0);
   await expect(page.getByText('Historical stream (baseline only)', { exact: true })).toBeVisible();
   expect(await geometry(page)).toEqual(before);
@@ -57,12 +58,12 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
   const footer = (await page.getByRole('navigation', { name: 'Tube Map date navigation', exact: true }).boundingBox())!;
   expect(footer.y + footer.height).toBeLessThanOrEqual(901);
   await page.getByRole('checkbox', { name: 'Critical Path', exact: true }).check();
-  await page.getByRole('checkbox', { name: 'Dependencies', exact: true }).uncheck();
-  await mode.selectOption('below'); await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);
-  await mode.selectOption('map'); expect(await geometry(page)).toEqual(before);
+  await tubeFilter(page,'Hide Dependencies',true);
+  await mode.check(); await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);
+  await page.getByRole('radio',{name:'Combined',exact:true}).check(); expect(await geometry(page)).toEqual(before);
   await expect(page.getByRole('checkbox', { name: 'Critical Path', exact: true })).toBeChecked();
-  await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).uncheck(); await expect(markers(page)).toHaveCount(0); await expect(mode).toBeDisabled();
-  await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).check(); await expect(mode).toHaveValue('map'); await expect(markers(page)).toHaveCount(4);
+  await mode.check(); await expect(markers(page)).toHaveCount(0); await expect(mode).toBeChecked();
+   await page.getByRole('radio',{name:'Combined',exact:true}).check(); await expect(markers(page)).toHaveCount(4);
   await expect(page.getByRole('button', { name: 'Save Now', exact: true, includeHidden: true })).toBeDisabled();
   expect(await page.evaluate(() => (window as unknown as { __tubeBytes: () => number[] }).__tubeBytes())).toEqual(initial);
   // Live diamonds still open their existing editor and preserve cancellation.
@@ -72,8 +73,8 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
 });
 
 test('comparison markers expose grouped historical/current details on hover and keyboard focus; baseline and date navigation update them', async ({ page }) => {
-  await open(page); await page.getByRole('checkbox', { name: 'Baseline milestones', exact: true }).check();
-  await page.getByRole('combobox', { name: 'Baseline milestone display', exact: true }).selectOption('map');
+  await open(page);
+  await page.getByRole('radio',{name:'Combined',exact:true}).check();
   const group = markers(page).filter({ hasText: '2' });
   await group.hover(); const tooltip = page.getByRole('tooltip'); await expect(tooltip).toContainText('Original checkpoint'); await expect(tooltip).toContainText('Coincident checkpoint'); await expect(tooltip).toContainText('27/10/2026'); await expect(tooltip).toContainText('02/11/2026');
   await page.mouse.move(0, 0); await group.focus(); await page.keyboard.press('Tab'); await page.keyboard.press('Shift+Tab'); await expect(tooltip).toBeVisible();
@@ -88,7 +89,7 @@ test('comparison markers expose grouped historical/current details on hover and 
 
 test('display controls stay disabled when there is no comparison baseline', async ({ page }) => {
   await open(page, false);
-  await expect(page.getByRole('checkbox', { name: 'Baseline milestones', exact: true })).toBeDisabled();
-  await expect(page.getByRole('combobox', { name: 'Baseline milestone display', exact: true })).toBeDisabled();
+  await expect(page.getByRole('radio', { name: 'Combined', exact: true })).toBeDisabled();
+  await expect(page.getByRole('radio', { name: 'Detached', exact: true })).toBeDisabled();
   await expect(markers(page)).toHaveCount(0);
 });

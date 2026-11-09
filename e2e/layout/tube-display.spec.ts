@@ -1,3 +1,4 @@
+import { tubeNames } from './tube-controls';
 import { globalAction } from './global-actions';
 import {test,expect,type Page} from '@playwright/test';
 import {makeProjectState,projectFixture,streamFixture} from '../../src/domain/test-fixtures';
@@ -10,21 +11,25 @@ const streams=[streamFixture({name:'Delivery'}),streamFixture({id:'stream-2',hum
 const original=makeProjectState({project:projectFixture({metadata:{schemaVersion:2,minimumAppVersion:'1.7.0',gettingStartedCompleted:true}}),streams,milestones:[milestone('1','2026-11-02'),milestone('2','2026-11-09',['stream-1','stream-2']),milestone('3','2026-11-16',['stream-1']),milestone('4','2026-12-27',['stream-2'])]});
 const baseline={id:'original',name:'Original plan',createdAt:'2026-11-01T00:00:00Z',snapshot:captureSchedule(original)};
 const source={...original,milestones:original.milestones.map(m=>m.id==='1'?{...m,plannedDate:'2026-11-09'}:m),baselines:[baseline,{...baseline,id:'second',name:'Second plan',snapshot:captureSchedule({...original,milestones:original.milestones.map(m=>({...m,plannedDate:'2026-11-23'}))})}]};
+source.baselines.push({...baseline,id:'matching',name:'Current plan copy',snapshot:captureSchedule(source)});
 async function open(page:Page){
  await page.clock.setFixedTime(new Date('2026-11-02T12:00:00Z'));
  const saved=serializeProject(source,{createdAt:'2026-11-01T00:00:00Z',lastSavedAt:'2026-11-01T00:00:00Z',runtimeVersion:APP_VERSION});if(!saved.ok)throw Error(JSON.stringify(saved.errors));
  await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'tube-display.pmp',getFile:async()=>({name:'tube-display.pmp',size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer}),createWritable:async()=>({write:async(value:Uint8Array)=>{data=new Uint8Array(value)},close:async()=>{}})};Object.assign(window,{showOpenFilePicker:async()=>[handle],__tubeSaved:()=>[...data]});},{bytes:[...saved.value]});
  await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
- await expect(page.getByRole('checkbox',{name:'Show milestone names',exact:true})).toBeChecked();
+ await expect(page.locator('.tube-station-link')).toHaveCount(5);
 }
 const current=(page:Page,id='1')=>page.locator(`.tube-station[data-entity-id="${id}"] .tube-station-diamond`).first();
 const historical=(page:Page,id='1')=>page.locator(`.tube-baseline-indicator[data-baseline-id="${id}"], .tube-baseline-overlay-marker[data-baseline-id="${id}"]`).first();
 async function comparison(page:Page,mode:string){
- await page.getByRole('checkbox',{name:'Baseline milestones',exact:true}).setChecked(mode!=='off');
- if(mode!=='off')await page.getByRole('combobox',{name:'Baseline milestone display',exact:true}).selectOption(mode==='overlay'?'map':'below');
+ if(mode==='off'){
+  await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Current plan copy',exact:true}).check();
+  await expect(page.getByRole('radio',{name:'Detached',exact:true})).toBeDisabled();
+ } else await page.getByRole('radio',{name:mode==='overlay'?'Combined':'Detached',exact:true}).check();
 }
+
 for(const mode of ['off','overlay','separate'])for(const names of [true,false])test(`${mode}, names ${names}: compact geometry, shared date alignment and unchanged data`,async({page},testInfo)=>{
- await page.setViewportSize({width:1280,height:800});await open(page);await comparison(page,mode);await page.getByRole('checkbox',{name:'Show milestone names',exact:true}).setChecked(names);
+ await page.setViewportSize({width:1280,height:800});await open(page);await comparison(page,mode);await tubeNames(page,names);
  await expect(page.locator('.tube-station-link')).toHaveCount(names?5:0);
  await expect(page.locator('.tube-baseline-name')).toHaveCount(mode!=='separate'||!names?0:5);
  await expect(page.locator('.tube-baseline-strip')).toHaveCount(mode==='separate'?1:0);await expect(page.locator('.tube-baseline-overlay-marker')).toHaveCount(mode==='overlay'?5:0);
@@ -43,7 +48,7 @@ for(const mode of ['off','overlay','separate'])for(const names of [true,false])t
 });
 
 test('one accessible tooltip for hover/focus, no native/pseudo tooltip, viewport-safe edges and Quick Edit',async({page})=>{
- await page.setViewportSize({width:900,height:700});await open(page);await comparison(page,'separate');await page.getByRole('checkbox',{name:'Show milestone names',exact:true}).uncheck();
+ await page.setViewportSize({width:900,height:700});await open(page);await comparison(page,'separate');await tubeNames(page,false);
  for(const marker of [current(page),historical(page),historical(page,'4')]){
   await marker.scrollIntoViewIfNeeded();await marker.focus();await expect(page.getByRole('tooltip')).toHaveCount(1);await expect(marker).toHaveAttribute('aria-describedby',await page.getByRole('tooltip').getAttribute('id') as string);
   await expect(marker).not.toHaveAttribute('title');expect(await marker.evaluate(node=>getComputedStyle(node,'::after').content)).toBe('none');
@@ -56,9 +61,33 @@ test('one accessible tooltip for hover/focus, no native/pseudo tooltip, viewport
 
 test('baseline selection, filters, axis and Quick Edit remain shared and snapshots survive save',async({page})=>{
  await open(page);await comparison(page,'separate');await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Second plan',exact:true}).check();await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23|23\/11\/2026/);
- await page.getByRole('combobox',{name:'Baseline milestone display',exact:true}).selectOption('map');await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23|23\/11\/2026/);
+ await page.getByRole('radio',{name:'Combined',exact:true}).check();await expect(historical(page)).toHaveAttribute('aria-label',/2026-11-23|23\/11\/2026/);
  await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption('date');await expect(page.locator('.tube-axis')).toContainText('02/11');
  await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('Operations');await expect(page.locator('.tube-line')).toHaveCount(2);await expect(historical(page,'1')).toHaveCount(0);await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('');
  await current(page).click();await page.getByRole('textbox',{name:'Milestone name',exact:true}).fill('Revised gate');await page.getByRole('button',{name:'Save',exact:true}).click();await globalAction(page,'Save Now');
  const loaded=deserializeProject(new Uint8Array(await page.evaluate(()=>(window as unknown as {__tubeSaved:()=>number[]}).__tubeSaved())));expect(loaded.ok).toBe(true);if(loaded.ok){expect(loaded.value.projectState.baselines).toEqual(source.baselines);expect(loaded.value.projectState.milestones.find(m=>m.id==='1')!.name).toBe('Revised gate');}
+});
+
+
+test('comparison controls reject identical snapshots and filters own names/dependencies without mutating data',async({page})=>{
+ await open(page);
+ await expect(page.locator('.baseline-controls .tube-baseline-key')).toHaveCount(0);
+ await expect(page.locator('.timeline-navigation-legend-row .tube-baseline-key')).toBeVisible();
+ const legend=(await page.getByRole('list',{name:'Milestone status legend',exact:true}).boundingBox())!,key=(await page.locator('.timeline-navigation-legend-row .tube-baseline-key').boundingBox())!;
+ expect(key.x-legend.x-legend.width).toBeGreaterThanOrEqual(0);expect(key.x-legend.x-legend.width).toBeLessThanOrEqual(12);
+ await expect(page.locator('.baseline-controls input[type=checkbox]')).toHaveCount(1);
+ await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Current plan copy',exact:true}).check();
+ await expect(page.getByRole('radio',{name:'Combined',exact:true})).toBeDisabled();await expect(page.getByRole('radio',{name:'Detached',exact:true})).toBeDisabled();
+ await expect(page.getByText('Selected baseline matches the current Tube Map.',{exact:true})).toBeVisible();
+ await expect(page.locator('.tube-baseline-strip,.tube-baseline-overlay-marker')).toHaveCount(0);
+ await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('Operations');await expect(page.getByRole('radio',{name:'Combined',exact:true})).toBeDisabled();await page.getByRole('searchbox',{name:'Search tube map',exact:true}).fill('');
+ await page.locator('.baseline-selector summary').click();await page.getByRole('radio',{name:'Original plan',exact:true}).check();
+ await page.getByRole('radio',{name:'Combined',exact:true}).check();await expect(page.locator('.tube-baseline-overlay-marker')).toHaveCount(5);
+ await page.locator('.filter-trigger').click();await expect(page.getByRole('checkbox',{name:'Hide Milestones Names',exact:true})).not.toBeChecked();
+ await page.getByRole('checkbox',{name:'Hide Milestones Names',exact:true}).check();await page.getByRole('checkbox',{name:'Hide Dependencies',exact:true}).check();await page.keyboard.press('Escape');
+ await expect(page.locator('.tube-station-link')).toHaveCount(0);await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);
+ await page.locator('.filter-trigger').click();await page.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.getByRole('checkbox',{name:'Hide Milestones Names',exact:true})).not.toBeChecked();await expect(page.getByRole('checkbox',{name:'Hide Dependencies',exact:true})).not.toBeChecked();await page.keyboard.press('Escape');
+ await expect(page.locator('.tube-station-link')).toHaveCount(5);
+ await page.locator('nav').getByRole('button',{name:'People',exact:true}).click();await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();await expect(page.locator('.tube-station-link')).toHaveCount(5);
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });

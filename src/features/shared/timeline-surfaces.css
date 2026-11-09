@@ -67,3 +67,16 @@
 .workspace.module-tube-map .tube-baseline-only-line>div { background:transparent; border-top:1px dashed var(--control-border); }
 
 .workspace.module-tube-map .tube-baseline-overlay-marker.label-left sup { left:auto; right:100%; }
+
+.tube-comparison-toggle { display:flex; align-items:center; gap:0; margin:0; padding:0; border:1px solid var(--control-border); border-radius:var(--ui-radius-control); overflow:hidden; }
+.tube-comparison-toggle label { position:relative; display:flex; align-items:center; gap:4px; padding:4px 10px; cursor:pointer; }
+.tube-comparison-toggle label + label { border-left:1px solid var(--control-border); }
+.tube-comparison-toggle label:has(input:checked) { background:var(--surface-subtle); color:var(--primary); }
+.tube-comparison-toggle label:has(input:focus-visible) { outline:2px solid var(--focus); outline-offset:-2px; }
+.tube-comparison-toggle:disabled { opacity:.55; }
+.tube-comparison-toggle:disabled label { cursor:default; }
+/* Keep the baseline key adjacent to the milestone diamonds; wrap footer metadata on narrow maps. */
+.workspace.module-tube-map .timeline-navigation-legend-row { height:auto; min-height:18px; flex-wrap:wrap; }
+.workspace.module-tube-map .panel footer.timeline-navigation .timeline-status-legend { flex:0 1 auto; }
+.workspace.module-tube-map .timeline-navigation-legend-row > .tube-baseline-key { flex:0 1 auto; max-width:100%; }
+.workspace.module-tube-map .panel footer.timeline-navigation .timeline-navigation-context { margin-left:auto; max-width:100%; }

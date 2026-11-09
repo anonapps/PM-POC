@@ -2201,3 +2201,8 @@ Make the Tube Map Stream/week-number header one 24px-high row, equal to a single
 ## Approved Tube Map today-focused window — 9 November 2026
 
 Opening Tube Map and Jump to today both show the same twelve-week, Monday-aligned window: four complete weeks before the current week, followed by the current week and seven further weeks. Today therefore lies in the fifth weekly column, approximately one-third across the timeline (exactly one-third on Monday, at its actual day position during the week). Preserve actual local-calendar today, week/date labels, the 24px header, four-week Previous/Next steps, filters, chart data and PMP behavior. This supersedes the former default window starting in the current week.
+
+
+## Tube Map comparison controls refinement — 9 November 2026
+
+Move the hollow-baseline/solid-current key beside the Milestone status legend in the bottom navigation. Dependencies is controlled only by the search dropdown's Hide Dependencies filter. Replace Show milestone names with Hide Milestones Names in that dropdown; names default visible and Clear all restores them. Replace Baseline milestones and Display with a single Combined/Detached radio toggle. Comparison appears automatically when the selected snapshot differs from the live Tube Map; disable the toggle and explain why when identical or no baseline exists. Default to Detached. Compare captured milestone names/dates/scopes and stream names/IDs independent of filtering, paging and task-only changes. Preserve selection, coloured current diamonds, historical details, Critical Path and all file/domain behavior. This supersedes earlier Tube Map checkbox/display control guidance only.
