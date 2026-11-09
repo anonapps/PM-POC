@@ -66,3 +66,9 @@ Validation: production build (including TypeScript/token checks) and lint pass. 
 The progress bar's preferred width is now 320px, twice its previous 160px, with flex shrinking retained for narrow screens. The percentage input uses the existing soft border/surface tokens and a 5px radius, keeping its editable outline visible while unfocused and retaining the normal keyboard focus indicator. The fixed suffix and editing behavior are unchanged.
 
 Production build (including TypeScript/token checks) passes. The existing responsive Settings/progress browser cases pass at 375, 900 and 1440px: `npm run test:targeted -- layout e2e/layout/consolidated-ui.spec.ts --grep 'Settings reuses'` (3 passed, 10.1s). Updated visual measurements confirm a 320px bar, a 1px soft border, equal 96px desktop summary heights and zero workspace overflow.
+
+## Follow-up: sidebar arrows through Search
+
+Search's deferred focus restoration could compete with sidebar navigation and leave focus in the page, stopping subsequent Up/Down navigation. Search now restores focus only when the document body owns focus, preserving explicit sidebar/page control focus. The shell assigns sidebar focus synchronously and no longer schedules a competing deferred refocus.
+
+Production build (TypeScript/token checks) and lint pass. `npm run test:targeted -- layout e2e/layout/consolidated-ui.spec.ts e2e/layout/search-navigation.spec.ts --grep 'sidebar keyboard|sidebar arrow navigation|Search'` passes all seven selected cases (20.5s browser time). New regressions traverse every sidebar page forward/backward in expanded/collapsed mode and wait through deferred frames to verify retained focus; Tab into Search remains stable. Existing Search query/filter/order/scroll, exact-record reveal and project-session checks remain covered.

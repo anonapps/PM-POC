@@ -26,7 +26,9 @@ export function SearchPanel({store,navigate}:{store:ProjectStore;navigate:(modul
     const initial=returnState.current;
     const frame=requestAnimationFrame(()=>{
       const title=[...root.querySelectorAll<HTMLButtonElement>(".search-result-title")].find(button=>button.dataset.searchResultKey===initial.lastResult);
-      (title??root.querySelector<HTMLInputElement>('input[type="search"]'))?.focus({preventScroll:true});
+      // Restore only when no sidebar button or user-selected page control owns focus.
+      if(document.activeElement===document.body)
+        (title??root.querySelector<HTMLInputElement>('input[type="search"]'))?.focus({preventScroll:true});
       workspace.scrollTop=initial.scroll;
     });
     return()=>cancelAnimationFrame(frame);

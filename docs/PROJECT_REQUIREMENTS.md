@@ -2234,3 +2234,8 @@ Enabling Show progress information must preserve the Overview dashboard column s
 ## Overview progress control visibility — 9 November 2026
 
 Double the manual progress bar’s preferred length from 160px to 320px, allowing it to shrink on narrow screens without overflow. The percentage input retains a soft visible border when unfocused, the normal keyboard focus indicator, and its fixed internal percentage suffix. Preserve card sizing, dashboard order and percentage editing/saving behavior.
+
+
+## Sidebar navigation through Search — 9 November 2026
+
+Search’s deferred focus restoration must respect focus on sidebar page buttons, so Up/Down can traverse Search in either direction and both sidebar widths. Sidebar focus is assigned synchronously after navigation; deferred work must not take focus back from a user who has pressed Tab into the page. Preserve Search query, result, scroll restoration and normal page-control keyboard behavior.

@@ -39,9 +39,8 @@ export function AppShell({ store, onClose, onSave, onSaveAs, onReload, onKeepCur
   useNavigationReveal(workspaceRef,target);
   useLayoutEffect(()=>{
     if(sidebarFocus.current!==module)return;
-    const focus=()=>navRef.current?.querySelector<HTMLButtonElement>(`button[data-module="${module}"]`)?.focus({preventScroll:true});
-    focus();const frame=requestAnimationFrame(()=>{if(sidebarFocus.current===module){focus();sidebarFocus.current=null;}});
-    return()=>cancelAnimationFrame(frame);
+    navRef.current?.querySelector<HTMLButtonElement>(`button[data-module="${module}"]`)?.focus({preventScroll:true});
+    sidebarFocus.current=null;
   },[module,target?.requestId]);
   useEffect(()=>{if(!pendingNavigation&&sidebarFocus.current!==module)sidebarFocus.current=null;},[pendingNavigation,module]);
   const sidebarKey=(event:import('react').KeyboardEvent<HTMLElement>)=>{

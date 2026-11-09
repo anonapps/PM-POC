@@ -79,3 +79,13 @@ test('Overview keeps onboarding in the same left stack as progress and actions',
  await expect(page.locator('.overview-actions-stack').getByRole('heading')).toHaveText(['Project Progress (manual)','Getting started','Quick Actions','Critical Path']);
  const stack=(await page.locator('.overview-actions-stack').boundingBox())!,timeline=(await page.locator('.overview-grid > article').boundingBox())!;expect(timeline.x).toBeGreaterThan(stack.x+stack.width);expect(timeline.y).toBe(stack.y);
 });
+
+for(const collapsed of [false,true])test(`sidebar arrow navigation traverses every page through Search in both directions (${collapsed?'collapsed':'expanded'})`,async({page})=>{
+ await open(page);if(collapsed){await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await expect(page.locator('.app-shell')).toHaveCSS('grid-template-columns',/64px/);}
+ const buttons=page.locator('#project-modules button'),count=await buttons.count();await buttons.first().focus();
+ for(const key of ['ArrowDown','ArrowUp']){
+  const positions=Array.from({length:count-1},(_,i)=>key==='ArrowDown'?i+1:count-2-i);
+  for(const index of positions){await page.keyboard.press(key);await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));await expect(buttons.nth(index)).toBeFocused();await expect(buttons.nth(index)).toHaveAttribute('aria-current','page');}
+ }
+ await page.keyboard.press('ArrowDown');await expect(buttons.nth(1)).toBeFocused();await page.keyboard.press('Tab');const search=page.getByRole('searchbox',{name:'Search names, IDs, roles, notes, status and dates',exact:true});await expect(search).toBeFocused();await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));await expect(search).toBeFocused();
+});
