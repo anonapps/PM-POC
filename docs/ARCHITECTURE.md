@@ -504,3 +504,7 @@ The owner-corrected29October creation layout retains the original560px maximum d
 
 
 UI standard closeout retains native table-cell/selection and overlay adapters as explicit variants in [the reuse matrix](UI_REUSE_MATRIX.md). The unused historical `CreationField` helper has been retired; current record creation uses EntityCreationPanel with FormField/FieldMessage. Earlier v1.5 implementation descriptions remain historical. No model, command or PMP contract changes accompany this cleanup.
+
+## Compact dialog surfaces — 9 November 2026
+
+`features/shared/dialog-surfaces.css` reuses action/embedded-field tokens for dialogs and native popovers. Dialog lifecycle/focus handling and domain commands are unchanged. Baseline management uses a bounded flex list with fixed-height CSS grid rows and HeroUI tooltips for full names/descriptions; the footer stays outside the scroll region. The Decision Log width rule is restricted to its existing title cell.

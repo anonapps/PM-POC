@@ -581,3 +581,7 @@ See V1.6_IMPLEMENTATION.md for approved phases, V1.6_PROGRESS.md for actual vali
 
 
 The owner subsequently approved the revised Extended Mode mockup conditional on exact standalone Tasks creation-panel equivalence. Phase 6 implementation reuses the existing modules/panel, with scoped compact surfaces and a shared page-level modal. Continue the same v1.6 draft PR through consolidated regression/documentation checks; merge/release/deployment still require separate approval.
+
+## Approved compact dialogs and baseline management — 9 November 2026
+
+Presentation-only work on `feature/compact-dialogs-baseline-manager`: shared compact dialog/popover controls, square icon actions, full-width Decision title input, removal of separately rendered comparison type labels, and a bounded baseline manager with equal-height rows and hover/focus text access. Existing commands, validation, selection, confirmations and persistence remain unchanged. Validation evidence is recorded in `docs/COMPACT_UI_VALIDATION.md`; PR review does not authorize merge, release or deployment.
