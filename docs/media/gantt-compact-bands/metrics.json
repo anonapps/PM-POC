@@ -1,0 +1,410 @@
+[
+  {
+    "phase": "before",
+    "mode": "Simple",
+    "expanded": true,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          45
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "before",
+    "mode": "Simple",
+    "expanded": false,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          45
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "before",
+    "mode": "Extended",
+    "expanded": true,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          32
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          20.296875
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "before",
+    "mode": "Extended",
+    "expanded": false,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          32
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          20.296875
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          36
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "mode": "Simple",
+    "expanded": true,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          22
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          23
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-item-heading": {
+        "heights": [
+          48
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "mode": "Simple",
+    "expanded": false,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          22
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          23
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-item-heading": {
+        "heights": [
+          48
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "mode": "Extended",
+    "expanded": true,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          22
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          23
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-item-heading": {
+        "heights": [
+          48
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "mode": "Extended",
+    "expanded": false,
+    "metrics": {
+      ".gantt-row.section>div": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-row.section .sort-heading": {
+        "heights": [
+          22
+        ],
+        "fonts": [
+          "700 14px / 20.3px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years span": {
+        "heights": [
+          23
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates span": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-years": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-dates": {
+        "heights": [
+          24
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      },
+      ".gantt-item-heading": {
+        "heights": [
+          48
+        ],
+        "fonts": [
+          "700 12.8px / 20px Arial, Helvetica, sans-serif"
+        ]
+      }
+    }
+  }
+]

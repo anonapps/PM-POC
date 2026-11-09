@@ -72,8 +72,8 @@ for(const width of [1024,1440,1920])test(`Extended resizing, independent scroll 
  const colors=async()=>page.locator('.gantt-panel .timeline-status-legend [role=listitem]').evaluateAll(nodes=>Object.fromEntries(nodes.map(e=>[e.textContent!.trim(),getComputedStyle(e.querySelector('i')!).backgroundColor])));
  const rgb=(hex:string)=>`rgb(${[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(', ')})`;
  const simpleColors=await colors();expect(simpleColors).toEqual(Object.fromEntries(Object.entries(palette).map(([key,value])=>[key,rgb(value)])));
- const simpleHeight=(await page.locator('.gantt-row>div').first().boundingBox())!.height;
- await extended(page);expect(await colors()).toEqual(simpleColors);expect((await page.locator('.gantt-row>div').first().boundingBox())!.height).toBeLessThan(simpleHeight);
+ const simpleHeight=(await page.locator('.gantt-row.section>div').first().boundingBox())!.height;expect(simpleHeight).toBe(24);
+ await extended(page);expect(await colors()).toEqual(simpleColors);expect((await page.locator('.gantt-row.section>div').first().boundingBox())!.height).toBe(simpleHeight);
  const chart=page.locator('.gantt-panel .gantt'),lower=page.locator('.gantt-tasks-pane');
  await lower.evaluate(e=>e.scrollTop=300);expect(await chart.evaluate(e=>e.scrollTop)).toBe(0);const lowerScroll=await lower.evaluate(e=>e.scrollTop);expect(lowerScroll).toBeGreaterThan(0);
  await chart.evaluate(e=>e.scrollTop=200);expect(await lower.evaluate(e=>e.scrollTop)).toBe(lowerScroll);
