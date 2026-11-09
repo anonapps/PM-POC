@@ -65,8 +65,6 @@
 .workspace .gantt-panel>.page-toolbar,.workspace .gantt-panel>.baseline-controls,.workspace .gantt-panel>footer { flex-shrink:0; }
 .workspace .gantt-panel .gantt { flex:1; min-height:0; max-height:none; }
 .workspace .gantt-panel .gantt-head { top:0; }
-.tube-baseline-indicator:is(:hover,:focus-visible)::after { content:attr(aria-label); position:absolute; z-index:50; bottom:100%; left:0; width:210px; max-width:45vw; padding:6px 8px; border:1px solid #acb8c7; border-radius:4px; background:white; color:#26364d; font:12px/1.4 Arial,sans-serif; box-shadow:0 3px 10px #17243a20; }
-.tube-baseline-indicator.label-left:is(:hover,:focus-visible)::after { left:auto; right:0; }
 @container (max-width:600px) {
   .workspace .panel table.fit-table tbody tr:has(.task-name-cell,.milestone-name-cell,.entity-name-cell,>td:first-child>small+input)>td { height:auto; min-height:76px; }
 }
@@ -366,3 +364,26 @@
  .workspace.module-milestones>.panel>table.milestones-table th:first-child { width:17.3%; }
  .workspace.module-milestones>.panel>table.milestones-table th:nth-child(4) { width:17.1%; }
 }
+/* Search titles follow the same quiet, keyboard-visible navigation as Warnings. */
+.workspace.module-search .panel .search-result-title { display:inline; min-height:0; height:auto; max-width:100%; margin:0; padding:0; border:0; border-radius:2px; background:transparent; color:var(--text); font:inherit; font-weight:700; line-height:1.4; text-align:left; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
+.workspace.module-search .panel .search-result-title:hover { color:var(--primary); text-decoration:underline; }
+.workspace.module-search .panel .search-result-title:focus-visible { outline:2px solid var(--focus); outline-offset:3px; }
+
+
+/* Tube Map comparison keeps the existing monochrome historical lanes and grid. */
+.tube-baseline-strip { box-sizing:border-box; }
+.tube-baseline-lane { min-height:0; }
+.tube-baseline-lane>div { box-sizing:border-box; }
+.tube-baseline-indicator { width:26px; height:26px; display:grid; place-items:center; transform:translate(-50%,-50%); line-height:26px; color:var(--text-muted); cursor:help; pointer-events:auto; }
+.tube-baseline-indicator:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.tube-baseline-name { position:absolute; top:26px; left:12px; max-width:110px; width:max-content; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-muted); font-size:var(--type-caption); line-height:1.2; }
+.tube-baseline-indicator.label-left .tube-baseline-name { left:auto; right:12px; }
+.tube-baseline-overlay { position:absolute; inset:0; pointer-events:none; }
+.tube-milestone-tooltip { position:fixed; z-index:1000; display:grid; gap:4px; width:max-content; max-width:min(340px,calc(100vw - 16px)); max-height:calc(100vh - 16px); overflow:auto; box-sizing:border-box; padding:8px 10px; border:1px solid var(--border); border-radius:var(--action-radius); background:var(--surface); color:var(--text); font-size:var(--type-caption); line-height:1.4; overflow-wrap:anywhere; box-shadow:0 3px 10px #17243a20; }
+
+.workspace .tube-map .tube-station-diamond { min-height:26px; height:26px; min-width:26px; width:26px; padding:0; }
+
+/* Fix 3: explicit choices for multiple stable warning relationship targets. */
+.warning-dependency-targets { max-width:45%; min-width:0; }
+.warning-dependency-targets .actions { flex-wrap:wrap; }
+.workspace .panel .warning-dependency-targets button { max-width:100%; height:auto; white-space:normal; overflow-wrap:anywhere; }

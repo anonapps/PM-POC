@@ -139,3 +139,14 @@ describe("shared hidden-field projection",()=>{
     expect(matchesEntitySearch(state,task,predecessor.humanId)).toBe(true);
   });
 });
+
+it('indexes Baselines and Dependencies by their own fields and real IDs with exact owning destinations',async()=>{
+ const {captureSchedule}=await import('../../domain/baselines');
+ const state=makeProjectState({streams:[streamFixture()],tasks:[taskFixture({id:'a',humanId:'TASK-001',name:'Design'}),taskFixture({id:'b',humanId:'TASK-002',name:'Delivery'})],dependencies:[{id:'edge-real-id',projectId:'project-1',predecessor:{kind:'task',id:'a'},successor:{kind:'task',id:'b'},type:'Finish-to-Start'}]});
+ const source={...state,baselines:[{id:'baseline-real-id',name:'Original plan',description:'Signed commitment',createdAt:'2026-10-25T00:00:00Z',snapshot:captureSchedule(state)}]};
+ expect(searchProject(source,'signed commitment')).toEqual([expect.objectContaining({entityType:'Baseline',module:'Baselines',entityId:'baseline-real-id',humanId:'baseline-real-id',isDeleted:false})]);
+ expect(searchProject(source,'baseline-real-id')[0].label).toBe('Original plan');
+ const dependency=searchProject(source,'edge-real-id')[0];expect(dependency).toMatchObject({entityType:'Dependency',module:'Dependencies',entityId:'edge-real-id',humanId:'edge-real-id',isDeleted:false});expect(dependency.label).toContain('TASK-001');expect(dependency.label).toContain('TASK-002');
+ expect(searchProject(source,'design delivery finish-to-start').map(result=>result.entityId)).toContain('edge-real-id');
+ expect(dependency.restoreKind).toBeUndefined();expect(searchProject(source,'baseline-real-id')[0].restoreKind).toBeUndefined();
+});

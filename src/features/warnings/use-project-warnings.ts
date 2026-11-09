@@ -16,7 +16,8 @@ export function projectWarningProjection(state: ProjectState, diagnostics: reado
     const id = diagnostic.id;
     if (ids.has(id)) continue;
     ids.add(id);
-    warnings.push({ id, dependencyId: diagnostic.dependencyId, severity: "warning", type: "Critical path analysis", entityType: diagnostic.kind === "task" ? "Task" : "Milestone", entityId: entity.id, humanId: entity.humanId, entityName: entity.name, description: diagnostic.description, destination: dependency && diagnostic.code !== "unscheduled" ? "Dependencies" : diagnostic.kind === "task" ? "Tasks" : "Milestones" });
+    const dependencyIds=diagnostic.kind==="milestone"&&diagnostic.code!=="unscheduled"?[...new Set([...(diagnostic.dependencyIds??[]),...(diagnostic.dependencyId?[diagnostic.dependencyId]:[])])].sort():undefined;
+    warnings.push({ id, ...(dependencyIds?{dependencyIds}:{}), dependencyId: diagnostic.dependencyId, severity: "warning", type: "Critical path analysis", entityType: diagnostic.kind === "task" ? "Task" : "Milestone", entityId: entity.id, humanId: entity.humanId, entityName: entity.name, description: diagnostic.description, destination: (dependency && diagnostic.code !== "unscheduled" || dependencyIds?.some(id=>dependencies.has(id))) ? "Dependencies" : diagnostic.kind === "task" ? "Tasks" : "Milestones" });
   }
   return warnings;
 }

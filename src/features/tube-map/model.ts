@@ -5,15 +5,15 @@ const parse = (date: string) => new Date(`${date}T00:00:00Z`);
 const iso = (date: Date) => date.toISOString().slice(0, 10);
 export function mondayOf(date: string) { const value = parse(date); const weekday = value.getUTCDay() || 7; value.setUTCDate(value.getUTCDate() - weekday + 1); return iso(value); }
 export function isoWeek(date: string) { const value = parse(date); value.setUTCDate(value.getUTCDate() + 4 - (value.getUTCDay() || 7)); const yearStart = new Date(Date.UTC(value.getUTCFullYear(), 0, 1)); return Math.ceil((((value.getTime() - yearStart.getTime()) / day) + 1) / 7); }
-export interface TubeStream { id: string; label: string; lane: number; top: number; height: number }
+export interface TubeStream { id: string; label: string; lane: number; top: number; height: number; contentHeight: number }
 export interface TubeStation { id: string; entityId: string; label: string; date: string; status: ProjectState["milestones"][number]["status"]; x: number; lane: number; y: number; level: number; boundary: "before" | "inside" | "after" }
 export interface TubeConnection { from: string; to: string; fromX: number; fromY: number; toX: number; toY: number }
 export interface TubeMapModel { start: string; end: string; weeks: readonly { date: string; label: string }[]; streams: readonly TubeStream[]; stations: readonly TubeStation[]; connections: readonly TubeConnection[]; height: number }
 
-function levelsFor(stations: readonly { x: number; label: string }[]) {
+export function levelsFor(stations: readonly { x: number; label: string }[], showNames = true) {
   const occupied: number[] = [];
   return stations.map((station) => {
-    const halfWidth = Math.min(12, Math.max(3, station.label.length * 0.35));
+    const halfWidth = Math.min(12, Math.max(3, (showNames ? station.label.length : 0) * 0.35));
     let level = 0;
     while (occupied[level] !== undefined && station.x - halfWidth < occupied[level]) level += 1;
     occupied[level] = station.x + halfWidth;
@@ -21,7 +21,7 @@ function levelsFor(stations: readonly { x: number; label: string }[]) {
   });
 }
 
-export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original", hideEmptyStreams = false, streamQuery = "",statuses:readonly MilestoneStatus[]=[]): TubeMapModel {
+export function buildTubeMap(state: ProjectState, startDate = new Date().toISOString().slice(0, 10), streamSort: "original" | "asc" | "desc" = "original", hideEmptyStreams = false, streamQuery = "",statuses:readonly MilestoneStatus[]=[], options:{showNames?:boolean;historicalLanes?:readonly {id:string;label:string;height:number}[]}={}): TubeMapModel {
   const milestones=state.milestones.filter(m=>!statuses.length||statuses.includes(m.status));
   const start = mondayOf(startDate);
   const startTime = parse(start).getTime();
@@ -33,6 +33,8 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   const matchingMilestoneStreams = new Set(milestones.filter(milestone => !milestone.deletion.isDeleted && milestone.name.toLocaleLowerCase().includes(needle) && milestone.scope.kind === "streams").flatMap(milestone => milestone.scope.kind === "streams" ? milestone.scope.streamIds : []));
   const activeStreams = state.streams.filter(stream => !stream.deletion.isDeleted && (!hideEmptyStreams || populatedStreams.has(stream.id)) && (!needle || stream.name.toLocaleLowerCase().includes(needle) || matchingMilestoneStreams.has(stream.id))); const orderedStreams = streamSort === "original" ? activeStreams : [...activeStreams].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"})*(streamSort==="asc"?1:-1));
   const baseStreams = [{ id: "project", label: "Project-wide", lane: 0 }, ...orderedStreams.map((stream, index) => ({ id: stream.id, label: stream.name, lane: index + 1 }))];
+  const currentLaneIds = new Set(baseStreams.map(stream => stream.id));
+  for (const lane of options.historicalLanes ?? []) if (!baseStreams.some(stream => stream.id === lane.id)) baseStreams.push({id:lane.id,label:lane.label,lane:baseStreams.length});
   const candidates = milestones.filter((milestone) => !milestone.deletion.isDeleted && /^\d{4}-\d{2}-\d{2}$/.test(milestone.plannedDate) && Number.isFinite(parse(milestone.plannedDate).getTime()) && iso(parse(milestone.plannedDate)) === milestone.plannedDate).flatMap((milestone) => {
     const stamp = parse(milestone.plannedDate).getTime();
     const boundary = stamp < startTime ? "before" as const : stamp >= endTime ? "after" as const : "inside" as const;
@@ -40,10 +42,9 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
     const ids = milestone.scope.kind === "project" ? ["project"] : milestone.scope.streamIds;
     return ids.map((streamId) => ({ id: `${milestone.id}:${streamId}`, entityId: milestone.id, label: milestone.name, date: milestone.plannedDate, status: milestone.status, x, streamId, boundary }));
   });
-  const laneIds = new Set(baseStreams.map(stream => stream.id));
   const candidatesByStream = new Map<string, typeof candidates>();
   for (const station of candidates) {
-    if (!laneIds.has(station.streamId)) continue;
+    if (!currentLaneIds.has(station.streamId)) continue;
     const lane = candidatesByStream.get(station.streamId) ?? [];
     lane.push(station);
     candidatesByStream.set(station.streamId, lane);
@@ -54,14 +55,16 @@ export function buildTubeMap(state: ProjectState, startDate = new Date().toISOSt
   for (const stream of baseStreams) {
     const laneCandidates = [...(candidatesByStream.get(stream.id) ?? [])].sort((left, right) => left.x - right.x || left.entityId.localeCompare(right.entityId));
     const visibleCandidates = laneCandidates.filter(station => station.boundary === "inside");
-    const visibleLevels = levelsFor(visibleCandidates);
+    const visibleLevels = levelsFor(visibleCandidates, options.showNames !== false);
     const levelsById = new Map(visibleCandidates.map((station, index) => [station.id, visibleLevels[index]]));
-    // Fixed-height lanes: collisions alternate above/below the centreline without resizing streams.
-    const height = 88;
-    streams.push({ ...stream, top, height });
+    // Preserve the named-lane rhythm; compact collision rows reserve distinct hit areas.
+    const compact = options.showNames === false;
+    const contentHeight = compact ? Math.max(48, (Math.max(0,...visibleLevels) + 1) * 28) : 88;
+    const height = contentHeight + (options.historicalLanes?.find(lane => lane.id === stream.id)?.height ?? 0);
+    streams.push({ ...stream, top, height, contentHeight });
     laneCandidates.forEach((station) => {
       const level = levelsById.get(station.id) ?? 0;
-      stations.push({ ...station, lane: stream.lane, level, y: top + height / 2 + (level === 0 ? 0 : (level % 2 === 1 ? -1 : 1) * 17) });
+      stations.push({ ...station, lane: stream.lane, level, y: compact && contentHeight > 48 ? top + 14 + level * 28 : top + contentHeight / 2 + (level === 0 ? 0 : (level % 2 === 1 ? -1 : 1) * 17) });
     });
     top += height;
   }

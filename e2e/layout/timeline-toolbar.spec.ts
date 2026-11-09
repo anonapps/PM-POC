@@ -1,7 +1,7 @@
-import {test,expect,type Page} from '@playwright/test';
-import {makeProjectState,streamFixture,taskFixture} from '../../src/domain/test-fixtures';
-import {readFileSync} from 'node:fs';
-import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
+import { test, expect, type Page } from "@playwright/test";
+import { makeProjectState, streamFixture, taskFixture } from "../../src/domain/test-fixtures";
+import { readFileSync } from "node:fs";
+import { deserializeProject, serializeProject } from "../../src/persistence/pmp/codec";
 const decoded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
 if(!decoded.ok)throw new Error('Invalid legacy fixture');
 const fixture=decoded.value;
