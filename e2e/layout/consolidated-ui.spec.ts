@@ -58,3 +58,24 @@ for(const width of [1024,1440,1920])test(`Milestone dependencies reserve equal g
  const warning=page.locator('.milestone-warning').first();if(await warning.count()){const control=(await warning.locator('xpath=preceding-sibling::details').boundingBox())!,icon=(await warning.boundingBox())!;expect(icon.x).toBeGreaterThanOrEqual(control.x+control.width);await warning.locator('summary').click();await expect(page.locator('.anchored-options:popover-open')).toBeVisible();await page.keyboard.press('Escape');}
  expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);await nav(page,'Tube Map');await expect(page.locator('.workspace > .panel')).toHaveCSS('border-left-color','rgba(0, 0, 0, 0)');await expect(page.locator('.workspace > .panel')).toHaveCSS('border-right-color','rgba(0, 0, 0, 0)');await expect(page.locator('.tube-axis > span').first()).toHaveCSS('border-left-width','1px');await expect(page.locator('.tube-line').first()).toHaveCSS('border-bottom-width','1px');await expect(page.locator('.tube-axis > span')).toHaveCount(12);
 });
+
+for(const width of [375,900,1440])test(`Overview keeps its column order when progress is toggled at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});await open(page,fixture.projectState);
+ const stack=page.locator('.overview-actions-stack'),timeline=page.locator('.overview-grid > article').filter({has:page.getByRole('heading',{name:'Timeline',exact:true})});
+ let initial:{x:number;y:number;width:number;height:number}|undefined;
+ for(const enabled of [true,false,true]){
+  await nav(page,'Settings');await page.getByRole('button',{name:'Edit Project Details',exact:true}).click();const dialog=page.getByRole('dialog',{name:'Project Details',exact:true});await dialog.getByRole('checkbox',{name:'Show progress information',exact:true}).setChecked(enabled);await dialog.getByRole('button',{name:'Done',exact:true}).click();await nav(page,'Overview');
+  await expect(page.locator('.project-progress-card')).toHaveCount(enabled?1:0);
+  const headings=await stack.getByRole('heading').allTextContents();expect(headings).toEqual([...(enabled?['Project Progress (manual)']:[]),'Quick Actions','Critical Path']);
+  const left=(await stack.boundingBox())!,right=(await timeline.boundingBox())!;
+  if(width>900){expect(right.x).toBeGreaterThan(left.x+left.width);expect(right.y).toBe(left.y);if(initial){expect(right).toEqual(initial);}else initial=right;}
+  else{expect(right.x).toBe(left.x);expect(right.y).toBeGreaterThanOrEqual(left.y+left.height);}
+  expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ }
+});
+
+test('Overview keeps onboarding in the same left stack as progress and actions',async({page})=>{
+ await page.setViewportSize({width:1440,height:1000});await open(page,{...small,project:{...small.project,metadata:{...small.project.metadata,gettingStartedCompleted:false}}});
+ await expect(page.locator('.overview-actions-stack').getByRole('heading')).toHaveText(['Project Progress (manual)','Getting started','Quick Actions','Critical Path']);
+ const stack=(await page.locator('.overview-actions-stack').boundingBox())!,timeline=(await page.locator('.overview-grid > article').boundingBox())!;expect(timeline.x).toBeGreaterThan(stack.x+stack.width);expect(timeline.y).toBe(stack.y);
+});

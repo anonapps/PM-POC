@@ -54,3 +54,9 @@ npm run dev
 ```
 
 Open http://localhost:3000. If the branch already exists locally, switch to it and use `git pull --ff-only`. The review branch includes all fixes inherited from `test/latest-ui-fixes`, including PR #30.
+
+## Follow-up: stable Overview columns
+
+Enabling progress previously inserted a new top-level grid item, moving Quick Actions into the right column and Timeline onto the next row. Progress and optional Getting started now join the existing left-hand Quick Actions/Critical Path stack. Timeline retains its right-hand column and top alignment when progress is toggled; narrow screens keep the same reading order in one column. Summary heights, progress editing, onboarding and all other dashboard behavior remain intact.
+
+Validation: production build (including TypeScript/token checks) and lint pass. `CHROME_PATH=/usr/bin/chromium npm run test:targeted -- layout e2e/layout/consolidated-ui.spec.ts --grep 'Overview|Settings'` passes all seven selected cases (22.2s browser time), including four new layout cases. Tests toggle progress on/off/on at 375, 900 and 1440px, assert an unchanged desktop Timeline rectangle, check mobile ordering/overflow, and cover onboarding. The Overview after screenshot and measurements above reflect this correction.
