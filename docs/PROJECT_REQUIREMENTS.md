@@ -2151,3 +2151,7 @@ Reduce Gantt Stream section title rows to approximately half their former Simple
 ## Approved Gantt warning placement — 9 November 2026
 
 Place the existing warning triangle immediately before the item name on the same line, in the existing indentation gutter. Preserve name position, available width, typography and title actions. Show only the triangle at that location, retaining the warning count in the accessible description/title and the existing keyboard-accessible details popup. Preserve existing warning rules/messages; do not introduce new task/milestone validation or change chart data, other row content, sidebar, persistence or PMP behavior.
+
+## Approved Tube Map single header band — 9 November 2026
+
+Make the Tube Map Stream/week-number header one 24px-high row, equal to a single Gantt date band, not the combined 48px year/date stack. Retain the existing header font, colors, column widths/alignment, Stream sorting, week/date modes and sticky behavior. Preserve all stream lane heights, stations, connectors, chart controls, footer, sidebar and PMP behavior.
