@@ -1,5 +1,5 @@
 /* Let the following white surface own its outline. Retain the divider's pixel
    so sticky offsets, search alignment and page-control geometry do not move. */
-.workspace .panel:has(>.empty,>.card,>.overview-grid,>table,>.data-table-scroll,>.search-results,>.warning-list,>.gantt,>.tube-body)>.title-row {
+.workspace:not(.module-overview) .panel:has(>.empty,>.card,>.overview-grid,>table,>.data-table-scroll,>.search-results,>.warning-list,>.gantt,>.tube-body)>.title-row {
  border-bottom-color:transparent;
 }

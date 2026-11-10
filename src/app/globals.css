@@ -135,7 +135,7 @@ table td.table-actions button { margin:.12rem; }
 /* Shared measured sticky offsets; the workspace has no top padding to mask. */
 .panel>.title-row{min-height:56px;z-index:20;isolation:isolate;}
 
-.panel>table{border-collapse:separate;border-spacing:0;}
+.panel>table,.panel>.data-table-scroll>table{border-collapse:separate;border-spacing:0;}
 .panel>table thead th{position:sticky;top:var(--module-toolbar-height);z-index:12;background:#edf1f5;box-shadow:0 1px 0 #d5dde6;}
 @media(max-width:850px){.panel>.title-row{min-height:56px;}.panel>table thead th{top:var(--module-toolbar-height);}}
 
