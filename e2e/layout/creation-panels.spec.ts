@@ -158,3 +158,21 @@ test('expanded Risk action lists keep header and submit actions fixed',async({pa
  for(const name of ['Cancel','Create']){const box=await footer.getByRole('button',{name,exact:true}).boundingBox();expect(box!.y+box!.height).toBeLessThanOrEqual(601);}
  await panel.getByRole('button',{name:'Cancel',exact:true}).click();await expect(panel).toBeHidden();
 });
+
+for(const viewport of [{width:375,height:700},{width:1024,height:600},{width:1440,height:900}])test(`New Project follows compact application controls at ${viewport.width}`,async({page},info)=>{
+ await page.setViewportSize(viewport);await setup(page,false);await page.getByRole('button',{name:'New Project',exact:true}).click();
+ const name=page.getByLabel('Project name',{exact:true}),description=page.getByLabel('Description',{exact:true}),create=page.getByRole('button',{name:'Choose File & Create',exact:true}),cancel=page.getByRole('button',{name:'Cancel',exact:true});
+ await expect(name).toBeFocused();await expect(create).toBeDisabled();await expect(description).toHaveCSS('height','60px');
+ const card=(await page.locator('.new-project-launcher>section').boundingBox())!;expect(card.width).toBeLessThanOrEqual(520);expect(card.y).toBeGreaterThanOrEqual(0);expect(card.y+card.height).toBeLessThanOrEqual(viewport.height);
+ for(const control of await page.locator('.new-project-launcher input,.new-project-launcher select').all())await expect(control).toHaveCSS('height','30px');
+ for(const button of [create,cancel]){await expect(button).toHaveCSS('height','30px');await expect(button).toBeInViewport();}
+ expect(await page.locator('body').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ const band=await name.evaluate(e=>{const r=e.getBoundingClientRect(),fields=e.closest('.project-form-fields')!,s=getComputedStyle(fields);return {width:r.width,available:fields.clientWidth-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight)};});expect(band.width).toBeCloseTo(band.available,0);
+ await name.press('Tab');await expect(description).toBeFocused();await description.fill('First line');await description.press('Enter');await expect(description).toHaveValue('First line\n');
+ await description.evaluate(e=>{e.style.height='900px';});await expect(create).toBeInViewport();await expect(cancel).toBeInViewport();expect(await page.locator('.project-form-fields').evaluate(e=>e.scrollHeight>e.clientHeight)).toBe(true);await description.evaluate(e=>{e.style.height='';});
+ await name.fill('Cancelled draft');await cancel.click();await expect(page.getByRole('button',{name:'New Project',exact:true})).toBeVisible();expect(await page.evaluate(()=>(window as unknown as {__panelCounts:()=>unknown}).__panelCounts())).toEqual({writes:0,pickers:0});
+ await page.getByRole('button',{name:'New Project',exact:true}).click();await expect(name).toHaveValue('');await expect(name).toBeFocused();
+ await page.screenshot({path:info.outputPath('compact-new-project.png')});
+ await name.fill('Compact project');await page.getByLabel('Start date',{exact:true}).fill('2028-02-29');await page.getByLabel('Status',{exact:true}).selectOption('In Progress');await expect(create).toBeEnabled();
+ await name.press('Enter');await expect(page.locator('.sidebar-project')).toContainText('Compact project');expect(await page.evaluate(()=>(window as unknown as {__panelCounts:()=>{pickers:number}}).__panelCounts().pickers)).toBe(1);
+});

@@ -1,0 +1,33 @@
+/* Dialogs reuse the page action and embedded field recipes. */
+.dialog-backdrop:not(.creation-backdrop) { padding:var(--space-3); }
+.heroui-experiment .dialog-backdrop:not(.creation-backdrop)>section {
+ box-sizing:border-box; width:min(520px,100%); max-height:calc(100dvh - 24px);
+ padding:var(--space-3); border-radius:var(--radius-dialog); overscroll-behavior:contain;
+ --field-height:var(--ui-field-embedded-height);
+}
+.dialog-backdrop:not(.creation-backdrop)>section>header { gap:var(--space-2); margin-bottom:var(--space-2); }
+.dialog-backdrop:not(.creation-backdrop) .form-grid { margin-top:var(--space-2); gap:var(--space-2); }
+.dialog-backdrop:not(.creation-backdrop) .form-grid label { gap:var(--space-1); }
+.dialog-backdrop:not(.creation-backdrop) .form-grid textarea { min-height:60px; field-sizing:fixed; }
+.dialog-backdrop .form-actions { margin-top:var(--space-2); gap:var(--space-2); flex-wrap:wrap; }
+.dialog-backdrop button:not(.action-icon-button) {
+ box-sizing:border-box; min-width:0; height:var(--action-height); min-height:var(--action-height);
+ padding:var(--ui-action-inset-block) var(--ui-action-inset-inline); border-radius:var(--action-radius);
+ font-size:var(--action-font); font-weight:var(--ui-action-weight); line-height:var(--ui-action-line-height);
+ display:inline-flex; align-items:center; justify-content:center;
+}
+.dialog-backdrop button.secondary:not(.action-icon-button) { color:var(--primary); border-color:var(--primary); background:var(--surface); }
+.dialog-backdrop button.danger:not(.action-icon-button) { color:#a12b20; border-color:#d78f87; background:var(--surface); }
+/* Native popovers retain measured positioning and scroll bounds. */
+:is(.filter-popover,.multi-select-options:popover-open,.relationship-options:popover-open,.anchored-options:popover-open) button {
+ min-height:var(--action-height); padding:var(--ui-action-inset-block) var(--ui-action-inset-inline);
+ border-radius:var(--action-radius); font-size:var(--action-font);
+}
+.multi-select-options:popover-open,.relationship-options:popover-open { padding:var(--space-2)!important; }
+:is(.filter-popover,.multi-select-options:popover-open,.relationship-options:popover-open) input[type=search] {
+ height:var(--ui-field-embedded-height); min-height:var(--ui-field-embedded-height); flex-basis:var(--ui-field-embedded-height);
+ padding-block:var(--space-1);
+}
+/* Fill only the existing title cell; keep the adjacent columns untouched. */
+.app-main .workspace.module-decision-log .panel table.fit-table td.decision-title-cell { padding-right:var(--space-3); }
+.app-main .workspace.module-decision-log .panel table.fit-table td.decision-title-cell>input { box-sizing:border-box; display:block; width:100%; min-width:0; max-width:100%; }

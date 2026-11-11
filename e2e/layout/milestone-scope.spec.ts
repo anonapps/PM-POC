@@ -82,7 +82,7 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
     for (const label of ['Duplicate', 'Delete']) {
       const button = row.getByRole('button', { name: label, exact: true });
       const box = (await button.boundingBox())!, cell = (await row.locator('.table-actions').boundingBox())!;
-      expect(box.width).toBe(36); expect(box.height).toBe(36);
+      expect(box.width).toBe(30); expect(box.height).toBe(30);
       expect(box.x + box.width).toBeLessThanOrEqual(cell.x + cell.width + 1);
     }
   }

@@ -30,12 +30,14 @@ test('compact actions render shared geometry, named icons and zero/nonzero count
       }));
       for(const button of buttonStates){
         expect(button.label).toMatch(/.+/);expect(button.title).toBeNull();expect(button.icon).toBe('true');
-        if(button.visible){expect(button.width).toBe(36);expect(button.height).toBe(36);}
+        if(button.visible){expect(button.width).toBe(30);expect(button.height).toBe(30);}
       }
       expect(await page.locator('.workspace').evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
       if (name === 'Risk Log') {
         await expect(page.getByRole('button', { name: 'Actions (0)', exact: true }).first().locator('.action-icon-badge')).toHaveText('0');
         await expect(page.getByRole('button', { name: 'Actions (2)', exact: true }).first().locator('.action-icon-badge')).toHaveText('2');
+        const overlaps=await page.locator('.action-icon-badge').evaluateAll(badges=>badges.some(badge=>{const a=badge.getBoundingClientRect(),button=badge.closest('button')!;return [...button.parentElement!.querySelectorAll('button.action-icon-button')].some(other=>{if(other===button)return false;const b=other.getBoundingClientRect();return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;});}));
+        expect(overlaps).toBe(false);
         const rows = page.locator('tbody tr').filter({ has: page.locator('.action-icon-button') });
         for (const row of await rows.all()) {
           const boxes = await row.locator('.action-icon-button').evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().y));
@@ -96,7 +98,7 @@ test('Extended Gantt retains aligned, reachable Task action icons at narrow desk
     const centers: number[] = [];
     for (const button of await buttons.all()) {
       const box = (await button.boundingBox())!;
-      expect(box.width).toBe(36); expect(box.height).toBe(36);
+      expect(box.width).toBe(30); expect(box.height).toBe(30);
       expect(box.x).toBeGreaterThanOrEqual(bounds.x); expect(box.x + box.width).toBeLessThanOrEqual(bounds.x + bounds.width + 1);
       centers.push(box.y + box.height / 2);
     }
