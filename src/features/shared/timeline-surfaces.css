@@ -67,6 +67,8 @@
 .workspace.module-tube-map .tube-baseline-only-line>div { background:transparent; border-top:1px dashed var(--control-border); }
 
 .workspace.module-tube-map .tube-baseline-overlay-marker.label-left sup { left:auto; right:100%; }
+/* Compact lanes can put Quick Edit across the sticky navigation (z-index 35). */
+.workspace.module-tube-map .tube-quick-edit { z-index:36; }
 
 .tube-comparison-toggle { display:flex; align-items:center; gap:0; margin:0; padding:0; border:1px solid var(--control-border); border-radius:var(--ui-radius-control); overflow:hidden; }
 .tube-comparison-toggle label { position:relative; display:flex; align-items:center; gap:4px; padding:4px 10px; cursor:pointer; }

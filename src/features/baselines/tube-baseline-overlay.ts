@@ -3,6 +3,14 @@ import { compareSchedule, dateVariance, validScheduleDate, type ProjectBaseline 
 import { timelineDisplayDate } from '../shared/timeline-date';
 import type { TubeMapModel, TubeStream } from '../tube-map/model';
 
+/** Nearest free horizontal target centre, in rendered pixels. Keep the date anchor
+ * when possible; never move or resize a live station to make room for history. */
+export function historicalMarkerCentre(anchor: number, halfWidth: number, obstacles: readonly { left: number; right: number }[], left: number, right: number) {
+  const candidates = [anchor, left + halfWidth, right - halfWidth, ...obstacles.flatMap(box => [box.left - halfWidth - 2, box.right + halfWidth + 2])];
+  return candidates.filter(x => x - halfWidth >= left && x + halfWidth <= right && obstacles.every(box => x + halfWidth <= box.left - 2 || x - halfWidth >= box.right + 2))
+    .sort((a, b) => Math.abs(a - anchor) - Math.abs(b - anchor))[0] ?? anchor;
+}
+
 export interface TubeBaselineMarker {
   streamId: string;
   date: string;

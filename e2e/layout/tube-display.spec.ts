@@ -12,12 +12,12 @@ const original=makeProjectState({project:projectFixture({metadata:{schemaVersion
 const baseline={id:'original',name:'Original plan',createdAt:'2026-11-01T00:00:00Z',snapshot:captureSchedule(original)};
 const source={...original,milestones:original.milestones.map(m=>m.id==='1'?{...m,plannedDate:'2026-11-09'}:m),baselines:[baseline,{...baseline,id:'second',name:'Second plan',snapshot:captureSchedule({...original,milestones:original.milestones.map(m=>({...m,plannedDate:'2026-11-23'}))})}]};
 source.baselines.push({...baseline,id:'matching',name:'Current plan copy',snapshot:captureSchedule(source)});
-async function open(page:Page){
+async function open(page:Page, sameDay=false){
  await page.clock.setFixedTime(new Date('2026-11-02T12:00:00Z'));
- const saved=serializeProject(source,{createdAt:'2026-11-01T00:00:00Z',lastSavedAt:'2026-11-01T00:00:00Z',runtimeVersion:APP_VERSION});if(!saved.ok)throw Error(JSON.stringify(saved.errors));
+ const saved=serializeProject(sameDay?{...source,milestones:[...source.milestones,milestone('5','2026-11-02')].map(m=>m.id==='1'?{...m,plannedDate:'2026-11-02'}:m)}:source,{createdAt:'2026-11-01T00:00:00Z',lastSavedAt:'2026-11-01T00:00:00Z',runtimeVersion:APP_VERSION});if(!saved.ok)throw Error(JSON.stringify(saved.errors));
  await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'tube-display.pmp',getFile:async()=>({name:'tube-display.pmp',size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer}),createWritable:async()=>({write:async(value:Uint8Array)=>{data=new Uint8Array(value)},close:async()=>{}})};Object.assign(window,{showOpenFilePicker:async()=>[handle],__tubeSaved:()=>[...data]});},{bytes:[...saved.value]});
  await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
- await expect(page.locator('.tube-station-link')).toHaveCount(5);
+ await expect(page.locator('.tube-station-link')).toHaveCount(sameDay?6:5);
 }
 const current=(page:Page,id='1')=>page.locator(`.tube-station[data-entity-id="${id}"] .tube-station-diamond`).first();
 const historical=(page:Page,id='1')=>page.locator(`.tube-baseline-indicator[data-baseline-id="${id}"], .tube-baseline-overlay-marker[data-baseline-id="${id}"]`).first();
@@ -37,7 +37,10 @@ for(const mode of ['off','overlay','separate'])for(const names of [true,false])t
  if(process.env.CAPTURE_LAYOUT)await page.screenshot({path:testInfo.outputPath('tube-display.png')});
  const lane=await page.locator('.tube-line').first().boundingBox();expect(lane!.height).toBe(names?88:48);
  if(mode!=='off'){
-  const old=await historical(page,'2').boundingBox(),live=await current(page,'2').boundingBox();expect(Math.abs(old!.x+old!.width/2-live!.x-live!.width/2)).toBeLessThan(1);
+  const old=historical(page,'2'),live=current(page,'2');
+  const anchor=await old.evaluate(node=>{const box=node.parentElement!.getBoundingClientRect();return box.left+box.width*parseFloat((node as HTMLElement).style.left)/100;});
+  const liveBox=(await live.boundingBox())!;expect(Math.abs(anchor-liveBox.x-liveBox.width/2)).toBeLessThan(1);
+  const oldBox=(await old.boundingBox())!;expect(oldBox.x+oldBox.width<=liveBox.x || oldBox.x>=liveBox.x+liveBox.width || oldBox.y+oldBox.height<=liveBox.y || oldBox.y>=liveBox.y+liveBox.height).toBe(true);
   const before=await historical(page).evaluate(node=>(node as HTMLElement).style.left);
   await page.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(historical(page)).toBeVisible();await page.getByRole('button',{name:'Next 4 weeks',exact:true}).click();await expect(historical(page)).toHaveCount(0);await page.getByRole('button',{name:'Jump to today',exact:true}).click();await expect(historical(page)).toBeVisible();expect(await historical(page).evaluate(node=>(node as HTMLElement).style.left)).toBe(before);
  }
@@ -90,4 +93,23 @@ test('comparison controls reject identical snapshots and filters own names/depen
  await expect(page.locator('.tube-station-link')).toHaveCount(5);
  await page.locator('nav').getByRole('button',{name:'People',exact:true}).click();await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();await expect(page.locator('.tube-station-link')).toHaveCount(5);
  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
+});
+
+for(const mode of ['overlay','separate'])for(const names of [false,true])test(`same-day stations: ${mode}, names ${names}, independent pointer and keyboard details`,async({page})=>{
+ await open(page,true);await tubeNames(page,names);
+ const geometry=await page.locator('.tube-station').evaluateAll(nodes=>nodes.map(node=>({id:node.getAttribute('data-entity-id'),left:(node as HTMLElement).style.left,top:(node as HTMLElement).style.top})));
+ await comparison(page,mode);
+ expect(await page.locator('.tube-station').evaluateAll(nodes=>nodes.map(node=>({id:node.getAttribute('data-entity-id'),left:(node as HTMLElement).style.left,top:(node as HTMLElement).style.top})))).toEqual(geometry);
+ const old=historical(page),live=current(page);
+ await old.focus();await page.keyboard.press('Escape');
+ await old.hover();await expect(page.getByRole('tooltip')).toHaveCount(1);await expect(page.getByRole('tooltip')).toContainText('Historical milestone');
+ await old.focus();await expect(old).toHaveAttribute('aria-describedby',await page.getByRole('tooltip').getAttribute('id') as string);
+ await page.keyboard.press('Escape');await expect(page.getByRole('tooltip')).toHaveCount(0);
+ await live.hover();await expect(page.getByRole('tooltip')).toHaveCount(1);await expect(page.getByRole('tooltip')).toContainText('Current milestone');
+ await live.focus();await expect(live).toHaveAttribute('aria-describedby',await page.getByRole('tooltip').getAttribute('id') as string);
+ await page.keyboard.press('Enter');await expect(page.getByRole('form',{name:'Quick edit milestone',exact:true})).toBeVisible();await expect(page.getByRole('tooltip')).toHaveCount(0);
+ await page.getByRole('textbox',{name:'Milestone name',exact:true}).fill('Same-day edited gate');await page.getByRole('button',{name:'Save',exact:true}).click();
+ await live.hover();await expect(page.getByRole('tooltip')).toContainText('Same-day edited gate');
+ await old.hover();await expect(page.getByRole('tooltip')).toContainText('Gate 1');await expect(page.getByRole('tooltip')).toContainText('Historical milestone');
+ await page.setViewportSize({width:900,height:700});await old.hover();await expect(page.getByRole('tooltip')).toContainText('Historical milestone');
 });

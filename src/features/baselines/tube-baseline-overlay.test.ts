@@ -3,7 +3,7 @@ import { captureSchedule, type ProjectBaseline } from '../../domain/baselines';
 import { makeProjectState, streamFixture } from '../../domain/test-fixtures';
 import type { Milestone } from '../../domain';
 import { buildTubeMap } from '../tube-map/model';
-import { buildTubeBaselineOverlay } from './tube-baseline-overlay';
+import { historicalMarkerCentre, buildTubeBaselineOverlay } from './tube-baseline-overlay';
 
 const milestone = (id: string, date: string, streams: string[] = []): Milestone => ({ id, projectId: 'project-1', humanId: `MILESTONE-${id}`, name: `Gate ${id}`, plannedDate: date, status: 'Planned', ownerId: null, scope: streams.length ? { kind: 'streams', streamIds: streams } : { kind: 'project' }, relatedTaskIds: [], deletion: { isDeleted: false } });
 const baseline = (state: ReturnType<typeof makeProjectState>): ProjectBaseline => ({ id: 'plan', name: 'Original plan', createdAt: '2026-10-26T12:00:00Z', snapshot: captureSchedule(state) });
@@ -67,4 +67,18 @@ describe('same-map historical milestone projection', () => {
     expect(buildTubeBaselineOverlay(baseline(original),original,model,new Map()).markers).toHaveLength(0);
   });
 
+});
+
+describe('historical marker pointer targets', () => {
+  it('keeps clear targets anchored and moves covered targets beyond the complete live button', () => {
+    expect(historicalMarkerCentre(100,9,[],0,600)).toBe(100);
+    const centre=historicalMarkerCentre(100,9,[{left:87,right:113}],0,600);
+    expect(Math.abs(centre-100)).toBe(24);
+    expect(historicalMarkerCentre(centre,9,[{left:87,right:113}],0,600)).toBe(centre);
+  });
+  it('avoids neighbouring buttons and earlier historical targets and stays inside chart edges', () => {
+    const obstacles=[{left:0,right:26},{left:28,right:54},{left:56,right:74}];
+    expect(historicalMarkerCentre(13,9,obstacles,0,600)).toBe(85);
+    expect(historicalMarkerCentre(595,9,[{left:580,right:600}],0,600)).toBe(569);
+  });
 });
