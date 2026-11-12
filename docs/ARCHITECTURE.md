@@ -3,7 +3,7 @@
 ## v1.5 architecture guidance (approved scope)
 
 - Reuse the application command boundary for text edits: normalise the first character of human-readable fields on blur as part of the same logical edit, so Undo and audit history contain no separate formatting mutation. Preserve IDs, emails, URLs, file paths and technical identifiers.
-- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient and resets on navigation. Predictive selection state must be independent of the currently typed search query.
+- Use shared presentation primitives for outlined inputs, searchable dynamic-list selectors, Search/Filter toolbars and creation states. Search/filter state is transient. Ordinary navigation resets destination preferences; Search journeys preserve their context for the open project session (see `SEARCH_NAVIGATION.md`). Fix 3 additionally preserves Dependencies preferences across its Warnings round trip; milestone relationship warnings resolve stable dependency IDs through transient diagnostic metadata (see `UX_IMPROVEMENT_BATCH.md`). Predictive selection state must be independent of the currently typed search query.
 - Implement shared Today-marker rendering and visual tokens across Gantt and Tube Map, while each chart computes its own date-axis coordinates. Hide Empty Streams is independent per chart and exposed once in its shared filter panel (24 October manual acceptance correction).
 - Persist optional last-save timezone metadata in the existing .pmp manifest without silently migrating compatible v1.4 files. Preserve UTC instant, original saving-device local display time, IANA timezone name where available and UTC offset. Update metadata only after successful file writes; display “Timezone unavailable” for legacy files until saved.
 - Keep browser file-picker operations behind the Project File Service. Save/Discard/Cancel and navigation-draft warnings must not discard data without the user's chosen action.
@@ -316,7 +316,7 @@ Global search indexes current project entities by human ID and name/title. It mu
 
 Deleted entities are excluded by default and included only when `Include Deleted` is enabled.
 
-Search results navigate through the application navigation layer so module context and Quick View behaviour remain consistent.
+Search result title buttons navigate through the existing application navigation target. Search and Warnings share exact-record focus, temporary filter inclusion, highlighting and content scrolling. Baselines reveal their existing management dialog; Dependencies reveal their existing row. Per-open-project navigation preferences preserve Search return context without writing UI state to `.pmp`. See `SEARCH_NAVIGATION.md` for the approved 2 November 2026 interaction, which supersedes the earlier Quick View-first behavior.
 
 ## 17. Gantt and Tube Map
 
@@ -439,7 +439,7 @@ HeroUI v2 Button/Chip controls and provider are part of the main presentation la
 
 ## v1.5 shared interaction implementation
 
-- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Module unmount resets this transient state.
+- `ModuleSearch` owns one disclosure/popover for live search and filters on all eight approved pages. The shared record-filter hook stores selected stable IDs; `matchesFilters` applies AND across categories and OR within each category. Risk Matrix selection writes to the same Level category used by the popover. Ordinary non-Search module navigation resets this transient state; the approved Search return journey retains it in the per-project navigation context.
 - Creation uses `CreationField`, pure calendar/required-field validation and `useCreationFeedback`. Only mandatory user inputs appear in creation; optional scope, owners and dependencies remain in row/context editing. Successful commands clear all creation inputs and active filters while retaining creation mode. No UI state is written to `.pmp`.
 - `PredictiveSelect`, `RelationshipPicker` and `SearchableOptionList` share query matching, arrows, Enter and Escape behaviour. Selection lives in canonical state or an explicit context draft, independently of query-filtered results. Native disclosure closing clears query state; outside clicks dismiss disclosures. Short fixed-value entity controls remain native selects.
 - `matchesEntitySearch` is the shared pure projection for module/global search, including descriptive text, owner and relationship names/human IDs, dependencies and risk actions. Matching itself lives in `option-matching.ts`, without React imports. Deleted related names remain excluded, preserving the established search contract.
@@ -479,7 +479,7 @@ Tube Map footer shielding uses a clipped paint-only shadow below the sticky foot
 
 Optional ProjectState.baselines stores versioned immutable schedule snapshots with stable entity IDs and detached historical stream references. Domain capture/comparison/calendar-day variance are independent of React, persistence and audit recording. Application commands edit collection/metadata through the existing store and Undo/Redo. Loaded snapshots are structurally validated then frozen; historical references are checked against the snapshot rather than current entities. Baseline-containing saves raise the minimum reader to 1.6.0 without changing project schema 2 or container format 1. Files without baselines retain the existing optional-field/compatibility contract. Archive writing appends large entry bytes incrementally rather than passing them as a function's argument list.
 
-Baseline selection lives in a project-keyed React provider and resets on close. Gantt, Tube Map and comparison share the same calculations. Historical Tube Map markers use separate aligned lanes to preserve live station geometry and label targets. Dependency editing preserves canonical record IDs/types; pure shared validation and warnings do not schedule or persist derived warnings. Existing chart connector support is retained.
+Baseline selection lives in a project-keyed React provider and resets on close. Gantt, Tube Map and comparison share the same calculations. Historical Tube Map markers reuse colourless hollow diamonds in Separate or Overlay display, sharing the selected baseline and date scale. Pure historical projections retain snapshot dates/scopes and historical-only streams. Optional compact lanes recalculate station/dependency coordinates without changing dates; one portalled accessible tooltip replaces native/pseudo milestone tooltips. See `TUBE_MAP_DISPLAY.md`. Dependency editing preserves canonical record IDs/types; pure shared validation and warnings do not schedule or persist derived warnings. Existing chart connector support is retained.
 
 FitTable preserves native cells, refs, controls and sorting; a workspace container query wraps all record fields into labelled groups when the table cannot fit. No columns are removed. Gantt and Tube Map use date navigation, with vertical-only scrolling and reserved footer space. Existing top-layer popup measurement remains authoritative. Extended Mode was implemented only after the owner approved the revised mockup with exact standalone Tasks panel equivalence.
 
@@ -504,3 +504,20 @@ The owner-corrected29October creation layout retains the original560px maximum d
 
 
 UI standard closeout retains native table-cell/selection and overlay adapters as explicit variants in [the reuse matrix](UI_REUSE_MATRIX.md). The unused historical `CreationField` helper has been retired; current record creation uses EntityCreationPanel with FormField/FieldMessage. Earlier v1.5 implementation descriptions remain historical. No model, command or PMP contract changes accompany this cleanup.
+
+## Global compact actions
+
+ActionIconButton forwards native button semantics and caller commands, supplying bundled Lucide icons and a shared HeroUI Tooltip adapter. Its isolated CSS owns the approved compact action variant; native labels/confirmation/propagation remain caller-owned. Disabled tooltip wrappers never enable actions. No domain, application, file-service or PMP changes. See ICON_BUTTON_STANDARDISATION.md for the page audit, mapping, retained labelled actions and visual-acceptance boundary.
+
+## Tube Map baseline comparison modes
+
+TubeMapView owns a transient below/map display choice beside existing baseline visibility. The pure buildTubeBaselineOverlay projection reuses compareSchedule and calendar-day positions, matches stable stream IDs, groups identical historical date/scope occurrences and appends read-only historical lanes when no live lane is displayed. It does not change buildTubeMap or canonical station/dependency geometry. The existing strip remains the default; new markers use shared hover/focus tooltips. The mode never enters PMP, commands or history. Scope, filtering semantics, screenshots and focused evidence: TUBE_MAP_COMPARISON_MODES.md.
+
+### Shared tooltip surface
+
+`tooltip-surfaces.css` owns the appearance of native title hints, action tooltips and rich chart details. `TitleTooltipProvider` renders native HTML/SVG title hints through one delegated, lazily displayed portal rather than adding a tooltip component to every table cell. It temporarily suppresses browser tooltips, restores title metadata, manages accessible descriptions and Escape dismissal, and keeps keyboard-focused hints positioned during chart scrolling. Existing action/chart positioning and rich hover behavior remain separate from the shared surface; this presentation layer never changes ProjectStore or PMP data.
+
+
+## Compact dialog surfaces — 9 November 2026
+
+`features/shared/dialog-surfaces.css` reuses action/embedded-field tokens for dialogs and native popovers. Dialog lifecycle/focus handling and domain commands are unchanged. Baseline management uses a bounded flex list with fixed-height CSS grid rows and the existing delegated clipping-only title hints for full names/descriptions; the footer stays outside the scroll region. The Decision Log width rule is restricted to its existing title cell.

@@ -1,3 +1,5 @@
+import { tubeFilter } from './tube-controls';
+import {globalAction} from './global-actions';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
@@ -26,12 +28,12 @@ test('baseline lifecycle, selection, undo, save/reopen and visual controls',asyn
  await page.getByRole('button',{name:'Done',exact:true}).click();await page.screenshot({path:testInfo.outputPath('baseline-comparison.png'),fullPage:true});await manage(page);
  await page.getByRole('button',{name:'Delete Approved delivery',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.locator('.baseline-list li')).toHaveCount(2);
  await page.getByRole('button',{name:'Delete Approved delivery',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Delete baseline',exact:true}).click();await expect(page.locator('.baseline-list li')).toHaveCount(1);await page.getByRole('button',{name:'Done',exact:true}).click();
- await page.getByRole('button',{name:'Undo',exact:true}).click();await manage(page);await expect(page.locator('.baseline-list li')).toHaveCount(2);await page.getByRole('button',{name:'Done',exact:true}).click();
- await page.getByRole('button',{name:'Save Now',exact:true}).click();await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await globalAction(page,'Undo');await manage(page);await expect(page.locator('.baseline-list li')).toHaveCount(2);await page.getByRole('button',{name:'Done',exact:true}).click();
+ await globalAction(page,'Save Now');await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
  const bytes=await page.evaluate(()=> (window as unknown as {__v16Saved:()=>number[]}).__v16Saved());const reopened=deserializeProject(new Uint8Array(bytes));expect(reopened.ok&&reopened.value.projectState.baselines?.map(b=>b.name)).toEqual(['Original plan','Approved delivery']);
- await nav(page,'Gantt');await page.getByLabel('Baseline overlay',{exact:true}).check();await expect(page.locator('.gantt-baseline').first()).toBeVisible();for(const zoom of ['Month','Quarter','Week']){await page.locator('.gantt-zoom-control select').selectOption(zoom);await expect(page.locator('.gantt-baseline').first()).toBeVisible();}await page.getByLabel('Variance indicators',{exact:true}).check();await expect(page.locator('.variance-indicator').first()).toBeVisible();await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(page.locator('.gantt-connectors .dependency-line')).toHaveCount(0);await page.screenshot({path:testInfo.outputPath('gantt-baseline.png')});
- await nav(page,'Tube Map');await page.getByLabel('Baseline milestones',{exact:true}).check();await expect(page.getByRole('region',{name:'Baseline milestone indicators'})).toBeVisible();await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);await page.screenshot({path:testInfo.outputPath('tube-baseline.png')});
- await nav(page,'File Information');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await nav(page,'Baselines');await manage(page);await expect(page.locator('.baseline-list li')).toHaveCount(2);
+ await nav(page,'Gantt');await page.getByLabel('Baseline overlay',{exact:true}).check();await expect(page.locator('.gantt-baseline').first()).toBeVisible();for(const zoom of ['Month','Quarter','Week']){await page.locator('.gantt-zoom-control select').selectOption(zoom);await expect(page.locator('.gantt-baseline').first()).toBeVisible();}await page.locator('.gantt-baseline').first().focus();await expect(page.getByRole('tooltip')).toContainText('Current start:');await page.keyboard.press('Escape');await tubeFilter(page,'Hide Dependencies',true);await expect(page.locator('.gantt-connectors .dependency-line')).toHaveCount(0);await page.screenshot({path:testInfo.outputPath('gantt-baseline.png')});
+ await nav(page,'Tube Map');await expect(page.getByRole('radio',{name:'Detached',exact:true})).toBeDisabled();await page.locator('.tube-station-diamond').first().click();await page.getByRole('textbox',{name:'Milestone name',exact:true}).fill('Updated comparison milestone');await page.getByRole('button',{name:'Save',exact:true}).click();await expect(page.getByRole('region',{name:'Baseline milestone indicators'})).toBeVisible();await tubeFilter(page,'Hide Dependencies',true);await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);await page.screenshot({path:testInfo.outputPath('tube-baseline.png')});
+ await globalAction(page,'Save Now');await nav(page,'Settings');await page.getByRole('button',{name:'Close Project',exact:true}).click();await page.getByRole('button',{name:'Open Project',exact:true}).click();await nav(page,'Baselines');await manage(page);await expect(page.locator('.baseline-list li')).toHaveCount(2);
 });
 test('dependency filters, editor, invalid self reference, warning recalculation and Undo',async({page},testInfo)=>{
  await page.setViewportSize({width:1280,height:1000});await open(page);await nav(page,'Dependencies');
@@ -43,7 +45,7 @@ test('dependency filters, editor, invalid self reference, warning recalculation 
  const pickSuccessor=async(value:string)=>{await dialog.locator('summary[aria-label="Dependency successor"]').click();await page.locator('.multi-select-options:popover-open').locator(`input[value="${value}"]`).click();};
  await pickSuccessor(predecessor!);await expect(dialog.getByRole('alert')).toContainText('Self-references');await expect(dialog.getByRole('button',{name:'Save dependency',exact:true})).toBeDisabled();await pickSuccessor(successor!);
  await page.getByLabel('Dependency type',{exact:true}).selectOption('Start-to-Start');await page.getByRole('button',{name:'Save dependency',exact:true}).click();await expect(rows.first()).toContainText('Start-to-Start');
- await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(rows.first()).not.toContainText('Start-to-Start');await page.screenshot({path:testInfo.outputPath('cross-stream-dependencies.png')});
+ await globalAction(page,'Undo');await expect(rows.first()).not.toContainText('Start-to-Start');await page.screenshot({path:testInfo.outputPath('cross-stream-dependencies.png')});
 });
 
 test('comparison preserves and searches historical stream names after rename and soft deletion',async({page})=>{
@@ -78,4 +80,48 @@ for(const width of [900,1024,1440,1920])test(`approved Baselines continuous comp
  expect(await panel.evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
  await page.screenshot({path:testInfo.outputPath(`${width}-baselines-aligned.png`)});
  const search=panel.locator('.shared-search-filter input');await search.fill(dated.humanId);await expect(table.locator('tbody tr')).toHaveCount(1);await expect(changed.locator('td').last()).toHaveText('+3d');
+});
+
+for(const viewport of [{width:1024,height:600},{width:1440,height:900}])test(`compact baseline manager handles long text and internal scrolling at ${viewport.width}`,async({page},testInfo)=>{
+ await page.setViewportSize(viewport);
+ const savedNames={...source.projectState,tasks:source.projectState.tasks.map((item,i)=>i?item:{...item,name:'Saved name containing task'}),milestones:source.projectState.milestones.map((item,i)=>i?item:{...item,name:'Saved name containing milestone'})};
+ const snapshot=captureSchedule(savedNames),longName='Long baseline name '.repeat(10),longDescription='Complete description with saved words task and milestone. '.repeat(80);
+ const baselines=Array.from({length:24},(_,i)=>({id:`compact-${i}`,name:i===2?longName:`Plan ${i}`,description:i===0?undefined:i===1?'Short description':longDescription,createdAt:'2026-10-26T12:00:00Z',snapshot}));
+ await open(page,{...savedNames,baselines});await nav(page,'Baselines');
+ const entity=page.locator('.comparison-table tbody tr').first().locator('td').first();
+ await expect(entity.locator('.comparison-kind')).toHaveCount(0);await expect(entity).toHaveText(`${savedNames.tasks[0].humanId} · ${savedNames.tasks[0].name}`);
+ await expect(page.locator('.comparison-table tbody tr').filter({hasText:savedNames.milestones[0].humanId}).locator('td').first()).toHaveText(`${savedNames.milestones[0].humanId} · ${savedNames.milestones[0].name}`);
+ await manage(page);const dialog=page.getByRole('dialog',{name:'Manage baselines',exact:true}),rows=dialog.locator('.baseline-list li');
+ await expect(rows).toHaveCount(24);
+ const heights=await rows.evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));expect(new Set(heights).size).toBe(1);expect(heights[0]).toBe(64);
+ const scroll=dialog.locator('.baseline-list-scroll');expect(await scroll.evaluate(e=>e.scrollHeight>e.clientHeight)).toBe(true);
+ const box=(await dialog.boundingBox())!;expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThanOrEqual(viewport.height);
+ const done=dialog.getByRole('button',{name:'Done',exact:true});await expect(done).toBeInViewport();
+ const nameButton=rows.nth(2).getByRole('button',{name:longName.trim(),exact:true});await nameButton.focus();await expect(page.locator('.title-tooltip')).toContainText(longName.trim());
+ const nameStart=await nameButton.evaluate(e=>{const range=document.createRange();range.selectNodeContents(e);return {text:range.getBoundingClientRect().left,button:e.getBoundingClientRect().left};});expect(nameStart.text).toBeGreaterThanOrEqual(nameStart.button);
+ await rows.nth(1).locator('.baseline-description').focus();await expect(page.locator('.title-tooltip')).toHaveCount(0);
+ await page.screenshot({path:testInfo.outputPath('compact-baseline-list.png')});
+ const description=rows.nth(2).locator('.baseline-description');await description.focus();await expect(page.getByRole('tooltip')).toContainText(longDescription);
+ await expect(page.locator('.title-tooltip')).toHaveCSS('background-color','rgb(227, 227, 227)');
+ const tooltip=page.getByRole('tooltip');expect(await tooltip.evaluate(e=>{const r=e.getBoundingClientRect(),pointer=e.style.pointerEvents;e.style.pointerEvents='auto';try{return e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));}finally{e.style.pointerEvents=pointer;}})).toBe(true);
+ await page.screenshot({path:testInfo.outputPath('compact-baseline-manager.png')});
+ await expect(description).toHaveCSS('white-space','nowrap');await expect(description).toHaveCSS('text-overflow','ellipsis');
+ await page.keyboard.press('Tab');await expect(rows.nth(2).getByRole('button',{name:`Rename ${longName.trim()}`,exact:true})).toBeFocused();
+ for(const button of await rows.first().locator('.baseline-row-actions button').all()){const size=(await button.boundingBox())!;expect(size.width).toBe(30);expect(size.height).toBe(30);}
+ await rows.first().getByRole('button',{name:'Rename Plan 0',exact:true}).click();
+ const editor=page.getByRole('dialog',{name:'Rename baseline',exact:true});expect((await editor.boundingBox())!.width).toBeLessThanOrEqual(440);await expect(editor.locator('input')).toHaveCSS('height','30px');
+ await editor.locator('input').fill('');await editor.getByRole('button',{name:'Save',exact:true}).click();await expect(editor).toBeVisible();
+ await editor.getByRole('button',{name:'Cancel',exact:true}).click();await expect(rows.first()).toContainText('Plan 0');await done.click();
+});
+
+test('Decision title fills its existing column and shared dialogs keep compact controls',async({page})=>{
+ await page.setViewportSize({width:1366,height:768});await open(page);await nav(page,'Decision Log');
+ const input=page.getByLabel('Title for DECISION-001',{exact:true});
+ const geometry=await input.evaluate(e=>{const r=e.getBoundingClientRect(),cell=e.closest('td')!,c=cell.getBoundingClientRect(),style=getComputedStyle(cell);return {width:r.width,available:cell.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),gap:c.right-r.right};});
+ expect(geometry.width).toBeCloseTo(geometry.available,0);expect(geometry.gap).toBeGreaterThanOrEqual(12);expect(geometry.gap).toBeLessThanOrEqual(16);
+ await input.fill('Long usable decision title '.repeat(15));await input.press('Enter');await expect(input).toHaveValue(/^Long usable decision title/);
+ await nav(page,'Risk Log');await page.getByRole('button',{name:'Add Risk',exact:true}).click();await expect(page.getByRole('dialog')).toBeVisible();await page.keyboard.press('Escape');
+ await nav(page,'Settings');await page.getByRole('button',{name:'Edit Project Details',exact:true}).click();const dialog=page.getByRole('dialog',{name:'Project Details',exact:true});
+ await expect(dialog.getByRole('button',{name:'Done',exact:true})).toHaveCSS('height','30px');await expect(dialog.locator('input[type=date]').first()).toHaveCSS('height','30px');await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'Edit Project Details',exact:true})).toBeFocused();
+ await expect(page.getByRole('button',{name:'Close Project',exact:true})).toBeVisible();
 });

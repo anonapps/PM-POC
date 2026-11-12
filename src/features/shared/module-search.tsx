@@ -1,4 +1,5 @@
 "use client";
+import { ActionTooltip } from "./action-icon-button";
 import { useLayoutEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { positionAnchoredPanel } from "./filter-panel-position";
@@ -34,9 +35,9 @@ export function ModuleSearch({title,value,onChange,placeholder,disabled=false,ch
   const active=Boolean(value.trim())||activeFilters;
   return <div ref={rootRef} className="module-search-toolbar shared-search-filter">
     <label className="toolbar-search-label"><span className="sr-only">{label??`Search ${title}`}</span><input type="search" aria-label={label??`Search ${title}`} disabled={disabled} value={value} onChange={event=>onChange(event.target.value)} placeholder={placeholder}/></label>
-    <ActionButton ref={triggerRef} type="button" variant="secondary" className="filter-trigger" disabled={disabled} title={`Search ${title}`} aria-label={`Search and filter ${title}`} aria-expanded={open} aria-controls={open?id:undefined} data-active={activeFilters||undefined} onClick={()=>setExpanded(previous=>!previous)}>
+    <ActionTooltip label={`Search and filter ${title}`}><ActionButton ref={triggerRef} type="button" variant="secondary" className="filter-trigger" disabled={disabled}  aria-label={`Search and filter ${title}`} aria-expanded={open} aria-controls={open?id:undefined} data-active={activeFilters||undefined} onClick={()=>setExpanded(previous=>!previous)}>
       <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 5h18M6 12h12M9 19h6"/></svg><span className="sr-only">Filters{active?" · Active":""}</span>
-    </ActionButton>
+    </ActionButton></ActionTooltip>
     {open&&createPortal(<div ref={panelRef} id={id} className="module-search-controls filter-popover" role="region" aria-label={`Search and filter controls for ${title}`}>
       <div className="filter-panel-heading"><strong>Filters</strong><ActionButton type="button" variant="secondary" onClick={()=>{onChange("");onClearFilters?.();}}>Clear all</ActionButton></div>
       <div className="filter-sections">{children}</div>

@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import uiTokens from '../../../src/ui/tokens.json';
+import { Copy, MessageCircle, Trash2, Zap } from 'lucide-react';
+import { ActionIconButton } from '../../../src/features/shared/action-icon-button';
 import { ActionButton } from '../../../src/features/shared/action-button';
 import { ChoiceRow } from '../../../src/features/shared/choice-row';
 import { ReferenceExamples } from './reference-examples';
@@ -49,6 +51,7 @@ export default function Catalogue() {
     <header className="catalogue-intro"><h1>ARGOS PM UI catalogue</h1><p>Compatibility reference · local examples only · no project files or project persistence</p><nav aria-label="Catalogue sections">{sections.map(name=><a key={name} href={`#${name.toLowerCase()}`}>{name}</a>)}</nav></header>
     <div className="workspace"><div className="panel">
       <section id="actions" className="catalogue-section"><h2>Actions</h2><p className="catalogue-note">Generic action classes (36–38px context); compact page actions appear in Search and Footers. Tab to inspect focus; hover and press to inspect states.</p><div className="catalogue-row"><ActionButton type="button">Primary</ActionButton><ActionButton type="button" variant="secondary">Secondary</ActionButton><ActionButton type="button" variant="danger">Delete</ActionButton><ActionButton type="button" disabled>Disabled</ActionButton><ActionButton type="button" variant="secondary" aria-label="More actions">⋯</ActionButton></div></section>
+      <section className="catalogue-section"><h2>Compact icon actions</h2><div className="catalogue-row"><ActionIconButton type="button" icon={MessageCircle} label="Context" onClick={()=>setNotice("Context selected")}/><ActionIconButton type="button" icon={Zap} label="Actions" count={0}/><ActionIconButton type="button" icon={Zap} label="Actions" count={3}/><ActionIconButton type="button" icon={Copy} label="Duplicate"/><ActionIconButton type="button" icon={Trash2} label="Delete" variant="danger"/><ActionIconButton type="button" icon={Copy} label="Duplicate unavailable" disabled/></div></section>
       <section id="fields" className="catalogue-section"><h2>Fields and density</h2><p className="catalogue-note">Actual context classes retain responsive styles. Human text capitalizes on blur; search, date and number values stay native.</p><div className="catalogue-grid">
         <div className="catalogue-sample"><h3>Regular table · 36px</h3><FitTable><thead><tr><th>Name</th></tr></thead><tbody><tr><td><HumanTextInput aria-label="Regular name" value={text} onChange={e=>setText(e.target.value)}/></td></tr></tbody></FitTable></div>
         <div className="catalogue-sample"><h3>Creation · 34px</h3><div className="creation-fields"><label>Name *<HumanTextInput aria-label="Creation name" defaultValue="Creation example"/></label><label>Date<input aria-label="Creation date" type="date" defaultValue="2026-10-27"/></label><label>Invalid example<input aria-label="Invalid example" aria-invalid="true" aria-describedby="catalogue-error" defaultValue=""/><small className="field-error" id="catalogue-error">Name is required</small></label></div></div>

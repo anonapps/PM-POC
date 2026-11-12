@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 export async function runRegression({ evaluate, waitFor, click, nav, setLabel, record }) {
   if (!process.env.REGRESSION_PMP_PATH) return;
   if(await evaluate(`Boolean(document.querySelector('nav'))`)){
-  await nav('File Information');
+  await nav('Settings');
   await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher')||document.querySelector('[role=dialog]'))`);
   if(await evaluate(`Boolean(document.querySelector('[role=dialog]'))`))await click('Save');
@@ -12,7 +12,7 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
   await evaluate(`(async()=>{const writer=await window.__E2E_FILE__.createWritable();await writer.write(new Uint8Array(${JSON.stringify(bytes)}));await writer.close()})()`);
   const started = Date.now();
   await click('Open Project');
-  await waitFor(`document.body.innerText.includes('Regression 180 records')`);
+  await waitFor(`document.querySelector('.sidebar-project strong')?.textContent==='Regression 180 records'`);
   record('180-record project opens', true, `${Date.now()-started} ms (diagnostic)`);
   for (const [module, prefix] of [['People','PERSON'],['Streams','STREAM'],['Tasks','TASK'],['Milestones','MILESTONE'],['Risk Log','RISK'],['Decision Log','DECISION']]) {
     const start = Date.now();
@@ -59,12 +59,12 @@ export async function runRegression({ evaluate, waitFor, click, nav, setLabel, r
     }
   }
   await click('Save Now');
-  await waitFor(`document.querySelector('[role="status"]')?.textContent.startsWith('Saved')`);
-  await nav('File Information');
+  await waitFor(`document.querySelector('.toolbar-save-status')?.textContent.startsWith('Saved')`);
+  await nav('Settings');
   await click('Close Project');
   await waitFor(`Boolean(document.querySelector('main.launcher'))`);
   await click('Open Project');
-  await waitFor(`document.body.innerText.includes('Regression 180 records')`);
+  await waitFor(`document.querySelector('.sidebar-project strong')?.textContent==='Regression 180 records'`);
   await nav('Decision Log');
   await waitFor(`document.body.innerText.includes('DECISION-${process.env.E2E_FULL_LIFECYCLE === '1' ? '060' : '030'}')`);
   const expected = process.env.E2E_FULL_LIFECYCLE === '1' ? 60 : 30;

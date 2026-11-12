@@ -1,3 +1,4 @@
+import { settleSidebar } from './sidebar-animation';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 const bytes=[...readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')];
@@ -39,8 +40,8 @@ for(const height of [400,480,600,720,768,900])test(`sidebar fits every module wi
   await sidebar.evaluate(e=>e.scrollTop=100);expect(await sidebar.evaluate(e=>e.scrollTop)).toBe(0);
   return rows.map(r=>r.top);
  };
- const positions=await check();await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();expect(await check()).toEqual(positions);expect(await nav.getByRole('button').evaluateAll(nodes=>nodes.map(e=>e.getAttribute('aria-label')))).toEqual(names);
- await page.getByRole('button',{name:'Expand sidebar',exact:true}).click();expect(await check()).toEqual(positions);
- await nav.getByRole('button',{name:'File Information',exact:true}).click();await expect(nav.getByRole('button',{name:'File Information',exact:true})).toHaveAttribute('aria-current','page');
+ const positions=await check();await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);expect(await check()).toEqual(positions);expect(await nav.getByRole('button').evaluateAll(nodes=>nodes.map(e=>e.getAttribute('aria-label')))).toEqual(names);
+ await page.getByRole('button',{name:'Expand sidebar',exact:true}).click();await settleSidebar(page);expect(await check()).toEqual(positions);
+ await nav.getByRole('button',{name:'Settings',exact:true}).click();await expect(nav.getByRole('button',{name:'Settings',exact:true})).toHaveAttribute('aria-current','page');
  await page.locator('.workspace').evaluate(e=>e.scrollTop=500);expect(await check()).toEqual(positions);
 });

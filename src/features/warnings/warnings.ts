@@ -24,6 +24,7 @@ export interface ProjectWarning {
   readonly description: string;
   readonly relatedDate?: string;
   readonly dependencyId?: string;
+  readonly dependencyIds?: readonly string[];
   readonly destination: ModuleName;
   readonly action?: { kind: "remove-dependency" | "remove-scope"; referenceId: string; label: string };
 }

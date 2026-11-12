@@ -1,7 +1,10 @@
-import {test,expect,type Page} from '@playwright/test';
-import {makeProjectState,streamFixture,taskFixture} from '../../src/domain/test-fixtures';
-import {readFileSync} from 'node:fs';
-import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
+import { settleSidebar } from './sidebar-animation';
+import { tubeFilter } from './tube-controls';
+import {captureSchedule} from '../../src/domain/baselines';
+import {test, expect, type Page } from "@playwright/test";
+import { makeProjectState, streamFixture, taskFixture } from "../../src/domain/test-fixtures";
+import { readFileSync } from "node:fs";
+import { deserializeProject, serializeProject } from "../../src/persistence/pmp/codec";
 const decoded=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
 if(!decoded.ok)throw new Error('Invalid legacy fixture');
 const fixture=decoded.value;
@@ -39,8 +42,8 @@ for(const width of [900,1024,1280,1440,1920])test(`independent search centre acr
   expect(await centred(page)).toBeCloseTo(centre,0);
   if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${name.replaceAll(' ','-')}-centred.png`)});
  }
- await page.locator('.sidebar-toggle').click();await centred(page);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await page.locator('.sidebar-toggle').click();await settleSidebar(page);await centred(page);
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 for(const width of [900,1280,1440,1920])for(const scenario of [
  {name:'short year-boundary project',today:'2026-12-31T12:00:00',range:['2026-12-28','2027-01-15'] as [string,string]},
@@ -76,7 +79,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
   await page.getByRole('button',{name:'Expand All',exact:true}).click();
   await chart.evaluate(e=>{e.scrollTop=0;e.scrollLeft=0;});
  }
- if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Gantt-footer.png`)});await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 // PR #12: footer paint must not extend scroll overflow and unstick the axis.
@@ -84,10 +87,10 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  await page.setViewportSize({width,height:900});await openProject(page);
  await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
  if(length==='short')await page.locator('.shared-search-filter input').fill(fixture.projectState.streams[0].name);
- await page.getByRole('combobox').selectOption('date');
+ await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption('date');
  for(const label of await page.locator('.tube-axis>span').allTextContents())expect(label).toMatch(/^\d{2}\/\d{2}$/);
  expect(await page.locator('.tube-axis>span').evaluateAll(nodes=>nodes.every(node=>getComputedStyle(node).textAlign==='center'))).toBe(true);
- await page.getByRole('combobox').selectOption('week');
+ await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption('week');
  const laneCount=await page.locator('.tube-line').count();expect(length==='short'?laneCount<5:laneCount>=31).toBe(true);
  const workspace=page.locator('.workspace');
  // Include the axis/footer in the bound; no decorative paint should add a viewport of scrolling.
@@ -103,12 +106,12 @@ for(const width of [1440,1080,768,375])for(const length of ['short','long'])test
  const last=(await page.locator('.tube-line').last().boundingBox())!,footer=(await page.getByRole('navigation',{name:'Tube Map date navigation'}).boundingBox())!;
  expect(last.y+last.height).toBeLessThanOrEqual(footer.y+1);
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-${length}-sticky.png`)});
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 for(const width of [900,1024,1280,1440,1920])test(`v1.6 all modules fit viewport at ${width}`,async({page})=>{
  await page.setViewportSize({width,height:1000});await openProject(page);
- for(const name of ["Overview",...pages,"Baselines","Dependencies","File Information"]){
+ for(const name of ["Overview",...pages,"Baselines","Dependencies","Settings"]){
   await page.locator('nav').getByRole('button',{name,exact:true}).click();
   await expect.poll(()=>page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth),{message:`${name} workspace must fit`}).toBeLessThanOrEqual(1);
   expect(await page.locator('.panel').first().evaluate(e=>e.scrollWidth-e.clientWidth),`${name} panel`).toBeLessThanOrEqual(1);
@@ -152,14 +155,14 @@ for(const moduleName of ['Gantt','Tube Map'])test(`dependency connectors are tra
  await page.getByRole('button',{name:moduleName==='Gantt'?'Gantt':'Tube Map',exact:true}).first().focus();
  const hover=await point();await page.mouse.move(hover.x,hover.y);await expect(first).toHaveAttribute('data-active','true');await expect(colouredItems()).toHaveCount(2);
  await page.mouse.move(10,10);await expect(first).toHaveAttribute('data-active','false');await expect(mutedItems()).toHaveCount(0);
- await page.locator('.filter-trigger').click();await page.getByRole('checkbox',{name:'Hide dependencies',exact:true}).check();await expect(links).toHaveCount(0);
- await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).not.toBeChecked();await expect(mutedItems()).toHaveCount(0);
+ await page.locator('.filter-trigger').click();await page.getByRole('checkbox',{name:'Hide Dependencies',exact:true}).check();await expect(links).toHaveCount(0);
+ await expect(page.getByRole('checkbox',{name:'Hide Dependencies',exact:true})).toBeChecked();await expect(mutedItems()).toHaveCount(0);
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${moduleName}-hide-dependencies-filter.png`)});
  await page.getByRole('button',{name:'Clear all',exact:true}).click();await page.keyboard.press('Escape');expect(await links.count()).toBeGreaterThan(1);
  await expect(page.locator('.dependency-connection[data-active=true]')).toHaveCount(0);
- await page.getByRole('checkbox',{name:'Dependencies',exact:true}).uncheck();await expect(links).toHaveCount(0);
- await page.getByRole('checkbox',{name:'Dependencies',exact:true}).check();expect(await links.count()).toBeGreaterThan(1);
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await tubeFilter(page,'Hide Dependencies',true);await expect(links).toHaveCount(0);
+ await tubeFilter(page,'Hide Dependencies',false);expect(await links.count()).toBeGreaterThan(1);
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
 });
 
 for(const width of [900,1280,1440])test(`timeline footers share compact geometry at ${width}`,async({page},testInfo)=>{
@@ -182,5 +185,77 @@ for(const width of [900,1280,1440])test(`timeline footers share compact geometry
  expect(Math.abs(footerBottom-workspaceBottom)).toBeLessThanOrEqual(1);
  expect(await page.locator('.workspace').evaluate(e=>getComputedStyle(e).paddingBottom)).toBe('0px');
  if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-Tube-compact-footer.png`)});
- await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
+});
+
+test('Gantt stream, year and date bands share compact height without changing typography or record rows',async({page},testInfo)=>{
+ await page.setViewportSize({width:1440,height:900});await openProject(page,undefined,{...fixture.projectState,baselines:[{id:'compact-bands',name:'Compact bands reference',createdAt:'2026-11-09T12:00:00Z',snapshot:captureSchedule(fixture.projectState)}]});
+ await page.locator('nav').getByRole('button',{name:'Gantt',exact:true}).click();
+ const chart=page.locator('.gantt');
+ for(const mode of ['Simple','Extended']){
+  await page.getByRole('button',{name:mode,exact:true}).click();
+  for(const expanded of [true,false]){
+   await page.getByRole('button',{name:expanded?'Expand All':'Collapse All',exact:true}).click();
+   const geometry=await chart.evaluate(root=>{
+    const rect=(e:Element)=>e.getBoundingClientRect().toJSON();
+    return {sections:[...root.querySelectorAll('.gantt-row.section>div')].map(rect),
+     labels:[...root.querySelectorAll('.gantt-row.section .sort-heading')].map(e=>({font:getComputedStyle(e).fontSize,line:parseFloat(getComputedStyle(e).lineHeight),height:e.getBoundingClientRect().height})),
+     years:rect(root.querySelector('.gantt-years')!),dates:rect(root.querySelector('.gantt-dates')!),
+     heading:rect(root.querySelector('.gantt-item-heading')!),
+     fonts:[...root.querySelectorAll('.gantt-head span')].map(e=>getComputedStyle(e).fontSize),
+     records:[...root.querySelectorAll('.gantt-row:not(.section)>div:first-child')].map(rect)};
+   });
+   for(const cell of geometry.sections)expect(cell.height).toBe(24);
+   for(const label of geometry.labels){expect(label.font).toBe('14px');expect(label.line).toBeLessThanOrEqual(label.height)}
+   expect(geometry.years.height).toBe(24);expect(geometry.dates.height).toBe(24);expect(geometry.heading.height).toBe(48);
+   expect(geometry.years.bottom).toBe(geometry.dates.top);expect(geometry.dates.bottom).toBe(geometry.heading.bottom);
+   for(const font of geometry.fonts)expect(font).toBe('12.8px');
+   if(expanded){expect(geometry.records.length).toBeGreaterThan(0);for(const record of geometry.records)expect(record.height).toBeGreaterThanOrEqual(mode==='Simple'?44:32)}
+   await page.screenshot({path:testInfo.outputPath(`gantt-compact-${mode.toLowerCase()}-${expanded?'expanded':'collapsed'}.png`)});
+  }
+ }
+ // Existing baseline/variance row rules must never increase section-band heights.
+ await page.getByRole('button',{name:'Expand All',exact:true}).click();
+ for(const label of ['Baseline overlay']){
+  const toggle=page.getByLabel(label,{exact:true});await expect(toggle).toBeEnabled();await toggle.check();
+ }
+ for(const mode of ['Simple','Extended']){
+  await page.getByRole('button',{name:mode,exact:true}).click();
+  for(const cell of await chart.locator('.gantt-row.section>div').all())expect((await cell.boundingBox())!.height).toBe(24);
+ }
+ // A fixed-height date line remains single-line at narrow widths; full ranges retain titles.
+ for(const width of [900,375]){
+  await page.setViewportSize({width,height:900});
+  for(const zoom of ['Week','Month','Quarter']){
+   await page.getByLabel('Zoom',{exact:true}).selectOption(zoom);
+   expect((await chart.locator('.gantt-years').boundingBox())!.height).toBe(24);
+   expect((await chart.locator('.gantt-dates').boundingBox())!.height).toBe(24);
+   for(const cell of await chart.locator('.gantt-dates>span').all()){
+    expect(await cell.evaluate(e=>getComputedStyle(e).whiteSpace)).toBe('nowrap');await expect(cell).toHaveAttribute('title',/\d{4}-\d{2}-\d{2} – \d{4}-\d{2}-\d{2}/);
+   }
+  }
+ }
+
+});
+
+for(const width of [375,900,1440])test(`Tube Map Stream and weeks use a single Gantt-sized date band at ${width}`,async({page},info)=>{
+ await page.setViewportSize({width,height:900});await openProject(page);
+ await page.locator('nav').getByRole('button',{name:'Gantt',exact:true}).click();
+ const dateHeight=(await page.locator('.gantt-dates').boundingBox())!.height,yearHeight=(await page.locator('.gantt-years').boundingBox())!.height;
+ expect(dateHeight).toBe(24);expect(yearHeight).toBe(24);
+ await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
+ const axis=page.locator('.tube-axis'),sort=axis.getByRole('button'),laneHeights=await page.locator('.tube-line').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));
+ for(const mode of ['week','date']){
+  await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption(mode);
+  const geometry=await axis.evaluate(e=>({box:e.getBoundingClientRect().toJSON(),cells:[...e.children].map(n=>{const range=document.createRange();range.selectNodeContents(n);return{box:n.getBoundingClientRect().toJSON(),textBox:range.getBoundingClientRect().toJSON(),font:getComputedStyle(n).fontSize,line:getComputedStyle(n).lineHeight,align:getComputedStyle(n).alignItems,text:n.textContent}})}));
+  expect(geometry.box.height).toBe(dateHeight);expect(geometry.box.height).not.toBe(dateHeight+yearHeight);expect(geometry.cells).toHaveLength(13);
+  for(const cell of geometry.cells){expect(cell.box.top).toBe(geometry.box.top);expect(cell.box.bottom).toBeLessThanOrEqual(geometry.box.bottom);expect(cell.box.height).toBe(23);expect(cell.font).toBe('12.8px');expect(cell.line).toBe('20px');expect(cell.align).toBe('center');expect(Math.abs(cell.textBox.y+cell.textBox.height/2-cell.box.y-cell.box.height/2)).toBeLessThan(2)}
+  for(const text of await axis.locator('span').allTextContents())expect(text).toMatch(mode==='week'?/^W\d{2}$/:/^\d{2}\/\d{2}$/);
+  expect(await page.locator('.tube-line').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height))).toEqual(laneHeights);
+ }
+ await sort.focus();await page.keyboard.press('Enter');await expect(sort).toHaveAttribute('aria-label','Sort Tube Map streams descending');await page.keyboard.press('Enter');await expect(sort).toHaveAttribute('aria-label','Sort Tube Map streams ascending');
+ await page.locator('.workspace').evaluate(e=>e.scrollTop=e.scrollHeight);
+ const toolbar=(await page.locator('.page-toolbar').boundingBox())!,header=(await axis.boundingBox())!;expect(header.y).toBeGreaterThanOrEqual(toolbar.y+toolbar.height-1);expect(header.height).toBe(24);
+ await page.locator('.workspace').evaluate(e=>e.scrollTop=0);
+ if(width===1440)await page.screenshot({path:info.outputPath('tube-map-single-header.png')});
 });

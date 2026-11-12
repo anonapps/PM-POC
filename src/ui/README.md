@@ -109,7 +109,7 @@ Current adoption includes ordinary actions in Search, timeline footers/quick edi
 
 [tokens.json](tokens.json) is the canonical source for the bounded compatibility inventory:
 
-- Twelve core color roles, preserving design-system aliases.
+- Thirteen core color roles (including the existing muted-red danger accent), preserving design-system aliases.
 - Both existing typography scales as separate rem-valued families.
 - Eight spacing roles, three foundation radii and distinct action metrics.
 - Regular/creation/embedded field heights, common line/inset and timeline footer minimum.
@@ -149,3 +149,7 @@ CHROME_PATH=/usr/bin/chromium npx playwright test --config tools/ui-catalogue/pl
 Before marking a PR ready, run `CHROME_PATH=/usr/bin/chromium npm run validate:pr`; release verification uses `validate:release` when a release is authorized. Keep all unit/browser/lifecycle coverage and existing viewport matrices. Record source state, command, counts, timing, failures, screenshot provenance and manual acceptance separately. A successful gate does not authorize merge, tag, release or deployment.
 
 Completion means each adopted role has an owner, documented variant, real example and relevant evidence. It does not require turning every cell/message into a facade, replacing every literal or deleting every legacy selector. Preserve explicit exceptions until a consumer-backed change proves safe.
+
+## Compact action icons
+
+Use [ActionIconButton](../features/shared/action-icon-button.tsx) for the approved compact action variant; its CSS owns 36 px square / 18 px icon geometry, 40 px nominal pointer targets and token-based states. Pass an explicit label and Lucide icon; keep existing native props, handlers and type semantics. Reserve `compact` for creation-panel Close, which retains the accepted 30 px header density and a 40 px pointer target. Fixed read-only table rows retain a 36 px target within their existing 40 px band. `count` renders a zero-inclusive badge and counted tooltip/name. HeroUI tooltips use 300 ms hover, keyboard focus and viewport flipping; omit native titles. Disabled controls expose their tooltip through a focusable wrapper without enabling the button. Keep Save/Create/Cancel and contextual workflow actions labelled. [Audit, mapping, exceptions and evidence](../../docs/ICON_BUTTON_STANDARDISATION.md).

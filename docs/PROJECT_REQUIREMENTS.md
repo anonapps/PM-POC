@@ -2135,3 +2135,119 @@ Owner Mac screenshots show Task/Risk creation content requiring scrolling and ex
 ## Owner correction — retain the original creation drawer footprint — 29 October 2026
 
 The owner rejects the 880px/three-column creation reflow as too wide and too empty. Restore the original maximum560px drawer and two-column main field layout. Keep descriptions full-width and original Task field pairs. Fit content by reducing inter-field/structural whitespace and reusing the existing30px embedded/Extended control recipe, with unchanged existing font sizes. Creation message slots use a compact12px minimum and expand naturally for actual messages rather than clipping or hiding them; IDs, announcements and validation behavior remain unchanged. The empty Risk actions group may sit beside Due date, expanding across the form when actions exist. Preserve all fields and visible Create/Cancel, exact standalone/Extended parity, native behavior, dismissal, commands and persistence. This supersedes the earlier29October permission to widen the drawer or use three main columns; narrow screens and genuinely expanded lists keep content-only scrolling.
+
+
+## Approved Search result navigation improvement — 2 November 2026
+
+Search result titles replace the separate Open details action with subtle, keyboard-accessible owning-record navigation consistent with Warnings. Reveal and temporarily highlight the exact record, scroll its content pane, and temporarily include targets excluded by destination search/deletion/status filters without changing those preferences. Baselines open the existing management dialog at the matching entry without changing the comparison selection; Dependencies target their existing page. Nested Risk actions remain discoverable through their owning Risk; do not invent separate destination pages.
+
+Preserve Search query, type/deleted filters and deterministic ordering when returning during the same open project session, with focus and scroll restored to the activated result where available. Preserve destination filter/sort and Risk action disclosure preferences on Search journeys; ordinary non-Search navigation keeps its established resets. Reset this transient state when the project session changes. Preserve compact layout, sidebar, search positioning, commands, offline operation and canonical `.pmp` data. This owner-approved interaction supersedes section 27's Quick View-first interaction for Search results and earlier navigation-reset rules only for these Search journeys.
+
+## Approved Tube Map display enhancements — 2 November 2026
+
+Add an Overlay / Separate selector to the existing comparison controls. Retain Separate as the initial display and reuse its colourless hollow-diamond historical design. Overlay places the same historical indicators in the main lanes. Both presentations share the selected baseline, twelve-week scale, axis and date navigation; do not duplicate controls or invent a new Tube Map zoom control. Historical dates, names and scopes come from immutable snapshots, including historical-only streams. Snapshots do not capture milestone status; historical tooltips must make that distinction explicit.
+
+Show milestone names defaults on. Turning it off hides current and historical captions, retaining names in accessible tooltips and reducing ordinary current lane height from 88px to 48px. Historical caption lanes similarly compact; dense collisions may reserve additional rows to preserve usable diamond targets. Overlay reserves only the historical space required by populated lanes. Preserve current status colours, critical-path indication, dependency endpoints, filters, Quick Edit, sidebar, navigation and scrolling. Display settings remain transient; no `.pmp` structure changes.
+
+Use a single application-styled, hoverable and keyboard-accessible tooltip for current and historical milestones, with ID/name, relevant dates, status, scope and available calendar-day variance. Remove milestone native titles and historical pseudo-tooltips. Keep the tooltip outside chart clipping, within the viewport, dismissible with Escape, and clear it when opening Quick Edit or when its trigger disappears. This supersedes the earlier separate-only baseline rendering and fixed named-lane height only for these approved display options.
+
+## UX improvement batch — Fix 3: Warnings-to-Dependencies — 2 November 2026
+
+Preserve task-warning navigation and existing warning types/corrective actions. Milestone Critical Path Analysis relationship warnings navigate by stable dependency ID, separately from the owning milestone ID. Temporarily reveal, focus, scroll to and highlight the exact Dependencies row using the shared record-target styling/mechanism. Preserve Dependencies query, relationship filters and sort across its Warnings round trip; Escape or ordinary target dismissal restores the filtered view without changing settings.
+
+For a multi-link milestone cycle, transient diagnostic metadata identifies links in that cycle's actual strongly connected component, excluding unrelated cycles/bridges. Sort and deduplicate stable IDs, use the first existing link for primary activation and offer explicit choices for the others. Missing/unidentifiable targets must explain the fallback and open the owning milestone; never infer an unrelated row from a name, list position or milestone ID. A disappeared Dependencies target gets an explicit unavailable message. Do not persist navigation metadata or alter the `.pmp` schema, file validation or scheduling calculations.
+
+
+## Approved global compact action icons
+
+The owner authorises shared icon-only controls for compact recognisable actions across modules: Context=MessageCircle, Actions=Zap (retain all existing numeric counts including zero), Duplicate=Copy, Delete=Trash2, Inspect/Edit=Pencil. Reuse Lucide and existing surface/accent/radius/focus tokens, consistent approximately 36 px square / 18 px icons, approximately 40 px pointer targets where feasible, muted-red destructive accents and accessible custom tooltips (300ms hover, keyboard focus, full labels/counts, viewport positioning). Keep primary workflow actions labelled. Preserve commands, native button types, confirmations, event propagation, permissions, page/toolbar/sidebar structures, filters and PMP compatibility. Shared implementation and audited exceptions: [ICON_BUTTON_STANDARDISATION.md](ICON_BUTTON_STANDARDISATION.md). The owner confirms the written specifications are sufficient and that the unavailable mockup must not block implementation. Feature branch and review PR only; no merge, publish or release.
+
+
+## Approved Milestones Scope column adjustment
+
+On Milestones only, widen Scope by approximately 50% at desktop table widths, taking the needed space from ID / Name while keeping Date, Status, Owner, Dependencies and Actions usable and aligned. Preserve existing pill styling, colours, 4 px spacing, natural wrapping, content-driven row growth and the icon-only actions. Do not introduce horizontal scrolling or change other page layouts, canonical data or functionality. Implement in open PR #29 and use focused validation only; no merge or release.
+
+
+## Approved Tube Map baseline display choice
+
+Add a labelled selector offering In the same map and Below the map for comparison milestones, alongside the existing Baseline milestones toggle. Default to the existing below-map display. Same-map historical markers share the live date axis, remain read-only hollow diamonds with hover/keyboard details, and preserve live station geometry, editing, dependencies and Critical Path styling. Baseline-only streams remain visible as labelled historical lanes in that chart. Keep date-window filtering and immutable comparison snapshots; the mode is transient UI state, never persisted or recorded in history. No merge or release is authorised.
+
+
+## Milestone scope summary refinement (9 November 2026)
+
+Milestones table scope selectors keep a fixed single-line height. Show the first active selected stream and, when more are selected, a compact +N pill counting the remaining active selections. Clicking the summary, including +N, opens the existing scope selection dropdown. Preserve Project-wide and Deleted streams fallback labels, keyboard interaction and canonical scope data. This supersedes earlier wrapping-scope layout guidance for the Milestones table only.
+
+
+## Approved global shell update — 5 November 2026
+
+Move the current project name beneath the existing sidebar brand, with its label and full-name title; hide both text elements in the collapsed rail. A 4px save-status dot remains visible in both states (saved green, unsaved amber, saving with reduced-motion-aware pulse, failure/access loss red), with readable state and last successful save time. Reuse the existing runtime/store and file behavior.
+
+Replace the global white header row with an intrinsic-width floating overlay at the content's top-right. Retain page control horizontal positions and reclaim the removed row's height. A restricted 10px top-edge strip reveals the toolbar after 300ms hover; normal content and the sidebar dot do not activate it. Suppress activation during dragging, selection and open dialogs/dropdowns/popovers. Leave dismissal has a 300ms grace; outside clicks pass through; Escape closes and keyboard focus returns predictably. Alt+Shift+T opens it for keyboard use. Hidden controls are inert and do not cover or reflow page content.
+
+Order: compact save status, icon-only Save Now, Undo, Redo; include Settings/Help only if corresponding existing global actions exist. Preserve action handlers, disabled states and existing shortcuts. Preserve sidebar widths, collapse-control position, navigation order, fonts, colors, navigation row heights/spacing and non-scrolling fit at normal/short desktop heights. Fit the name into the existing brand/toggle band. No other page, chart, domain, persistence or PMP change is authorized. No merge, release or deployment is authorized.
+
+## Approved Gantt compact stream/header bands — 9 November 2026
+
+Reduce Gantt Stream section title rows to approximately half their former Simple-mode height, retaining all existing font sizes. Use one 24px band for section cells in Simple and Extended modes, both expanded and collapsed, and with baseline/variance options. Use that same band height for each year/date line above the chart (approximately one-third smaller than their former 36px bands). Include Project-wide grouping. Preserve task/milestone row heights, controls, colors, text, chart geometry alignment, dependencies, scrolling, sidebar and PMP behavior.
+
+## Approved Gantt warning placement — 9 November 2026
+
+Place the existing warning triangle immediately before the item name on the same line, in the existing indentation gutter. Preserve name position, available width, typography and title actions. Show only the triangle at that location, retaining the warning count in the accessible description/title and the existing keyboard-accessible details popup. Preserve existing warning rules/messages; do not introduce new task/milestone validation or change chart data, other row content, sidebar, persistence or PMP behavior.
+
+## Approved Tube Map single header band — 9 November 2026
+
+Make the Tube Map Stream/week-number header one 24px-high row, equal to a single Gantt date band, not the combined 48px year/date stack. Retain the existing header font, colors, column widths/alignment, Stream sorting, week/date modes and sticky behavior. Preserve all stream lane heights, stations, connectors, chart controls, footer, sidebar and PMP behavior.
+
+## Approved Tube Map today-focused window — 9 November 2026
+
+Opening Tube Map and Jump to today both show the same twelve-week, Monday-aligned window: four complete weeks before the current week, followed by the current week and seven further weeks. Today therefore lies in the fifth weekly column, approximately one-third across the timeline (exactly one-third on Monday, at its actual day position during the week). Preserve actual local-calendar today, week/date labels, the 24px header, four-week Previous/Next steps, filters, chart data and PMP behavior. This supersedes the former default window starting in the current week.
+
+
+## Tube Map comparison controls refinement — 9 November 2026
+
+Move the hollow-baseline/solid-current key beside the Milestone status legend in the bottom navigation. Dependencies is controlled only by the search dropdown's Hide Dependencies filter. Replace Show milestone names with Hide Milestones Names in that dropdown; names default visible and Clear all restores them. Replace Baseline milestones and Display with a single Combined/Detached radio toggle. Comparison appears automatically when the selected snapshot differs from the live Tube Map; disable the toggle and explain why when identical or no baseline exists. Default to Detached. Compare captured milestone names/dates/scopes and stream names/IDs independent of filtering, paging and task-only changes. Preserve selection, coloured current diamonds, historical details, Critical Path and all file/domain behavior. This supersedes earlier Tube Map checkbox/display control guidance only.
+
+## Timeline filters, baseline tooltip and Tube Map surface — 9 November 2026
+
+Gantt and Tube Map expose Critical Path only as Show Critical Path in the search filter dropdown. Preserve their independent project-session overlay states; Clear all turns the corresponding overlay off. Gantt Dependencies is controlled only by Hide Dependencies in that dropdown, matching Tube Map. Remove Gantt's Variance indicators control and inline variance labels. When Baseline overlay is enabled, hovering or keyboard-focusing a displayed historical bar/diamond shows the item name, current start/end and baseline start/end dates in an application tooltip; retain the grey historical shape, delayed-finish segment and current chart behavior. Tube Map's outer panel inherits the page background like Gantt, retaining matching white plotting and muted header surfaces. These instructions supersede the earlier toolbar/variance control guidance only; file format and scheduling behavior remain unchanged.
+
+
+## Unified tooltip surface — 9 November 2026
+
+All app tooltips, including name/title hints, action icons, Gantt baseline details and Tube Map details, use one compact light-grey surface with dark regular text, the shared control font size, subtle border/shadow and a small corner radius, matching the owner's native-name-hint reference. Preserve rich content, keyboard descriptions/focus, Escape dismissal, viewport-safe placement, disabled-action descriptions and hoverable chart details. Replace browser-rendered title hints with one delegated app tooltip so styling is consistent across browsers; preserve title text and restore title attributes when the trigger is left. Tooltips must not block chart actions or modify project data.
+
+
+## Approved consolidated UI/UX batch — 9 November 2026
+
+Implement the owner's six-change specification in a feature branch based on test/latest-ui-fixes, with a PR targeting that branch. Preserve its complete main ancestry and all previously approved UI changes. Add successful-action-only independent 600ms Delete separator / Duplicate source-row feedback throughout row-based tables and lists, with stable identities, cancellation/failure protection, cleanup and reduced-motion fallback. Animate the existing sidebar width for 300ms with simultaneous label fading and synchronous workspace movement, smooth reversal, and reduced-motion support. Focused sidebar pages use non-wrapping Up/Down navigation and Tab-to-current-page Search (or first main control); retain normal Shift+Tab and other control behavior.
+
+Rename File Information to Settings in the user interface while preserving the internal route key and every existing file/audit feature. Move the single existing Project Details editor entry from Overview to a compact top Settings section. Manual progress is titled Project Progress (manual), without the separate label, with a shorter horizontal bar and compact right-hand numeric percentage including a fixed internal suffix. Valid whole percentages retain existing immediate-save semantics; intermediate/invalid drafts do not write invalid data. KPI, Quick Actions and progress tiles share a height rule; the heading is Quick Actions. Preserve all other Overview content. Audit data remains full-width, hidden by default, with the existing 50-row display, filter, sort, export and retention.
+
+Reserve a consistent external warning gutter in every Milestones Dependencies cell so controls have equal width and the entire Actions track moves right. Preserve counts, warnings, popovers, density and other column alignment without horizontal scrolling. Remove only the Tube Map page-level left/right frame lines; retain the chart's internal grid, boundaries, data, controls and scrolling. No merge, release, deployment, schema or PMP compatibility change is authorised.
+
+
+## Overview progress layout consistency — 9 November 2026
+
+Enabling Show progress information must preserve the Overview dashboard column structure: progress, optional Getting started, Quick Actions and Critical Path belong to the left stack; Timeline remains alongside that stack on desktop. Disabling progress removes only its tile without moving Timeline or reordering the other sections. On narrow screens retain the same reading order in one column. Preserve summary-card heights, editing behavior and all other dashboard functionality.
+
+
+## Overview progress control visibility — 9 November 2026
+
+Double the manual progress bar’s preferred length from 160px to 320px, allowing it to shrink on narrow screens without overflow. The percentage input retains a soft visible border when unfocused, the normal keyboard focus indicator, and its fixed internal percentage suffix. Preserve card sizing, dashboard order and percentage editing/saving behavior.
+
+
+## Sidebar navigation through Search — 9 November 2026
+
+Search’s deferred focus restoration must respect focus on sidebar page buttons, so Up/Down can traverse Search in either direction and both sidebar widths. Sidebar focus is assigned synchronously after navigation; deferred work must not take focus back from a user who has pressed Tab into the page. Preserve Search query, result, scroll restoration and normal page-control keyboard behavior.
+
+
+## Text hints only for clipped content — 9 November 2026
+
+On non-chart pages, text-repetition tooltips appear only when the displayed text is clipped by its available column/control width, including abbreviated scope labels. Apply consistently to table cells/headings, predictive selections, scope pills, baseline lists and sidebar text. Suppress native title popups as well as application hints for fully visible text. Preserve accessible labels, keyboard behavior, action-icon/explanatory tooltips and all existing Gantt/Tube Map chart tooltip behavior. Measure current rendered content so filtering, responsive sizing and sidebar changes are respected.
+
+
+## Approved dialog and baseline compactness — 9 November 2026
+
+Reuse existing compact page-button and embedded-field tokens across dialogs and popovers, preserving keyboard, focus, validation and dismissal behavior. Keep row actions square when icon-only, retaining existing labels/icons, colors, counters and commands. Decision Log title inputs fill their existing ID / Title cell with 12–16px separation before Date; other columns and row heights remain unchanged. Baseline comparison entity cells show ID and saved name without the separately rendered type suffix. Manage baselines uses equal-height rows with name/timestamp, single-line read-only descriptions (full text on hover/focus), compact rename/delete icons and an internally scrolling list above Create baseline/Done. Create/Rename baseline uses compact required Name and optional Description fields. These presentation changes do not modify persisted data or the `.pmp` contract.
+
+The consolidated integration retains the shared Lucide action/feedback components and clipping-only shared text hints. The compact record/dialog icon geometry uses the existing 30px page-action height, superseding the earlier approximately 36px record-action geometry; floating global controls retain their accepted implementation.

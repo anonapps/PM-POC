@@ -1,5 +1,6 @@
 "use client";
-import { ActionButton } from "../shared/action-button";
+import { Unlink } from "lucide-react";
+import { ActionIconButton } from "../shared/action-icon-button";
 import { PageToolbar } from "../shared/page-toolbar";
 import { ModuleSearch } from "../shared/module-search";
 import { matchesOption } from "../shared/searchable-option-list";
@@ -10,6 +11,8 @@ import type { ModuleName } from "../shell/shell";
 import { EmptyState } from "../shell/shell";
 import type { ProjectWarning } from "./warnings";
 import { useProjectWarnings } from "./use-project-warnings";
+import { warningNavigation } from "./navigation";
+import { ActionButton } from "../shared/action-button";
 
 export function canApplyWarningCorrection(state: ProjectState, warning: ProjectWarning): boolean {
   if (warning.action?.kind !== "remove-scope") return Boolean(warning.action);
@@ -43,5 +46,5 @@ export function WarningsPanel({ store, navigate }: { store: ProjectStore; naviga
     }
     if (window.confirm(`${warning.action?.label}?`)) store.execute(warningCorrection(warning));
   };
-  return <section className="panel"><PageToolbar><h1 className="module-page-title">WARNINGS ({all.length})</h1><ModuleSearch title="warnings" value={query} onChange={setQuery} placeholder="Search types, IDs, names and descriptions" activeFilters={types.length>0||entityTypes.length>0} onClearFilters={()=>{setTypes([]);setEntityTypes([])}}><FilterChoices label="Warning type" options={[...new Set(all.map(w=>w.type))].map(id=>({id,label:id}))} selected={types} onChange={setTypes}/><FilterChoices label="Entity type" options={[...new Set(all.map(w=>w.entityType))].map(id=>({id,label:id}))} selected={entityTypes} onChange={setEntityTypes}/></ModuleSearch></PageToolbar>{warnings.length === 0 ? <EmptyState title={all.length ? "No matching warnings" : "No project warnings"} description={all.length ? "Change the filters to see other warnings." : "No active inconsistencies were found."} /> : <ul className="warning-list">{warnings.map((warning) => <li key={warning.id}><button type="button" className="warning-content" aria-label={`Go to ${warning.humanId}: ${warning.type}`} onClick={() => navigate(warning.destination, warning.entityId)}><strong>{warning.type}</strong><span>{warning.entityType} · {warning.humanId} · {warning.entityName}</span><span className="warning-description">{warning.description}</span></button>{warning.action&&<div className="actions"><ActionButton type="button" variant="danger" onClick={() => correct(warning)}>{warning.action.label}</ActionButton></div>}</li>)}</ul>}</section>;
+  return <section className="panel"><PageToolbar><h1 className="module-page-title">WARNINGS ({all.length})</h1><ModuleSearch title="warnings" value={query} onChange={setQuery} placeholder="Search types, IDs, names and descriptions" activeFilters={types.length>0||entityTypes.length>0} onClearFilters={()=>{setTypes([]);setEntityTypes([])}}><FilterChoices label="Warning type" options={[...new Set(all.map(w=>w.type))].map(id=>({id,label:id}))} selected={types} onChange={setTypes}/><FilterChoices label="Entity type" options={[...new Set(all.map(w=>w.entityType))].map(id=>({id,label:id}))} selected={entityTypes} onChange={setEntityTypes}/></ModuleSearch></PageToolbar>{warnings.length === 0 ? <EmptyState title={all.length ? "No matching warnings" : "No project warnings"} description={all.length ? "Change the filters to see other warnings." : "No active inconsistencies were found."} /> : <ul className="warning-list">{warnings.map((warning) => {const target=warningNavigation(state,warning);return <li key={warning.id}><button type="button" className="warning-content" aria-label={`Go to ${warning.humanId}: ${warning.type}`} onClick={() => {const latest=warningNavigation(store.getState(),warning);navigate(latest.destination,latest.entityId);}}><strong>{warning.type}</strong><span>{warning.entityType} · {warning.humanId} · {warning.entityName}</span><span className="warning-description">{warning.description}</span></button>{target.fallback&&<p className="field-warning">{target.fallback}</p>}{target.dependencyIds.length>1&&<details className="warning-dependency-targets"><summary>Locate dependencies ({target.dependencyIds.length})</summary><div className="actions">{target.dependencyIds.map(id=><ActionButton key={id} type="button" variant="secondary" onClick={()=>{const latest=warningNavigation(store.getState(),{...warning,dependencyId:id,dependencyIds:[id]});navigate(latest.destination,latest.entityId);}}>Dependency {id}</ActionButton>)}</div></details>}{warning.action&&<div className="actions"><ActionIconButton type="button" variant="danger" onClick={() => correct(warning)} icon={Unlink} label={warning.action.label} /></div>}</li>;})}</ul>}</section>;
 }

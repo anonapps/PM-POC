@@ -1,3 +1,4 @@
+import { settleSidebar } from './sidebar-animation';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {deserializeProject} from '../../src/persistence/pmp';
@@ -19,8 +20,8 @@ test('record rows and heading bands remove empty lower space without displacing 
   if(['Streams','Tasks','Milestones'].includes(name))await page.screenshot({path:info.outputPath(`${name}-compact.png`)});
  }
  await nav(page,'Milestones');const pills=page.locator('tbody tr').filter({has:page.getByLabel('Name for MILESTONE-002',{exact:true})});
- expect(await pills.locator('.scope-pill').count()).toBeGreaterThan(1);await expect(pills.locator('summary.scope-summary')).toBeVisible();
- const scope=await pills.locator('summary.scope-summary').boundingBox();expect(scope!.height).toBeGreaterThan(36);
+ expect(await pills.locator('.scope-pill').count()).toBe(1);await expect(pills.locator('.scope-overflow-pill')).toHaveCount(1);await expect(pills.locator('summary.scope-summary')).toBeVisible();
+ const scope=await pills.locator('summary.scope-summary').boundingBox();expect(scope!.height).toBe(36);
  const band=await pills.locator('input:not([type=checkbox]),select,summary:not(.scope-summary),.table-actions>button').evaluateAll(nodes=>nodes.filter(e=>!e.closest('.multi-select-options,.relationship-options')).map(e=>{const r=e.getBoundingClientRect();return r.y+r.height/2;}));expect(Math.max(...band)-Math.min(...band)).toBeLessThan(3);
  const badge=page.locator('.milestone-warning').first(),warningRow=badge.locator('xpath=ancestor::tr[1]');
  const centers=await warningRow.locator('input:not([type=checkbox]),select,summary:not(.scope-summary),.table-actions>button').evaluateAll(nodes=>nodes.filter(e=>!e.closest('.multi-select-options,.relationship-options')).map(e=>{const r=e.getBoundingClientRect();return r.y+r.height/2;}));expect(Math.max(...centers)-Math.min(...centers)).toBeLessThan(3);
@@ -46,7 +47,7 @@ test('Dependencies follows compact font tokens and preserves complete warning te
 for(const width of [900,1024,1152,1280,1366,1440,1920])test(`desktop Gantt Search matches People size and position at ${width}`,async({page})=>{
  await page.setViewportSize({width,height:900});await open(page);
  for(const collapsed of [false,true]){
-  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);
   await nav(page,'People');const reference=(await page.locator('.shared-search-filter').boundingBox())!;
   await nav(page,'Gantt');const simple=(await page.locator('.gantt-panel .shared-search-filter').boundingBox())!;expect(simple).toEqual(reference);
   await page.getByRole('button',{name:'Extended',exact:true}).click();const extended=(await page.locator('.gantt-panel .shared-search-filter').boundingBox())!;expect(extended).toEqual(reference);
@@ -82,7 +83,7 @@ test('boxed fields reuse a centered internal text band across pages and sizes',a
 for(const width of [900,1280,1440])test(`Tasks selection column aligns and preserves select-all in both views at ${width}`,async({page},info)=>{
  await page.setViewportSize({width,height:1000});await open(page);
  for(const collapsed of [false,true]){
-  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  if(collapsed)await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await settleSidebar(page);
   for(const extended of [false,true]){
    await nav(page,extended?'Gantt':'Tasks');if(extended)await page.getByRole('button',{name:'Extended',exact:true}).click();
    const table=page.locator(extended?'.gantt-tasks-pane table.tasks-table':'.workspace>.panel>table.tasks-table');

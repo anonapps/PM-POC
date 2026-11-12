@@ -1,0 +1,94 @@
+import {test,expect,type Page} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {makeProjectState} from '../../src/domain/test-fixtures';
+import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
+import {globalAction} from './global-actions';
+const original=deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));if(!original.ok)throw Error('Invalid fixture');const fixture=original.value;
+const people=fixture.projectState.people.slice(0,3).map((item,i)=>({...item,id:`person-${i}`,humanId:`PERSON-00${i+1}` as const,name:['Alpha','Bravo','Charlie'][i],deletion:{isDeleted:false}}));
+const small=makeProjectState({project:{...fixture.projectState.project,metadata:{...fixture.projectState.project.metadata,gettingStartedCompleted:true,showProgress:true}},people,identifierSequences:{stream:0,person:3,task:0,milestone:0,risk:0,decision:0},auditHistory:{enabled:true,events:[]}});
+async function open(page:Page,state=small){const saved=serializeProject(state,{createdAt:fixture.manifest.createdAt,lastSavedAt:fixture.manifest.lastSavedAt,runtimeVersion:'1.7.0'});if(!saved.ok)throw Error(JSON.stringify(saved.errors));await page.addInitScript(({bytes})=>{let data=new Uint8Array(bytes);const handle={name:'consolidated.pmp',getFile:async()=>({name:'consolidated.pmp',size:data.length,lastModified:1,arrayBuffer:async()=>data.slice().buffer}),createWritable:async()=>({write:async(value:Uint8Array)=>{data=new Uint8Array(value)},close:async()=>{}})};Object.assign(window,{showOpenFilePicker:async()=>[handle],__batchBytes:()=>[...data]})},{bytes:[...saved.value]});await page.goto('/');await page.getByRole('button',{name:'Open Project',exact:true}).click();}
+const nav=async(page:Page,name:string)=>page.locator('nav').getByRole('button',{name,exact:true}).click();
+const row=(page:Page,id:string)=>page.locator(`[data-navigation-id="${id}"]`);
+for(const scenario of [
+ {name:'middle',id:'person-1',target:'person-2',edge:'top'},
+ {name:'first',id:'person-0',target:'person-1',edge:'top'},
+ {name:'last',id:'person-2',target:'person-1',edge:'bottom'},
+ {name:'only filtered',id:'person-0',target:'empty',edge:'top'},
+])test(`Delete ${scenario.name} pulses the correct live separator without retaining rows`,async({page})=>{
+ await open(page);await nav(page,'People');if(scenario.name==='only filtered')await page.getByRole('searchbox',{name:'Search people',exact:true}).fill('Alpha');
+ await row(page,scenario.id).getByRole('button',{name:'Delete',exact:true}).click();await expect(row(page,scenario.id)).toHaveCount(0);
+ const pulse=page.locator('.row-action-pulse--delete');await expect(pulse).toHaveAttribute('data-source-id',scenario.id);await expect(pulse).toHaveAttribute('data-target-id',scenario.target);await expect(pulse).toHaveAttribute('data-edge',scenario.edge);
+ expect(await pulse.evaluate(e=>e.getAnimations()[0]?.effect?.getTiming().duration)).toBe(600);
+ const target=scenario.target==='empty'?page.locator('.empty'):row(page,scenario.target),box=(await target.boundingBox())!,mark=(await pulse.boundingBox())!;expect(mark.y).toBeCloseTo((scenario.edge==='top'?box.y:box.y+box.height)-1,0);
+ await expect(pulse).toHaveCount(0,{timeout:1500});
+});
+test('Duplicate pulses its source with independent rapid effects while the copy is offscreen',async({page})=>{
+ const tasks=Array.from({length:30},(_,i)=>({...fixture.projectState.tasks[0],id:`task-${i}`,humanId:`TASK-${String(i+1).padStart(3,'0')}` as const,name:`Task ${i}`,parentTaskId:undefined,milestoneId:undefined,ownerId:null,scope:{kind:'project' as const},deletion:{isDeleted:false}}));
+ await page.setViewportSize({width:1440,height:800});await open(page,{...small,tasks,identifierSequences:{...small.identifierSequences,task:30}});await nav(page,'Tasks');const source=row(page,'task-0'),copy=source.getByRole('button',{name:'Duplicate',exact:true});await source.getByRole('checkbox',{name:'Select TASK-001',exact:true}).check();const measured=await copy.evaluate(async (button:HTMLButtonElement)=>{button.click();button.click();await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);const effects=[...document.querySelectorAll<HTMLElement>('.row-action-pulse--duplicate')];return effects.map(e=>({source:e.dataset.sourceId,duration:e.getAnimations()[0]?.effect?.getTiming().duration,rect:e.getBoundingClientRect().toJSON()}));});
+ const pulses=page.locator('.row-action-pulse--duplicate');expect(measured).toHaveLength(2);expect(measured.every(effect=>effect.source==='task-0'&&effect.duration===600)).toBe(true);
+ await expect(page.locator('tbody tr').last()).not.toBeInViewport();const a=(await source.boundingBox())!,b=measured[0].rect;expect(b.width).toBeCloseTo(a.width);expect(b.height).toBeCloseTo(a.height);await expect(pulses).toHaveCount(0,{timeout:1500});await expect(source).toBeVisible();await expect(source.getByRole('checkbox',{name:'Select TASK-001',exact:true})).toBeChecked();await copy.click();await expect(page.locator('.row-action-pulse')).toHaveCount(1);await nav(page,'People');await expect(page.locator('.row-action-pulse')).toHaveCount(0);
+});
+test('confirmation cancellation never pulses, successful confirmation does, reduced motion stays static',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});await open(page,fixture.projectState);await nav(page,'Tasks');const source=page.locator('tbody tr').filter({has:page.getByLabel('Name for TASK-005',{exact:true})}),button=source.getByRole('button',{name:'Delete',exact:true});
+ const cancelled=page.waitForEvent('dialog').then(dialog=>dialog.dismiss());await button.click();await cancelled;await expect(source).toBeVisible();await expect(page.locator('.row-action-pulse')).toHaveCount(0);
+ const accepted=page.waitForEvent('dialog').then(dialog=>dialog.accept());await button.click();await accepted;const pulse=page.locator('.row-action-pulse--delete');await expect(pulse).toHaveAttribute('data-reduced-motion','true');expect(await pulse.evaluate(e=>e.getAnimations().length)).toBe(0);await expect(pulse).toHaveCount(0,{timeout:1500});
+});
+test('sidebar keyboard navigation, endpoint stops, focus and Tab target work in both widths',async({page})=>{
+ await open(page);const modules=page.locator('#project-modules button');await modules.first().focus();await page.keyboard.press('ArrowUp');await expect(modules.first()).toBeFocused();
+ await page.keyboard.press('ArrowDown');await expect(modules.nth(1)).toBeFocused();await expect(modules.nth(1)).toHaveAttribute('aria-current','page');await page.keyboard.press('Tab');const search=page.getByRole('searchbox',{name:'Search names, IDs, roles, notes, status and dates',exact:true});await expect(search).toBeFocused();await search.fill('keep me');await search.evaluate((input:HTMLInputElement)=>input.setSelectionRange(2,2));await modules.nth(1).focus();await page.keyboard.press('Tab');await expect(search).toHaveValue('keep me');expect(await search.evaluate((input:HTMLInputElement)=>[input.selectionStart,input.selectionEnd])).toEqual([2,2]);await page.keyboard.press('ArrowDown');await expect(search).toBeFocused();
+ await modules.last().focus();await page.keyboard.press('ArrowDown');await expect(modules.last()).toBeFocused();await modules.last().click();await expect(modules.last()).toBeFocused();await expect(modules.last()).toHaveAccessibleName('Settings');await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Open Project',exact:true})).toBeFocused();
+ await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await expect(page.locator('.app-shell')).toHaveCSS('grid-template-columns',/64px/);await modules.last().focus();await page.keyboard.press('ArrowUp');await expect(modules.nth(12)).toBeFocused();await expect(modules.nth(12)).toHaveAttribute('aria-current','page');await page.keyboard.press('Shift+Tab');await expect(modules.nth(11)).toBeFocused();
+});
+test('sidebar animates 300ms and reverses from its current width, with reduced-motion fallback',async({page})=>{
+ await page.setViewportSize({width:1440,height:900});await open(page);const shell=page.locator('.app-shell'),side=page.locator('#project-sidebar'),toggle=page.locator('.sidebar-toggle');expect((await side.boundingBox())!.width).toBe(232);await expect(shell).toHaveCSS('transition-duration','0.3s');
+ await toggle.click();await page.waitForTimeout(100);const middle=(await side.boundingBox())!.width;expect(middle).toBeGreaterThan(64);expect(middle).toBeLessThan(232);const reversal=await toggle.evaluate(async (button:HTMLButtonElement)=>{const sidebar=document.querySelector('#project-sidebar')!,root=document.querySelector('.app-shell')!,before=sidebar.getBoundingClientRect().width;await new Promise<void>(resolve=>{const observer=new MutationObserver(()=>{observer.disconnect();resolve();});observer.observe(root,{attributes:true,attributeFilter:['class']});button.click();});return{before,after:sidebar.getBoundingClientRect().width,expanded:!root.classList.contains('sidebar-hidden')};});expect(reversal.expanded).toBe(true);expect(Math.abs(reversal.after-reversal.before)).toBeLessThan(1);await expect.poll(async()=>(await side.boundingBox())!.width).toBe(232);
+ await toggle.click();await expect.poll(async()=>(await side.boundingBox())!.width).toBe(64);expect(await page.locator('#project-modules .module-label').evaluateAll(nodes=>nodes.every(e=>getComputedStyle(e).opacity==='0'))).toBe(true);
+ await page.emulateMedia({reducedMotion:'reduce'});await expect(shell).toHaveCSS('transition-duration','0s');await toggle.click();await expect.poll(async()=>(await side.boundingBox())!.width).toBe(232);
+});
+for(const width of [375,900,1440])test(`Settings reuses Project Details and Overview has equal compact cards at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});await open(page,{...fixture.projectState,auditHistory:{enabled:true,events:fixture.projectState.auditHistory?.events??[]}});await expect(page.getByRole('button',{name:'Edit Project',exact:true})).toHaveCount(0);await expect(page.getByRole('heading',{name:'Project Progress (manual)',exact:true})).toBeVisible();await expect(page.getByText('Manual progress',{exact:true})).toHaveCount(0);
+ const heights=await page.locator('.kpis>button,.project-progress-card,.quick-actions-card').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));expect(new Set(heights).size).toBe(1);const input=page.getByRole('spinbutton',{name:'Project progress percentage',exact:true});await input.fill('100');await input.blur();await expect(input).toHaveValue('100');await input.fill('101');await input.blur();await expect(input).toHaveValue('100');await input.fill('');await expect(input).toHaveValue('');await input.blur();await expect(input).toHaveValue('100');await input.fill('0');await input.blur();await expect(input).toHaveValue('0');await expect(page.locator('.project-progress-number>span')).toHaveText('%');expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ await nav(page,'Settings');await expect(page.getByRole('heading',{name:'Project Details',exact:true})).toBeVisible();const editDetails=page.getByRole('button',{name:'Edit Project Details',exact:true});
+ const metrics=(element:HTMLElement|SVGElement)=>{const s=getComputedStyle(element);return {height:element.getBoundingClientRect().height,padding:s.padding,fontSize:s.fontSize,fontWeight:s.fontWeight,lineHeight:s.lineHeight,radius:s.borderRadius,border:s.borderWidth};};
+ const standard=await page.getByRole('button',{name:'Open Project',exact:true}).evaluate(metrics);expect(standard.height).toBe(30);expect(await editDetails.evaluate(metrics)).toEqual(standard);
+ await editDetails.click();const dialog=page.getByRole('dialog',{name:'Project Details',exact:true});await dialog.getByRole('textbox',{name:'Project name',exact:true}).fill('Consolidated project');await dialog.getByRole('button',{name:'Done',exact:true}).click();await expect(page.locator('.sidebar-project strong')).toHaveText('Consolidated project');
+ await page.getByRole('button',{name:'Show audit data',exact:true}).click();const audit=(await page.locator('#audit-history-data').boundingBox())!,available=await page.locator('#audit-history-data').evaluate(e=>{const card=e.closest('.card')!,s=getComputedStyle(card);return card.clientWidth-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight)});expect(Math.abs(audit.width-available)).toBeLessThanOrEqual(1);expect(await page.locator('#audit-history-data tbody tr').count()).toBeLessThanOrEqual(50);
+ await globalAction(page,'Save Now');const saved=deserializeProject(new Uint8Array(await page.evaluate(()=>(window as unknown as {__batchBytes:()=>number[]}).__batchBytes())));expect(saved.ok).toBe(true);if(saved.ok){expect(saved.value.projectState.project.name).toBe('Consolidated project');expect(saved.value.projectState.project.metadata.schemaVersion).toBe(fixture.projectState.project.metadata.schemaVersion);}
+});
+for(const width of [1024,1440,1920])test(`Milestone dependencies reserve equal gutters and Tube Map removes only outer borders at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});await open(page,fixture.projectState);await nav(page,'Milestones');const rows=page.locator('.milestones-table tbody tr');const widths=await rows.locator(':scope > td:nth-child(6) > details.multi-select').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().width));expect(widths.length).toBeGreaterThan(2);expect(Math.max(...widths)-Math.min(...widths)).toBeLessThan(1);
+ for(const r of await rows.all()){const cells=await r.locator(':scope>td').evaluateAll(nodes=>nodes.map(e=>({left:e.getBoundingClientRect().left,width:e.getBoundingClientRect().width})));const heads=await page.locator('.milestones-table thead th').evaluateAll(nodes=>nodes.map(e=>({left:e.getBoundingClientRect().left,width:e.getBoundingClientRect().width})));expect(cells).toEqual(heads);}
+ const warning=page.locator('.milestone-warning').first();if(await warning.count()){const control=(await warning.locator('xpath=preceding-sibling::details').boundingBox())!,icon=(await warning.boundingBox())!;expect(icon.x).toBeGreaterThanOrEqual(control.x+control.width);await warning.locator('summary').click();await expect(page.locator('.anchored-options:popover-open')).toBeVisible();await page.keyboard.press('Escape');}
+ expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);await nav(page,'Tube Map');await expect(page.locator('.workspace > .panel')).toHaveCSS('border-left-color','rgba(0, 0, 0, 0)');await expect(page.locator('.workspace > .panel')).toHaveCSS('border-right-color','rgba(0, 0, 0, 0)');await expect(page.locator('.tube-axis > span').first()).toHaveCSS('border-left-width','1px');await expect(page.locator('.tube-line').first()).toHaveCSS('border-bottom-width','1px');await expect(page.locator('.tube-axis > span')).toHaveCount(12);
+});
+
+for(const width of [375,900,1440])test(`Overview keeps its column order when progress is toggled at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});await open(page,fixture.projectState);
+ const stack=page.locator('.overview-actions-stack'),timeline=page.locator('.overview-grid > article').filter({has:page.getByRole('heading',{name:'Timeline',exact:true})});
+ let initial:{x:number;y:number;width:number;height:number}|undefined;
+ for(const enabled of [true,false,true]){
+  await nav(page,'Settings');await page.getByRole('button',{name:'Edit Project Details',exact:true}).click();const dialog=page.getByRole('dialog',{name:'Project Details',exact:true});await dialog.getByRole('checkbox',{name:'Show progress information',exact:true}).setChecked(enabled);await dialog.getByRole('button',{name:'Done',exact:true}).click();await nav(page,'Overview');
+  await expect(page.locator('.project-progress-card')).toHaveCount(enabled?1:0);
+  const headings=await stack.getByRole('heading').allTextContents();expect(headings).toEqual([...(enabled?['Project Progress (manual)']:[]),'Quick Actions','Critical Path']);
+  const left=(await stack.boundingBox())!,right=(await timeline.boundingBox())!;
+  if(width>900){expect(right.x).toBeGreaterThan(left.x+left.width);expect(right.y).toBe(left.y);if(initial){expect(right).toEqual(initial);}else initial=right;}
+  else{expect(right.x).toBe(left.x);expect(right.y).toBeGreaterThanOrEqual(left.y+left.height);}
+  expect(await page.locator('.workspace').evaluate(e=>e.scrollWidth-e.clientWidth)).toBeLessThanOrEqual(1);
+ }
+});
+
+test('Overview keeps onboarding in the same left stack as progress and actions',async({page})=>{
+ await page.setViewportSize({width:1440,height:1000});await open(page,{...small,project:{...small.project,metadata:{...small.project.metadata,gettingStartedCompleted:false}}});
+ await expect(page.locator('.overview-actions-stack').getByRole('heading')).toHaveText(['Project Progress (manual)','Getting started','Quick Actions','Critical Path']);
+ const stack=(await page.locator('.overview-actions-stack').boundingBox())!,timeline=(await page.locator('.overview-grid > article').boundingBox())!;expect(timeline.x).toBeGreaterThan(stack.x+stack.width);expect(timeline.y).toBe(stack.y);
+});
+
+for(const collapsed of [false,true])test(`sidebar arrow navigation traverses every page through Search in both directions (${collapsed?'collapsed':'expanded'})`,async({page})=>{
+ await open(page);if(collapsed){await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await expect(page.locator('.app-shell')).toHaveCSS('grid-template-columns',/64px/);}
+ const buttons=page.locator('#project-modules button'),count=await buttons.count();await buttons.first().focus();
+ for(const key of ['ArrowDown','ArrowUp']){
+  const positions=Array.from({length:count-1},(_,i)=>key==='ArrowDown'?i+1:count-2-i);
+  for(const index of positions){await page.keyboard.press(key);await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));await expect(buttons.nth(index)).toBeFocused();await expect(buttons.nth(index)).toHaveAttribute('aria-current','page');}
+ }
+ await page.keyboard.press('ArrowDown');await expect(buttons.nth(1)).toBeFocused();await page.keyboard.press('Tab');const search=page.getByRole('searchbox',{name:'Search names, IDs, roles, notes, status and dates',exact:true});await expect(search).toBeFocused();await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));await expect(search).toBeFocused();
+});

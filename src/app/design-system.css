@@ -12,6 +12,7 @@
   --primary-active: var(--ui-color-primary-active);
   --sidebar: var(--ui-color-sidebar);
   --focus: var(--ui-color-focus);
+  --danger: var(--ui-color-danger);
   --text-xs: var(--ui-text-xs);
   --text-sm: var(--ui-text-sm);
   --text-base: var(--ui-text-base);

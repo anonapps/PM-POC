@@ -7,10 +7,20 @@
 .baseline-actions>summary::-webkit-details-marker { display:none; }
 .baseline-action-options:popover-open { padding:6px!important; display:flex; flex-direction:column; gap:4px; }
 .baseline-action-options button { text-align:left; min-height:30px; font-size:var(--type-control); }
-.baseline-manager .baseline-list { padding:0; display:grid; gap:6px; list-style:none; }
-.baseline-manager .baseline-list li { display:grid; grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:4px 8px; border:1px solid var(--border); padding:6px; border-radius:4px; }
-.baseline-manager .baseline-list li>button:first-child { grid-column:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.baseline-manager .baseline-list li>time,.baseline-manager .baseline-list li>span { grid-column:1; font-size:var(--type-caption); color:var(--text-muted); }
-.baseline-manager .baseline-list li>button[aria-label^=Rename] { grid-column:2; grid-row:1; }
-.baseline-manager .baseline-list li>button[aria-label^=Delete] { grid-column:3; grid-row:1; }
+/* A bounded list keeps the dialog footer available for every baseline count. */
+.baseline-manager { display:flex; flex-direction:column; min-height:0; }
+.heroui-experiment .dialog-backdrop>section:has(>.baseline-manager) { width:min(680px,100%); max-height:min(520px,calc(100dvh - 24px)); display:flex; flex-direction:column; overflow:hidden; }
+.baseline-list-scroll { min-height:0; overflow:auto; overscroll-behavior:contain; }
+.baseline-list-heading,.baseline-manager .baseline-list li { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) 68px; align-items:center; gap:var(--space-2); }
+.baseline-list-heading { position:sticky; top:0; z-index:1; background:var(--surface); padding:var(--space-1); border-bottom:1px solid var(--border); font-size:var(--type-caption); font-weight:600; }
+.baseline-manager .baseline-list { display:block; padding:0; margin:0; list-style:none; }
+.baseline-manager .baseline-list li { box-sizing:border-box; height:64px; padding:var(--space-1); border:0; border-bottom:1px solid var(--border); border-radius:0; }
+.baseline-identity { min-width:0; display:grid; gap:2px; }
+.baseline-manager .baseline-identity>button { display:block; width:100%; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; }
+.baseline-identity>time { font-size:var(--type-caption); color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.baseline-description { min-width:0; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:var(--type-control); }
+.baseline-description:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.baseline-row-actions { display:flex; align-items:center; gap:var(--space-2); }
+.baseline-manager>.form-actions { flex-shrink:0; }
+.heroui-experiment .dialog-backdrop>section:has(.baseline-editor) { width:min(440px,100%); }
 .baseline-help { font-size:var(--type-caption); color:var(--text-muted); margin:8px 0 0; }

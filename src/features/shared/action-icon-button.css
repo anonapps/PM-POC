@@ -1,0 +1,86 @@
+/* One owner for compact actions. Higher context specificity preserves this recipe
+   against legacy table, search, shell and Extended Gantt button rules.
+   The body arm also covers dialogs rendered through a body portal. */
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 var(--action-icon-size, 36px);
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--action-icon-size, 36px);
+  min-width: var(--action-icon-size, 36px);
+  height: var(--action-icon-size, 36px);
+  min-height: var(--action-icon-size, 36px);
+  padding: 0;
+  border: 1px solid var(--control-border);
+  border-radius: var(--ui-radius-control);
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: none;
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+  transform: none;
+  transition: none;
+}
+/* 40px pointer target without increasing the compact table row footprint. */
+body .action-icon-button::after { content: ""; position: absolute; inset: -2px; }
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:hover:not(:disabled),
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:active:not(:disabled) {
+  background: var(--surface-subtle);
+  border-color: currentColor;
+}
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:active:not(:disabled) { background: var(--border); }
+body .action-icon-button:focus-visible { outline: 2px solid var(--ui-color-focus); outline-offset: 2px; }
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button.danger { color: var(--ui-color-danger); }
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:disabled { opacity: .45; cursor: not-allowed; }
+body .action-icon-button > svg { flex: none; width: 18px; height: 18px; pointer-events: none; }
+body .action-icon-button .action-icon-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-card);
+  background: var(--surface-subtle);
+  color: var(--primary);
+  font-size: var(--type-caption);
+  line-height: 1;
+  pointer-events: none;
+}
+
+
+.disabled-action-trigger { display: inline-flex; vertical-align: middle; }
+.disabled-action-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-control); }
+/* Fit a 36px icon inside the existing 40px read-only row band. Other cells
+   retain their established padding, text metrics and fixed row height. */
+.app-main .workspace .panel table.record-data-table td.table-actions:has(> .action-icon-button) {
+  padding-block: 1px;
+}
+/* The fixed read-only row clips its cell overflow. Keep the target within the
+   button here so the pointer extension cannot create a scrollable control. */
+.app-main .workspace .panel table.record-data-table .action-icon-button::after { content: none; }
+
+/* Creation Close retains the accepted 30px header band and a 40px hit target. */
+body .action-icon-button--compact { --action-icon-size: var(--ui-action-height); }
+body .action-icon-button--compact::after { inset: -5px; }
+/* Disabled actions delegate pointer events to their focusable tooltip wrapper. */
+.disabled-action-trigger > button:disabled { pointer-events:none; }
+
+body .action-tooltip-layer { pointer-events:none; }
+
+/* Reuse the page action height for record/dialog icons; floating global actions
+   retain their accepted geometry. Icon choices, badges, tooltips and feedback stay shared. */
+.workspace .action-icon-button,.dialog-backdrop .action-icon-button { --action-icon-size:var(--ui-action-height); }
+/* Extend vertically in roomy record rows without reaching into adjacent actions. */
+body .workspace .action-icon-button::after { inset:-5px -2px; }
+.app-main .workspace .panel table.record-data-table .action-icon-button::after { content:none; }
+/* Reserve space for the existing overhanging count, including Risk Log's
+   narrow zero-margin action cells. Do not resize or clip the badge itself. */
+:is(body, .app-main .workspace .panel table.record-data-table .table-actions) button.action-icon-button.action-icon-button:has(>.action-icon-badge) { margin-inline-end:var(--space-2); }

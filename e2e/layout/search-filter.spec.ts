@@ -67,16 +67,18 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   expect(await panel.locator('.filter-category').evaluateAll(sections=>sections.every((e,i)=>i===0||e.getBoundingClientRect().top>=sections[i-1].getBoundingClientRect().bottom))).toBe(true);
   expect(await panel.locator('input[type=search]').evaluateAll(inputs=>inputs.every(e=>{const r=e.getBoundingClientRect();return r.width>100&&r.height<=34&&e.scrollWidth<=e.clientWidth+2;}))).toBe(true);
   if(moduleName==='Gantt'||moduleName==='Tube Map'){
+   const critical=panel.getByRole('checkbox',{name:'Show Critical Path',exact:true});await expect(critical).not.toBeChecked();await critical.check();await expect(page.locator('.critical-path-legend')).toBeVisible();
+   await expect(page.locator('.baseline-controls').getByRole('checkbox',{name:'Critical Path',exact:true})).toHaveCount(0);
    const geometry=await chartFilterGeometry(panel);
    expect(geometry.horizontalOverflow).toBeLessThanOrEqual(1);expect(geometry.fits).toBe(true);
    expect(Math.abs(geometry.bottomSpace-geometry.expectedBottomSpace)).toBeLessThanOrEqual(1);
    if(moduleName==='Gantt')ganttGeometry=geometry;
    else{
     expect(geometry.shared).toEqual(ganttGeometry!.shared);
-    expect(geometry.labels).toEqual(['Hide Empty Streams','Hide dependencies','Tentative','Planned','Delayed','Complete']);
+    expect(geometry.labels).toEqual(['Hide Empty Streams','Hide Dependencies','Hide Milestones Names','Show Critical Path','Tentative','Planned','Delayed','Complete']);
     await expect(panel.getByRole('group',{name:'Milestone Status',exact:true})).toBeVisible();
-    const dependencies=panel.getByRole('checkbox',{name:'Hide dependencies',exact:true});
-    await dependencies.check();await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).not.toBeChecked();
+    const dependencies=panel.getByRole('checkbox',{name:'Hide Dependencies',exact:true});
+    await dependencies.check();await expect(dependencies).toBeChecked();await expect(page.locator('.tube-connections .dependency-line')).toHaveCount(0);await expect(page.locator('.baseline-controls').getByRole('checkbox',{name:'Dependencies',exact:true})).toHaveCount(0);
     const planned=panel.getByRole('checkbox',{name:'Filter Milestone Status: Planned',exact:true});
     await planned.check();await expect(page.locator('.tube-station:not(.status-planned)')).toHaveCount(0);
     // Tube Map search filters stream lanes; the Project-wide lane remains by design.
@@ -88,7 +90,8 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   if(await checkbox.count()){await checkbox.check();if(['People','Streams','Tasks','Milestones','Risk Log','Decision Log'].includes(moduleName)){await input.fill('zzzz-no-match');await expect(page.locator('tbody tr')).toHaveCount(0);await input.fill('');}await page.keyboard.press('Escape');await expect(trigger).toBeFocused();await trigger.click();await expect(checkbox).toBeChecked();}
   await panel.getByRole('button',{name:'Clear all',exact:true}).click();
   await expect(input).toHaveValue('');
-  if(moduleName==='Tube Map'){await expect(panel.locator('input:checked')).toHaveCount(0);await expect(page.getByRole('checkbox',{name:'Dependencies',exact:true})).toBeChecked();}
+  if(moduleName==='Gantt'||moduleName==='Tube Map'){await expect(panel.getByRole('checkbox',{name:'Show Critical Path',exact:true})).not.toBeChecked();await expect(page.locator('.critical-path-legend')).toHaveCount(0);}
+  if(moduleName==='Tube Map'){await expect(panel.locator('input:checked')).toHaveCount(0);await expect(panel.getByRole('checkbox',{name:'Hide Dependencies',exact:true})).not.toBeChecked();}
   if(moduleName==='Gantt'||moduleName==='Tube Map')await expect(page.getByText('Hide Empty Streams',{exact:true})).toHaveCount(1);
   if(process.env.CAPTURE_LAYOUT==='1')await page.screenshot({path:testInfo.outputPath(`${width}-${moduleName.replaceAll(' ','-')}-after.png`)});
   await page.locator('.workspace').evaluate(e=>{e.scrollTop=180;});
@@ -96,7 +99,7 @@ for(const width of [1280,1440,1920])test(`shared search/filter geometry and inte
   await page.keyboard.press('Escape');await expect(panel).toHaveCount(0);
   await input.fill('zzzz-no-match');await trigger.click();await panel.getByRole('button',{name:'Clear all'}).click();await expect(input).toHaveValue('');
   await page.locator('h1').click();await expect(panel).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'Save Now',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Save Now',exact:true,includeHidden:true})).toBeDisabled();
  }
  await page.locator('nav').getByRole('button',{name:'Milestones',exact:true}).click();
  expect(await page.locator('summary .scope-pill').evaluateAll(pills=>pills.length>0&&pills.every(pill=>{const parent=pill.parentElement!.getBoundingClientRect(),r=pill.getBoundingClientRect();return r.top>=parent.top&&r.bottom<=parent.bottom&&r.width>30;}))).toBe(true);
