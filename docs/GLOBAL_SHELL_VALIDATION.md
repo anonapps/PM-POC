@@ -1,5 +1,7 @@
 # Global sidebar and floating toolbar
 
+> Implementation/evidence record. The consolidated content is now integrated through [PR #34](https://github.com/anonapps/PM-POC/pull/34) (`9266a02`, 12 November 2026). Use the [v1.7 manual](V1.7_UI_REFERENCE.md) and [current UI guide](ARGOS_PM_UI_REFERENCE.md) for final labels and behavior, including the historical-marker fix. Branch instructions and measurements below retain their original scope/date; this is not a release/deployment record.
+
 Presentation-only change from main `ed30f02`, on `feature/global-sidebar-floating-toolbar`.
 
 The sidebar name uses canonical project state and occupies the unused left portion of the existing brand/toggle band. The brand, toggle and all navigation retain their previous geometry; the project name has an ellipsis and full-value title. The collapsed sidebar retains only the 4px status dot. Existing sidebar overflow clipping and viewport-dependent navigation metrics are unchanged.

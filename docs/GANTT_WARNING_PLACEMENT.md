@@ -1,5 +1,7 @@
 # Gantt warning placement
 
+> Implementation/evidence record. The consolidated content is now integrated through [PR #34](https://github.com/anonapps/PM-POC/pull/34) (`9266a02`, 12 November 2026). Use the [v1.7 manual](V1.7_UI_REFERENCE.md) and [current UI guide](ARGOS_PM_UI_REFERENCE.md) for final labels and behavior, including the historical-marker fix. Branch instructions and measurements below retain their original scope/date; this is not a release/deployment record.
+
 Follow-up on `feature/global-sidebar-floating-toolbar`, starting from clean commit `a4bf623`; draft PR #30 remains open.
 
 The shared Gantt name wrapper preserves the original text area's width, indentation and font for both tasks and milestones. Existing milestone dependency warnings render a single triangle in that wrapper's existing left gutter, 3px before the name. The warning is absolutely positioned, so neither its presence nor opening the popup shifts/resizes the name. The native disclosure marker and separate visible count are replaced by the single triangle; the count remains in the accessible description and title. The existing PredictiveDisclosure retains keyboard opening, Escape/focus return, outside dismissal, top-layer popup positioning and unchanged messages.

@@ -1,4 +1,16 @@
-# ARGOS PM — Architecture (v1.4.0)
+# ARGOS PM — Architecture (v1.7)
+
+## Current v1.7 architecture — 12 November 2026
+
+Current main includes PR #34 (`9266a02`). The earlier version sections below are retained design/delivery history; later approved requirements take precedence.
+
+The pure local Critical Path engine and disposable background worker derive project/stream calculated schedules, reliability, float and warnings. Results/caches remain outside canonical ProjectStore persistence, audit and Undo history. Relevant committed edits invalidate/recalculate results; the Analysis pane exposes Refresh/Retry, task reveal and explicit Quick Edit. Planned dates and dependency records change only through existing commands. See [approved decisions](V1.7_APPROVED_DECISIONS.md) and [implementation](V1.7_IMPLEMENTATION.md).
+
+Settings is the visible label for the existing internal File Information route. It hosts the original Project Details editor, file actions/audit and [current manual](V1.7_UI_REFERENCE.md). Sidebar/floating-toolbar, transient selection/reveal, compact action feedback and filter preferences stay in the presentation/session boundary. The global shell does not create a new project data source.
+
+Tube Map Combined history is a read-only snapshot projection. Historical targets measure rendered current diamond/caption bounds and preceding historical targets, choose the nearest free horizontal target when needed and recalculate on chart resize. The date anchor and model geometry are unchanged. Below-map/Detached uses its historical strip. Both share the single portalled keyboard/hover tooltip; current Quick Edit stacks above the sticky footer. No dates, comparison calculations or persistence shape change.
+
+PMP format 1/schema 2 and the Project File Service remain authoritative; baseline-bearing files retain the v1.6 reader floor. See the [documentation index](README.md) for current instructions. Historical claims below about the old header, controls or exclusions describe their dated baseline.
 
 ## v1.5 architecture guidance (approved scope)
 

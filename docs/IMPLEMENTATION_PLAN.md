@@ -1,4 +1,10 @@
-# ARGOS PM — Implementation Plan (v1.4.0)
+# ARGOS PM — Implementation Record (v1.7)
+
+## Current delivery state — 12 November 2026
+
+Critical Path Analysis and the consolidated UI are integrated into main. PR #34 was owner-accepted and squash-merged as `9266a02` after successful final CI, including lifecycle-release-gate, and review resolution. No release, tag or deployment was created by the merge. Documentation maintenance follows in its own PR.
+
+Current operation is documented in the [v1.7 manual](V1.7_UI_REFERENCE.md) and [UI guide](ARGOS_PM_UI_REFERENCE.md). The [v1.7 change record](releases/v1.7.0.md) and [readiness register](V1.7_RELEASE_READINESS.md) distinguish current integration from historical development/validation evidence. The sequences and original Blocks below are historical records, not outstanding work or permission for another release.
 
 ## v1.5 implementation sequence (approved, not yet validated)
 

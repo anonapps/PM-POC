@@ -1,8 +1,33 @@
-# ARGOS PM v1.7.0 — unpublished release candidate
+# ARGOS PM v1.7.0 — current main content
 
-Prepared 1 November 2026 on the v1.7 development branch. Adds local Critical Path Analysis, scoped float/reliability, Extended lower-pane tabs, task reveal, shared Quick Edit, chart indicators and CSV. The release-readiness remediation surfaces milestone diagnostics, makes invalid schedules discoverable as Unscheduled, and corrects temporary expansion accessibility without changing project dates or the PMP format.
+Updated 12 November 2026 after [PR #34](https://github.com/anonapps/PM-POC/pull/34), squash commit `9266a02`. The owner accepted the local version and authorized integration. This is a main-branch change record; no v1.7 tag, release or deployment was created by that merge.
 
-The package and bundled version-matched manual identify v1.7.0 as a candidate. macOS local UAT passed **for the reported v1.7 UI fixes only**; full-feature UAT and subsequent-remediation UAT are not claimed. See [candidate notes](releases/v1.7.0.md), [manual](V1.7_UI_REFERENCE.md) and [readiness/evidence](V1.7_RELEASE_READINESS.md). No merge, tag, release or deployment is implied.
+## Planning and analysis
+
+- Local Critical Path Analysis supports project-wide/per-stream scope, the full dependency graph and four relationship types, inclusive calendar days, Project Start and same-day Finish-to-Start. Linked milestones are zero-duration events; planned dates remain unchanged.
+- Extended Gantt offers Tasks/Analysis tabs, resizable independent panes, search/filter/sort, expandable reliability/float details, task reveal, Quick Edit and local CSV. Missing/invalid/reversed dates remain Unscheduled; cycles/conflicts produce explicit partial/unresolved results rather than invented values.
+- Named immutable baselines retain dates, names and historical scope references. Comparison stays shared across Baselines, Gantt and Tube Map. Gantt historical hover/focus tooltips show current/baseline dates; numeric variance stays in the comparison table.
+- Tube Map uses Combined or Detached (below-map, default) comparison, automatically available when captured Tube Map content differs. Hide Milestones Names compacts current/historical captions without losing accessible details. Same-day historical targets remain independently pointer/keyboard accessible; the final correction preserves live geometry and editor behavior and recalculates on resize.
+- Tube Map opens a twelve-week window with the current week fifth; Previous/Next move four weeks and Jump to today restores it. Compact chart headers, filter-owned dependencies/critical overlays, historical status explanations and one shared tooltip preserve dates/calculations.
+
+## Current interface and workflows
+
+- Settings replaces the visible File Information label; Project Details moved there from Overview. File operations, metadata, manual and optional Audit Log remain available.
+- Sidebar project/save status, floating Project actions (Alt+Shift+T), keyboard page traversal, optional Project Progress (manual), stable Overview columns and equal-height summary cards preserve existing commands.
+- Compact Lucide row actions, successful-only duplicate/delete feedback, clipped-text-only repeating hints, compact dialogs/baseline management and Milestones scope summaries/warning gutters retain validation, Undo/Redo and focus behavior.
+- Global Search opens exact records/baseline entries/dependencies, temporarily reveals filtered destinations and restores Search context on return. Warnings navigate to the intended record/relationship; no automatic correction is introduced.
+
+## Compatibility and documentation
+
+PMP container format 1/schema 2 and supported legacy behavior remain unchanged. Files containing baselines retain their existing v1.6 reader requirement. Critical Path caches and display selections stay outside persisted project data. No migration, `.mpp` conversion, cloud storage or automatic scheduling is introduced by these changes. The consolidated UI uses the shared Lucide dependency already integrated in the app.
+
+The [user manual](USER_MANUAL.md), [complete v1.7 reference](V1.7_UI_REFERENCE.md), [UI guide](ARGOS_PM_UI_REFERENCE.md), versioned PDF and editable Word document describe current main. The v1.4 illustrated reference and v1.5/v1.6 guides/footage remain clearly identified historical material.
+
+## Acceptance and verification
+
+The owner accepted the integrated version after local testing and authorized PR #34's squash merge. The final [PR validation](https://github.com/anonapps/PM-POC/actions/runs/43238733691) passed `validate` and `lifecycle-release-gate` on `52acf02`; security and other executed checks passed, with publishing steps skipped. Focused correction evidence: 52 unit cases in 3 files (1.32s), 13 Tube Map browser cases (25.61s), TypeScript, lint and production build passed. The review finding was replied to/resolved and the PR was CLEAN/MERGEABLE before merge.
+
+Earlier local release validation (1 November) and its 520 unit / 245 lifecycle / 154 browser counts are preserved in the [readiness register](V1.7_RELEASE_READINESS.md) as historical evidence, not current totals. Local owner acceptance and Linux/Chromium automation do not certify every physical Windows/macOS file-picker, recovery or accessibility scenario. Publication, tags and deployment remain separate decisions.
 
 # ARGOS PM v1.6.0 — 29 October 2026
 

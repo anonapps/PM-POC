@@ -36,7 +36,7 @@ it("ships the current v1.7 version-matched candidate manual without claiming pub
  const {APP_VERSION}=await import('./app-info');
  expect(APP_VERSION).toBe('1.7.0');const result=resolveUiManual(APP_VERSION)!;
  expect(result.exact).toBe(true);expect(result.manual.status).toBe('candidate');expect(result.label).toContain('not published');
- expect(result.manual.source).toContain('/blob/feature/v1.7-critical-path-analysis/docs/V1.7_UI_REFERENCE.md');
+ expect(result.manual.source).toContain('/blob/main/docs/V1.7_UI_REFERENCE.md');
  expect(readFileSync(new URL('../../public'+result.manual.pdf,import.meta.url)).subarray(0,5).toString()).toBe('%PDF-');
  expect(readFileSync(new URL('../../docs/V1.7_UI_REFERENCE.md',import.meta.url),'utf8')).toContain('Version 1.7.0');
 });

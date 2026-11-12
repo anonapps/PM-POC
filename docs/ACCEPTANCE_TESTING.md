@@ -1,4 +1,18 @@
-# Acceptance Testing
+# Acceptance Testing — v1.7
+
+## Current v1.7 acceptance checklist
+
+Use the [current manual](V1.7_UI_REFERENCE.md) and [UI guide](ARGOS_PM_UI_REFERENCE.md). PR #34 (`9266a02`, 12 November 2026) was owner-accepted after local testing; its [final CI](https://github.com/anonapps/PM-POC/actions/runs/43238733691) passed before merge. This does not certify all native-platform scenarios listed below.
+
+- Open/create/save/reopen a real disposable `.pmp` with native Chrome permission prompts; verify dirty close/switch, Save As, access-loss recovery and external modifications without overwriting the original test file unexpectedly.
+- Verify Settings → Project Details, optional Overview progress (0–100 whole values only), file/audit/manual actions, sidebar save feedback, floating actions via hover/Alt+Shift+T and keyboard focus restoration.
+- Verify record creation/inline editing, scopes/owners/dependencies, successful-only Duplicate/Delete feedback, Undo/Redo, confirmations, hidden/deleted records and clipped-text hints at supported desktop sizes.
+- Navigate global Search and Warnings to exact records/baselines/dependencies, including filtered targets, and verify query/filter/sort/scroll restoration without persisted selection changes.
+- Exercise Gantt Simple/Extended, Tasks/Analysis tabs, divider keyboard/pointer resize, independent panes, scoped reliable/partial/unresolved/unscheduled analysis, Refresh/Retry, reveal/Quick Edit/CSV and critical overlays without automatic date edits.
+- Create/rename/delete baselines, compare historical/current names/dates/scopes, save/reopen and verify immutable snapshots. Test Combined and Detached, names visible/hidden, two same-day current milestones, historical hover/focus, one dismissible tooltip, current selection/editing, resize and filters. Verify current positions remain unchanged and Quick Edit Save stays above the footer.
+- Check the today-focused twelve-week Tube Map window, four-week navigation, compact headings and filter-owned dependencies/critical overlays. Clear all restores each chart's documented defaults.
+
+Choose focused automated suites using [Testing optimisation](TESTING_OPTIMISATION.md). Full main/PR validation owns lifecycle and layout coverage; do not repeat full suites for documentation-only edits. Historical results below retain their dates; [v1.7 readiness](V1.7_RELEASE_READINESS.md) records later evidence and native limitations.
 
 ## v1.4.0 acceptance status
 

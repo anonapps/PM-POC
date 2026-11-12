@@ -1,5 +1,7 @@
 # Compact Gantt stream and calendar bands
 
+> Implementation/evidence record. The consolidated content is now integrated through [PR #34](https://github.com/anonapps/PM-POC/pull/34) (`9266a02`, 12 November 2026). Use the [v1.7 manual](V1.7_UI_REFERENCE.md) and [current UI guide](ARGOS_PM_UI_REFERENCE.md) for final labels and behavior, including the historical-marker fix. Branch instructions and measurements below retain their original scope/date; this is not a release/deployment record.
+
 Approved follow-up on `feature/global-sidebar-floating-toolbar`, based on `e20f6b9`. The existing draft PR #30 remains open. The working tree was clean before this change.
 
 One scoped CSS recipe in `src/features/shared/planning-controls.css` defines a private 24px Gantt band height. It applies to both cells of each Stream/Project-wide section and to each year/date line. Section buttons fit the new band without font changes; the Item heading spans the two calendar lines (48px). The bands remain fixed across Simple/Extended, expanded/collapsed and baseline/variance states. Narrow dates stay on one line, using the existing truncation and full-range titles.
