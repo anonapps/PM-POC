@@ -1,5 +1,7 @@
 # Tube Map single header band
 
+> Implementation/evidence record. The consolidated content is now integrated through [PR #34](https://github.com/anonapps/PM-POC/pull/34) (`9266a02`, 12 November 2026). Use the [v1.7 manual](V1.7_UI_REFERENCE.md) and [current UI guide](ARGOS_PM_UI_REFERENCE.md) for final labels and behavior, including the historical-marker fix. Branch instructions and measurements below retain their original scope/date; this is not a release/deployment record.
+
 Approved follow-up on `feature/global-sidebar-floating-toolbar`, starting from clean `2183a08`, in draft PR #30.
 
 A scoped CSS rule in `src/features/shared/planning-controls.css` reduces only the Tube Map Stream/week-number header from 42px to 24px. It matches a single Gantt calendar band, not the combined 48px year/date stack. Child cells are 23px plus the header's existing 1px divider. Header fonts and horizontal geometry remain unchanged. The Stream sort button and week/date text are vertically centered; date/week text retains block ellipsis behavior at narrow widths.

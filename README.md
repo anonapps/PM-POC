@@ -1,18 +1,17 @@
 # ARGOS PM
 
-A local-first ARGOS PM v1.7.0 release candidate built with TypeScript, React and Next.js. The authoritative product specification is maintained in [`docs/PROJECT_REQUIREMENTS.md`](docs/PROJECT_REQUIREMENTS.md), with architecture and implementation details in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+A local-first ARGOS PM v1.7.0 workspace built with TypeScript, React and Next.js. Project data stays in a self-contained local `.pmp` file. The authoritative [requirements](docs/PROJECT_REQUIREMENTS.md), [architecture](docs/ARCHITECTURE.md) and [implementation record](docs/IMPLEMENTATION_PLAN.md) describe its boundaries.
 
-## v1.7.0 release candidate
+## Current v1.7 content
 
-Critical Path Analysis runs locally in the Extended Gantt lower pane, with project/stream scope, reliable calculated dates and float, independent chart highlighting, shared Quick Edit and local CSV. Task reveal preserves filters and pane positions. The three release-readiness findings are addressed without changing the PMP format or planned dates.
+The owner-tested consolidated UI and Tube Map accessibility correction were integrated into `main` through [PR #34](https://github.com/anonapps/PM-POC/pull/34), squash commit `9266a02`, on 12 November 2026. Version 1.7.0 is available from main; that merge did not create a tag, GitHub release or deployment.
 
-This feature branch is not a published release. macOS local UAT passed for the reported v1.7 UI fixes only; full-feature and subsequent-remediation UAT are not claimed. See the [candidate release notes](docs/releases/v1.7.0.md), [version-matched manual](docs/V1.7_UI_REFERENCE.md) and [readiness register](docs/V1.7_RELEASE_READINESS.md) for validation and remaining gates.
+- Local Critical Path Analysis in Extended Gantt, with project/stream scope, calculated dates/float, reliability warnings, task reveal, Quick Edit and CSV. Planned dates are never automatically changed.
+- Named immutable baselines, comparison dates/variance, Gantt historical tooltips and Combined/Detached Tube Map comparison. Same-day historical targets remain pointer/keyboard accessible with names hidden.
+- Settings replaces the visible File Information label and contains Project Details, file operations, Audit Log and the manual. The sidebar shows project/save status; global actions use a floating toolbar (Alt+Shift+T).
+- Preserved record workflows, shared compact actions/dialogs, search-result navigation, filters, current milestone editing, dependencies, Undo/Redo and PMP compatibility.
 
-## v1.6.0
-
-Viewport-fitting record layouts, multiple named immutable schedule baselines, shared date comparison, Gantt historical overlays, Tube Map historical milestone indicators and a cross-stream dependency inspection/editing workspace. Data stays in the local `.pmp` file; warnings never schedule automatically.
-
-Extended Gantt adds a resizable compact chart/Tasks split using the existing modules. Its Add Task panel exactly matches standalone Tasks. The owner approved the [design](docs/V1.6_EXTENDED_MODE_MOCKUP.md) with that condition; implementation and regression evidence are in the phase report. See the [user guide](docs/V1.6_UI_REFERENCE.md), [implementation specification](docs/V1.6_IMPLEMENTATION.md) and [phase/test report](docs/V1.6_PROGRESS.md). The v1.6.0 publication follows owner acceptance of the final UI and explicit release direction. See [release notes](docs/releases/v1.6.0.md) and the [UI contributor guide](src/ui/README.md). The video below remains the v1.5 demonstration; no v1.6 footage is implied.
+Start with the [user manual](docs/USER_MANUAL.md), [complete v1.7 reference](docs/V1.7_UI_REFERENCE.md), [UI guide](docs/ARGOS_PM_UI_REFERENCE.md), [PDF](public/manuals/1.7/ARGOS_PM_UI_REFERENCE.pdf) or [Word manual](docs/ARGOS_PM_UI_REFERENCE.docx). The [documentation index](docs/README.md) separates current guidance, engineering references and historical evidence. See [v1.7 change notes](docs/releases/v1.7.0.md) and the [readiness register](docs/V1.7_RELEASE_READINESS.md) for dated acceptance/CI scope.
 
 ## Product demo — ARGOS PM v1.5.0
 
@@ -34,7 +33,7 @@ The v1.5 release includes shared search and filtering, anchored pickers, updated
 
 ## UI reference manual
 
-Use the bundled candidate [v1.7 UI Reference Manual](docs/V1.7_UI_REFERENCE.md) and [versioned PDF](public/manuals/1.7/ARGOS_PM_UI_REFERENCE.pdf) from File Information. Published v1.6 and v1.5 manuals remain available for those versions. The [earlier illustrated reference](docs/ARGOS_PM_UI_REFERENCE.md) remains an archive.
+Open **Settings → UI Reference Manual** for the bundled [v1.7 manual](docs/V1.7_UI_REFERENCE.md). The generic [UI guide](docs/ARGOS_PM_UI_REFERENCE.md) and PDF/Word downloads now cover v1.7. Earlier [v1.4 illustrated material](docs/V1.4_UI_REFERENCE.md) and versioned v1.5/v1.6 manuals remain historical references. The app retains its unpublished-candidate label until a v1.7 release is explicitly published.
 
 ## Quick start — first run (macOS / Terminal)
 
@@ -85,22 +84,18 @@ Open `http://localhost:3000` in Chrome Desktop.
 
 ## Validation
 
-Run the complete regression gate before considering a change complete:
+Choose the smallest relevant suite from [Testing optimisation](docs/TESTING_OPTIMISATION.md). Documentation-only updates need link/asset checks and manual regeneration; do not repeat application/browser suites unless changed behavior warrants them.
 
 ```bash
-npm ci
-npm test
+npm run test:targeted -- unit src/shared/ui-manual.test.ts
+npm run test:targeted -- layout e2e/layout/tube-display.spec.ts
 npm run typecheck
 npm run lint
-npm run build
-npm audit --omit=dev --audit-level=moderate
-npm run test:regression
-npm run test:lifecycle
 ```
 
-The regression suite includes 30 streams, people, tasks, milestones, risks and decisions (180 varied records). `npm run test:e2e` runs the original smoke flow; `npm run test:regression` adds the large dataset; `npm run test:lifecycle` also creates 30 additional records per module through the UI. See [`docs/AUTOMATED_REGRESSION.md`](docs/AUTOMATED_REGRESSION.md) for scenarios, CI triggers and commands, and [`docs/ACCEPTANCE_TESTING.md`](docs/ACCEPTANCE_TESTING.md) for native file-picker checks.
+For a ready application PR use `npm run validate:pr`; release verification uses `npm run validate:release`. These commands own the complete unit, build, lifecycle, layout and audit stages; avoid overlapping aliases. Browser validation requires Node.js 22+ and local Chrome/Chromium (set `CHROME_PATH` if needed). Never run browser suites concurrently against the same server/profile. Validation does not authorize a release or deployment.
 
-The 11 October 2026 regression baseline passed 27 Vitest files / 139 tests, TypeScript, lint, production build, dependency checks and both Chrome browser suites. Test counts are a dated validation result, not a fixed coverage target. The production audit is blocking; the full development audit is informational in CI.
+Main-targeted PRs run `.github/workflows/validate.yml`, including the required `lifecycle-release-gate`. The final PR #34 [validation run](https://github.com/anonapps/PM-POC/actions/runs/43238733691) passed both jobs on `52acf02` before merge. Its focused fix checks passed 52 unit cases and 13 Tube Map browser cases; these are dated results, not fixed coverage totals. See [automated regression](docs/AUTOMATED_REGRESSION.md) and [acceptance/native-file checks](docs/ACCEPTANCE_TESTING.md). Production audits block at the configured threshold; full development audit is informational under the existing policy.
 
 ## Source layout
 
@@ -119,12 +114,8 @@ The 11 October 2026 regression baseline passed 27 Vitest files / 139 tests, Type
 The `.pmp` project file is the sole source of truth for project data. Persistence remains behind the Project File Service abstraction. The application does not depend on cloud storage, a database, browser local storage or an application backend for project data.
 
 
-## UI standardization proposal
+## UI contribution and catalogue
 
-The documentation-only [Stage 1 proposal](docs/UI_STANDARD_PROPOSAL.md) captures the [current UI audit](docs/UI_STANDARD_AUDIT.md), reusable component contracts and a [sequenced migration/acceptance plan](docs/UI_STANDARD_MIGRATION_PLAN.md). Proposed token normalization is not yet approved; current requirements and accepted UI remain the reference.
+Use the [UI contributor guide](src/ui/README.md), [current design system](docs/UI_DESIGN_SYSTEM.md), [component contracts](docs/UI_COMPONENT_CONTRACTS.md), [token inventory](docs/UI_TOKEN_INVENTORY.md) and [style ownership map](docs/UI_STYLE_OWNERSHIP.md) before changing a shared control. Existing approved requirements and working behavior take precedence over historical normalization proposals.
 
-### Internal UI catalogue
-
-Run `npm run ui:catalogue` for the separate local component review app. See the [catalogue guide](tools/ui-catalogue/README.md) and [component contracts](docs/UI_COMPONENT_CONTRACTS.md). Production pages and approved visual values remain unchanged.
-
-For UI changes, use the [initial token inventory](docs/UI_TOKEN_INVENTORY.md) and [style ownership map](docs/UI_STYLE_OWNERSHIP.md) to locate existing assets and rules before adding a new override.
+Run `npm run ui:catalogue` for the separate local component review app; see its [guide](tools/ui-catalogue/README.md). The earlier [Stage 1 proposal](docs/UI_STANDARD_PROPOSAL.md), [audit](docs/UI_STANDARD_AUDIT.md) and [migration record](docs/UI_STANDARD_MIGRATION_PLAN.md) retain their dated design decisions/evidence.

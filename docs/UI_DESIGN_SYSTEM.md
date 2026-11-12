@@ -1,4 +1,12 @@
-# v1.3.0 — UI design system
+# ARGOS PM — UI design system (v1.7)
+
+## Current v1.7 surface
+
+Use the [current UI guide](ARGOS_PM_UI_REFERENCE.md), [UI contributor guide](../src/ui/README.md), [component contracts](UI_COMPONENT_CONTRACTS.md), [token inventory](UI_TOKEN_INVENTORY.md) and [style ownership](UI_STYLE_OWNERSHIP.md). Current accepted presentation includes sidebar project/save status and width animation, floating Project actions, Settings, compact record/action/dialog controls, clipping-aware text hints, shared rich chart tooltips and compact timeline headings/navigation. The older header/36px baseline below is historical, not a universal rule for current compact controls.
+
+Reuse existing semantic tokens/compositions and context variants. Row icon controls use the approved 30px action geometry; floating actions keep their own recipe. Milestones scope summaries retain first-stream/+N and the external dependency warning gutter. Gantt/Tube Map keep chart-specific positioning, date labels, status colors, dependency focus, keyboard details and transient comparison/critical filters. PR #34's historical target placement preserves current live geometry; compact Quick Edit stays above the footer.
+
+This is a record of accepted v1.7 content, not authorization to normalize every earlier value or replace native/persistence behavior. The v1.3/v1.4 records below retain their original evidence and are superseded where later requirements explicitly changed the interface.
 
 > **Current standardization work:** This document records the historical v1.3/v1.4 design-system baseline. Later approved requirements take precedence. The documentation-only [Stage 1 proposal](UI_STANDARD_PROPOSAL.md), [current-state audit](UI_STANDARD_AUDIT.md) and [migration plan](UI_STANDARD_MIGRATION_PLAN.md) distinguish preserved behavior from unapproved normalization candidates. They do not change the running UI.
 
