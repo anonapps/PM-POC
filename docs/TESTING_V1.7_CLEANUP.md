@@ -62,3 +62,7 @@ The full run failed in `text-hint-overflow.spec.ts`, “text hints appear only f
 All 241 browser definitions remain collected after cleanup, and all browser assertion lines match the baseline. The only product-spec edits move screenshot destinations and use the existing Playwright test-info argument. The tracked documentation PNGs, application source, fixture bytes, dependency versions, package version and lockfile are unchanged. Product tests were not repeated after documentation-only edits; only the failed case and the two changed output paths were rerun.
 
 These are single samples, with baseline npm startup versus after child-stage timing and differing host load. No same-suite performance speedup is claimed. The benefit is eliminating accidental full-scope runs, restoring a required build gate, retaining concise summaries and avoiding routine tracked-asset rewrites. Raw logs remain ignored under `work/`; [machine-readable evidence](testing-v1.7-cleanup.json) preserves both the failed full run and successful focused recheck.
+
+## Performance follow-up to merged PR #36
+
+See [QA performance investigation](TESTING_PERFORMANCE_PR36.md) for the 2/3/4-worker comparison, the measured removal of two dirty-draft navigation timeouts, unchanged assertion/viewport coverage, and subsequent tooltip failures. Its final release validation is explicitly recorded as failed; successful focused diagnostics do not resolve the tooltip flakiness. The PR #36 implementation and historical evidence above remain intact.

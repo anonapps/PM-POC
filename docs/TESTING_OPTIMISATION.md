@@ -1,5 +1,7 @@
 # Testing optimisation
 
+PR #36 performance follow-up: [controlled worker comparison, lifecycle profiling and unresolved tooltip evidence](TESTING_PERFORMANCE_PR36.md). Keep two workers on the measured runner; higher counts provided no reliable benefit. The follow-up removes two expected navigation-success timeouts while preserving every checkpoint and form creation.
+
 Current v1.7 follow-up: [validation cleanup and verification](TESTING_V1.7_CLEANUP.md). The measured 453/477-unit and 54/69-browser counts below are historical PR #24 evidence, not current suite totals.
 
 Branch: `chore/testing-optimisation`, based on `main` at `3c6ef7036d7a5ac7c66dcd7966a15324df212a5b` (26 October 2026). Application functionality, product requirements, persistence implementation and the `.pmp` contract are outside this change. During validation, main advanced to `af119ff` through the independent v1.6 PR #23. That main commit was integrated unchanged into this branch; the original v1.5 measurements below remain historical, and final v1.6 verification is recorded separately.
