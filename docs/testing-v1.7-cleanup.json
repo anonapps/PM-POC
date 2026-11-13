@@ -1,0 +1,182 @@
+{
+  "date": "2026-11-13",
+  "main_sha": "ab913ad372acf3822ee38d5b8df6f5536dbefa7a",
+  "version": "1.7.0",
+  "environment": {
+    "node": "24.19.0",
+    "chromium": "151.0.7922.173",
+    "os": "Debian Linux"
+  },
+  "baseline": {
+    "vitest_files": 67,
+    "vitest_tests": 561,
+    "vitest_seconds": 32.03,
+    "shell_wall_seconds": 32.748,
+    "browser_cases": 241,
+    "browser_specs": 27,
+    "incomplete_install_attempt_excluded": true
+  },
+  "build_bypass_reproduction": {
+    "configured_package_build_exit_code": 17,
+    "old_runner_exit_code": 0,
+    "fixed_runner_contract_passed": true
+  },
+  "final_runner_contracts": {
+    "passed": 11,
+    "failed": 0,
+    "seconds": 3.384
+  },
+  "full_pr_exit_code": 1,
+  "full_pr_stages": [
+    {
+      "name": "validation-runner",
+      "seconds": 2.58,
+      "code": 0,
+      "counts": [
+        "# tests 11",
+        "# pass 11"
+      ],
+      "log_file": "validation-runner.log"
+    },
+    {
+      "name": "unit",
+      "seconds": 38.96,
+      "code": 0,
+      "counts": [
+        "Test Files  67 passed (67)",
+        "Tests  561 passed (561)"
+      ],
+      "log_file": "unit.log"
+    },
+    {
+      "name": "typecheck",
+      "seconds": 9.94,
+      "code": 0,
+      "counts": [],
+      "log_file": "typecheck.log"
+    },
+    {
+      "name": "lint",
+      "seconds": 13.23,
+      "code": 0,
+      "counts": [],
+      "log_file": "lint.log"
+    },
+    {
+      "name": "build",
+      "seconds": 49.09,
+      "code": 0,
+      "counts": [],
+      "log_file": "build.log"
+    },
+    {
+      "name": "lifecycle",
+      "seconds": 155.77,
+      "code": 0,
+      "counts": [
+        "Acceptance: 245 passed, 0 failed (all)"
+      ],
+      "log_file": "lifecycle.log"
+    },
+    {
+      "name": "layout",
+      "seconds": 746.51,
+      "code": 1,
+      "counts": [
+        "240 passed (12.4m)"
+      ],
+      "log_file": "layout.log"
+    }
+  ],
+  "full_browser_result": {
+    "passed": 240,
+    "failed": 1,
+    "collected": 241,
+    "failed_spec": "e2e/layout/text-hint-overflow.spec.ts",
+    "failed_case": "text hints appear only for clipped cells, selections and pills at 1440",
+    "failure": "Long Task-owner title tooltip was not found",
+    "cause": "unconfirmed",
+    "tooltip_test_and_application_unchanged": true
+  },
+  "targeted_recheck": {
+    "passed": 3,
+    "failed": 0,
+    "seconds": 21.48,
+    "scopes": [
+      "unchanged failed tooltip case at 1440",
+      "milestone screenshot output at 1440",
+      "Tube Map screenshot output at 1440"
+    ]
+  },
+  "retention": {
+    "browser_cases": 241,
+    "browser_specs": 27,
+    "case_counts": {
+      "action-icons": 4,
+      "compact-rhythm": 14,
+      "consolidated-ui": 20,
+      "creation-panels": 30,
+      "critical-path": 16,
+      "demo-lifecycle": 1,
+      "desktop-records": 11,
+      "extended": 18,
+      "gantt-surface": 7,
+      "gantt-warning": 2,
+      "global-shell": 7,
+      "milestone-scope-overflow": 2,
+      "milestone-scope": 4,
+      "read-only-pages": 8,
+      "release-smoke": 1,
+      "search-filter": 3,
+      "search-navigation": 4,
+      "shared-surfaces": 6,
+      "status-batch": 7,
+      "text-hint-overflow": 3,
+      "timeline-toolbar": 35,
+      "tooltip-consistency": 2,
+      "tube-comparison": 6,
+      "tube-display": 13,
+      "tube-map-window": 3,
+      "v16": 10,
+      "warning-dependencies": 4
+    },
+    "expect_calls": {
+      "e2e/layout/compact-rhythm.spec.ts": 47,
+      "e2e/layout/creation-panels.spec.ts": 134,
+      "e2e/layout/critical-path.spec.ts": 163,
+      "e2e/layout/demo-lifecycle.spec.ts": 67,
+      "e2e/layout/desktop-records.spec.ts": 25,
+      "e2e/layout/extended.spec.ts": 97,
+      "e2e/layout/gantt-surface.spec.ts": 47,
+      "e2e/layout/read-only-pages.spec.ts": 53,
+      "e2e/layout/release-smoke.spec.ts": 37,
+      "e2e/layout/search-filter.spec.ts": 58,
+      "e2e/layout/shared-surfaces.spec.ts": 39,
+      "e2e/layout/status-batch.spec.ts": 47,
+      "e2e/layout/timeline-toolbar.spec.ts": 129,
+      "e2e/layout/v16.spec.ts": 92,
+      "e2e/layout/tube-display.spec.ts": 78,
+      "e2e/layout/tube-comparison.spec.ts": 35,
+      "e2e/layout/warning-dependencies.spec.ts": 28,
+      "e2e/layout/milestone-scope.spec.ts": 25,
+      "e2e/layout/milestone-scope-overflow.spec.ts": 13,
+      "e2e/layout/tooltip-consistency.spec.ts": 32,
+      "e2e/layout/text-hint-overflow.spec.ts": 9,
+      "e2e/layout/gantt-warning.spec.ts": 25,
+      "e2e/layout/search-navigation.spec.ts": 40,
+      "e2e/layout/action-icons.spec.ts": 34,
+      "e2e/layout/tube-map-window.spec.ts": 16,
+      "e2e/layout/consolidated-ui.spec.ts": 93,
+      "e2e/layout/global-shell.spec.ts": 61
+    },
+    "dependencies_and_lockfile_unchanged": true,
+    "application_and_browser_assertion_lines_unchanged": true,
+    "artifact_destination_only_specs": [
+      "e2e/layout/milestone-scope.spec.ts",
+      "e2e/layout/tube-comparison.spec.ts"
+    ]
+  },
+  "tracked_media_unchanged_after_recheck": true,
+  "clean_full_run_claimed": false,
+  "draft_pr_reason": "Full run had an intermittent tooltip failure; isolated recheck passed. Await mandatory CI evidence."
+}

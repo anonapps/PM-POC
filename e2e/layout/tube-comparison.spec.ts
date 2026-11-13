@@ -1,6 +1,6 @@
 import { tubeFilter } from './tube-controls';
 import { test, expect, type Page } from '@playwright/test';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { deserializeProject, serializeProject } from '../../src/persistence/pmp/codec';
 import { captureSchedule } from '../../src/domain/baselines';
 
@@ -36,14 +36,14 @@ async function open(page: Page, baselines = true) {
 const markers = (page: Page) => page.locator('.tube-baseline-overlay-marker');
 const geometry = (page: Page) => page.locator('.tube-station').evaluateAll(nodes => nodes.map(node => ({ id: node.getAttribute('data-entity-id'), left: (node as HTMLElement).style.left, top: (node as HTMLElement).style.top })));
 
-for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches between below and same map without moving live milestones at ${width}`, async ({ page }) => {
+for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches between below and same map without moving live milestones at ${width}`, async ({ page }, info) => {
   await page.setViewportSize({ width, height: 900 }); const initial = await open(page);
   const mode = page.getByRole('radio', { name: 'Detached', exact: true });
   await expect(mode).toBeEnabled(); await expect(mode).toBeChecked();
 
   await expect(page.getByRole('region', { name: 'Baseline milestone indicators', exact: true })).toBeVisible();
   const before = await geometry(page);
-  if (width === 1440) { mkdirSync('docs/media/tube-comparison', { recursive: true }); await page.screenshot({ path: 'docs/media/tube-comparison/below.png' }); }
+  if (width === 1440) await page.screenshot({ path: info.outputPath('below.png') });
   await page.getByRole('radio',{name:'Combined',exact:true}).check(); await expect(markers(page)).toHaveCount(4);
   await expect(page.getByRole('region', { name: 'Baseline milestone indicators', exact: true })).toHaveCount(0);
   await expect(page.getByText('Historical stream (baseline only)', { exact: true })).toBeVisible();
@@ -53,7 +53,7 @@ for (const width of [900, 1280, 1440, 1920]) test(`Tube comparison switches betw
   expect(await checkpoint.evaluate(node => parseFloat((node as HTMLElement).style.left))).toBeCloseTo(29 * 100 / 84);
   const historicalBox = (await checkpoint.boundingBox())!, chartBox = (await page.locator('.tube-body').boundingBox())!;
   expect(historicalBox.x + historicalBox.width / 2).toBeCloseTo(chartBox.x + 29 * chartBox.width / 84, 1);
-  if (width === 1440) await page.screenshot({ path: 'docs/media/tube-comparison/same-map.png' });
+  if (width === 1440) await page.screenshot({ path: info.outputPath('same-map.png') });
   expect(await page.locator('.workspace').evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   const footer = (await page.getByRole('navigation', { name: 'Tube Map date navigation', exact: true }).boundingBox())!;
   expect(footer.y + footer.height).toBeLessThanOrEqual(901);

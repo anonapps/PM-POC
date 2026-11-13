@@ -1,6 +1,6 @@
 import { globalAction } from './global-actions';
 import { test, expect, type Page } from '@playwright/test';
-import { readFileSync, mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { deserializeProject, serializeProject } from '../../src/persistence/pmp/codec';
 
 const decoded = deserializeProject(new Uint8Array(readFileSync('src/testing/fixtures/v1.4-rich-project.pmp')));
@@ -53,7 +53,7 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
   }));
   const legacy = await page.addStyleTag({ content: priorColumns });
   const before = { columns: await columns(), heights: await heights(), pills: await pillStyles() };
-  if (width === 1440) { mkdirSync('docs/media/milestone-scope', { recursive: true }); await page.screenshot({ path: 'docs/media/milestone-scope/before-1440.png' }); }
+  if (width === 1440) await page.screenshot({ path: info.outputPath('before-1440.png') });
   await legacy.evaluate(node => node.parentNode?.removeChild(node));
   const after = { columns: await columns(), heights: await heights(), pills: await pillStyles() };
   expect(after.columns[3] / before.columns[3]).toBeGreaterThan(1.45);
@@ -90,7 +90,7 @@ for (const width of [1024, 1280, 1440, 1920]) test(`Milestones Scope gains half 
   expect(after.heights[2]).toBe(after.heights[0]);
   expect(await page.locator('.workspace').evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
   expect(await table.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
-  if (width === 1440) await page.screenshot({ path: 'docs/media/milestone-scope/after-1440.png' });
+  if (width === 1440) await page.screenshot({ path: info.outputPath('after-1440.png') });
   await info.attach('scope-column-comparison', { body: JSON.stringify({ width, before, after }, null, 2), contentType: 'application/json' });
   await rows[0].locator('.scope-summary').click();
   const choice = page.getByRole('checkbox', { name: 'Stream 2', exact: true });

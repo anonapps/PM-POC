@@ -1,13 +1,15 @@
 # Testing optimisation
 
+Current v1.7 follow-up: [validation cleanup and verification](TESTING_V1.7_CLEANUP.md). The measured 453/477-unit and 54/69-browser counts below are historical PR #24 evidence, not current suite totals.
+
 Branch: `chore/testing-optimisation`, based on `main` at `3c6ef7036d7a5ac7c66dcd7966a15324df212a5b` (26 October 2026). Application functionality, product requirements, persistence implementation and the `.pmp` contract are outside this change. During validation, main advanced to `af119ff` through the independent v1.6 PR #23. That main commit was integrated unchanged into this branch; the original v1.5 measurements below remain historical, and final v1.6 verification is recorded separately.
 
 ## Validation levels
 
 | Level | Command | Scope |
 | --- | --- | --- |
-| Quick | `npm run validate:quick` | Domain and persistence Vitest cases. Smoke feedback, not PR approval. |
-| Targeted | `npm run test:targeted -- unit src/features/tasks/commands.test.ts` | Explicit Vitest file/path selection; an empty selector is rejected. |
+| Quick | `npm run validate:quick` | Runner checks plus domain and persistence Vitest cases. Smoke feedback, not PR approval. |
+| Targeted | `npm run test:targeted -- unit src/features/tasks/commands.test.ts` | Explicit Vitest file/path selection; empty/flags-only selectors are rejected; put an existing test path/directory or a positive name filter first. |
 | Targeted | `npm run test:targeted -- layout e2e/layout/creation-panels.spec.ts --grep 'Task full'` | Explicit Playwright file/name selection. Requires a build or an intentionally supplied `E2E_BASE_URL`. |
 | Targeted | `npm run test:targeted -- volume` | Independent 180-record open/render/sort/search/save/reopen scenario, using a disposable copy of the committed fixture. Add `--full` to exercise all 180 additional UI creations. |
 | PR regression | `npm run validate:pr` | Every Vitest case, typecheck, lint, production build, full custom lifecycle and all Playwright cases. One owned production server; Atlas runs exactly once via Playwright. |
@@ -119,11 +121,11 @@ Remaining limitations: timings are single samples with differing contention/serv
 
 After original validation, `main` advanced from `3c6ef70` to `af119ff29d1d0f1ea2befec87840adbd546f0f34` via the independent v1.6 PR #23. The optimisation branch integrated that commit without changing any application implementation, product requirement, file-format specification, dependency version or lockfile relative to that main. All updated upstream harness assertions were preserved when resolving overlapping lines. The newly added `extended.spec.ts` and `v16.spec.ts` are unchanged.
 
-The current main inventory is **55 Vitest files / 477 cases** and **69 Playwright cases in 8 specs**. The increase from the original 453/54 counts is upstream product coverage, not tests added or removed to change timing. In addition to the original release/lifecycle protections, the current selection includes named schedule-baseline CRUD/comparison/persistence, cross-stream dependencies, historical stream names, Extended Gantt panels/edits/resize/reopen and expanded footer viewport coverage.
+The recorded v1.6 main inventory was **55 Vitest files / 477 cases** and **69 Playwright cases in 8 specs**. The increase from the original 453/54 counts is upstream product coverage, not tests added or removed to change timing. In addition to the original release/lifecycle protections, the current selection includes named schedule-baseline CRUD/comparison/persistence, cross-stream dependencies, historical stream names, Extended Gantt panels/edits/resize/reopen and expanded footer viewport coverage.
 
 The v1.6 feature push remains enabled in the standalone lifecycle workflow, and non-main PRs still run their historical validation. Existing v1.6 evidence screenshots/JSON hooks are retained; only the original v1.5 successful screenshot hooks become opt-in. These intentional remaining costs avoid interfering with ongoing v1.6 development.
 
-For current main-targeting source PRs, the workflow-derived unit execution comparison is `477 + 477 + 18 + 18 = 990` before versus **477** after. Unique unit cases and all 69 browser cases remain selected. This is an execution-count comparison, not a controlled v1.6 timing benchmark. The original v1.5 before/after timings above are not relabeled as v1.6 results.
+For that v1.6 main-targeting source PR path, the workflow-derived unit execution comparison is `477 + 477 + 18 + 18 = 990` before versus **477** after. Unique unit cases and all 69 browser cases remain selected. This is an execution-count comparison, not a controlled v1.6 timing benchmark. The original v1.5 before/after timings above are not relabeled as v1.6 results.
 
 
 Final integration validation passed with `CHROME_PATH=/usr/bin/chromium E2E_VERBOSE=1 npm run validate:release`. [testing-integration.json](testing-integration.json) records the current results:
@@ -138,4 +140,4 @@ Final integration validation passed with `CHROME_PATH=/usr/bin/chromium E2E_VERB
 | Playwright | 376.91 s | All 69 cases passed, including Atlas |
 | Production / full dependency audit | 0.96 s / 1.07 s | Both passed; 0 vulnerabilities |
 
-Summed stage time: **703.36 s**. All **378** source `expect(...)` calls across the current eight Playwright specs match main, alongside the full parameterized matrix. The original mobile-Gantt checkpoint name/assertion changed in upstream v1.6 to require viewport fitting; its updated main assertion was retained exactly. The optimisation introduces no application change or file-contract change. Native OS boundaries and controlled performance benchmarking remain the limitations described above. Final results supersede the older 453/54 counts for this PR's validation; the older data remains intact as the original before/after evidence.
+Summed stage time: **703.36 s**. All **378** source `expect(...)` calls across the current eight Playwright specs match main, alongside the full parameterized matrix. The original mobile-Gantt checkpoint name/assertion changed in upstream v1.6 to require viewport fitting; its updated main assertion was retained exactly. The optimisation introduces no application change or file-contract change. Native OS boundaries and controlled performance benchmarking remain the limitations described above. Those results superseded the older 453/54 counts for PR #24's validation; the older data remains intact as the original before/after evidence.

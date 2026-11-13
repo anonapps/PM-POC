@@ -20,7 +20,8 @@
     "validate:release": "node scripts/validate.mjs release",
     "ui:catalogue": "next dev --webpack tools/ui-catalogue --hostname 127.0.0.1 --port 3100",
     "ui:tokens": "node scripts/generate-ui-tokens.mjs",
-    "ui:tokens:check": "node scripts/generate-ui-tokens.mjs --check"
+    "ui:tokens:check": "node scripts/generate-ui-tokens.mjs --check",
+    "test:validation": "node --test --test-reporter=tap scripts/validate.test.mjs"
   },
   "dependencies": {
     "@heroui/react": "2.8.10",
