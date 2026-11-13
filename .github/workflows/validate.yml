@@ -24,6 +24,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Validation runner contracts
+        run: npm run test:validation
       - run: npm test
       - run: npm run typecheck
       - run: npm run lint

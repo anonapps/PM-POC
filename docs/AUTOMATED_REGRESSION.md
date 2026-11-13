@@ -2,6 +2,8 @@
 
 ## Current suite ownership and evidence
 
+The [v1.7 testing cleanup](TESTING_V1.7_CLEANUP.md) records current inventory and runner verification. `npm run test:validation` runs the small Node runner checks in main CI and quick/full validation; `npm test` retains its existing Vitest-only interface. Full npm validation delegates to `npm run build`, including the required UI token check.
+
 Follow [Testing optimisation](TESTING_OPTIMISATION.md) for scoped work, `validate:pr` for ready application PRs and `validate:release` for release verification. Main-targeted PRs run `.github/workflows/validate.yml`: `validate` owns unit/static/build/audit/layout checks, and `lifecycle-release-gate` owns the complete lifecycle including Atlas. The separate lifecycle workflow retains nightly/manual execution. Do not disable required checks or duplicate successful supersets.
 
 PR #34's final [run 43238733691](https://github.com/anonapps/PM-POC/actions/runs/43238733691) passed both jobs on `52acf02` before squash merge `9266a02`. Focused Tube Map correction checks passed 52 unit cases and all 13 `tube-display.spec.ts` cases, including Combined/Detached × names visible/hidden with same-day milestones, pointer/keyboard details, editing, geometry and filters. Counts in older records below are dated evidence, not current coverage totals.
