@@ -1,3 +1,4 @@
+import {expectTextHint} from './text-hint-assertion';
 import {test,expect,type Page,type Locator} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {deserializeProject,serializeProject} from '../../src/persistence/pmp/codec';
@@ -12,7 +13,7 @@ async function open(page:Page){await page.addInitScript(({bytes})=>{const data=n
 const nav=(page:Page,name:string)=>page.locator('nav').getByRole('button',{name,exact:true}).click();
 async function settle(page:Page,anchor:Locator){await anchor.scrollIntoViewIfNeeded();await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));}
 async function noHint(page:Page,anchor:Locator){await settle(page,anchor);await anchor.hover();await expect(anchor).not.toHaveAttribute('title');await page.waitForTimeout(400);await expect(page.locator('.title-tooltip')).toHaveCount(0);await expect(anchor).not.toHaveAttribute('title');await page.mouse.move(0,0);}
-async function hint(page:Page,anchor:Locator,text:string){await settle(page,anchor);await anchor.hover();await expect(anchor).not.toHaveAttribute('title');await expect(page.locator('.title-tooltip')).toContainText(text);await page.keyboard.press('Escape');await page.mouse.move(0,0);}
+async function hint(page:Page,anchor:Locator,text:string){await settle(page,anchor);await anchor.hover();await expect(anchor).not.toHaveAttribute('title');await expectTextHint(page,text);await page.keyboard.press('Escape');await page.mouse.move(0,0);}
 for(const width of [900,1440])test(`text hints appear only for clipped cells, selections and pills at ${width}`,async({page})=>{
  await page.setViewportSize({width,height:1000});await open(page);await nav(page,'Dependencies');
  await noHint(page,page.locator('[data-navigation-id="hint-short"] td').nth(2));

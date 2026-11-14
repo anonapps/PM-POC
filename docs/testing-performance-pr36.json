@@ -261,7 +261,8 @@
   "assertionRetention": {
     "specCount": 27,
     "sourceExpectCalls": 1524,
-    "allSpecHashesMatchBase": true
+    "allSpecHashesMatchBase": true,
+    "evidenceCommit": "1f937f4"
   },
   "limitations": [
     "Single samples; no population reliability rate or controlled CI speedup claim",
@@ -294,5 +295,7 @@
       },
       "policy": "informational at moderate"
     }
-  }
+  },
+  "performanceEvidenceCommit": "1f937f4",
+  "subsequentTooltipCorrection": "testing-tooltip-fix.json"
 }

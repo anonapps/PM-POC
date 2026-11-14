@@ -1,5 +1,7 @@
 # Testing optimisation
 
+Tooltip follow-up (14 November): [confirmed Playwright diagnostic starvation and assertion-preserving correction](TESTING_TOOLTIP_FIX.md). Keep the lightweight pending-hint precondition: a missing single-element assertion can synchronously snapshot the whole Tasks page and block the hover timer.
+
 PR #36 performance follow-up: [controlled worker comparison, lifecycle profiling and unresolved tooltip evidence](TESTING_PERFORMANCE_PR36.md). Keep two workers on the measured runner; higher counts provided no reliable benefit. The follow-up removes two expected navigation-success timeouts while preserving every checkpoint and form creation.
 
 Current v1.7 follow-up: [validation cleanup and verification](TESTING_V1.7_CLEANUP.md). The measured 453/477-unit and 54/69-browser counts below are historical PR #24 evidence, not current suite totals.

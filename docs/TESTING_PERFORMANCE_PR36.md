@@ -1,5 +1,7 @@
 # QA performance follow-up to PR #36
 
+This report preserves the 13 November performance measurements and then-unresolved failures. The separately authorised [14 November tooltip investigation and correction](TESTING_TOOLTIP_FIX.md) records the subsequent confirmed cause and current verification. Source-hash statements below describe the original performance-only commit `1f937f4`, before the tooltip assertion helper correction.
+
 Base: `562d8b57b723c51ad4d28fd4727142b6ad9e59bf`, the merged PR #36 commit on main. Dedicated branch: `perf/qa-automation-followup-36`. No application, UI, dependency, fixture or PMP changes are authorised by this investigation.
 
 ## Review before changing tests
