@@ -1,0 +1,301 @@
+{
+  "base": "562d8b57b723c51ad4d28fd4727142b6ad9e59bf",
+  "runtime": {
+    "node": "24.19.0",
+    "chromium": "151.0.7922.173",
+    "playwright": "1.64.1",
+    "cpuQuota": 2,
+    "memoryGiB": 8
+  },
+  "workerSamples": [
+    {
+      "workers": 2,
+      "wallSeconds": 690.819,
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-11-13T12:02:55.823Z",
+        "duration": 690082.272,
+        "expected": 241,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "specTestSeconds": {
+        "creation-panels.spec.ts": 209.02500000000006,
+        "timeline-toolbar.spec.ts": 175.866,
+        "extended.spec.ts": 107.89299999999997,
+        "compact-rhythm.spec.ts": 105.26400000000001,
+        "demo-lifecycle.spec.ts": 87.141,
+        "consolidated-ui.spec.ts": 69.859,
+        "critical-path.spec.ts": 60.970000000000006,
+        "search-filter.spec.ts": 49.703,
+        "v16.spec.ts": 48.620999999999995,
+        "action-icons.spec.ts": 42.219,
+        "gantt-surface.spec.ts": 40.45,
+        "global-shell.spec.ts": 38.806,
+        "tube-display.spec.ts": 36.344,
+        "text-hint-overflow.spec.ts": 36.007000000000005,
+        "desktop-records.spec.ts": 33.507000000000005,
+        "shared-surfaces.spec.ts": 32.602000000000004,
+        "read-only-pages.spec.ts": 32.517999999999994,
+        "status-batch.spec.ts": 27.157,
+        "milestone-scope-overflow.spec.ts": 23.735999999999997,
+        "tube-comparison.spec.ts": 20.922,
+        "milestone-scope.spec.ts": 17.808,
+        "search-navigation.spec.ts": 14.632,
+        "warning-dependencies.spec.ts": 11.306000000000001,
+        "tube-map-window.spec.ts": 10.667,
+        "release-smoke.spec.ts": 8.719,
+        "tooltip-consistency.spec.ts": 8.536999999999999,
+        "gantt-warning.spec.ts": 7.545999999999999
+      },
+      "failures": []
+    },
+    {
+      "workers": 3,
+      "wallSeconds": 687.826,
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-11-13T12:14:26.716Z",
+        "duration": 687034.3840000001,
+        "expected": 240,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "specTestSeconds": {
+        "creation-panels.spec.ts": 326.37600000000003,
+        "timeline-toolbar.spec.ts": 281.4680000000001,
+        "extended.spec.ts": 154.26299999999998,
+        "compact-rhythm.spec.ts": 149.29899999999998,
+        "demo-lifecycle.spec.ts": 138.004,
+        "consolidated-ui.spec.ts": 100.81099999999999,
+        "critical-path.spec.ts": 90.73500000000001,
+        "v16.spec.ts": 72.74000000000001,
+        "search-filter.spec.ts": 72.63,
+        "action-icons.spec.ts": 56.587,
+        "tube-display.spec.ts": 55.63799999999999,
+        "desktop-records.spec.ts": 55.289,
+        "global-shell.spec.ts": 52.00600000000001,
+        "read-only-pages.spec.ts": 51.062999999999995,
+        "gantt-surface.spec.ts": 49.653999999999996,
+        "shared-surfaces.spec.ts": 47.223,
+        "milestone-scope-overflow.spec.ts": 43.693,
+        "text-hint-overflow.spec.ts": 41.451,
+        "status-batch.spec.ts": 37.349999999999994,
+        "tube-comparison.spec.ts": 28.519999999999996,
+        "search-navigation.spec.ts": 27.343999999999998,
+        "milestone-scope.spec.ts": 25.268,
+        "tube-map-window.spec.ts": 15.934999999999999,
+        "warning-dependencies.spec.ts": 15.79,
+        "tooltip-consistency.spec.ts": 15.025,
+        "gantt-warning.spec.ts": 11.151,
+        "release-smoke.spec.ts": 9.689
+      },
+      "failures": [
+        {
+          "file": "text-hint-overflow.spec.ts",
+          "title": "text hints appear only for clipped cells, selections and pills at 900",
+          "status": "unexpected"
+        }
+      ]
+    },
+    {
+      "workers": 4,
+      "wallSeconds": 728.761,
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-11-13T12:25:54.424Z",
+        "duration": 728091.277,
+        "expected": 237,
+        "skipped": 0,
+        "unexpected": 4,
+        "flaky": 0
+      },
+      "specTestSeconds": {
+        "creation-panels.spec.ts": 444.15400000000017,
+        "timeline-toolbar.spec.ts": 425.8179999999998,
+        "extended.spec.ts": 236.442,
+        "compact-rhythm.spec.ts": 195.646,
+        "demo-lifecycle.spec.ts": 177.546,
+        "critical-path.spec.ts": 131.038,
+        "consolidated-ui.spec.ts": 128.01199999999997,
+        "search-filter.spec.ts": 105.14999999999999,
+        "v16.spec.ts": 103.67500000000001,
+        "desktop-records.spec.ts": 89.77599999999998,
+        "action-icons.spec.ts": 86.66799999999999,
+        "gantt-surface.spec.ts": 74.262,
+        "read-only-pages.spec.ts": 71.423,
+        "tube-display.spec.ts": 71.402,
+        "shared-surfaces.spec.ts": 70.868,
+        "status-batch.spec.ts": 62.047,
+        "global-shell.spec.ts": 61.798,
+        "text-hint-overflow.spec.ts": 55.338,
+        "milestone-scope-overflow.spec.ts": 55.189,
+        "tube-comparison.spec.ts": 39.161,
+        "search-navigation.spec.ts": 35.852,
+        "milestone-scope.spec.ts": 32.253,
+        "tooltip-consistency.spec.ts": 19.736,
+        "warning-dependencies.spec.ts": 18.904,
+        "tube-map-window.spec.ts": 18.448,
+        "release-smoke.spec.ts": 14.453,
+        "gantt-warning.spec.ts": 12.561
+      },
+      "failures": [
+        {
+          "file": "consolidated-ui.spec.ts",
+          "title": "Delete last pulses the correct live separator without retaining rows",
+          "status": "unexpected"
+        },
+        {
+          "file": "creation-panels.spec.ts",
+          "title": "Stream full creation panel at 1440",
+          "status": "unexpected"
+        },
+        {
+          "file": "text-hint-overflow.spec.ts",
+          "title": "text hints appear only for clipped cells, selections and pills at 900",
+          "status": "unexpected"
+        },
+        {
+          "file": "text-hint-overflow.spec.ts",
+          "title": "text hints appear only for clipped cells, selections and pills at 1440",
+          "status": "unexpected"
+        }
+      ]
+    }
+  ],
+  "lifecycle": {
+    "beforeSeconds": 142.608816558,
+    "afterSeconds": 110.628402147,
+    "guardBeforeSeconds": 20.246824586000002,
+    "guardAfterSeconds": 0.05747612500000021,
+    "beforeCdpRequests": 2269,
+    "afterCdpRequests": 2077,
+    "identicalCheckpointNamesAndOrder": true,
+    "checkpointCount": 245,
+    "all180FormCreationsPreserved": true
+  },
+  "releaseValidation": {
+    "command": "CHROME_PATH=/usr/bin/chromium E2E_VERBOSE=1 npm run validate:release",
+    "exitCode": 1,
+    "stages": [
+      {
+        "name": "validation-runner",
+        "seconds": 2.36,
+        "code": 0,
+        "counts": [
+          "# tests 11",
+          "# pass 11"
+        ],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/validation-runner.log"
+      },
+      {
+        "name": "unit",
+        "seconds": 29.31,
+        "code": 0,
+        "counts": [
+          "Test Files  67 passed (67)",
+          "Tests  561 passed (561)"
+        ],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 9.66,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 12.64,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 24.64,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 110.77,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 646.03,
+        "code": 1,
+        "counts": [
+          "239 passed (10.8m)"
+        ],
+        "log": "work/validation-2026-11-13T12-41-58.263Z/layout.log"
+      }
+    ],
+    "playwright": {
+      "collected": 241,
+      "passed": 239,
+      "failed": 2,
+      "failures": [
+        "Long Task-owner hint at 900",
+        "Long Task-owner hint at 1440"
+      ]
+    },
+    "auditsSkippedByFailFast": true
+  },
+  "tooltipDiagnostic": {
+    "cases": 6,
+    "passed": 6,
+    "seconds": 65.659,
+    "rootCause": "unconfirmed",
+    "retryOrTimeoutChanges": false
+  },
+  "assertionRetention": {
+    "specCount": 27,
+    "sourceExpectCalls": 1524,
+    "allSpecHashesMatchBase": true,
+    "evidenceCommit": "1f937f4"
+  },
+  "limitations": [
+    "Single samples; no population reliability rate or controlled CI speedup claim",
+    "Full release validation failed due to reproduced pre-existing tooltip flakiness",
+    "Branch protection settings unavailable (HTTP 403); unchanged",
+    "Native OS file-picker consent remains manual"
+  ],
+  "standaloneAudits": {
+    "production": {
+      "exitCode": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 53,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 53
+      },
+      "policy": "blocking at moderate"
+    },
+    "full": {
+      "exitCode": 1,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 53,
+        "moderate": 7,
+        "high": 0,
+        "critical": 0,
+        "total": 60
+      },
+      "policy": "informational at moderate"
+    }
+  },
+  "performanceEvidenceCommit": "1f937f4",
+  "subsequentTooltipCorrection": "testing-tooltip-fix.json"
+}

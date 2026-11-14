@@ -1,0 +1,171 @@
+{
+  "startingCommit": "1f937f4",
+  "date": "2026-11-14",
+  "rootCause": {
+    "component": "Playwright 1.64.1 missing-element assertion diagnostics",
+    "mechanism": "Whole-page accessibility snapshot synchronously blocks the browser while the 300ms tooltip timer is pending",
+    "dominantSampledFunction": "isElementHiddenForAria",
+    "sampledSelfMilliseconds": 4819.501,
+    "callerChainUniqueNames": [
+      "isElementHiddenForAria",
+      "visit",
+      "processElement",
+      "generateAriaTree",
+      "ariaSnapshotForExpectFailure",
+      "evaluate",
+      "(root)"
+    ],
+    "applicationTooltipBugConfirmed": false
+  },
+  "before": {
+    "command": "npm run test:targeted -- layout e2e/layout/text-hint-overflow.spec.ts --repeat-each=3",
+    "workers": 2,
+    "collected": 9,
+    "passed": 6,
+    "failed": 3,
+    "seconds": 63.57
+  },
+  "afterTargeted": {
+    "command": "npm run test:targeted -- layout e2e/layout/text-hint-overflow.spec.ts e2e/layout/tooltip-consistency.spec.ts --repeat-each=3",
+    "workers": 2,
+    "collected": 15,
+    "passed": 15,
+    "failed": 0,
+    "seconds": 70.74,
+    "scopeDiffersFromBefore": true
+  },
+  "assertionControls": {
+    "missing": {
+      "rejected": true,
+      "seconds": 4.16
+    },
+    "wrongText": {
+      "rejected": true,
+      "seconds": 4.94
+    },
+    "duplicate": {
+      "rejected": true,
+      "seconds": 4.92
+    },
+    "delayedCorrectSubstring": {
+      "passed": true,
+      "seconds": 0.39
+    }
+  },
+  "preserved": {
+    "originalToContainTextAssertion": true,
+    "originalFiveSecondReadinessRequirement": true,
+    "testRetries": 0,
+    "workerCount": 2,
+    "playwrightCases": 241,
+    "lifecycleCheckpoints": 245,
+    "additionalUiFormCreations": 180,
+    "applicationAndPmpUnchanged": true,
+    "other26PlaywrightSpecsUnchanged": true
+  },
+  "releaseValidation": {
+    "command": "CHROME_PATH=/usr/bin/chromium npm run validate:release",
+    "exitCode": 0,
+    "stages": [
+      {
+        "name": "validation-runner",
+        "seconds": 2.37,
+        "code": 0,
+        "counts": [
+          "# tests 11",
+          "# pass 11"
+        ],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/validation-runner.log"
+      },
+      {
+        "name": "unit",
+        "seconds": 30.99,
+        "code": 0,
+        "counts": [
+          "Test Files  67 passed (67)",
+          "Tests  561 passed (561)"
+        ],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/unit.log"
+      },
+      {
+        "name": "typecheck",
+        "seconds": 4.8,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/typecheck.log"
+      },
+      {
+        "name": "lint",
+        "seconds": 14.42,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/lint.log"
+      },
+      {
+        "name": "build",
+        "seconds": 23.25,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/build.log"
+      },
+      {
+        "name": "lifecycle",
+        "seconds": 121.12,
+        "code": 0,
+        "counts": [
+          "Acceptance: 245 passed, 0 failed (all)"
+        ],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/lifecycle.log"
+      },
+      {
+        "name": "layout",
+        "seconds": 664.05,
+        "code": 0,
+        "counts": [
+          "241 passed (11.1m)"
+        ],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/layout.log"
+      },
+      {
+        "name": "production-audit",
+        "seconds": 3.84,
+        "code": 0,
+        "counts": [],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/production-audit.log"
+      },
+      {
+        "name": "development-audit",
+        "seconds": 2.94,
+        "code": 1,
+        "counts": [],
+        "log": "work/validation-2026-11-14T12-15-26.117Z/development-audit.log"
+      }
+    ],
+    "playwright": {
+      "collected": 241,
+      "passed": 241,
+      "failed": 0
+    },
+    "audits": {
+      "production": {
+        "passed": true,
+        "low": 53,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0
+      },
+      "full": {
+        "informational": true,
+        "low": 53,
+        "moderate": 7,
+        "high": 0,
+        "critical": 0
+      }
+    }
+  },
+  "rawEvidenceDirectory": "work/tooltip-fix/",
+  "testedSourceHashes": {
+    "e2e/layout/text-hint-assertion.ts": "4d325324dfc1c5f9c00adb7665641d28ee591a312ae212de90c9c88ae0db6dcc",
+    "e2e/layout/text-hint-overflow.spec.ts": "be18d3a12c4593b73227cef8351242adc1c4148f6a9a9db46a806d153d6c3c90"
+  }
+}
