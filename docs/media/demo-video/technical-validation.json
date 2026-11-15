@@ -1,0 +1,308 @@
+{
+  "media": {
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "profile": "High",
+        "codec_type": "video",
+        "codec_tag_string": "avc1",
+        "codec_tag": "0x31637661",
+        "width": 1920,
+        "height": 1080,
+        "coded_width": 1920,
+        "coded_height": 1088,
+        "closed_captions": 0,
+        "film_grain": 0,
+        "has_b_frames": 2,
+        "sample_aspect_ratio": "1:1",
+        "display_aspect_ratio": "16:9",
+        "pix_fmt": "yuvj420p",
+        "level": 40,
+        "color_range": "pc",
+        "color_space": "bt470bg",
+        "chroma_location": "left",
+        "field_order": "progressive",
+        "refs": 4,
+        "is_avc": "true",
+        "nal_length_size": "4",
+        "id": "0x1",
+        "r_frame_rate": "30/1",
+        "avg_frame_rate": "30/1",
+        "time_base": "1/15360",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 921600,
+        "duration": "60.000000",
+        "bit_rate": "531252",
+        "bits_per_raw_sample": "8",
+        "nb_frames": "1800",
+        "nb_read_frames": "1800",
+        "extradata_size": 51,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "VideoHandler",
+          "vendor_id": "[0][0][0][0]",
+          "encoder": "Lavc61.19.101 libx264"
+        }
+      }
+    ],
+    "format": {
+      "filename": "/workspace/output/demo-video/argos-pm-product-demo.mp4",
+      "nb_streams": 1,
+      "nb_programs": 0,
+      "nb_stream_groups": 0,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "start_time": "0.000000",
+      "duration": "60.000000",
+      "size": "4006709",
+      "bit_rate": "534227",
+      "probe_score": 100,
+      "tags": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2avc1mp41",
+        "encoder": "Lavf61.7.103"
+      }
+    }
+  },
+  "browserErrors": [],
+  "pointer": {
+    "moves": 1207,
+    "clicks": 40,
+    "focuses": 42
+  },
+  "clickEvents": [
+    {
+      "at": 3657.7205097173774,
+      "action": "click",
+      "target": "Milestones"
+    },
+    {
+      "at": 7415.10642841888,
+      "action": "click",
+      "target": "Tube Map"
+    },
+    {
+      "at": 9472.485228162597,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 10469.139318003845,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 11321.99046059657,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 12265.964262831922,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 13107.425072969318,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 14206.592154908521,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 15396.881896490355,
+      "action": "click",
+      "target": "Baselines"
+    },
+    {
+      "at": 16377.874279205525,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 17804.513419235423,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 19666.83277568164,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 20828.64668612515,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 22843.31173916139,
+      "action": "click",
+      "target": "Gantt"
+    },
+    {
+      "at": 23852.77995301488,
+      "action": "click",
+      "target": "Zoom"
+    },
+    {
+      "at": 24883.60504022211,
+      "action": "click",
+      "target": "Search gantt"
+    },
+    {
+      "at": 26249.02114330462,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 27120.381576137253,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 29226.16928881612,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 30232.789919555777,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 31089.91243681925,
+      "action": "click",
+      "target": "Comparison baseline"
+    },
+    {
+      "at": 31944.18737096889,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 33076.10165871716,
+      "action": "click",
+      "target": "Search gantt"
+    },
+    {
+      "at": 34049.975083647754,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 34948.387556061796,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 35953.584395244536,
+      "action": "click",
+      "target": ""
+    },
+    {
+      "at": 36871.9299494554,
+      "action": "click",
+      "target": "Extended"
+    },
+    {
+      "at": 38261.55050900548,
+      "action": "click",
+      "target": "Critical Path Analysis"
+    },
+    {
+      "at": 40606.53520324625,
+      "action": "click",
+      "target": "TASK-006Install backbone cabling"
+    },
+    {
+      "at": 42420.44564675732,
+      "action": "click",
+      "target": "TASK-007Configure core switches"
+    },
+    {
+      "at": 44204.456467573145,
+      "action": "click",
+      "target": "TASK-008Connect carrier uplinks"
+    },
+    {
+      "at": 46136.54161030825,
+      "action": "click",
+      "target": "Risk Log"
+    },
+    {
+      "at": 48398.94639424788,
+      "action": "click",
+      "target": "Actions (1)"
+    },
+    {
+      "at": 50039.1542678152,
+      "action": "click",
+      "target": "Actions (1)"
+    },
+    {
+      "at": 51118.38826795757,
+      "action": "click",
+      "target": "\u25be Risk Matrix"
+    },
+    {
+      "at": 51978.35836833488,
+      "action": "click",
+      "target": "Context"
+    },
+    {
+      "at": 53601.480743219196,
+      "action": "click",
+      "target": "Cancel"
+    },
+    {
+      "at": 54404.49918131986,
+      "action": "click",
+      "target": "\u25b8 Risk Matrix"
+    },
+    {
+      "at": 55354.168149782876,
+      "action": "click",
+      "target": "Overview"
+    }
+  ],
+  "chapters": {
+    "overview": 0,
+    "milestones": 3,
+    "baselines": 14.67074820246316,
+    "critical": 32.3172207588809,
+    "risks": 45.468783370114615,
+    "closing": 54.72342849006906
+  },
+  "sourceDuration": 42.141,
+  "timelineFactor": 1.4237915569160675,
+  "progressVisible": false,
+  "risks": 6,
+  "intentionalHolds": 0
+}
