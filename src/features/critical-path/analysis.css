@@ -1,7 +1,5 @@
 .analysis-panel-selector { display:flex; gap:4px; padding:8px 16px; border-bottom:1px solid var(--border); flex:none; }
-.analysis-panel-selector [role=tab] { min-height:30px; padding:4px 12px; border:1px solid var(--control-border); border-radius:var(--radius-control,6px); background:var(--surface-subtle); color:var(--text); font-size:var(--type-control); cursor:pointer; }
-.analysis-panel-selector [role=tab]:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
-.analysis-panel-selector [role=tab][aria-selected=true] { color:var(--primary); border-color:var(--primary); background:var(--surface); box-shadow:inset 0 -2px var(--primary); font-weight:700; }
+.analysis-panel-selector [role=tab] { text-transform:uppercase; }
 .workspace .gantt-tasks-pane.analysis-active { display:flex; flex-direction:column; overflow:hidden; }
 .gantt-tasks-pane.analysis-active[hidden] { display:none!important; }
 .workspace .critical-path-analysis { display:flex; flex-direction:column; flex:1; min-height:0; min-width:0; margin:0; max-width:none; }

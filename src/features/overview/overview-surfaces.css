@@ -15,3 +15,12 @@
 .settings-panel #audit-history-data { width:100%; min-width:0; }
 
 @container workspace (max-width:500px) { .overview-panel { --overview-summary-height:144px; } }
+
+/* The Timeline card can be narrow while the dashboard still has two columns. */
+@container overview-timeline (max-width:390px) {
+ .overview-timeline-table :is(th,td) { padding-inline:4px; }
+ .app-main .workspace .panel .overview-timeline-table th:first-child .column-heading-label { height:auto; white-space:normal; }
+ .app-main .workspace .panel .overview-timeline-table th:first-child .sort-heading {
+  height:auto; white-space:normal; overflow-wrap:normal;
+ }
+}

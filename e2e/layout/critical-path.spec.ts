@@ -215,3 +215,45 @@ test('temporary stream reveal exposes expanded state and restores collapse prefe
  await chart.getByRole('searchbox',{name:'Search gantt',exact:true}).press('Escape');await expect(task).toHaveCount(0);await expect(stream.getByRole('button',{name:'Expand Documentation',exact:true})).toHaveAttribute('aria-expanded','false');
  await chart.getByRole('button',{name:'Expand All',exact:true}).click();await taskRow(page,'TASK-005').getByRole('button',{name:'TASK-005 Documentation',exact:true}).click();await chart.getByRole('searchbox',{name:'Search gantt',exact:true}).press('Escape');await expect(task).toHaveCount(1);await expect(stream.locator('.gantt-open-stream')).toHaveAttribute('aria-expanded','true');
 });
+
+test('Overview explains both Critical Path metrics on hover and focus without changing their counts', async ({page}) => {
+  await open(page);
+  const metrics = page.locator('.critical-summary-counts p');
+  await expect(metrics.nth(0)).toHaveText('Critical tasks 4');
+  await expect(metrics.nth(1)).toHaveText('Critical paths 2');
+  await metrics.nth(0).hover();
+  await expect(page.getByRole('tooltip')).toContainText('total float is reliably zero');
+  await metrics.nth(1).focus();
+  await expect(page.getByRole('tooltip')).toContainText('each full sequence of zero-float tasks or linked milestones');
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('tooltip')).toHaveCount(0);
+});
+
+test('Extended lower panel uses the mode switch styling and retains tab keyboard navigation', async ({page}) => {
+  await page.setViewportSize({width: 1440, height: 1000});
+  await open(page);
+  await nav(page, 'Gantt');
+  await page.getByRole('button', {name: 'Extended', exact: true}).click();
+  const mode = page.getByRole('group', {name: 'Gantt mode'});
+  const tabs = page.getByRole('tablist', {name: 'Gantt lower panel'});
+  const tasks = tabs.getByRole('tab', {name: 'Tasks', exact: true});
+  const analysis = tabs.getByRole('tab', {name: 'Critical Path Analysis', exact: true});
+  const styles = (node: Element) => {
+    const s = getComputedStyle(node);
+    return [s.backgroundColor, s.color, s.border, s.borderRadius, s.fontFamily, s.fontSize, s.fontWeight, s.padding, s.height];
+  };
+  expect(await tasks.evaluate(styles)).toEqual(await mode.getByRole('button', {name: 'Extended'}).evaluate(styles));
+  expect(await analysis.evaluate(styles)).toEqual(await mode.getByRole('button', {name: 'Simple'}).evaluate(styles));
+  await expect(tasks).toHaveCSS('text-transform', 'uppercase');
+  const divider = page.getByRole('separator', {name: /Resize Gantt/});
+  const position = (await divider.boundingBox())!.y;
+  await tasks.press('ArrowRight');
+  await expect(analysis).toBeFocused();
+  await expect(analysis).toHaveAttribute('aria-selected', 'true');
+  await expect(tasks).toHaveAttribute('aria-selected', 'false');
+  await expect(page.getByRole('tabpanel', {name: 'Critical Path Analysis'})).toBeVisible();
+  await analysis.press('Home');
+  await expect(tasks).toBeFocused();
+  await expect(page.getByRole('tabpanel', {name: 'Tasks', exact: true})).toBeVisible();
+  expect((await divider.boundingBox())!.y).toBe(position);
+});

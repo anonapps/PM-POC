@@ -1,10 +1,10 @@
 
 /* Shared Gantt action sizes replace the historical shrink-to-fit exceptions. */
 .workspace .gantt-workspace .gantt-panel>.page-toolbar button,
-.workspace .gantt-workspace .gantt-panel>.page-toolbar .gantt-mode-switch button {
+.workspace .gantt-workspace :is(.gantt-panel>.page-toolbar,.analysis-panel-selector) .gantt-mode-switch button {
  height:var(--action-height); min-height:var(--action-height); font-size:var(--action-font); padding:2px 10px; line-height:1.1;
 }
-.workspace .gantt-workspace .gantt-panel>.page-toolbar .gantt-mode-switch { padding:0; height:var(--action-height); border:0; }
+.workspace .gantt-workspace :is(.gantt-panel>.page-toolbar,.analysis-panel-selector) .gantt-mode-switch { padding:0; height:var(--action-height); border:0; }
 .workspace .gantt-workspace .gantt-panel>.page-toolbar .actions { gap:6px; }
 .baseline-controls,.gantt-zoom-control { --field-height:var(--action-height); }
 .workspace .panel>.baseline-controls,
@@ -50,3 +50,27 @@
  height:100%; min-height:0; padding-block:0; display:flex; align-items:center;
 }
 .workspace .tube-map>.tube-axis>span { display:block; align-content:center; }
+
+
+/* Date buttons use the existing heading type and keep the hit area on the label. */
+.workspace .panel .timeline-date-heading {
+  display:inline-block;
+  min-height:0;
+  max-width:100%;
+  text-align:center;
+  vertical-align:middle;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.workspace .panel .timeline-date-heading:focus-visible { outline-offset:-2px; }
+
+/* A separate background layer keeps weekend bands behind all plotted items. */
+.gantt { --timeline-weekend:color-mix(in srgb,var(--border) 38%,transparent); }
+.app-main .workspace .panel .gantt-dates>span.weekend {
+  background:linear-gradient(var(--timeline-weekend),var(--timeline-weekend)) var(--column-heading-background)!important;
+}
+.workspace .gantt .gantt-row>.gantt-track {
+  background-image:linear-gradient(90deg,#e8edf3 1px,transparent 1px),var(--gantt-weekends,none);
+  background-size:var(--gantt-column-width) 100%,100% 100%;
+}
+.workspace .gantt .gantt-row.section>.gantt-track { background-image:var(--gantt-weekends,none); background-size:100% 100%; }

@@ -114,7 +114,7 @@
 .workspace .gantt-extended .gantt-tasks-pane .tasks-table td:first-child input[type=checkbox] { margin:0 auto; }
 .workspace .gantt-extended .gantt-tasks-pane .tasks-table td.table-actions { white-space:nowrap; }
 .workspace .gantt-extended .gantt-tasks-pane .tasks-table .table-actions button { padding-inline:6px; }
-.workspace .gantt-panel .gantt-mode-switch button[aria-pressed="true"] { background:#2459a9; color:white; }
+.workspace :is(.gantt-panel,.analysis-panel-selector) .gantt-mode-switch button:is([aria-pressed="true"],[aria-selected="true"]) { background:#2459a9; color:white; }
 .workspace .gantt-extended .gantt-row.section .gantt-open-stream { height:22px; min-height:22px; padding:0 3px; }
 .workspace .gantt-extended .gantt-row.section .sort-heading { min-height:0; padding:0; }
 /* Owner correction: fit every Extended task column even in narrower panes. */

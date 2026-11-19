@@ -2251,3 +2251,11 @@ On non-chart pages, text-repetition tooltips appear only when the displayed text
 Reuse existing compact page-button and embedded-field tokens across dialogs and popovers, preserving keyboard, focus, validation and dismissal behavior. Keep row actions square when icon-only, retaining existing labels/icons, colors, counters and commands. Decision Log title inputs fill their existing ID / Title cell with 12–16px separation before Date; other columns and row heights remain unchanged. Baseline comparison entity cells show ID and saved name without the separately rendered type suffix. Manage baselines uses equal-height rows with name/timestamp, single-line read-only descriptions (full text on hover/focus), compact rename/delete icons and an internally scrolling list above Create baseline/Done. Create/Rename baseline uses compact required Name and optional Description fields. These presentation changes do not modify persisted data or the `.pmp` contract.
 
 The consolidated integration retains the shared Lucide action/feedback components and clipping-only shared text hints. The compact record/dialog icon geometry uses the existing 30px page-action height, superseding the earlier approximately 36px record-action geometry; floating global controls retain their accepted implementation.
+
+## v1.7 consolidated maintenance
+
+On Overview, the Timeline table fits Start, End and Unscheduled to their contents and gives the remaining space to Stream / scope. Truncated stream names use the shared clipping-only tooltip. The Critical Path summary explains critical tasks and distinct paths using the shared tooltip.
+
+Gantt and Tube Map date labels reframe their existing twelve-column windows with the chosen date at the start of the fifth column, measured within the date area. Keep the existing paging increments and Jump to today windows. Gantt preserves the exact fifth-column start date when changing zoom, superseding the earlier zoom-reset instructions. Only the daily Gantt view has weekend bands. Tube Map retains its existing Monday-based weekly scale and axis label choices.
+
+Extended Gantt presents Tasks and Critical Path Analysis in a segmented control styled like Simple / Extended. Keep lower-pane tab keyboard interaction, selection and resizing.
