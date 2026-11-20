@@ -28,6 +28,8 @@ async function edit(page:Page){await page.locator('nav').getByRole('button',{nam
 
 test('all routes keep page controls fixed and clickable with an intrinsic toolbar overlay',async({page})=>{
  await open(page);const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+ // The warning summary includes diagnostics from the first Critical Path worker result.
+ await expect(page.locator('.critical-path-overview').getByText(/^Calculated completion \d{2}\/\d{2}\/\d{4}/)).toBeVisible();
  for(const moduleName of modules){
   await page.locator('nav').getByRole('button',{name:moduleName,exact:true}).click();await expect(toolbar(page)).toBeHidden();await expect(page.locator('.workspace'),moduleName).toBeVisible();
   const geometry=()=>page.locator('.workspace').evaluate(e=>[...e.querySelectorAll('h1,.title-row input,.title-row button,.title-row select')].map(node=>({text:node.getAttribute('aria-label')??node.textContent,box:node.getBoundingClientRect().toJSON()})));
