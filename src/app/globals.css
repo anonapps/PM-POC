@@ -52,7 +52,7 @@ tr.navigation-target > td, .navigation-target > td { background:#dcecff; }
 /* v1.1 application shell and shared editable controls */
 .app-shell{height:100vh}.app-shell.sidebar-hidden{grid-template-columns:1fr}.app-shell aside{position:sticky;top:0;height:100vh}.brand{display:block;width:calc(100% - 42px);border:0;background:transparent;text-align:left}.restore-sidebar{position:fixed;z-index:20;top:12px;left:12px;padding:.5rem}.sidebar-hidden .app-main{width:100%}.sidebar-hidden .workspace{padding-left:4rem}.workspace{height:calc(100vh - 72px);overflow:auto}
 table input:not([type=checkbox]),table select,.inline-form input,.inline-form select{height:36px;vertical-align:middle}.multi-select{position:relative;min-width:150px}.multi-select summary{height:36px;padding:.5rem;border:1px solid #b7c1ce;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.multi-select[open]{z-index:5}.multi-select label{display:flex;gap:.4rem;padding:.35rem;background:white;white-space:nowrap}.field-error{color:#b42318!important;max-width:150px}
-.gantt{position:relative;min-width:980px}.gantt-columns{display:grid;grid-template-columns:repeat(12,1fr);padding:0}.gantt-columns span{padding:.65rem .25rem;border-left:1px solid #ccd5df;text-align:center;font-size:var(--type-caption)}.gantt-columns .weekend,.gantt-track .weekend{background:#f3f4f6}.gantt-row.section>div{background:#eaf0f7;font-weight:700}.today-line{position:absolute;top:0;bottom:42px;width:1px;background:#dc2626;pointer-events:none}.gantt-bar.milestone{background:#7c3aed;transform:translateX(-50%) rotate(45deg);width:14px!important;height:14px}.gantt-panel{overflow-x:auto}
+.gantt{position:relative;min-width:980px}.gantt-columns{display:grid;grid-template-columns:repeat(12,1fr);padding:0}.gantt-columns span{padding:.65rem .25rem;border-left:1px solid #ccd5df;text-align:center;font-size:var(--type-caption)}.gantt-row.section>div{background:#eaf0f7;font-weight:700}.today-line{position:absolute;top:0;bottom:42px;width:1px;background:#dc2626;pointer-events:none}.gantt-bar.milestone{background:#7c3aed;transform:translateX(-50%) rotate(45deg);width:14px!important;height:14px}.gantt-panel{overflow-x:auto}
 .tube-map{min-width:980px;padding-top:48px}.tube-axis{position:sticky;z-index:5;left:0;right:auto;top:0;width:100%;grid-template-columns:160px repeat(12,1fr);background:white}.tube-axis b{position:sticky;left:0;background:#eef2f6;padding:.6rem}.tube-line{height:76px;grid-template-columns:160px 1fr;border-bottom:1px solid #e5e7eb}.tube-line strong{position:sticky;left:0;z-index:3;background:white}.tube-line div{height:2px;border-radius:0;background:#334155;background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(8.333% - 1px),#e5e7eb calc(8.333% - 1px),#e5e7eb 8.333%)}.tube-station{max-width:160px;white-space:normal;text-align:center}.tube-station i{width:16px;height:16px;border:0;border-radius:1px;background:#7c3aed;transform:rotate(45deg)}.tube-station small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.tube-map footer{position:sticky;left:12px}
 .gantt-connectors{position:absolute;left:32%;top:42px;width:68%;height:calc(100% - 84px);z-index:2;pointer-events:none;overflow:visible}.gantt-connectors>path{fill:none;stroke:#334155;stroke-width:.35;vector-effect:non-scaling-stroke}.gantt-connectors marker path{fill:#334155}.gantt-bar i{display:block;height:100%;background:#173f72}.gantt-bar.milestone i{display:none}
 .tube-body{position:relative;margin-left:160px}.tube-line{position:absolute;left:-160px;right:0;width:calc(100% + 160px)}.tube-connections{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.tube-connections path{fill:none;stroke:#64748b;stroke-width:1.5;vector-effect:non-scaling-stroke}.tube-body .tube-station{left:var(--station-x)}
@@ -171,8 +171,14 @@ table td.table-actions button { margin:.12rem; }
 /* Overview timeline: aligned, consistently sized columns with quiet row separators. */
 .overview-timeline-range{margin:10px 0 16px;color:#475569;font-size:var(--type-body);}
 .overview-timeline-table-wrap{width:100%;overflow-x:auto;}
-.overview-timeline-table{width:100%;border-collapse:collapse;table-layout:auto;font-size:var(--type-body);}
-.overview-timeline-table th,.overview-timeline-table td{padding:11px 14px;text-align:left;vertical-align:middle;border-bottom:1px solid #e2e8f0;white-space:nowrap;}
+.overview-timeline-layout{container:overview-timeline / inline-size;}
+.workspace .panel table.fit-table.overview-timeline-table{border-collapse:collapse;table-layout:auto;font-size:var(--type-body);}
+.overview-timeline-name{display:block;contain:inline-size;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@container workspace (min-width:601px) {
+  .overview-timeline-table thead th:first-child{width:100%;}
+  .overview-timeline-table :is(th,td):not(:first-child){width:1%;}
+}
+.overview-timeline-table th,.overview-timeline-table td{padding:11px clamp(4px, 1.5cqw, 14px);text-align:left;vertical-align:middle;border-bottom:1px solid #e2e8f0;white-space:nowrap;}
 .overview-timeline-table thead th{background:#f1f5f9;color:#475569;font-weight:600;}
 .overview-timeline-table tbody th{font-weight:600;color:#17243b;}
 .overview-timeline-table tbody td{font-variant-numeric:tabular-nums;color:#334155;}
@@ -358,6 +364,7 @@ table td.table-actions button { margin:.12rem; }
 :root { --action-height:var(--ui-action-height); --action-radius:var(--ui-action-radius); --action-font:var(--ui-action-font); }
 .app-main > header .header-actions button,
 .workspace .panel > .title-row button:not(.sort-heading),
+.workspace .gantt-tasks-pane .analysis-panel-selector button,
 .workspace .panel .quick-actions button,
 .workspace .panel .settings-project-details > button,
 .new-project-launcher .actions button,
@@ -377,7 +384,7 @@ table td.table-actions button { margin:.12rem; }
   white-space:nowrap;
 }
 .workspace .panel button.danger { background:#fff; color:#a12b20; border-color:#d78f87; }
-.workspace .panel button.secondary { background:#fff; color:var(--primary); border-color:var(--primary); }
+.workspace :is(.panel,.analysis-panel-selector) button.secondary { background:#fff; color:var(--primary); border-color:var(--primary); }
 .workspace .panel button:disabled,
 .app-main > header button:disabled { opacity:.45; cursor:not-allowed; }
 

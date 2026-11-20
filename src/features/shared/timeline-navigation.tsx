@@ -15,3 +15,12 @@ export function TimelineNavigation({label,start,end,previousLabel="← Previous"
     {controls}</div>
   </footer>;
 }
+
+export function TimelineDateHeading({date, end, label, weekend, onNavigate}: {
+  date: string; end?: string; label: string; weekend?: boolean; onNavigate: (date: string) => void;
+}) {
+  return <span className={weekend ? "weekend" : undefined} title={end ? `${date} – ${end}` : timelineDisplayDate(date)}>
+    <button type="button" className="sort-heading timeline-date-heading" data-date={date}
+      aria-label={`Jump to ${timelineDisplayDate(date)} (${label})`} onClick={() => onNavigate(date)}>{label}</button>
+  </span>;
+}

@@ -57,6 +57,7 @@ for(const width of [900,1280,1440,1920])for(const scenario of [
  expect(await footer.locator('button').allTextContents()).toEqual(['← Previous','Next →','Jump to today']);
  for(const [zoom,days] of [['Week',1],['Month',7],['Quarter',14]] as const){
   await page.locator('.gantt-zoom-control select').selectOption(zoom);await expect(footer.getByRole('button',{name:'Jump to today'})).toBeEnabled();
+  await footer.getByRole('button',{name:'Jump to today'}).click();
   const start=await range.getAttribute('data-start'),end=await range.getAttribute('data-end');
   await expect(range).toHaveText(/^\d{2}\/\d{2}\/\d{4} – \d{2}\/\d{2}\/\d{4}$/);
   expect((await page.locator('.gantt-dates span').first().getAttribute('title'))!.split(' – ')[0]).toBe(start);
@@ -244,7 +245,7 @@ for(const width of [375,900,1440])test(`Tube Map Stream and weeks use a single G
  const dateHeight=(await page.locator('.gantt-dates').boundingBox())!.height,yearHeight=(await page.locator('.gantt-years').boundingBox())!.height;
  expect(dateHeight).toBe(24);expect(yearHeight).toBe(24);
  await page.locator('nav').getByRole('button',{name:'Tube Map',exact:true}).click();
- const axis=page.locator('.tube-axis'),sort=axis.getByRole('button'),laneHeights=await page.locator('.tube-line').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));
+ const axis=page.locator('.tube-axis'),sort=axis.getByRole('button',{name:/Sort Tube Map streams/}),laneHeights=await page.locator('.tube-line').evaluateAll(nodes=>nodes.map(e=>e.getBoundingClientRect().height));
  for(const mode of ['week','date']){
   await page.getByRole('combobox',{name:'Tube Map axis',exact:true}).selectOption(mode);
   const geometry=await axis.evaluate(e=>({box:e.getBoundingClientRect().toJSON(),cells:[...e.children].map(n=>{const range=document.createRange();range.selectNodeContents(n);return{box:n.getBoundingClientRect().toJSON(),textBox:range.getBoundingClientRect().toJSON(),font:getComputedStyle(n).fontSize,line:getComputedStyle(n).lineHeight,align:getComputedStyle(n).alignItems,text:n.textContent}})}));
@@ -258,4 +259,116 @@ for(const width of [375,900,1440])test(`Tube Map Stream and weeks use a single G
  const toolbar=(await page.locator('.page-toolbar').boundingBox())!,header=(await axis.boundingBox())!;expect(header.y).toBeGreaterThanOrEqual(toolbar.y+toolbar.height-1);expect(header.height).toBe(24);
  await page.locator('.workspace').evaluate(e=>e.scrollTop=0);
  if(width===1440)await page.screenshot({path:info.outputPath('tube-map-single-header.png')});
+});
+
+test('Gantt date labels keep the same one-third date through zoom, and shade only daily weekends', async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 900});
+  await page.clock.setFixedTime(new Date('2026-12-31T12:00:00'));
+  await openProject(page);
+  await page.locator('nav').getByRole('button', {name: 'Gantt', exact: true}).click();
+  const dates = page.locator('.gantt-dates');
+  const range = page.getByRole('navigation', {name: 'Gantt date navigation'}).locator('[data-start]');
+  const zoom = page.getByRole('combobox', {name: 'Zoom', exact: true});
+  const reference = () => dates.locator('button').nth(4);
+  const date = '2027-01-03';
+  await dates.locator(`button[data-date="${date}"]`).press('Enter');
+  await expect(reference()).toHaveAttribute('data-date', date);
+  await expect(reference()).toBeFocused();
+  await expect(range).toHaveAttribute('data-start', '2026-12-30');
+  const ratio = await reference().evaluate(button => {
+    const track = button.parentElement!.parentElement!.getBoundingClientRect();
+    return (button.parentElement!.getBoundingClientRect().left - track.left) / track.width;
+  });
+  expect(ratio).toBeCloseTo(1 / 3, 2);
+  const weekendDates = await dates.locator('.weekend button').evaluateAll(buttons => buttons.map(button => (button as HTMLElement).dataset.date));
+  expect(weekendDates).toEqual(['2027-01-02', '2027-01-03', '2027-01-09', '2027-01-10']);
+  const tracks = page.locator('.gantt-track');
+  for (const track of [tracks.first(), page.locator('.gantt-row.task .gantt-track').first()]) {
+    expect(await track.evaluate(node => getComputedStyle(node).backgroundImage)).toContain('linear-gradient(to right');
+  }
+  expect(await dates.locator('.weekend').first().evaluate(node => getComputedStyle(node).backgroundImage)).toContain('linear-gradient');
+  await expect(dates.locator('span').first()).toHaveCSS('background-image', 'none');
+
+  for (const [level, start] of [['Quarter', '2026-11-08'], ['Month', '2026-12-06'], ['Week', '2026-12-30'], ['Quarter', '2026-11-08'], ['Week', '2026-12-30']]) {
+    await zoom.selectOption(level);
+    await expect(reference()).toHaveAttribute('data-date', date);
+    await expect(range).toHaveAttribute('data-start', start);
+    if (level !== 'Week') {
+      await expect(dates.locator('.weekend')).toHaveCount(0);
+      expect(await tracks.first().evaluate(node => getComputedStyle(node).backgroundImage)).toBe('none');
+    }
+  }
+  await zoom.selectOption('Quarter');
+  const coarseDate = (await dates.locator('button').nth(6).getAttribute('data-date'))!;
+  await dates.locator('button').nth(6).click();
+  await expect(reference()).toHaveAttribute('data-date', coarseDate);
+  await zoom.selectOption('Week');
+  await expect(reference()).toHaveAttribute('data-date', coarseDate);
+  await tracks.first().click({position: {x: 12, y: 6}});
+  await expect(reference()).toHaveAttribute('data-date', coarseDate);
+});
+
+test('Tube Map week labels reframe the selected Monday and preserve the four-week controls', async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 900});
+  await page.clock.setFixedTime(new Date('2026-12-31T12:00:00'));
+  await openProject(page);
+  await page.locator('nav').getByRole('button', {name: 'Tube Map', exact: true}).click();
+  const axis = page.locator('.tube-axis');
+  const labels = axis.locator('span button');
+  const footer = page.getByRole('navigation', {name: 'Tube Map date navigation'});
+  const range = footer.locator('[data-start]');
+  const originalStart = (await range.getAttribute('data-start'))!;
+  const date = (await labels.nth(7).getAttribute('data-date'))!;
+  await labels.nth(7).click();
+  await expect(labels.nth(4)).toHaveAttribute('data-date', date);
+  const ratio = await labels.nth(4).evaluate(button => {
+    const cell = button.parentElement!;
+    const first = cell.parentElement!.children[1].getBoundingClientRect();
+    const last = cell.parentElement!.lastElementChild!.getBoundingClientRect();
+    return (cell.getBoundingClientRect().left - first.left) / (last.right - first.left);
+  });
+  expect(ratio).toBeCloseTo(1 / 3, 2);
+  const clickedStart = (await range.getAttribute('data-start'))!;
+  await footer.getByRole('button', {name: 'Next 4 weeks'}).click();
+  expect(Date.parse((await range.getAttribute('data-start'))!) - Date.parse(clickedStart)).toBe(28 * 86_400_000);
+  await footer.getByRole('button', {name: 'Previous 4 weeks'}).click();
+  await expect(range).toHaveAttribute('data-start', clickedStart);
+  await page.getByRole('combobox', {name: 'Tube Map axis'}).selectOption('date');
+  await expect(labels.nth(4)).toHaveAttribute('data-date', date);
+  const otherDate = (await labels.nth(2).getAttribute('data-date'))!;
+  await labels.nth(2).press('Space');
+  await expect(labels.nth(4)).toHaveAttribute('data-date', otherDate);
+  await expect(labels.nth(4)).toBeFocused();
+  await expect(axis.locator('.weekend')).toHaveCount(0);
+  await footer.getByRole('button', {name: 'Jump to today'}).click();
+  await expect(range).toHaveAttribute('data-start', originalStart);
+});
+
+for (const width of [900, 960, 1440, 1920]) test(`Overview Timeline fits dates and shows only clipped stream hints at ${width}px`, async ({page}) => {
+  await page.setViewportSize({width, height: 940});
+  const longName = 'A long stream label for delivery coordination '.repeat(6).trim();
+  const state = {...fixture.projectState, streams: fixture.projectState.streams.map((stream, index) => index === 0 ? {...stream, name: longName} : stream)};
+  await openProject(page, undefined, state);
+  const table = page.locator('.overview-timeline-table');
+  const name = table.getByText(longName, {exact: true});
+  await expect(name).toHaveCSS('text-overflow', 'ellipsis');
+  expect(await name.evaluate(node => node.scrollWidth)).toBeGreaterThan(await name.evaluate(node => node.clientWidth));
+  const cells = await table.locator('thead th').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width));
+  if (width !== 960) expect(cells[0]).toBeGreaterThan(Math.max(...cells.slice(1)));
+  expect(await table.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
+  expect(await table.evaluate(node => node.parentElement!.scrollWidth - node.parentElement!.clientWidth)).toBeLessThanOrEqual(1);
+  await table.getByRole('button', {name: 'Unscheduled', exact: true}).click();
+  await expect(table.getByRole('columnheader', {name: /Unscheduled/})).toHaveAttribute('aria-sort', 'ascending');
+  const labelsFit = await table.locator('td, thead th:not(:first-child)').evaluateAll(nodes => nodes.every(node => {
+    const label = node.querySelector('button') ?? node;
+    const range = document.createRange();
+    range.selectNodeContents(label);
+    const text = range.getBoundingClientRect(), cell = node.getBoundingClientRect();
+    return text.left >= cell.left - 1 && text.right <= cell.right + 1;
+  }));
+  expect(labelsFit).toBe(true);
+  await name.hover();
+  await expect(page.getByRole('tooltip')).toHaveText(longName);
+  await table.getByText('Project-wide', {exact: true}).hover();
+  await expect(page.getByRole('tooltip')).toHaveCount(0);
 });
